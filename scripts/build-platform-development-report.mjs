@@ -214,7 +214,8 @@ function render(args, data) {
     .metric span { display:block; color:var(--muted); font-size:13px; }
     .metric strong { display:block; font-size:28px; margin-top:4px; }
     .platforms { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
-    .platforms span, .pill { display:inline-flex; align-items:center; gap:5px; border:1px solid var(--line); background:#eef5f8; color:#17485a; border-radius:999px; padding:5px 8px; font-size:12px; }
+    .platforms span { display:inline-block; max-width:100%; border:1px solid var(--line); background:#eef5f8; color:#17485a; border-radius:999px; padding:5px 8px; font-size:12px; line-height:1.25; overflow-wrap:anywhere; }
+    .pill { display:inline-flex; align-items:center; gap:5px; border:1px solid var(--line); background:#eef5f8; color:#17485a; border-radius:999px; padding:5px 8px; font-size:12px; }
     .listings { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:14px; }
     .listing { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
     .listing.agency { border-color:#d8b98e; }
@@ -241,6 +242,8 @@ function render(args, data) {
     @media (max-width: 760px) {
       main { padding:16px; }
       .grid, .listings { grid-template-columns:1fr; }
+      .platforms { display:grid; grid-template-columns:1fr; }
+      .platforms span { width:100%; border-radius:8px; }
       .photoButton { flex-basis:82%; }
       .topline { align-items:flex-start; flex-direction:column; }
     }

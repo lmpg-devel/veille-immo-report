@@ -3,7 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Installer Veille Immo</title>
+  <title>Veille Immo</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#0b5c86">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
   <style>
     body {
       margin: 0;
@@ -24,7 +27,7 @@
     p {
       margin: 0 0 16px;
     }
-    a.button {
+    a.button, button.button {
       display: inline-block;
       padding: 14px 18px;
       border-radius: 8px;
@@ -32,6 +35,9 @@
       color: #fff;
       font-weight: 700;
       text-decoration: none;
+      border: 0;
+      font: inherit;
+      cursor: pointer;
     }
     .note {
       margin-top: 18px;
@@ -45,12 +51,13 @@
 <body>
   <main>
     <h1>Veille Immo</h1>
-    <p>APK Android v1.4 avec rapport en ligne, verification quotidienne et notifications de nouvelles annonces.</p>
-    <p><a class="button" href="veille-immo-v1.4.apk" download>Telecharger l'APK v1.4</a></p>
-    <p><a href="./">Ouvrir le rapport web</a></p>
+    <p>Version web installable, sans APK Android.</p>
+    <p><a class="button" href="./?source=install">Ouvrir l'application web</a></p>
+    <p><button id="installButton" class="button" type="button" hidden>Installer sur l'ecran d'accueil</button></p>
     <div class="note">
-      Cette version utilise un nom de fichier et un identifiant Android neufs pour eviter les anciens telechargements et les conflits d'installation. Android demandera peut-etre d'autoriser l'installation depuis le navigateur, puis l'app demandera l'autorisation d'envoyer des notifications.
+      Dans Chrome Android, ouvrir le menu puis choisir Ajouter a l'ecran d'accueil ou Installer l'application. Cette voie ne passe pas par l'installateur APK.
     </div>
   </main>
+  <script src="pwa.js" defer></script>
 </body>
 </html>

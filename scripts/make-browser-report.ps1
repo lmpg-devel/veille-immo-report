@@ -1,7 +1,8 @@
 param(
   [string]$SourceHtml = ".\mobile-index.html",
   [string]$OutputHtml = ".\browser-index.html",
-  [string]$SiteDir = ".\web-report-site"
+  [string]$SiteDir = ".\web-report-site",
+  [switch]$NoSiteIndexCopy
 )
 
 $ErrorActionPreference = "Stop"
@@ -63,7 +64,7 @@ $utf8NoBom = New-Object System.Text.UTF8Encoding $false
 [System.IO.File]::WriteAllText($outputFullPath, $html, $utf8NoBom)
 New-Item -ItemType Directory -Force -Path $SiteDir | Out-Null
 $siteIndexPath = [System.IO.Path]::GetFullPath((Join-Path $SiteDir "index.html"))
-if ($outputFullPath -ne $siteIndexPath) {
+if (-not $NoSiteIndexCopy -and $outputFullPath -ne $siteIndexPath) {
   Copy-Item -LiteralPath $OutputHtml -Destination $siteIndexPath -Force
 }
 

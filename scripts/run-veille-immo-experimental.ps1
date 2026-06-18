@@ -1384,7 +1384,7 @@ $html = Convert-ExternalLinksToLocalActions -Html $html
 Set-Content -LiteralPath $htmlPath -Value $html -Encoding UTF8
 Set-Content -LiteralPath $latestPath -Value $html -Encoding UTF8
 Set-Content -LiteralPath $indexPath -Value $html -Encoding UTF8
-$mobileIndexPath = Join-Path (Split-Path -Parent $PSScriptRoot) "mobile-index.html"
+$mobileIndexPath = Join-Path (Split-Path -Parent $PSScriptRoot) "experimental-mobile-index.html"
 Set-Content -LiteralPath $mobileIndexPath -Value $html -Encoding UTF8
 
 Write-Host ""

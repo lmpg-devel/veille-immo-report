@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-06-18T23:41:08.900Z",
+  "count": 1,
+  "listings": [
+    {
+      "Source": "Agence locale (site direct)",
+      "Id": "d0bd8cda",
+      "RequestedLocation": "Saint-Gilles",
+      "Locality": "Saint-Gilles",
+      "PostalCode": "1060",
+      "Address": "",
+      "Latitude": 50.827,
+      "Longitude": 4.345,
+      "GeoPrecision": "centre commune - agence experimental",
+      "Price": 200000,
+      "Bedrooms": "4",
+      "SurfaceM2": "",
+      "AgentName": "Berth Immobiliën",
+      "AgentPhone": "+32 2 356 04 34",
+      "AgentMobile": "",
+      "AgentEmail": "",
+      "AgentWebsite": "https://www.berth.be",
+      "PhotoCount": 0,
+      "PhotoUrls": "",
+      "Title": "Maison à vendre à Sint-Gillis | Berth Immo",
+      "Url": "https://www.berth.be/fr/l/a-vendre/maison/1060-sint-gillis/lis_ozzinurgkwsjsw2e5nhi70uq/"
+    }
+  ]
+}

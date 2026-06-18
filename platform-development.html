@@ -1,0 +1,877 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Développement sources multi-sites</title>
+  <style>
+    :root { color-scheme: light; --ink:#172026; --muted:#62707a; --line:#d9e0e6; --bg:#f4f6f8; --panel:#fff; --accent:#0b6f8f; --agency:#8b4a12; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Arial, Helvetica, sans-serif; background:var(--bg); color:var(--ink); line-height:1.35; }
+    main { width:min(1120px, 100%); margin:0 auto; padding:22px; }
+    h1 { margin:0 0 6px; font-size:clamp(26px, 5vw, 42px); letter-spacing:0; }
+    h2 { margin:10px 0 7px; font-size:18px; letter-spacing:0; }
+    h3 { margin:26px 0 12px; font-size:21px; letter-spacing:0; }
+    p { margin:0 0 10px; }
+    a { color:#075a78; text-decoration:none; font-weight:700; }
+    a:hover { text-decoration:underline; }
+    .note { background:#fff7db; border:1px solid #e6d284; padding:12px; margin:18px 0; }
+    .grid { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:12px; margin:18px 0; }
+    .metric { background:var(--panel); border:1px solid var(--line); padding:14px; border-radius:8px; }
+    .metric span { display:block; color:var(--muted); font-size:13px; }
+    .metric strong { display:block; font-size:28px; margin-top:4px; }
+    .platforms { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    .platforms span, .pill { display:inline-flex; align-items:center; gap:5px; border:1px solid var(--line); background:#eef5f8; color:#17485a; border-radius:999px; padding:5px 8px; font-size:12px; }
+    .listings { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:14px; }
+    .listing { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+    .listing.agency { border-color:#d8b98e; }
+    .photos { display:flex; gap:4px; overflow-x:auto; background:#172026; min-height:176px; }
+    .photoButton { border:0; padding:0; background:transparent; flex:0 0 72%; cursor:pointer; }
+    .photoButton img { width:100%; height:176px; display:block; object-fit:cover; }
+    .noPhoto { min-height:176px; width:100%; display:grid; place-items:center; color:#c8d2d9; font-weight:700; }
+    .body { padding:12px; }
+    .topline { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+    .topline strong { white-space:nowrap; }
+    .meta, .address { color:var(--muted); font-size:14px; }
+    .contact { background:#eef2f4; padding:10px; border-radius:6px; margin-top:10px; overflow-wrap:anywhere; }
+    .actions { display:flex; flex-wrap:wrap; gap:14px; margin-top:12px; }
+    details { background:var(--panel); border:1px solid var(--line); border-radius:8px; margin-top:12px; padding:12px; }
+    summary { cursor:pointer; font-weight:700; }
+    .tableWrap { overflow-x:auto; margin-top:10px; }
+    table { border-collapse:collapse; width:100%; min-width:760px; font-size:13px; }
+    th, td { border-bottom:1px solid var(--line); text-align:left; padding:8px; vertical-align:top; }
+    th { background:#eef2f4; }
+    .modal { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.86); padding:18px; z-index:10; }
+    .modal.open { display:flex; }
+    .modal img { max-width:100%; max-height:82vh; object-fit:contain; }
+    .modal button { position:fixed; top:14px; left:14px; border:0; border-radius:999px; padding:10px 14px; font-weight:700; background:#fff; color:#172026; }
+    @media (max-width: 760px) {
+      main { padding:16px; }
+      .grid, .listings { grid-template-columns:1fr; }
+      .photoButton { flex-basis:82%; }
+      .topline { align-items:flex-start; flex-direction:column; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Développement sources multi-sites</h1>
+    <p>Shot expérimental généré le 19/06/2026 01:41:16. Le rapport stable n'est pas modifié.</p>
+    <div class="note">
+      Zimmo et Immovlan sont testés en mode navigateur Chrome headless. Les agences locales sont auditées par plateforme, puis filtrées en maisons à vendre sous le plafond configuré.
+    </div>
+
+    <section class="grid" aria-label="Résumé">
+      <div class="metric"><span>Annonces Immoweb conservées</span><strong>37</strong></div>
+      <div class="metric"><span>Annonces agences ajoutables</span><strong>1</strong></div>
+      <div class="metric"><span>Agences auditées</span><strong>40</strong></div>
+      <div class="metric"><span>Blocages navigateur</span><strong>4/4</strong></div>
+    </section>
+
+    <section>
+      <h3>Plateformes agences détectées</h3>
+      <p>433 lien(s) candidat(s) repérés avant filtrage détail.</p>
+      <div class="platforms"><span>Unknown <strong>11</strong></span><span>Century21 + Next/Gatsby <strong>7</strong></span><span>Unreadable <strong>5</strong></span><span>Dewaele <strong>3</strong></span><span>WHISE <strong>2</strong></span><span>WordPress + Next/Gatsby <strong>2</strong></span><span>Next/Gatsby <strong>2</strong></span><span>Skarabee <strong>2</strong></span><span>WordPress <strong>1</strong></span><span>WHISE + WordPress + Next/Gatsby <strong>1</strong></span><span>Century21 + WordPress <strong>1</strong></span><span>Century21 + WHISE + WordPress + Wix + Next/Gatsby <strong>1</strong></span><span>ERA <strong>1</strong></span><span>Omnicasa + Next/Gatsby <strong>1</strong></span></div>
+    </section>
+
+    <section>
+      <h3>Annonces homogènes</h3>
+      <div class="listings">
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/cc8f0860-774d-4a52-9ece-e672414efa85/736x736/fc240a5d19057e4e9ed495bd54f58578.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/cc8f0860-774d-4a52-9ece-e672414efa85/736x736/fc240a5d19057e4e9ed495bd54f58578.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/cc8f0860-774d-4a52-9ece-e672414efa85/736x736/0f316189d89bd2006a27a328a2aa1bbd.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/cc8f0860-774d-4a52-9ece-e672414efa85/736x736/0f316189d89bd2006a27a328a2aa1bbd.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/cc8f0860-774d-4a52-9ece-e672414efa85/736x736/4b62b0b43fd552f86de6fca11fb4bf28.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/cc8f0860-774d-4a52-9ece-e672414efa85/736x736/4b62b0b43fd552f86de6fca11fb4bf28.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/cc8f0860-774d-4a52-9ece-e672414efa85/736x736/01a543366d09260786ef936378741c79.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/cc8f0860-774d-4a52-9ece-e672414efa85/736x736/01a543366d09260786ef936378741c79.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/cc8f0860-774d-4a52-9ece-e672414efa85/736x736/e314c34060111d39b2df69e6bfcf4bc7.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/cc8f0860-774d-4a52-9ece-e672414efa85/736x736/e314c34060111d39b2df69e6bfcf4bc7.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/cc8f0860-774d-4a52-9ece-e672414efa85/736x736/608568a1adb007a9badadd5eb5ef5361.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/cc8f0860-774d-4a52-9ece-e672414efa85/736x736/608568a1adb007a9badadd5eb5ef5361.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/cc8f0860-774d-4a52-9ece-e672414efa85/736x736/e09c1bd693be25037d652fc67195bbc1.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/cc8f0860-774d-4a52-9ece-e672414efa85/736x736/e09c1bd693be25037d652fc67195bbc1.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/cc8f0860-774d-4a52-9ece-e672414efa85/736x736/2bcbab460ea512ee167c1a682baae845.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/cc8f0860-774d-4a52-9ece-e672414efa85/736x736/2bcbab460ea512ee167c1a682baae845.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>125 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à LINKEBEEK - 125 000 € - 2 chambres - 90m² - Immoweb</h2>
+        <p class="meta">LINKEBEEK · 2 ch. · 90 m2</p>
+        <p class="address">Bankveld 4 1630 LINKEBEEK</p>
+        <div class="contact">
+          <strong>Clavis Immo</strong><br>
+          +3226701970 · clavisimmo@omniwebsites.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/linkebeek/1630/21609297" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.clavisimmo.be" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/71b6cdbc-c68a-4e2f-a548-eb26dcf6cac7/736x736/1effe778caf65685e3ac92c7397faaa9.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/71b6cdbc-c68a-4e2f-a548-eb26dcf6cac7/736x736/1effe778caf65685e3ac92c7397faaa9.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/71b6cdbc-c68a-4e2f-a548-eb26dcf6cac7/736x736/4935808222ab65831e64a6c9782f3cd9.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/71b6cdbc-c68a-4e2f-a548-eb26dcf6cac7/736x736/4935808222ab65831e64a6c9782f3cd9.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/71b6cdbc-c68a-4e2f-a548-eb26dcf6cac7/736x736/990036b7b9e133411678a3e40a33859c.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/71b6cdbc-c68a-4e2f-a548-eb26dcf6cac7/736x736/990036b7b9e133411678a3e40a33859c.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/71b6cdbc-c68a-4e2f-a548-eb26dcf6cac7/736x736/03ce951c39f439c68dcd5c2b4956529c.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/71b6cdbc-c68a-4e2f-a548-eb26dcf6cac7/736x736/03ce951c39f439c68dcd5c2b4956529c.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/71b6cdbc-c68a-4e2f-a548-eb26dcf6cac7/736x736/91de3d485653d27993f94c6d9022aa60.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/71b6cdbc-c68a-4e2f-a548-eb26dcf6cac7/736x736/91de3d485653d27993f94c6d9022aa60.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/71b6cdbc-c68a-4e2f-a548-eb26dcf6cac7/736x736/5ce401d441de7f3cad810c3c78faa7d3.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/71b6cdbc-c68a-4e2f-a548-eb26dcf6cac7/736x736/5ce401d441de7f3cad810c3c78faa7d3.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/71b6cdbc-c68a-4e2f-a548-eb26dcf6cac7/736x736/b97326cdf588f92ed719917db0604194.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/71b6cdbc-c68a-4e2f-a548-eb26dcf6cac7/736x736/b97326cdf588f92ed719917db0604194.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/71b6cdbc-c68a-4e2f-a548-eb26dcf6cac7/736x736/53a98d3b949ab923ee8cea93773a2c48.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/71b6cdbc-c68a-4e2f-a548-eb26dcf6cac7/736x736/53a98d3b949ab923ee8cea93773a2c48.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>169 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Saint-Gilles - 169 000 € - 3 chambres - 97m² - Immoweb</h2>
+        <p class="meta">Saint-Gilles · 3 ch. · 97 m2</p>
+        <p class="address">Crickxstraat 38 1060 Saint-Gilles</p>
+        <div class="contact">
+          <strong>JAM Properties</strong><br>
+          +3225342187 · jamproperties_bruxelles@importfrommedia.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/saint-gilles/1060/21137574" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bbc984a3-320a-422e-889a-0b7035bff8cd/736x736/97a3d5743df192ccebbbea6af3c3892b.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bbc984a3-320a-422e-889a-0b7035bff8cd/736x736/97a3d5743df192ccebbbea6af3c3892b.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bbc984a3-320a-422e-889a-0b7035bff8cd/736x736/c5c5e32c6b5d9a113d4b130be3a94f5a.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bbc984a3-320a-422e-889a-0b7035bff8cd/736x736/c5c5e32c6b5d9a113d4b130be3a94f5a.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bbc984a3-320a-422e-889a-0b7035bff8cd/736x736/f648a5408626bd02a92eafb0cc5529d7.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bbc984a3-320a-422e-889a-0b7035bff8cd/736x736/f648a5408626bd02a92eafb0cc5529d7.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bbc984a3-320a-422e-889a-0b7035bff8cd/736x736/52fd3a2b7a27b152a2ed6c2cdf059497.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bbc984a3-320a-422e-889a-0b7035bff8cd/736x736/52fd3a2b7a27b152a2ed6c2cdf059497.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bbc984a3-320a-422e-889a-0b7035bff8cd/736x736/ceb4eb41992a0ee97b35ce39eae2e548.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bbc984a3-320a-422e-889a-0b7035bff8cd/736x736/ceb4eb41992a0ee97b35ce39eae2e548.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bbc984a3-320a-422e-889a-0b7035bff8cd/736x736/8f0717f298c9a98df14742b04b7aa53c.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bbc984a3-320a-422e-889a-0b7035bff8cd/736x736/8f0717f298c9a98df14742b04b7aa53c.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bbc984a3-320a-422e-889a-0b7035bff8cd/736x736/524477ec66cc3ebdeae39ba3fab1efdc.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bbc984a3-320a-422e-889a-0b7035bff8cd/736x736/524477ec66cc3ebdeae39ba3fab1efdc.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bbc984a3-320a-422e-889a-0b7035bff8cd/736x736/eb743f729c70c72332fd95c2b4f9adc6.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bbc984a3-320a-422e-889a-0b7035bff8cd/736x736/eb743f729c70c72332fd95c2b4f9adc6.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>185 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Alsemberg - 185 000 € - 2 chambres - 83m² - Immoweb</h2>
+        <p class="meta">Alsemberg · 2 ch. · 83 m2</p>
+        <p class="address">Brusselsesteenweg 27 1652 Alsemberg</p>
+        <div class="contact">
+          <strong>ERA VISIE</strong><br>
+          +3225235552 · immoweb@erabelgium.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/alsemberg/1652/21556270" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/fa6cb29d-5f7b-415f-bdf7-cc70d3b2a6c4/736x736/758ee955a7ec7ff0fcda49012905e3ca.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/fa6cb29d-5f7b-415f-bdf7-cc70d3b2a6c4/736x736/758ee955a7ec7ff0fcda49012905e3ca.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/fa6cb29d-5f7b-415f-bdf7-cc70d3b2a6c4/736x736/41eee1ca9ef9ac1b8528b1a77980489f.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/fa6cb29d-5f7b-415f-bdf7-cc70d3b2a6c4/736x736/41eee1ca9ef9ac1b8528b1a77980489f.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/fa6cb29d-5f7b-415f-bdf7-cc70d3b2a6c4/736x736/873b88bc76ef3bbdc3db3a7ee1024a75.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/fa6cb29d-5f7b-415f-bdf7-cc70d3b2a6c4/736x736/873b88bc76ef3bbdc3db3a7ee1024a75.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/fa6cb29d-5f7b-415f-bdf7-cc70d3b2a6c4/736x736/ef4d75759ae4e6b498160d4bb6857bb6.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/fa6cb29d-5f7b-415f-bdf7-cc70d3b2a6c4/736x736/ef4d75759ae4e6b498160d4bb6857bb6.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/fa6cb29d-5f7b-415f-bdf7-cc70d3b2a6c4/736x736/60330941f4bb126c51e2a38fa986fb26.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/fa6cb29d-5f7b-415f-bdf7-cc70d3b2a6c4/736x736/60330941f4bb126c51e2a38fa986fb26.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/fa6cb29d-5f7b-415f-bdf7-cc70d3b2a6c4/736x736/4780b27328540630a4c1238a5513e54f.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/fa6cb29d-5f7b-415f-bdf7-cc70d3b2a6c4/736x736/4780b27328540630a4c1238a5513e54f.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/fa6cb29d-5f7b-415f-bdf7-cc70d3b2a6c4/736x736/6781cf349fa75790aae08cd1f3346610.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/fa6cb29d-5f7b-415f-bdf7-cc70d3b2a6c4/736x736/6781cf349fa75790aae08cd1f3346610.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/fa6cb29d-5f7b-415f-bdf7-cc70d3b2a6c4/736x736/b55d3b8e53bd3e905e2c70438f89946f.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/fa6cb29d-5f7b-415f-bdf7-cc70d3b2a6c4/736x736/b55d3b8e53bd3e905e2c70438f89946f.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>200 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à LINKEBEEK - 200 000 € - 2 chambres - 90m² - Immoweb</h2>
+        <p class="meta">LINKEBEEK · 2 ch. · 90 m2</p>
+        <p class="address">Square des Braves 25 1630 LINKEBEEK</p>
+        <div class="contact">
+          <strong>L'Immobilière du Lycée Français</strong><br>
+          +320488333447 · immodlf@omniwebsites.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/linkebeek/1630/21469286" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.immodlf.be" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing agency">
+      <div class="photos"><div class="noPhoto">Photo non lue</div></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Agence locale (site direct)</span>
+          <strong>200 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Sint-Gillis | Berth Immo</h2>
+        <p class="meta">Saint-Gilles · 4 ch. · ? m2</p>
+        <p class="address">centre commune - agence experimental</p>
+        <div class="contact">
+          <strong>Berth Immobiliën</strong><br>
+          +32 2 356 04 34
+        </div>
+        <div class="actions">
+          <a href="https://www.berth.be/fr/l/a-vendre/maison/1060-sint-gillis/lis_ozzinurgkwsjsw2e5nhi70uq/" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="https://www.berth.be" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/af7a8413-aca6-4419-9e5d-698de8878520/736x736/19bf3087e1577052e51c1c79e29034b6.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/af7a8413-aca6-4419-9e5d-698de8878520/736x736/19bf3087e1577052e51c1c79e29034b6.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/af7a8413-aca6-4419-9e5d-698de8878520/736x736/c8d5776f1552a587836ef604ee3c7bc4.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/af7a8413-aca6-4419-9e5d-698de8878520/736x736/c8d5776f1552a587836ef604ee3c7bc4.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/af7a8413-aca6-4419-9e5d-698de8878520/736x736/25f8792321670fca30e0928a19240e1d.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/af7a8413-aca6-4419-9e5d-698de8878520/736x736/25f8792321670fca30e0928a19240e1d.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/af7a8413-aca6-4419-9e5d-698de8878520/736x736/2a0bd6d1f01598932727cb7bc16db985.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/af7a8413-aca6-4419-9e5d-698de8878520/736x736/2a0bd6d1f01598932727cb7bc16db985.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/af7a8413-aca6-4419-9e5d-698de8878520/736x736/2d7caee4d8265ff692334e71764e07fb.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/af7a8413-aca6-4419-9e5d-698de8878520/736x736/2d7caee4d8265ff692334e71764e07fb.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/af7a8413-aca6-4419-9e5d-698de8878520/736x736/e011ead75b17c01891a059a3afc769aa.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/af7a8413-aca6-4419-9e5d-698de8878520/736x736/e011ead75b17c01891a059a3afc769aa.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/af7a8413-aca6-4419-9e5d-698de8878520/736x736/e8566c961f2fdac0eb1819e061b3e469.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/af7a8413-aca6-4419-9e5d-698de8878520/736x736/e8566c961f2fdac0eb1819e061b3e469.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/af7a8413-aca6-4419-9e5d-698de8878520/736x736/274238c2e6ba9f423500d548ce5b1ce6.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/af7a8413-aca6-4419-9e5d-698de8878520/736x736/274238c2e6ba9f423500d548ce5b1ce6.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>220 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Sint-Pieters-Leeuw - 220 000 € - 2 chambres - 104m² - Immoweb</h2>
+        <p class="meta">Sint-Pieters-Leeuw · 2 ch. · 104 m2</p>
+        <p class="address">Bergensesteenweg 741 1600 Sint-Pieters-Leeuw</p>
+        <div class="contact">
+          <strong>De Immobiliers</strong><br>
+          +3223560000 · deimmobiliers@contactme.skarabee.com
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/sint-pieters-leeuw/1600/21647929" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.deimmobiliers.be" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/08cec6d1-750e-494e-b91d-a3f0dbb87538/736x736/7a15b25233e5894da129971cfe562f16.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/08cec6d1-750e-494e-b91d-a3f0dbb87538/736x736/7a15b25233e5894da129971cfe562f16.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/08cec6d1-750e-494e-b91d-a3f0dbb87538/736x736/a74eb71bef71ea673a4c2e402d020238.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/08cec6d1-750e-494e-b91d-a3f0dbb87538/736x736/a74eb71bef71ea673a4c2e402d020238.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/08cec6d1-750e-494e-b91d-a3f0dbb87538/736x736/3cfccb8fdfa67a418478f18a5886a554.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/08cec6d1-750e-494e-b91d-a3f0dbb87538/736x736/3cfccb8fdfa67a418478f18a5886a554.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/08cec6d1-750e-494e-b91d-a3f0dbb87538/736x736/9e95d35c8da4ab0c906417f073c06ed2.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/08cec6d1-750e-494e-b91d-a3f0dbb87538/736x736/9e95d35c8da4ab0c906417f073c06ed2.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/08cec6d1-750e-494e-b91d-a3f0dbb87538/736x736/4f8bdaf67b09ab0cf31def338a11b52a.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/08cec6d1-750e-494e-b91d-a3f0dbb87538/736x736/4f8bdaf67b09ab0cf31def338a11b52a.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/08cec6d1-750e-494e-b91d-a3f0dbb87538/736x736/64446ad555f35abc2318fe6dfa0a1575.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/08cec6d1-750e-494e-b91d-a3f0dbb87538/736x736/64446ad555f35abc2318fe6dfa0a1575.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/08cec6d1-750e-494e-b91d-a3f0dbb87538/736x736/886db73a85b9f759a3187b35d436dcdb.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/08cec6d1-750e-494e-b91d-a3f0dbb87538/736x736/886db73a85b9f759a3187b35d436dcdb.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/08cec6d1-750e-494e-b91d-a3f0dbb87538/736x736/0bf9bae0745181a32125e6a763cd841e.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/08cec6d1-750e-494e-b91d-a3f0dbb87538/736x736/0bf9bae0745181a32125e6a763cd841e.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>230 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Schaerbeek - 230 000 € - 2 chambres - 110m² - Immoweb</h2>
+        <p class="meta">Schaerbeek · 2 ch. · 110 m2</p>
+        <p class="address">Rue de la Marne 47 1030 Schaerbeek</p>
+        <div class="contact">
+          <strong>CENTURY 21 Home Consult</strong><br>
+          +3222452621 · storage8742_204@importfrommedia.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/schaerbeek/1030/21569470" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.century21.be/homeconsult" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/8d1fefd2-ab8f-42dd-a005-77d7e36391ee/736x736/175ba7a642ac5dd35c80cdd1eaf51e8e.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/8d1fefd2-ab8f-42dd-a005-77d7e36391ee/736x736/175ba7a642ac5dd35c80cdd1eaf51e8e.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/8d1fefd2-ab8f-42dd-a005-77d7e36391ee/736x736/9f4c15e1df0f2c3387b2d3d79c55de60.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/8d1fefd2-ab8f-42dd-a005-77d7e36391ee/736x736/9f4c15e1df0f2c3387b2d3d79c55de60.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/8d1fefd2-ab8f-42dd-a005-77d7e36391ee/736x736/eadec84c30e4de0a7ddeeec926354f5c.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/8d1fefd2-ab8f-42dd-a005-77d7e36391ee/736x736/eadec84c30e4de0a7ddeeec926354f5c.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/8d1fefd2-ab8f-42dd-a005-77d7e36391ee/736x736/bef87d2726a3f053f9e39c09d7981e31.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/8d1fefd2-ab8f-42dd-a005-77d7e36391ee/736x736/bef87d2726a3f053f9e39c09d7981e31.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/8d1fefd2-ab8f-42dd-a005-77d7e36391ee/736x736/da2a5f595fb1c61b730754a979c8222e.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/8d1fefd2-ab8f-42dd-a005-77d7e36391ee/736x736/da2a5f595fb1c61b730754a979c8222e.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/8d1fefd2-ab8f-42dd-a005-77d7e36391ee/736x736/5f9e37413de2a5628324a8dabc726a72.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/8d1fefd2-ab8f-42dd-a005-77d7e36391ee/736x736/5f9e37413de2a5628324a8dabc726a72.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/8d1fefd2-ab8f-42dd-a005-77d7e36391ee/736x736/fd236f2a6a2885a4428496156d91d8ea.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/8d1fefd2-ab8f-42dd-a005-77d7e36391ee/736x736/fd236f2a6a2885a4428496156d91d8ea.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/8d1fefd2-ab8f-42dd-a005-77d7e36391ee/736x736/7237ac745c3695c568e78698fa9a6c15.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/8d1fefd2-ab8f-42dd-a005-77d7e36391ee/736x736/7237ac745c3695c568e78698fa9a6c15.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>235 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à SINT-PIETERS-LEEUW - 235 000 € - 2 chambres - 106m² - Immoweb</h2>
+        <p class="meta">SINT-PIETERS-LEEUW · 2 ch. · 106 m2</p>
+        <p class="address">Gieterijstraat 74 1600 SINT-PIETERS-LEEUW</p>
+        <div class="contact">
+          <strong>Multimmo</strong><br>
+          +3223784040 · multimmo@omniwebsites.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/sint-pieters-leeuw/1600/21632884" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.multimmo.be" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/14dc06c1-a250-460f-b9d4-3e180e08a5b8/736x736/7dde5a814a2be0577a985248d6d5aaff.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/14dc06c1-a250-460f-b9d4-3e180e08a5b8/736x736/7dde5a814a2be0577a985248d6d5aaff.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/14dc06c1-a250-460f-b9d4-3e180e08a5b8/736x736/be6d681b00e983065a4414bba89aa93f.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/14dc06c1-a250-460f-b9d4-3e180e08a5b8/736x736/be6d681b00e983065a4414bba89aa93f.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/14dc06c1-a250-460f-b9d4-3e180e08a5b8/736x736/e245dfec7df439b4f2b340cf43fce46c.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/14dc06c1-a250-460f-b9d4-3e180e08a5b8/736x736/e245dfec7df439b4f2b340cf43fce46c.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/14dc06c1-a250-460f-b9d4-3e180e08a5b8/736x736/8b7a0e6fbfdb182a7bea695c464f2c76.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/14dc06c1-a250-460f-b9d4-3e180e08a5b8/736x736/8b7a0e6fbfdb182a7bea695c464f2c76.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/14dc06c1-a250-460f-b9d4-3e180e08a5b8/736x736/e4ba227dcdaa342422881e7d3f59b4c5.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/14dc06c1-a250-460f-b9d4-3e180e08a5b8/736x736/e4ba227dcdaa342422881e7d3f59b4c5.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/14dc06c1-a250-460f-b9d4-3e180e08a5b8/736x736/f8e2b3b07614ec51200ea66808a3a8bc.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/14dc06c1-a250-460f-b9d4-3e180e08a5b8/736x736/f8e2b3b07614ec51200ea66808a3a8bc.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/14dc06c1-a250-460f-b9d4-3e180e08a5b8/736x736/1b2f7da156e4d8e4f8a0a4ade70a482e.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/14dc06c1-a250-460f-b9d4-3e180e08a5b8/736x736/1b2f7da156e4d8e4f8a0a4ade70a482e.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/14dc06c1-a250-460f-b9d4-3e180e08a5b8/736x736/3c0d6ebf5fe9148c76e1d80c471f76c8.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/14dc06c1-a250-460f-b9d4-3e180e08a5b8/736x736/3c0d6ebf5fe9148c76e1d80c471f76c8.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>240 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Anderlecht - 240 000 € - 3 chambres - 103m² - Immoweb</h2>
+        <p class="meta">Anderlecht · 3 ch. · 103 m2</p>
+        <p class="address">Frans Halsstraat 27A 1070 Anderlecht</p>
+        <div class="contact">
+          <strong>Immo Pické BV BVBA.</strong><br>
+          +3223316269 · storage6011_791@importfrommedia.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/anderlecht/1070/21195263" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.immopicke.be" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9055d44a-b54d-4026-b844-798f37dac00f/736x736/a5498a27c4cae8452367a1490a42a738.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9055d44a-b54d-4026-b844-798f37dac00f/736x736/a5498a27c4cae8452367a1490a42a738.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9055d44a-b54d-4026-b844-798f37dac00f/736x736/b7b3197c5ae9b30d8eb8780ac8c18ea4.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9055d44a-b54d-4026-b844-798f37dac00f/736x736/b7b3197c5ae9b30d8eb8780ac8c18ea4.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9055d44a-b54d-4026-b844-798f37dac00f/736x736/ce973958bc11e8242e79c42fdbd5a18e.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9055d44a-b54d-4026-b844-798f37dac00f/736x736/ce973958bc11e8242e79c42fdbd5a18e.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9055d44a-b54d-4026-b844-798f37dac00f/736x736/13332e90976e6fcc96321fd5d3a4487f.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9055d44a-b54d-4026-b844-798f37dac00f/736x736/13332e90976e6fcc96321fd5d3a4487f.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9055d44a-b54d-4026-b844-798f37dac00f/736x736/2b4601c925653c650cc1253dc49bd906.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9055d44a-b54d-4026-b844-798f37dac00f/736x736/2b4601c925653c650cc1253dc49bd906.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9055d44a-b54d-4026-b844-798f37dac00f/736x736/3ff9231060cdd91a1b69c4b01cfe17e4.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9055d44a-b54d-4026-b844-798f37dac00f/736x736/3ff9231060cdd91a1b69c4b01cfe17e4.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9055d44a-b54d-4026-b844-798f37dac00f/736x736/d2e0679b1a5512f35a2d60878e151418.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9055d44a-b54d-4026-b844-798f37dac00f/736x736/d2e0679b1a5512f35a2d60878e151418.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9055d44a-b54d-4026-b844-798f37dac00f/736x736/93791204b890d3e039a186ddc5b8dd33.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9055d44a-b54d-4026-b844-798f37dac00f/736x736/93791204b890d3e039a186ddc5b8dd33.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>240 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Laeken - 240 000 € - 3 chambres - 100m² - Immoweb</h2>
+        <p class="meta">Laeken · 3 ch. · 100 m2</p>
+        <p class="address">Rue Steyls 14 1020 Laeken</p>
+        <div class="contact">
+          <strong>Century 21 Vision</strong><br>
+          +3228965921 · storage12412_964@importfrommedia.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/laeken/1020/21493349" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/b1bca13f-3122-4fdd-9c16-4ad7f0e988c8/736x736/3c8175d9d161941e91eddd1d57937d69.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/b1bca13f-3122-4fdd-9c16-4ad7f0e988c8/736x736/3c8175d9d161941e91eddd1d57937d69.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/b1bca13f-3122-4fdd-9c16-4ad7f0e988c8/736x736/b24c0adf74d7e29ba3c12029cb3f2887.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/b1bca13f-3122-4fdd-9c16-4ad7f0e988c8/736x736/b24c0adf74d7e29ba3c12029cb3f2887.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/b1bca13f-3122-4fdd-9c16-4ad7f0e988c8/736x736/9d52cbbc4cdb2b16938d440fe30d9297.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/b1bca13f-3122-4fdd-9c16-4ad7f0e988c8/736x736/9d52cbbc4cdb2b16938d440fe30d9297.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/b1bca13f-3122-4fdd-9c16-4ad7f0e988c8/736x736/049dfc66981ca60ec98388623915fe64.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/b1bca13f-3122-4fdd-9c16-4ad7f0e988c8/736x736/049dfc66981ca60ec98388623915fe64.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/b1bca13f-3122-4fdd-9c16-4ad7f0e988c8/736x736/14b21d2b91d55e69831b1219d7b62e22.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/b1bca13f-3122-4fdd-9c16-4ad7f0e988c8/736x736/14b21d2b91d55e69831b1219d7b62e22.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/b1bca13f-3122-4fdd-9c16-4ad7f0e988c8/736x736/e54d1871dbfbe62812d065a984cd461f.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/b1bca13f-3122-4fdd-9c16-4ad7f0e988c8/736x736/e54d1871dbfbe62812d065a984cd461f.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/b1bca13f-3122-4fdd-9c16-4ad7f0e988c8/736x736/6c6b361726e0c57e87c4225515eea57d.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/b1bca13f-3122-4fdd-9c16-4ad7f0e988c8/736x736/6c6b361726e0c57e87c4225515eea57d.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/b1bca13f-3122-4fdd-9c16-4ad7f0e988c8/736x736/a09fd390ebd5286700f933a7f9f049c5.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/b1bca13f-3122-4fdd-9c16-4ad7f0e988c8/736x736/a09fd390ebd5286700f933a7f9f049c5.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>245 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Anderlecht - 245 000 € - 2 chambres - 102m² - Immoweb</h2>
+        <p class="meta">Anderlecht · 2 ch. · 102 m2</p>
+        <p class="address">Rue des Colombophiles 167 1070 Anderlecht</p>
+        <div class="contact">
+          <strong>ERA CORNELIS</strong><br>
+          +3223540465 · immoweb@erabelgium.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/anderlecht/1070/21618491" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="https://www.era.be/fr/era-cornelis" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/c5b61955-c444-42ce-938b-6b59c1f6aa16/736x736/6de1d8eff1e6a2d9849c0df07feefce9.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/c5b61955-c444-42ce-938b-6b59c1f6aa16/736x736/6de1d8eff1e6a2d9849c0df07feefce9.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/c5b61955-c444-42ce-938b-6b59c1f6aa16/736x736/afa34d8ef13deaa2fd8cb332e6651a3f.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/c5b61955-c444-42ce-938b-6b59c1f6aa16/736x736/afa34d8ef13deaa2fd8cb332e6651a3f.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/c5b61955-c444-42ce-938b-6b59c1f6aa16/736x736/c5ca9ac60418208f650e7add5f584947.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/c5b61955-c444-42ce-938b-6b59c1f6aa16/736x736/c5ca9ac60418208f650e7add5f584947.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/c5b61955-c444-42ce-938b-6b59c1f6aa16/736x736/591aabdccb533edabc6d97af05346b22.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/c5b61955-c444-42ce-938b-6b59c1f6aa16/736x736/591aabdccb533edabc6d97af05346b22.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/c5b61955-c444-42ce-938b-6b59c1f6aa16/736x736/622d99c622cf13b229ce2a7c76d40614.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/c5b61955-c444-42ce-938b-6b59c1f6aa16/736x736/622d99c622cf13b229ce2a7c76d40614.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/c5b61955-c444-42ce-938b-6b59c1f6aa16/736x736/19cfeeaa93cf2b02b085cf5ee3ba8ecc.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/c5b61955-c444-42ce-938b-6b59c1f6aa16/736x736/19cfeeaa93cf2b02b085cf5ee3ba8ecc.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/c5b61955-c444-42ce-938b-6b59c1f6aa16/736x736/84f06eb44e368b38a80a7131d582c6b0.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/c5b61955-c444-42ce-938b-6b59c1f6aa16/736x736/84f06eb44e368b38a80a7131d582c6b0.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/c5b61955-c444-42ce-938b-6b59c1f6aa16/736x736/571de44c653a921fcf1ca6616029ca9a.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/c5b61955-c444-42ce-938b-6b59c1f6aa16/736x736/571de44c653a921fcf1ca6616029ca9a.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>245 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Sint-Pieters-Leeuw - 245 000 € - 2 chambres - 96m² - Immoweb</h2>
+        <p class="meta">Sint-Pieters-Leeuw · 2 ch. · 96 m2</p>
+        <p class="address">Pedestraat 107 1602 Sint-Pieters-Leeuw</p>
+        <div class="contact">
+          <strong>ERA VISIE</strong><br>
+          +3225235552 · immoweb@erabelgium.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/sint-pieters-leeuw/1602/21624111" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/59493507-6a87-465a-a817-3daa47489614/736x736/e59768af7d9007e2f4cb2daeca058793.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/59493507-6a87-465a-a817-3daa47489614/736x736/e59768af7d9007e2f4cb2daeca058793.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/59493507-6a87-465a-a817-3daa47489614/736x736/5dcb44f0e134d5c5bbbcd5792a3c9b38.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/59493507-6a87-465a-a817-3daa47489614/736x736/5dcb44f0e134d5c5bbbcd5792a3c9b38.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/59493507-6a87-465a-a817-3daa47489614/736x736/03167416fc9c4eb36dba1e2f96389d6f.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/59493507-6a87-465a-a817-3daa47489614/736x736/03167416fc9c4eb36dba1e2f96389d6f.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/59493507-6a87-465a-a817-3daa47489614/736x736/34df1132be36cf3562d1e6d90c216f0c.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/59493507-6a87-465a-a817-3daa47489614/736x736/34df1132be36cf3562d1e6d90c216f0c.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/59493507-6a87-465a-a817-3daa47489614/736x736/058c0c9ca930fb23bbd40ef0a2322c1b.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/59493507-6a87-465a-a817-3daa47489614/736x736/058c0c9ca930fb23bbd40ef0a2322c1b.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/59493507-6a87-465a-a817-3daa47489614/736x736/6bf9c3c31a6ff55c75672309e53a7707.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/59493507-6a87-465a-a817-3daa47489614/736x736/6bf9c3c31a6ff55c75672309e53a7707.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/59493507-6a87-465a-a817-3daa47489614/736x736/2f4b2c18907c4ea672d48ca3286cd132.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/59493507-6a87-465a-a817-3daa47489614/736x736/2f4b2c18907c4ea672d48ca3286cd132.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/59493507-6a87-465a-a817-3daa47489614/736x736/a7a4948750e0a391588570a1b71be05d.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/59493507-6a87-465a-a817-3daa47489614/736x736/a7a4948750e0a391588570a1b71be05d.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>245 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Uccle - 245 000 € - 2 chambres - 119m² - Immoweb</h2>
+        <p class="meta">Uccle · 2 ch. · 119 m2</p>
+        <p class="address">Chaussée d'Alsemberg 916 1180 Uccle</p>
+        <div class="contact">
+          <strong>La Maison Properties Group</strong><br>
+          +3226692303 · storage10268_436@importfrommedia.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/uccle/1180/21201047" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.lamaison.be" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/817e8815-1888-43a1-8b8d-aa07f76bb4cb/736x736/64388eb7acbe69799e0f11ad90ce42e6.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/817e8815-1888-43a1-8b8d-aa07f76bb4cb/736x736/64388eb7acbe69799e0f11ad90ce42e6.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/817e8815-1888-43a1-8b8d-aa07f76bb4cb/736x736/94ba7a845077270e874121f14c2a5322.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/817e8815-1888-43a1-8b8d-aa07f76bb4cb/736x736/94ba7a845077270e874121f14c2a5322.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/817e8815-1888-43a1-8b8d-aa07f76bb4cb/736x736/90050f1fc71bd63936c59978d05d0c8a.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/817e8815-1888-43a1-8b8d-aa07f76bb4cb/736x736/90050f1fc71bd63936c59978d05d0c8a.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/817e8815-1888-43a1-8b8d-aa07f76bb4cb/736x736/e1d47ed9c7551bf361b74a1008273ee0.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/817e8815-1888-43a1-8b8d-aa07f76bb4cb/736x736/e1d47ed9c7551bf361b74a1008273ee0.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/817e8815-1888-43a1-8b8d-aa07f76bb4cb/736x736/b5b2840fefe01bfcfe271eb03e42502f.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/817e8815-1888-43a1-8b8d-aa07f76bb4cb/736x736/b5b2840fefe01bfcfe271eb03e42502f.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/817e8815-1888-43a1-8b8d-aa07f76bb4cb/736x736/363360ebd82b8f494fdfc4716cc8eb99.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/817e8815-1888-43a1-8b8d-aa07f76bb4cb/736x736/363360ebd82b8f494fdfc4716cc8eb99.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/817e8815-1888-43a1-8b8d-aa07f76bb4cb/736x736/1b39e8c403147131c65534d12efb1866.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/817e8815-1888-43a1-8b8d-aa07f76bb4cb/736x736/1b39e8c403147131c65534d12efb1866.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/817e8815-1888-43a1-8b8d-aa07f76bb4cb/736x736/88df11c0e4fa65e2a424ccc668a1000c.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/817e8815-1888-43a1-8b8d-aa07f76bb4cb/736x736/88df11c0e4fa65e2a424ccc668a1000c.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>249 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Anderlecht - 249 000 € - 3 chambres - 183m² - Immoweb</h2>
+        <p class="meta">Anderlecht · 3 ch. · 183 m2</p>
+        <p class="address">Rue Sergent De Bruyne 86 1070 Anderlecht</p>
+        <div class="contact">
+          <strong>Rêvimmo Brussels</strong><br>
+          +3222170032 · revimmo_bruxelles@importfrommedia.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/anderlecht/1070/21611249" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.revimmo.be" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/5bcefb3f-efec-43f0-9a3a-302143170c4e/736x736/65f7c0b6f17e6ff1f797115c21b9ea03.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/5bcefb3f-efec-43f0-9a3a-302143170c4e/736x736/65f7c0b6f17e6ff1f797115c21b9ea03.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/5bcefb3f-efec-43f0-9a3a-302143170c4e/736x736/158c3d6d6474cf046c282f9040c6e7fd.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/5bcefb3f-efec-43f0-9a3a-302143170c4e/736x736/158c3d6d6474cf046c282f9040c6e7fd.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/5bcefb3f-efec-43f0-9a3a-302143170c4e/736x736/980b2d4f0edea6f2ce3be78b58b79ce8.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/5bcefb3f-efec-43f0-9a3a-302143170c4e/736x736/980b2d4f0edea6f2ce3be78b58b79ce8.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/5bcefb3f-efec-43f0-9a3a-302143170c4e/736x736/c401a34f0fa838fa3a0e24d883fb1581.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/5bcefb3f-efec-43f0-9a3a-302143170c4e/736x736/c401a34f0fa838fa3a0e24d883fb1581.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/5bcefb3f-efec-43f0-9a3a-302143170c4e/736x736/774e04d3da16ce2b061c0325bb737bcf.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/5bcefb3f-efec-43f0-9a3a-302143170c4e/736x736/774e04d3da16ce2b061c0325bb737bcf.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/5bcefb3f-efec-43f0-9a3a-302143170c4e/736x736/0fa0da53aa7e3f60a62a79abb57f5539.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/5bcefb3f-efec-43f0-9a3a-302143170c4e/736x736/0fa0da53aa7e3f60a62a79abb57f5539.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/5bcefb3f-efec-43f0-9a3a-302143170c4e/736x736/0287f4c26768295adec3a9d961140320.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/5bcefb3f-efec-43f0-9a3a-302143170c4e/736x736/0287f4c26768295adec3a9d961140320.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/5bcefb3f-efec-43f0-9a3a-302143170c4e/736x736/9b494ca4491df3a4401d18b5f0ce1efc.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/5bcefb3f-efec-43f0-9a3a-302143170c4e/736x736/9b494ca4491df3a4401d18b5f0ce1efc.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>249 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Anderlecht - 249 000 € - 4 chambres - Immoweb</h2>
+        <p class="meta">Anderlecht · 4 ch. · ? m2</p>
+        <p class="address">Rue des Alouettes 4 1070 Anderlecht</p>
+        <div class="contact">
+          <strong>Agent non lu</strong><br>
+          +32495852995
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/anderlecht/1070/21597009" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9b06a99d-dd4d-4496-9f2f-0dbc6fe01a09/736x736/a03cc845e8f20a54d4c3e6fd82c3920a.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9b06a99d-dd4d-4496-9f2f-0dbc6fe01a09/736x736/a03cc845e8f20a54d4c3e6fd82c3920a.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9b06a99d-dd4d-4496-9f2f-0dbc6fe01a09/736x736/ed531836db48331ec4131321fe0c5f1d.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9b06a99d-dd4d-4496-9f2f-0dbc6fe01a09/736x736/ed531836db48331ec4131321fe0c5f1d.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9b06a99d-dd4d-4496-9f2f-0dbc6fe01a09/736x736/5b84d69e8fd80274ac1ec1aec29f44f7.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9b06a99d-dd4d-4496-9f2f-0dbc6fe01a09/736x736/5b84d69e8fd80274ac1ec1aec29f44f7.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9b06a99d-dd4d-4496-9f2f-0dbc6fe01a09/736x736/7c6e3fd45ace345b8c276baeb39046e1.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9b06a99d-dd4d-4496-9f2f-0dbc6fe01a09/736x736/7c6e3fd45ace345b8c276baeb39046e1.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9b06a99d-dd4d-4496-9f2f-0dbc6fe01a09/736x736/ad570d600340ec0bea7131808195b394.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9b06a99d-dd4d-4496-9f2f-0dbc6fe01a09/736x736/ad570d600340ec0bea7131808195b394.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9b06a99d-dd4d-4496-9f2f-0dbc6fe01a09/736x736/d1339be14e41978969cac23f5f9928e2.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9b06a99d-dd4d-4496-9f2f-0dbc6fe01a09/736x736/d1339be14e41978969cac23f5f9928e2.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9b06a99d-dd4d-4496-9f2f-0dbc6fe01a09/736x736/b478116d963e8e7ef76bd7a85230d80b.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9b06a99d-dd4d-4496-9f2f-0dbc6fe01a09/736x736/b478116d963e8e7ef76bd7a85230d80b.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>249 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Bruxelles - 249 000 € - 2 chambres - 93m² - Immoweb</h2>
+        <p class="meta">Bruxelles · 2 ch. · 93 m2</p>
+        <p class="address">Rue Haute 334 1000 Bruxelles</p>
+        <div class="contact">
+          <strong>Rêvimmo Brussels</strong><br>
+          +3222170032 · revimmo_bruxelles@importfrommedia.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/bruxelles/1000/21646423" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.revimmo.be" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/fcaba6bf-1c1f-44da-956d-0e66d3e8cd9c/736x736/d6b260f5c8dcdb67a99e72aaff116aff.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/fcaba6bf-1c1f-44da-956d-0e66d3e8cd9c/736x736/d6b260f5c8dcdb67a99e72aaff116aff.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/fcaba6bf-1c1f-44da-956d-0e66d3e8cd9c/736x736/77e91282d8e262ad18048ce80503d896.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/fcaba6bf-1c1f-44da-956d-0e66d3e8cd9c/736x736/77e91282d8e262ad18048ce80503d896.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/fcaba6bf-1c1f-44da-956d-0e66d3e8cd9c/736x736/ef531c5360d5fc18426a5d810e4c8d25.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/fcaba6bf-1c1f-44da-956d-0e66d3e8cd9c/736x736/ef531c5360d5fc18426a5d810e4c8d25.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/fcaba6bf-1c1f-44da-956d-0e66d3e8cd9c/736x736/ea09d8ee70634c144d0c2ed7d62cc471.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/fcaba6bf-1c1f-44da-956d-0e66d3e8cd9c/736x736/ea09d8ee70634c144d0c2ed7d62cc471.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/fcaba6bf-1c1f-44da-956d-0e66d3e8cd9c/736x736/3fd8abb3b1c3eda877536b628ac006c4.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/fcaba6bf-1c1f-44da-956d-0e66d3e8cd9c/736x736/3fd8abb3b1c3eda877536b628ac006c4.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/fcaba6bf-1c1f-44da-956d-0e66d3e8cd9c/736x736/d3c5662764526f58e286f22e00ac925d.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/fcaba6bf-1c1f-44da-956d-0e66d3e8cd9c/736x736/d3c5662764526f58e286f22e00ac925d.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/fcaba6bf-1c1f-44da-956d-0e66d3e8cd9c/736x736/f42f7ff5af200c6ead32bacbf3d056a5.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/fcaba6bf-1c1f-44da-956d-0e66d3e8cd9c/736x736/f42f7ff5af200c6ead32bacbf3d056a5.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/fcaba6bf-1c1f-44da-956d-0e66d3e8cd9c/736x736/5ac222930167fd6fe37a96d60e203b19.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/fcaba6bf-1c1f-44da-956d-0e66d3e8cd9c/736x736/5ac222930167fd6fe37a96d60e203b19.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>249 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Koekelberg - 249 000 € - 2 chambres - 115m² - Immoweb</h2>
+        <p class="meta">Koekelberg · 2 ch. · 115 m2</p>
+        <p class="address">Rue George-dit-Marchal 1 1081 Koekelberg</p>
+        <div class="contact">
+          <strong>Immo To Be</strong><br>
+          +32472642892 · storage13234_16297@importfrommedia.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/koekelberg/1081/21652264" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/38fd2c01-db98-43b1-8c1b-19ffadc8a595/736x736/d903048f8178ac4576513da24ac6d426.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/38fd2c01-db98-43b1-8c1b-19ffadc8a595/736x736/d903048f8178ac4576513da24ac6d426.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/38fd2c01-db98-43b1-8c1b-19ffadc8a595/736x736/31407c8c695ee67c6b09d64b7eb44260.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/38fd2c01-db98-43b1-8c1b-19ffadc8a595/736x736/31407c8c695ee67c6b09d64b7eb44260.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/38fd2c01-db98-43b1-8c1b-19ffadc8a595/736x736/1c70e96f47762ab1489785f8dbad1ea4.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/38fd2c01-db98-43b1-8c1b-19ffadc8a595/736x736/1c70e96f47762ab1489785f8dbad1ea4.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/38fd2c01-db98-43b1-8c1b-19ffadc8a595/736x736/ffde9f728ecbb747061b2141e47e9ffe.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/38fd2c01-db98-43b1-8c1b-19ffadc8a595/736x736/ffde9f728ecbb747061b2141e47e9ffe.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/38fd2c01-db98-43b1-8c1b-19ffadc8a595/736x736/62f6468926ef96f8c8efe9510899ca5a.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/38fd2c01-db98-43b1-8c1b-19ffadc8a595/736x736/62f6468926ef96f8c8efe9510899ca5a.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/38fd2c01-db98-43b1-8c1b-19ffadc8a595/736x736/3413a4ae2ac1dd3f5d8f2831c8d76643.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/38fd2c01-db98-43b1-8c1b-19ffadc8a595/736x736/3413a4ae2ac1dd3f5d8f2831c8d76643.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/38fd2c01-db98-43b1-8c1b-19ffadc8a595/736x736/e71e56effc3488670b6df59cf3b3e10f.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/38fd2c01-db98-43b1-8c1b-19ffadc8a595/736x736/e71e56effc3488670b6df59cf3b3e10f.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/38fd2c01-db98-43b1-8c1b-19ffadc8a595/736x736/0ddf659ce13928a1aae5f3f248fb0157.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/38fd2c01-db98-43b1-8c1b-19ffadc8a595/736x736/0ddf659ce13928a1aae5f3f248fb0157.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>249 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Sint-Genesius-Rode - 249 000 € - 2 chambres - 125m² - Immoweb</h2>
+        <p class="meta">Sint-Genesius-Rode · 2 ch. · 125 m2</p>
+        <p class="address">Hallesesteenweg 108 1640 Sint-Genesius-Rode</p>
+        <div class="contact">
+          <strong>Immo Roosens</strong><br>
+          +3223053030 · info@immoroosens.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/sint-genesius-rode/1640/21622514" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.immoroosens.be" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/0938cdad-e009-4e10-a06a-01f1ff82716d/736x736/57639ca99d28b7209296725772d589d8.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/0938cdad-e009-4e10-a06a-01f1ff82716d/736x736/57639ca99d28b7209296725772d589d8.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/0938cdad-e009-4e10-a06a-01f1ff82716d/736x736/c9fda650e31f44056b769cecac0ecfcc.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/0938cdad-e009-4e10-a06a-01f1ff82716d/736x736/c9fda650e31f44056b769cecac0ecfcc.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/0938cdad-e009-4e10-a06a-01f1ff82716d/736x736/21b8a00e1605ccf29a79086d338a203d.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/0938cdad-e009-4e10-a06a-01f1ff82716d/736x736/21b8a00e1605ccf29a79086d338a203d.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/0938cdad-e009-4e10-a06a-01f1ff82716d/736x736/60d7d8bc85ccbc6da1e45b8ba4cd241e.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/0938cdad-e009-4e10-a06a-01f1ff82716d/736x736/60d7d8bc85ccbc6da1e45b8ba4cd241e.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/0938cdad-e009-4e10-a06a-01f1ff82716d/736x736/43d459099cc675ded9f7dd51e447f8fe.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/0938cdad-e009-4e10-a06a-01f1ff82716d/736x736/43d459099cc675ded9f7dd51e447f8fe.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/0938cdad-e009-4e10-a06a-01f1ff82716d/736x736/50dc8b263b306ee0800607dbf1ab8573.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/0938cdad-e009-4e10-a06a-01f1ff82716d/736x736/50dc8b263b306ee0800607dbf1ab8573.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/0938cdad-e009-4e10-a06a-01f1ff82716d/736x736/43ea13377a687827bf48e304cb954638.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/0938cdad-e009-4e10-a06a-01f1ff82716d/736x736/43ea13377a687827bf48e304cb954638.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/0938cdad-e009-4e10-a06a-01f1ff82716d/736x736/346aced4da7c4700a6c13db1958e94bf.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/0938cdad-e009-4e10-a06a-01f1ff82716d/736x736/346aced4da7c4700a6c13db1958e94bf.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>250 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Anderlecht - 250 000 € - 5 chambres - 188m² - Immoweb</h2>
+        <p class="meta">Anderlecht · 5 ch. · 188 m2</p>
+        <p class="address">Rue du Chapeau 6 1070 Anderlecht</p>
+        <div class="contact">
+          <strong>Flow Real Property</strong><br>
+          +3223046998 · storage7151_115@importfrommedia.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/anderlecht/1070/21596734" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.flowrealproperty.be" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/a90f60de-9314-4e6f-a563-096d4a223576/736x736/deb4851aa3f4e10665db4ee044553cec.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/a90f60de-9314-4e6f-a563-096d4a223576/736x736/deb4851aa3f4e10665db4ee044553cec.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/a90f60de-9314-4e6f-a563-096d4a223576/736x736/1b22dd31d8807ac0e8b58127864a3f70.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/a90f60de-9314-4e6f-a563-096d4a223576/736x736/1b22dd31d8807ac0e8b58127864a3f70.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/a90f60de-9314-4e6f-a563-096d4a223576/736x736/6d216561291514c99dfc0ce4ea72a0d9.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/a90f60de-9314-4e6f-a563-096d4a223576/736x736/6d216561291514c99dfc0ce4ea72a0d9.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/a90f60de-9314-4e6f-a563-096d4a223576/736x736/3447695404cec28a59a1ca512f9d7861.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/a90f60de-9314-4e6f-a563-096d4a223576/736x736/3447695404cec28a59a1ca512f9d7861.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/a90f60de-9314-4e6f-a563-096d4a223576/736x736/ad3acae77f3ff6b42a3baa09e840ad67.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/a90f60de-9314-4e6f-a563-096d4a223576/736x736/ad3acae77f3ff6b42a3baa09e840ad67.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/a90f60de-9314-4e6f-a563-096d4a223576/736x736/59a5f623f627b9fa10a1b5c5d5688149.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/a90f60de-9314-4e6f-a563-096d4a223576/736x736/59a5f623f627b9fa10a1b5c5d5688149.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/a90f60de-9314-4e6f-a563-096d4a223576/736x736/52cd4138b18b28e202a7bbd35702efad.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/a90f60de-9314-4e6f-a563-096d4a223576/736x736/52cd4138b18b28e202a7bbd35702efad.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/a90f60de-9314-4e6f-a563-096d4a223576/736x736/d75c788215a998cf0ff195a1a94ec176.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/a90f60de-9314-4e6f-a563-096d4a223576/736x736/d75c788215a998cf0ff195a1a94ec176.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>250 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Molenbeek-Saint-Jean - 250 000 € - 1 chambre - 98m² - Immoweb</h2>
+        <p class="meta">Molenbeek-Saint-Jean · 1 ch. · 98 m2</p>
+        <p class="address">1080 Molenbeek-Saint-Jean</p>
+        <div class="contact">
+          <strong>L'Immobilière des 4 Vents</strong><br>
+          +3223150851 · storage3472_uccle_55@importfrommedia.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/molenbeek-saint-jean/1080/21522929" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.immo4vents.be" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/a2c29ded-76af-42c2-a818-137e08af751e/736x736/35694e9efb732c19e8e251b40fe77829.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/a2c29ded-76af-42c2-a818-137e08af751e/736x736/35694e9efb732c19e8e251b40fe77829.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/a2c29ded-76af-42c2-a818-137e08af751e/736x736/b501b10d9314df8704da92b76fcb9967.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/a2c29ded-76af-42c2-a818-137e08af751e/736x736/b501b10d9314df8704da92b76fcb9967.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/a2c29ded-76af-42c2-a818-137e08af751e/736x736/14efcc94977a8ed3d2e08b55883f133d.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/a2c29ded-76af-42c2-a818-137e08af751e/736x736/14efcc94977a8ed3d2e08b55883f133d.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/a2c29ded-76af-42c2-a818-137e08af751e/736x736/ea8509473d1397e5f3d9033480d249ef.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/a2c29ded-76af-42c2-a818-137e08af751e/736x736/ea8509473d1397e5f3d9033480d249ef.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/a2c29ded-76af-42c2-a818-137e08af751e/736x736/e035b2a6b899fe870d67a5d7c3bda817.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/a2c29ded-76af-42c2-a818-137e08af751e/736x736/e035b2a6b899fe870d67a5d7c3bda817.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/a2c29ded-76af-42c2-a818-137e08af751e/736x736/d00aeec5b3e89225a6090bd7b2c5d6bd.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/a2c29ded-76af-42c2-a818-137e08af751e/736x736/d00aeec5b3e89225a6090bd7b2c5d6bd.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/a2c29ded-76af-42c2-a818-137e08af751e/736x736/a7a4948750e0a391588570a1b71be05d.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/a2c29ded-76af-42c2-a818-137e08af751e/736x736/a7a4948750e0a391588570a1b71be05d.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/a2c29ded-76af-42c2-a818-137e08af751e/736x736/2f4b2c18907c4ea672d48ca3286cd132.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/a2c29ded-76af-42c2-a818-137e08af751e/736x736/2f4b2c18907c4ea672d48ca3286cd132.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>250 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Uccle - 250 000 € - 2 chambres - 173m² - Immoweb</h2>
+        <p class="meta">Uccle · 2 ch. · 173 m2</p>
+        <p class="address">Chaussée d'Alsemberg 914 1180 Uccle</p>
+        <div class="contact">
+          <strong>La Maison Properties Group</strong><br>
+          +3226692303 · storage10268_436@importfrommedia.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/uccle/1180/21646585" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.lamaison.be" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/003c7064-1a71-41c5-b1a3-bc013dd5229d/736x736/5a4912ac3b339d70433fc75a97410e06.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/003c7064-1a71-41c5-b1a3-bc013dd5229d/736x736/5a4912ac3b339d70433fc75a97410e06.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/003c7064-1a71-41c5-b1a3-bc013dd5229d/736x736/6d388a9c58aac91d9d084ed6eeb74e17.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/003c7064-1a71-41c5-b1a3-bc013dd5229d/736x736/6d388a9c58aac91d9d084ed6eeb74e17.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/003c7064-1a71-41c5-b1a3-bc013dd5229d/736x736/747d774e85cbcff518bd419f0a6c05ce.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/003c7064-1a71-41c5-b1a3-bc013dd5229d/736x736/747d774e85cbcff518bd419f0a6c05ce.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/003c7064-1a71-41c5-b1a3-bc013dd5229d/736x736/d6793382462500559bccca4881c8af04.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/003c7064-1a71-41c5-b1a3-bc013dd5229d/736x736/d6793382462500559bccca4881c8af04.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/003c7064-1a71-41c5-b1a3-bc013dd5229d/736x736/4cac50f5cf22affb209fe9f654059f90.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/003c7064-1a71-41c5-b1a3-bc013dd5229d/736x736/4cac50f5cf22affb209fe9f654059f90.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/003c7064-1a71-41c5-b1a3-bc013dd5229d/736x736/1bb0d1abdd15a6a6eb7dc31c3e657e6a.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/003c7064-1a71-41c5-b1a3-bc013dd5229d/736x736/1bb0d1abdd15a6a6eb7dc31c3e657e6a.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/003c7064-1a71-41c5-b1a3-bc013dd5229d/736x736/8483543c7b47b145a1f882f3d596babf.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/003c7064-1a71-41c5-b1a3-bc013dd5229d/736x736/8483543c7b47b145a1f882f3d596babf.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/003c7064-1a71-41c5-b1a3-bc013dd5229d/736x736/e76acffa4e76d6d92fc290e1a780db19.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/003c7064-1a71-41c5-b1a3-bc013dd5229d/736x736/e76acffa4e76d6d92fc290e1a780db19.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>255 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Ruisbroek - 255 000 € - 2 chambres - 70m² - Immoweb</h2>
+        <p class="meta">Ruisbroek · 2 ch. · 70 m2</p>
+        <p class="address">Brugstraat 9 1601 Ruisbroek</p>
+        <div class="contact">
+          <strong>Enjoy Immo</strong><br>
+          +32479240032 · Julie.enjoyimmo@gmail.com
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/ruisbroek/1601/21645294" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/2a3acde1-a381-4f41-b8b8-3e1ad34962b7/736x736/19887239349b44f2a2e443ad60d86fda.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/2a3acde1-a381-4f41-b8b8-3e1ad34962b7/736x736/19887239349b44f2a2e443ad60d86fda.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/2a3acde1-a381-4f41-b8b8-3e1ad34962b7/736x736/83b7bbe014ff4ecec0972a9cbd33c31f.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/2a3acde1-a381-4f41-b8b8-3e1ad34962b7/736x736/83b7bbe014ff4ecec0972a9cbd33c31f.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/2a3acde1-a381-4f41-b8b8-3e1ad34962b7/736x736/cf81d83a6117bd2d47bb183d0dea845c.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/2a3acde1-a381-4f41-b8b8-3e1ad34962b7/736x736/cf81d83a6117bd2d47bb183d0dea845c.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/2a3acde1-a381-4f41-b8b8-3e1ad34962b7/736x736/3dc239a7a90578c6420918ae3b5adb6a.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/2a3acde1-a381-4f41-b8b8-3e1ad34962b7/736x736/3dc239a7a90578c6420918ae3b5adb6a.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/2a3acde1-a381-4f41-b8b8-3e1ad34962b7/736x736/90f30de9921d462dbed13daa424eac3f.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/2a3acde1-a381-4f41-b8b8-3e1ad34962b7/736x736/90f30de9921d462dbed13daa424eac3f.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/2a3acde1-a381-4f41-b8b8-3e1ad34962b7/736x736/f8bacaace8978c1d72b7477645936cbc.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/2a3acde1-a381-4f41-b8b8-3e1ad34962b7/736x736/f8bacaace8978c1d72b7477645936cbc.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/2a3acde1-a381-4f41-b8b8-3e1ad34962b7/736x736/48b23e96e7ed83050738305a6fc1f28a.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/2a3acde1-a381-4f41-b8b8-3e1ad34962b7/736x736/48b23e96e7ed83050738305a6fc1f28a.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/2a3acde1-a381-4f41-b8b8-3e1ad34962b7/736x736/296847c9675f0d30b88754a3b45b29e6.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/2a3acde1-a381-4f41-b8b8-3e1ad34962b7/736x736/296847c9675f0d30b88754a3b45b29e6.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>259 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à SAINT-JOSSE-TEN-NOODE - 259 000 € - 4 chambres - 160m² - Immoweb</h2>
+        <p class="meta">SAINT-JOSSE-TEN-NOODE · 4 ch. · 160 m2</p>
+        <p class="address">1210 SAINT-JOSSE-TEN-NOODE</p>
+        <div class="contact">
+          <strong>Espace Immo Brussels CENTRE</strong><br>
+          +3222191955 · espaceimmo@omniwebsites.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/saint-josse-ten-noode/1210/21608544" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/2464932e-4413-49fe-be67-2e362c92584b/736x736/e2eae3b641f78d629b5840d2ec67c159.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/2464932e-4413-49fe-be67-2e362c92584b/736x736/e2eae3b641f78d629b5840d2ec67c159.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/2464932e-4413-49fe-be67-2e362c92584b/736x736/b612329a9beba3e5b9746091b7d7fbe4.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/2464932e-4413-49fe-be67-2e362c92584b/736x736/b612329a9beba3e5b9746091b7d7fbe4.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/2464932e-4413-49fe-be67-2e362c92584b/736x736/9b457922661a0d792c80091bc26ca0f7.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/2464932e-4413-49fe-be67-2e362c92584b/736x736/9b457922661a0d792c80091bc26ca0f7.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/2464932e-4413-49fe-be67-2e362c92584b/736x736/62c95aa2c0672384cf216a11d2340a65.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/2464932e-4413-49fe-be67-2e362c92584b/736x736/62c95aa2c0672384cf216a11d2340a65.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/2464932e-4413-49fe-be67-2e362c92584b/736x736/b55ac226563c112edc09d7dd8e6c1556.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/2464932e-4413-49fe-be67-2e362c92584b/736x736/b55ac226563c112edc09d7dd8e6c1556.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/2464932e-4413-49fe-be67-2e362c92584b/736x736/95f1674207cdad7bcdb4de297a6d2b0c.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/2464932e-4413-49fe-be67-2e362c92584b/736x736/95f1674207cdad7bcdb4de297a6d2b0c.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/2464932e-4413-49fe-be67-2e362c92584b/736x736/159edabb4113a226b076cd5441268414.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/2464932e-4413-49fe-be67-2e362c92584b/736x736/159edabb4113a226b076cd5441268414.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/2464932e-4413-49fe-be67-2e362c92584b/736x736/d8795961c0ad1a2ff4ff886aa903ed4b.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/2464932e-4413-49fe-be67-2e362c92584b/736x736/d8795961c0ad1a2ff4ff886aa903ed4b.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>265 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Uccle - 265 000 € - 2 chambres - 133m² - Immoweb</h2>
+        <p class="meta">Uccle · 2 ch. · 133 m2</p>
+        <p class="address">Chaussée d'Alsemberg 918 1180 Uccle</p>
+        <div class="contact">
+          <strong>La Maison Properties Group</strong><br>
+          +3226692303 · storage10268_436@importfrommedia.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/uccle/1180/21419369" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.lamaison.be" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/acf10de5-68b4-4e15-b22a-458d88172612/736x736/7be166379b8926d0169fbd3eec7316e9.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/acf10de5-68b4-4e15-b22a-458d88172612/736x736/7be166379b8926d0169fbd3eec7316e9.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/acf10de5-68b4-4e15-b22a-458d88172612/736x736/0b6a0c338a2531c322bba87b460f0c6d.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/acf10de5-68b4-4e15-b22a-458d88172612/736x736/0b6a0c338a2531c322bba87b460f0c6d.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/acf10de5-68b4-4e15-b22a-458d88172612/736x736/78c7fc0f9cf454631362559d6a4c22c2.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/acf10de5-68b4-4e15-b22a-458d88172612/736x736/78c7fc0f9cf454631362559d6a4c22c2.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/acf10de5-68b4-4e15-b22a-458d88172612/736x736/8e9edddf79f384f8131cf7ded764e51e.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/acf10de5-68b4-4e15-b22a-458d88172612/736x736/8e9edddf79f384f8131cf7ded764e51e.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/acf10de5-68b4-4e15-b22a-458d88172612/736x736/4ea0545b0290443bd66fc56ecf88ab27.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/acf10de5-68b4-4e15-b22a-458d88172612/736x736/4ea0545b0290443bd66fc56ecf88ab27.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/acf10de5-68b4-4e15-b22a-458d88172612/736x736/f9c75f9faa94e3e5b7f18c674d03fd43.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/acf10de5-68b4-4e15-b22a-458d88172612/736x736/f9c75f9faa94e3e5b7f18c674d03fd43.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/acf10de5-68b4-4e15-b22a-458d88172612/736x736/21cf5972a3c75b16b3ca627909956de1.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/acf10de5-68b4-4e15-b22a-458d88172612/736x736/21cf5972a3c75b16b3ca627909956de1.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/acf10de5-68b4-4e15-b22a-458d88172612/736x736/c4f6a22c83da27f2c2cbd0d57154f77f.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/acf10de5-68b4-4e15-b22a-458d88172612/736x736/c4f6a22c83da27f2c2cbd0d57154f77f.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>265 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Woluwe-Saint-Lambert - 265 000 € - 2 chambres - 75m² - Immoweb</h2>
+        <p class="meta">Woluwe-Saint-Lambert · 2 ch. · 75 m2</p>
+        <p class="address">Avenue du Péage 53 1200 Woluwe-Saint-Lambert</p>
+        <div class="contact">
+          <strong>Easyhome</strong><br>
+          +3284770043 · storage7460_368@importfrommedia.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/woluwe-saint-lambert/1200/21375731" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.easyhome-immo.be" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/43e0989a-180c-4243-acf5-585a96f3bec3/736x736/c1b787de9cb16f07bea16a41b919d443.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/43e0989a-180c-4243-acf5-585a96f3bec3/736x736/c1b787de9cb16f07bea16a41b919d443.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/43e0989a-180c-4243-acf5-585a96f3bec3/736x736/3114f09e41e2d681bce5560310f368f4.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/43e0989a-180c-4243-acf5-585a96f3bec3/736x736/3114f09e41e2d681bce5560310f368f4.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/43e0989a-180c-4243-acf5-585a96f3bec3/736x736/ae8b38f8fb780316b2a7973a9d1ecbdf.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/43e0989a-180c-4243-acf5-585a96f3bec3/736x736/ae8b38f8fb780316b2a7973a9d1ecbdf.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/43e0989a-180c-4243-acf5-585a96f3bec3/736x736/9411b9dc6ba2f61041c311415f7bfddd.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/43e0989a-180c-4243-acf5-585a96f3bec3/736x736/9411b9dc6ba2f61041c311415f7bfddd.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/43e0989a-180c-4243-acf5-585a96f3bec3/736x736/bb05a34ac582a392f39934778f093b86.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/43e0989a-180c-4243-acf5-585a96f3bec3/736x736/bb05a34ac582a392f39934778f093b86.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/43e0989a-180c-4243-acf5-585a96f3bec3/736x736/67ae6eab90a33bb9bd57d25596116b80.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/43e0989a-180c-4243-acf5-585a96f3bec3/736x736/67ae6eab90a33bb9bd57d25596116b80.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/43e0989a-180c-4243-acf5-585a96f3bec3/736x736/ca6c92452426763b3a0e9aba101955a8.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/43e0989a-180c-4243-acf5-585a96f3bec3/736x736/ca6c92452426763b3a0e9aba101955a8.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/43e0989a-180c-4243-acf5-585a96f3bec3/736x736/8d2d525ce1ef44a49ab2bbc6d11cb3b1.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/43e0989a-180c-4243-acf5-585a96f3bec3/736x736/8d2d525ce1ef44a49ab2bbc6d11cb3b1.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>269 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Molenbeek-Saint-Jean - 269 000 € - 2 chambres - 90m² - Immoweb</h2>
+        <p class="meta">Molenbeek-Saint-Jean · 2 ch. · 90 m2</p>
+        <p class="address">Rue du Gulden Bodem 9 1080 Molenbeek-Saint-Jean</p>
+        <div class="contact">
+          <strong>Perception Immobilière</strong><br>
+          +32496708370 · percepti_anderlecht@importfrommedia.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/molenbeek-saint-jean/1080/21542765" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.perception-immobiliere.be" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9bb8f3de-51c0-454c-91cd-db88533a0884/736x736/100218dc22021d68f3d538d38c2414b3.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9bb8f3de-51c0-454c-91cd-db88533a0884/736x736/100218dc22021d68f3d538d38c2414b3.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9bb8f3de-51c0-454c-91cd-db88533a0884/736x736/efa26983656d353ce6491568f9cfb996.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9bb8f3de-51c0-454c-91cd-db88533a0884/736x736/efa26983656d353ce6491568f9cfb996.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9bb8f3de-51c0-454c-91cd-db88533a0884/736x736/2bfa46c8ad0e8ee127cdb294e195c79c.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9bb8f3de-51c0-454c-91cd-db88533a0884/736x736/2bfa46c8ad0e8ee127cdb294e195c79c.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9bb8f3de-51c0-454c-91cd-db88533a0884/736x736/c8e2319b6a9bad62e96cfa160f299fd8.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9bb8f3de-51c0-454c-91cd-db88533a0884/736x736/c8e2319b6a9bad62e96cfa160f299fd8.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9bb8f3de-51c0-454c-91cd-db88533a0884/736x736/2887fba86af6becbe00642e8ef69a533.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9bb8f3de-51c0-454c-91cd-db88533a0884/736x736/2887fba86af6becbe00642e8ef69a533.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9bb8f3de-51c0-454c-91cd-db88533a0884/736x736/d1734668eabdbe531ccfe9d94e63203a.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9bb8f3de-51c0-454c-91cd-db88533a0884/736x736/d1734668eabdbe531ccfe9d94e63203a.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9bb8f3de-51c0-454c-91cd-db88533a0884/736x736/5c6a2a7d2c734e917c25d1b544dfa0ba.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9bb8f3de-51c0-454c-91cd-db88533a0884/736x736/5c6a2a7d2c734e917c25d1b544dfa0ba.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/9bb8f3de-51c0-454c-91cd-db88533a0884/736x736/2b3977006f5ac68dccd6d667620c9f8f.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/9bb8f3de-51c0-454c-91cd-db88533a0884/736x736/2b3977006f5ac68dccd6d667620c9f8f.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>275 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Anderlecht - 275 000 € - 3 chambres - 161m² - Immoweb</h2>
+        <p class="meta">Anderlecht · 3 ch. · 161 m2</p>
+        <p class="address">1070 Anderlecht</p>
+        <div class="contact">
+          <strong>JAM Properties</strong><br>
+          +3225342187 · jamproperties_bruxelles@importfrommedia.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/anderlecht/1070/21587048" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/e6b69730-1897-4d6a-92f9-ca1bd806ce3f/736x736/f6ef0c8700a6078598b5b1e2c8afb016.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/e6b69730-1897-4d6a-92f9-ca1bd806ce3f/736x736/f6ef0c8700a6078598b5b1e2c8afb016.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/e6b69730-1897-4d6a-92f9-ca1bd806ce3f/736x736/51fa5936b734f35a6c5a5155a77e18d6.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/e6b69730-1897-4d6a-92f9-ca1bd806ce3f/736x736/51fa5936b734f35a6c5a5155a77e18d6.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/e6b69730-1897-4d6a-92f9-ca1bd806ce3f/736x736/7e9794fc989c04f62d680f7b552ec9f4.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/e6b69730-1897-4d6a-92f9-ca1bd806ce3f/736x736/7e9794fc989c04f62d680f7b552ec9f4.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/e6b69730-1897-4d6a-92f9-ca1bd806ce3f/736x736/3f6d451667ca3f47e56a040c4100b6b8.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/e6b69730-1897-4d6a-92f9-ca1bd806ce3f/736x736/3f6d451667ca3f47e56a040c4100b6b8.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/e6b69730-1897-4d6a-92f9-ca1bd806ce3f/736x736/8318cd1ceff8ab69d20299ba8b58ee46.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/e6b69730-1897-4d6a-92f9-ca1bd806ce3f/736x736/8318cd1ceff8ab69d20299ba8b58ee46.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/e6b69730-1897-4d6a-92f9-ca1bd806ce3f/736x736/3c9e6126bf2518c78ea6c91041905373.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/e6b69730-1897-4d6a-92f9-ca1bd806ce3f/736x736/3c9e6126bf2518c78ea6c91041905373.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/e6b69730-1897-4d6a-92f9-ca1bd806ce3f/736x736/17bd5ecd4f27cdcfe1b8740f1179440e.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/e6b69730-1897-4d6a-92f9-ca1bd806ce3f/736x736/17bd5ecd4f27cdcfe1b8740f1179440e.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/e6b69730-1897-4d6a-92f9-ca1bd806ce3f/736x736/3d9b79976aaa9a69bbccfe80e518c2a5.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/e6b69730-1897-4d6a-92f9-ca1bd806ce3f/736x736/3d9b79976aaa9a69bbccfe80e518c2a5.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>275 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Hoeilaart - 275 000 € - 2 chambres - 175m² - Immoweb</h2>
+        <p class="meta">Hoeilaart · 2 ch. · 175 m2</p>
+        <p class="address">Désiré Vandervaerenstraat 12 1560 Hoeilaart</p>
+        <div class="contact">
+          <strong>MC Properties</strong><br>
+          +32489843982 · storage10139_633@importfrommedia.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/hoeilaart/1560/21405676" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.properties-mc.com" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/91188ea6-84f6-4b38-ab34-cd662bea336c/736x736/f634282b6534b18f1936d77848fa622e.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/91188ea6-84f6-4b38-ab34-cd662bea336c/736x736/f634282b6534b18f1936d77848fa622e.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/91188ea6-84f6-4b38-ab34-cd662bea336c/736x736/08f4be647b0f2bbb1245fdff3231b581.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/91188ea6-84f6-4b38-ab34-cd662bea336c/736x736/08f4be647b0f2bbb1245fdff3231b581.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/91188ea6-84f6-4b38-ab34-cd662bea336c/736x736/23740827b19806351d44462ac6f06c6b.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/91188ea6-84f6-4b38-ab34-cd662bea336c/736x736/23740827b19806351d44462ac6f06c6b.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/91188ea6-84f6-4b38-ab34-cd662bea336c/736x736/0a93193569c9d7a99dcedb7d197d611f.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/91188ea6-84f6-4b38-ab34-cd662bea336c/736x736/0a93193569c9d7a99dcedb7d197d611f.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/91188ea6-84f6-4b38-ab34-cd662bea336c/736x736/dd3eef03e1ea177a4dc0ad29afd608a2.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/91188ea6-84f6-4b38-ab34-cd662bea336c/736x736/dd3eef03e1ea177a4dc0ad29afd608a2.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/91188ea6-84f6-4b38-ab34-cd662bea336c/736x736/e2c1eb210d8cfaf82151ebc4552550c1.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/91188ea6-84f6-4b38-ab34-cd662bea336c/736x736/e2c1eb210d8cfaf82151ebc4552550c1.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/91188ea6-84f6-4b38-ab34-cd662bea336c/736x736/41182705635fbef5c5e4b27bf23f5976.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/91188ea6-84f6-4b38-ab34-cd662bea336c/736x736/41182705635fbef5c5e4b27bf23f5976.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/91188ea6-84f6-4b38-ab34-cd662bea336c/736x736/fb851370483f5e366cdf82325dfc251e.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/91188ea6-84f6-4b38-ab34-cd662bea336c/736x736/fb851370483f5e366cdf82325dfc251e.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>275 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à HOEILAART - 275 000 € - 3 chambres - 153m² - Immoweb</h2>
+        <p class="meta">HOEILAART · 3 ch. · 153 m2</p>
+        <p class="address">Kasteelstraat 57 1560 HOEILAART</p>
+        <div class="contact">
+          <strong>CENTURY 21 ImmoNero</strong><br>
+          +3226573699 · immonero@omniwebsites.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/hoeilaart/1560/21535769" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="https://www.immonero.be/nl/te-koop/?" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/feb2d7ee-1e40-41ea-bea1-f999363f2ff5/736x736/ed13bab17a3a04770abbc334fb251ef6.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/feb2d7ee-1e40-41ea-bea1-f999363f2ff5/736x736/ed13bab17a3a04770abbc334fb251ef6.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/feb2d7ee-1e40-41ea-bea1-f999363f2ff5/736x736/5cde2eb87d78e08240a8f5a7da1feb5e.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/feb2d7ee-1e40-41ea-bea1-f999363f2ff5/736x736/5cde2eb87d78e08240a8f5a7da1feb5e.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/feb2d7ee-1e40-41ea-bea1-f999363f2ff5/736x736/672ee30e81b52c0a17ba810589ab1df4.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/feb2d7ee-1e40-41ea-bea1-f999363f2ff5/736x736/672ee30e81b52c0a17ba810589ab1df4.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/feb2d7ee-1e40-41ea-bea1-f999363f2ff5/736x736/dee7aafc9727a2ea5fb1ecdfbfd370cc.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/feb2d7ee-1e40-41ea-bea1-f999363f2ff5/736x736/dee7aafc9727a2ea5fb1ecdfbfd370cc.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/feb2d7ee-1e40-41ea-bea1-f999363f2ff5/736x736/c0c1397b7353b50ddd4b4615992acb47.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/feb2d7ee-1e40-41ea-bea1-f999363f2ff5/736x736/c0c1397b7353b50ddd4b4615992acb47.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/feb2d7ee-1e40-41ea-bea1-f999363f2ff5/736x736/7bd350d9f1ee57a8ac313929dda41f90.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/feb2d7ee-1e40-41ea-bea1-f999363f2ff5/736x736/7bd350d9f1ee57a8ac313929dda41f90.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/feb2d7ee-1e40-41ea-bea1-f999363f2ff5/736x736/656028497f2c21555310e4705580865e.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/feb2d7ee-1e40-41ea-bea1-f999363f2ff5/736x736/656028497f2c21555310e4705580865e.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/feb2d7ee-1e40-41ea-bea1-f999363f2ff5/736x736/8898db29039ed8adbf6725db888d370a.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/feb2d7ee-1e40-41ea-bea1-f999363f2ff5/736x736/8898db29039ed8adbf6725db888d370a.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>275 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à WEMMEL - 275 000 € - 2 chambres - 105m² - Immoweb</h2>
+        <p class="meta">WEMMEL · 2 ch. · 105 m2</p>
+        <p class="address">Guido Gezellestraat 20 1780 WEMMEL</p>
+        <div class="contact">
+          <strong>VMV-Vastgoed</strong><br>
+          +3252503503 · vmv@omniwebsites.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/wemmel/1780/21588373" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.vmv-vastgoed.be" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/8dcd7937-77eb-4fd3-87fa-714b0d08f13d/736x736/ad52f2cf9e4380ecbeb0dd2da171da3c.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/8dcd7937-77eb-4fd3-87fa-714b0d08f13d/736x736/ad52f2cf9e4380ecbeb0dd2da171da3c.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/8dcd7937-77eb-4fd3-87fa-714b0d08f13d/736x736/67e05b2f0862868355b64d9078d228df.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/8dcd7937-77eb-4fd3-87fa-714b0d08f13d/736x736/67e05b2f0862868355b64d9078d228df.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/8dcd7937-77eb-4fd3-87fa-714b0d08f13d/736x736/8def68704e72260921877db69fbed838.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/8dcd7937-77eb-4fd3-87fa-714b0d08f13d/736x736/8def68704e72260921877db69fbed838.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/8dcd7937-77eb-4fd3-87fa-714b0d08f13d/736x736/1482c687f543aaac3f68f68b4213faeb.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/8dcd7937-77eb-4fd3-87fa-714b0d08f13d/736x736/1482c687f543aaac3f68f68b4213faeb.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/8dcd7937-77eb-4fd3-87fa-714b0d08f13d/736x736/5169d357e33069261d008a2722bf42a0.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/8dcd7937-77eb-4fd3-87fa-714b0d08f13d/736x736/5169d357e33069261d008a2722bf42a0.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/8dcd7937-77eb-4fd3-87fa-714b0d08f13d/736x736/140f3d4f73c5efedc17ce1bb0fcf22f9.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/8dcd7937-77eb-4fd3-87fa-714b0d08f13d/736x736/140f3d4f73c5efedc17ce1bb0fcf22f9.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/8dcd7937-77eb-4fd3-87fa-714b0d08f13d/736x736/028a94340ee8379d56c90249d8d32f52.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/8dcd7937-77eb-4fd3-87fa-714b0d08f13d/736x736/028a94340ee8379d56c90249d8d32f52.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/8dcd7937-77eb-4fd3-87fa-714b0d08f13d/736x736/eeafd58b3815e5bea096ca8f37d11692.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/8dcd7937-77eb-4fd3-87fa-714b0d08f13d/736x736/eeafd58b3815e5bea096ca8f37d11692.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>278 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à WEMMEL - 278 000 € - 2 chambres - 140m² - Immoweb</h2>
+        <p class="meta">WEMMEL · 2 ch. · 140 m2</p>
+        <p class="address">1780 WEMMEL</p>
+        <div class="contact">
+          <strong>Structura</strong><br>
+          +3224608046 · structura@omniwebsites.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/wemmel/1780/21529468" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.structura.be" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/afbc3039-8acf-4b0d-8f34-56ac426a24f4/736x736/1c85d0623bfe57207c94643a02918220.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/afbc3039-8acf-4b0d-8f34-56ac426a24f4/736x736/1c85d0623bfe57207c94643a02918220.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/afbc3039-8acf-4b0d-8f34-56ac426a24f4/736x736/b822b4dbba41ad257058ca1bea47293a.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/afbc3039-8acf-4b0d-8f34-56ac426a24f4/736x736/b822b4dbba41ad257058ca1bea47293a.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/afbc3039-8acf-4b0d-8f34-56ac426a24f4/736x736/92160895a33607d4307bc4de6a3e9b97.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/afbc3039-8acf-4b0d-8f34-56ac426a24f4/736x736/92160895a33607d4307bc4de6a3e9b97.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/afbc3039-8acf-4b0d-8f34-56ac426a24f4/736x736/cfcb53633b081f66894710761bd1e13f.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/afbc3039-8acf-4b0d-8f34-56ac426a24f4/736x736/cfcb53633b081f66894710761bd1e13f.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/afbc3039-8acf-4b0d-8f34-56ac426a24f4/736x736/2fc65c19511092314df4c90ec4f6516c.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/afbc3039-8acf-4b0d-8f34-56ac426a24f4/736x736/2fc65c19511092314df4c90ec4f6516c.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/afbc3039-8acf-4b0d-8f34-56ac426a24f4/736x736/cf8a1e773c5fa69fe5bf099bc977a3d2.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/afbc3039-8acf-4b0d-8f34-56ac426a24f4/736x736/cf8a1e773c5fa69fe5bf099bc977a3d2.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/afbc3039-8acf-4b0d-8f34-56ac426a24f4/736x736/e1ab861163883d164aeba86b79fc3158.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/afbc3039-8acf-4b0d-8f34-56ac426a24f4/736x736/e1ab861163883d164aeba86b79fc3158.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/afbc3039-8acf-4b0d-8f34-56ac426a24f4/736x736/091b478d16d7d9ac151ce63335abd944.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/afbc3039-8acf-4b0d-8f34-56ac426a24f4/736x736/091b478d16d7d9ac151ce63335abd944.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>279 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à ANDERLECHT - 279 000 € - 3 chambres - 126m² - Immoweb</h2>
+        <p class="meta">ANDERLECHT · 3 ch. · 126 m2</p>
+        <p class="address">Rue de l'Agrafe 35 1070 ANDERLECHT</p>
+        <div class="contact">
+          <strong>Immo One</strong><br>
+          +3225225122 · immoone@omniwebsites.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/anderlecht/1070/21050637" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.immo-one.eu" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/28ed54ab-f5fd-41e4-b678-99263fb3b441/736x736/5647b2e6fd3e76ce298faadc2ce42964.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/28ed54ab-f5fd-41e4-b678-99263fb3b441/736x736/5647b2e6fd3e76ce298faadc2ce42964.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/28ed54ab-f5fd-41e4-b678-99263fb3b441/736x736/62b3a6b504640da3850b4bb5f2bf8426.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/28ed54ab-f5fd-41e4-b678-99263fb3b441/736x736/62b3a6b504640da3850b4bb5f2bf8426.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/28ed54ab-f5fd-41e4-b678-99263fb3b441/736x736/ec8e3a1af9d654d9a43565fed03778f6.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/28ed54ab-f5fd-41e4-b678-99263fb3b441/736x736/ec8e3a1af9d654d9a43565fed03778f6.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/28ed54ab-f5fd-41e4-b678-99263fb3b441/736x736/9b83eddc4a5fce9bd1b3d4f0b346a548.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/28ed54ab-f5fd-41e4-b678-99263fb3b441/736x736/9b83eddc4a5fce9bd1b3d4f0b346a548.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/28ed54ab-f5fd-41e4-b678-99263fb3b441/736x736/ab6123775277d3e6403041e399d3786a.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/28ed54ab-f5fd-41e4-b678-99263fb3b441/736x736/ab6123775277d3e6403041e399d3786a.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/28ed54ab-f5fd-41e4-b678-99263fb3b441/736x736/fe87cdeab6e1244a0a5d61d64ed95130.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/28ed54ab-f5fd-41e4-b678-99263fb3b441/736x736/fe87cdeab6e1244a0a5d61d64ed95130.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/28ed54ab-f5fd-41e4-b678-99263fb3b441/736x736/ef179ccb56724bdee8a62e8e3bb8ea62.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/28ed54ab-f5fd-41e4-b678-99263fb3b441/736x736/ef179ccb56724bdee8a62e8e3bb8ea62.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/28ed54ab-f5fd-41e4-b678-99263fb3b441/736x736/c33f1001680640867201e55a8d1db3d9.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/28ed54ab-f5fd-41e4-b678-99263fb3b441/736x736/c33f1001680640867201e55a8d1db3d9.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>280 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Anderlecht - 280 000 € - 3 chambres - 111m² - Immoweb</h2>
+        <p class="meta">Anderlecht · 3 ch. · 111 m2</p>
+        <p class="address">Rue de Neerpede 155 1070 Anderlecht</p>
+        <div class="contact">
+          <strong>CENTURY 21 M-City</strong><br>
+          +3224142101 · info@century21m-city.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/anderlecht/1070/21419878" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.century21.be/m-city" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bc6e2d84-55fb-4822-a761-ae0f6e6e527e/736x736/222098161100abde864849ee2f9fcedc.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bc6e2d84-55fb-4822-a761-ae0f6e6e527e/736x736/222098161100abde864849ee2f9fcedc.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bc6e2d84-55fb-4822-a761-ae0f6e6e527e/736x736/3f48d3ce8e65aa8f533876ef9706b12b.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bc6e2d84-55fb-4822-a761-ae0f6e6e527e/736x736/3f48d3ce8e65aa8f533876ef9706b12b.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bc6e2d84-55fb-4822-a761-ae0f6e6e527e/736x736/e0de2edbeb385a4bd8eab21bf57b332f.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bc6e2d84-55fb-4822-a761-ae0f6e6e527e/736x736/e0de2edbeb385a4bd8eab21bf57b332f.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bc6e2d84-55fb-4822-a761-ae0f6e6e527e/736x736/3eb7660fcdef18960beda79c347a57bf.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bc6e2d84-55fb-4822-a761-ae0f6e6e527e/736x736/3eb7660fcdef18960beda79c347a57bf.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bc6e2d84-55fb-4822-a761-ae0f6e6e527e/736x736/f3861fde3ebb2c2342b6f1ea07adb757.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bc6e2d84-55fb-4822-a761-ae0f6e6e527e/736x736/f3861fde3ebb2c2342b6f1ea07adb757.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bc6e2d84-55fb-4822-a761-ae0f6e6e527e/736x736/e680963a42760e15fc2b61e1bf19244a.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bc6e2d84-55fb-4822-a761-ae0f6e6e527e/736x736/e680963a42760e15fc2b61e1bf19244a.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bc6e2d84-55fb-4822-a761-ae0f6e6e527e/736x736/bb802e91b875ac24d5d204d81e974c4e.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bc6e2d84-55fb-4822-a761-ae0f6e6e527e/736x736/bb802e91b875ac24d5d204d81e974c4e.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bc6e2d84-55fb-4822-a761-ae0f6e6e527e/736x736/d07c95af9bf3612f357b1c6bdf4e659d.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bc6e2d84-55fb-4822-a761-ae0f6e6e527e/736x736/d07c95af9bf3612f357b1c6bdf4e659d.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>280 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Evere - 280 000 € - 4 chambres - 150m² - Immoweb</h2>
+        <p class="meta">Evere · 4 ch. · 150 m2</p>
+        <p class="address">Avenue Champ de Repos 50 1140 Evere</p>
+        <div class="contact">
+          <strong>Expertissimmo</strong><br>
+          +3226468810 · expertissimmo_16924@importfrommedia.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/evere/1140/21620395" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="http://www.expertissimmo.eu" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bd53f14d-50a5-4ed3-a1b3-e60f420dc494/736x736/b13f100a648dc8c7fed4e1fb81c0c385.png"><img src="https://media-resize.immowebstatic.be/classifieds/bd53f14d-50a5-4ed3-a1b3-e60f420dc494/736x736/b13f100a648dc8c7fed4e1fb81c0c385.png" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bd53f14d-50a5-4ed3-a1b3-e60f420dc494/736x736/5390ae4f033674797e9dc883750462df.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bd53f14d-50a5-4ed3-a1b3-e60f420dc494/736x736/5390ae4f033674797e9dc883750462df.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bd53f14d-50a5-4ed3-a1b3-e60f420dc494/736x736/5a032edd280ab954e5541b854e4854a2.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bd53f14d-50a5-4ed3-a1b3-e60f420dc494/736x736/5a032edd280ab954e5541b854e4854a2.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bd53f14d-50a5-4ed3-a1b3-e60f420dc494/736x736/b528ed97d672a85c3189ae5441e6632c.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bd53f14d-50a5-4ed3-a1b3-e60f420dc494/736x736/b528ed97d672a85c3189ae5441e6632c.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bd53f14d-50a5-4ed3-a1b3-e60f420dc494/736x736/d436fbe8d9c30b85888a9994a17dcb3b.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bd53f14d-50a5-4ed3-a1b3-e60f420dc494/736x736/d436fbe8d9c30b85888a9994a17dcb3b.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/bd53f14d-50a5-4ed3-a1b3-e60f420dc494/736x736/5ae4f05c1879b01658865cf233418dae.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/bd53f14d-50a5-4ed3-a1b3-e60f420dc494/736x736/5ae4f05c1879b01658865cf233418dae.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>280 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Forest - 280 000 € - 4 chambres - 190m² - Immoweb</h2>
+        <p class="meta">Forest · 4 ch. · 190 m2</p>
+        <p class="address">Rue Berthelot 5 1190 Forest</p>
+        <div class="contact">
+          <strong>Culer &amp; Associés</strong><br>
+          +32 475788080 · diane@culerassocies.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/forest/1190/21611290" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/957a76ae-b160-45dc-8a25-646d172c0425/736x736/69a248f9ac868087a05fa3b15ad15ade.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/957a76ae-b160-45dc-8a25-646d172c0425/736x736/69a248f9ac868087a05fa3b15ad15ade.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/957a76ae-b160-45dc-8a25-646d172c0425/736x736/1ac880933ce8bdd89e3ff6c1966defd1.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/957a76ae-b160-45dc-8a25-646d172c0425/736x736/1ac880933ce8bdd89e3ff6c1966defd1.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/957a76ae-b160-45dc-8a25-646d172c0425/736x736/1ab5390b51eb35a2434ac256455a5703.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/957a76ae-b160-45dc-8a25-646d172c0425/736x736/1ab5390b51eb35a2434ac256455a5703.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/957a76ae-b160-45dc-8a25-646d172c0425/736x736/84ed59a6481e96483f326b20cd3426f2.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/957a76ae-b160-45dc-8a25-646d172c0425/736x736/84ed59a6481e96483f326b20cd3426f2.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/957a76ae-b160-45dc-8a25-646d172c0425/736x736/436f6b4ef5a60ef4ce66ccf421d72ae5.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/957a76ae-b160-45dc-8a25-646d172c0425/736x736/436f6b4ef5a60ef4ce66ccf421d72ae5.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/957a76ae-b160-45dc-8a25-646d172c0425/736x736/3b676374d407b5a610b385802b2a4d52.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/957a76ae-b160-45dc-8a25-646d172c0425/736x736/3b676374d407b5a610b385802b2a4d52.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/957a76ae-b160-45dc-8a25-646d172c0425/736x736/011ad94ca6c7a3044ac005a7c25bdefd.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/957a76ae-b160-45dc-8a25-646d172c0425/736x736/011ad94ca6c7a3044ac005a7c25bdefd.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/957a76ae-b160-45dc-8a25-646d172c0425/736x736/0102e10eea60bc3f38aeb1599f913884.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/957a76ae-b160-45dc-8a25-646d172c0425/736x736/0102e10eea60bc3f38aeb1599f913884.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>285 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Molenbeek-Saint-Jean - 285 000 € - 7 chambres - 200m² - Immoweb</h2>
+        <p class="meta">Molenbeek-Saint-Jean · 7 ch. · 200 m2</p>
+        <p class="address">Place de la Duchesse de Brabant 7 1080 Molenbeek-Saint-Jean</p>
+        <div class="contact">
+          <strong>TRIOR Jette</strong><br>
+          +3224303730 · triorwaterloo_669@importfrommedia.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/molenbeek-saint-jean/1080/21639134" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="https://www.trior.be/agence-immobiliere-jette" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/62c06c13-d844-48b1-91ef-57f4188ffb3c/736x736/c4205768c9019a0d68180f702a18abfb.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/62c06c13-d844-48b1-91ef-57f4188ffb3c/736x736/c4205768c9019a0d68180f702a18abfb.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/62c06c13-d844-48b1-91ef-57f4188ffb3c/736x736/5d140bb3cf8bbf0e8a57de89896ee5e9.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/62c06c13-d844-48b1-91ef-57f4188ffb3c/736x736/5d140bb3cf8bbf0e8a57de89896ee5e9.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/62c06c13-d844-48b1-91ef-57f4188ffb3c/736x736/d71d46ecf15b38a379f6079d7693b0a1.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/62c06c13-d844-48b1-91ef-57f4188ffb3c/736x736/d71d46ecf15b38a379f6079d7693b0a1.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/62c06c13-d844-48b1-91ef-57f4188ffb3c/736x736/4ab14950b0ff6958a7e199bb68865421.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/62c06c13-d844-48b1-91ef-57f4188ffb3c/736x736/4ab14950b0ff6958a7e199bb68865421.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/62c06c13-d844-48b1-91ef-57f4188ffb3c/736x736/270d465cd52fd7e96961bf7cbb4a73f2.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/62c06c13-d844-48b1-91ef-57f4188ffb3c/736x736/270d465cd52fd7e96961bf7cbb4a73f2.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/62c06c13-d844-48b1-91ef-57f4188ffb3c/736x736/22f4438649798044ef8ee5f76686b271.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/62c06c13-d844-48b1-91ef-57f4188ffb3c/736x736/22f4438649798044ef8ee5f76686b271.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/62c06c13-d844-48b1-91ef-57f4188ffb3c/736x736/9ce595f3a8235231702980f45f356c19.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/62c06c13-d844-48b1-91ef-57f4188ffb3c/736x736/9ce595f3a8235231702980f45f356c19.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/62c06c13-d844-48b1-91ef-57f4188ffb3c/736x736/f53408de60c808546251c678ab272369.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/62c06c13-d844-48b1-91ef-57f4188ffb3c/736x736/f53408de60c808546251c678ab272369.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>285 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Molenbeek-Saint-Jean - 285 000 € - 2 chambres - 130m² - Immoweb</h2>
+        <p class="meta">Molenbeek-Saint-Jean · 2 ch. · 130 m2</p>
+        <p class="address">Place de la Duchesse de Brabant 21 1080 Molenbeek-Saint-Jean</p>
+        <div class="contact">
+          <strong>MYIMMO Ganshoren</strong><br>
+          +3228831300 · myimmo_ganshoren_615@importfrommedia.be
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/molenbeek-saint-jean/1080/21608296" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          <a href="https://www.myimmo.be" target="_blank" rel="noopener noreferrer">Site agence</a>
+        </div>
+      </div>
+    </article>
+    <article class="listing portal">
+      <div class="photos"><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/0f9b2f71-1db8-4774-9c52-0fcbe1284116/736x736/88e45781a566d799faf1650836fd4904.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/0f9b2f71-1db8-4774-9c52-0fcbe1284116/736x736/88e45781a566d799faf1650836fd4904.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/0f9b2f71-1db8-4774-9c52-0fcbe1284116/736x736/ff24cb8854fb33b74b9b14cb039254bb.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/0f9b2f71-1db8-4774-9c52-0fcbe1284116/736x736/ff24cb8854fb33b74b9b14cb039254bb.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/0f9b2f71-1db8-4774-9c52-0fcbe1284116/736x736/fe9dae49bb1293d9dbac232691ab6f34.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/0f9b2f71-1db8-4774-9c52-0fcbe1284116/736x736/fe9dae49bb1293d9dbac232691ab6f34.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/0f9b2f71-1db8-4774-9c52-0fcbe1284116/736x736/9e9b4b72adbc20807d2caeee27f466fc.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/0f9b2f71-1db8-4774-9c52-0fcbe1284116/736x736/9e9b4b72adbc20807d2caeee27f466fc.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/0f9b2f71-1db8-4774-9c52-0fcbe1284116/736x736/268123e608f00c89a1eb3ac1d66bc047.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/0f9b2f71-1db8-4774-9c52-0fcbe1284116/736x736/268123e608f00c89a1eb3ac1d66bc047.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/0f9b2f71-1db8-4774-9c52-0fcbe1284116/736x736/58ce8035632f1c6ee49325d58e6fcd65.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/0f9b2f71-1db8-4774-9c52-0fcbe1284116/736x736/58ce8035632f1c6ee49325d58e6fcd65.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/0f9b2f71-1db8-4774-9c52-0fcbe1284116/736x736/ea7fa3627dd69ba96e3806537f95ee3d.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/0f9b2f71-1db8-4774-9c52-0fcbe1284116/736x736/ea7fa3627dd69ba96e3806537f95ee3d.jpg" alt=""></button><button class="photoButton" type="button" data-full="https://media-resize.immowebstatic.be/classifieds/0f9b2f71-1db8-4774-9c52-0fcbe1284116/736x736/dd516b657ff118ce9fbdd6b3dcd4bb2d.jpg"><img src="https://media-resize.immowebstatic.be/classifieds/0f9b2f71-1db8-4774-9c52-0fcbe1284116/736x736/dd516b657ff118ce9fbdd6b3dcd4bb2d.jpg" alt=""></button></div>
+      <div class="body">
+        <div class="topline">
+          <span class="pill">Immoweb</span>
+          <strong>285 000 EUR</strong>
+        </div>
+        <h2>Maison à vendre à Schaerbeek - 285 000 € - 3 chambres - 167m² - Immoweb</h2>
+        <p class="meta">Schaerbeek · 3 ch. · 167 m2</p>
+        <p class="address">Rue de Robiano XX 1030 Schaerbeek</p>
+        <div class="contact">
+          <strong>Consultance &amp; Gestion</strong><br>
+          +3226733444 · +32475798610 · michele.anciaux@gmail.com
+        </div>
+        <div class="actions">
+          <a href="https://www.immoweb.be/fr/annonce/maison/a-vendre/schaerbeek/1030/21461892" target="_blank" rel="noopener noreferrer">Ouvrir l'annonce</a>
+          
+        </div>
+      </div>
+    </article></div>
+    </section>
+
+    <section>
+      <h3>Diagnostics</h3>
+      <details open>
+        <summary>Zimmo / Immovlan</summary>
+        <div class="tableWrap"><table><thead><tr><th>source</th><th>location</th><th>status</th><th>HttpStatus</th><th>Title</th><th>message</th></tr></thead><tbody><tr><td>Zimmo</td><td>Wemmel</td><td>Blocage navigateur</td><td></td><td></td><td>0 lien(s) candidat(s), titre: Un instant…</td></tr><tr><td>Immovlan</td><td>Wemmel</td><td>Blocage navigateur</td><td></td><td></td><td>0 lien(s) candidat(s), titre: Service Unavailable</td></tr><tr><td>Zimmo</td><td>Dilbeek</td><td>Blocage navigateur</td><td></td><td></td><td>0 lien(s) candidat(s), titre: Un instant…</td></tr><tr><td>Immovlan</td><td>Dilbeek</td><td>Blocage navigateur</td><td></td><td></td><td>0 lien(s) candidat(s), titre: Service Unavailable</td></tr></tbody></table></div>
+      </details>
+      <details>
+        <summary>Extraction agences</summary>
+        <div class="tableWrap"><table><thead><tr><th>Agency</th><th>Platform</th><th>Status</th><th>Message</th><th>Url</th></tr></thead><tbody><tr><td>Agence Wellington</td><td>WHISE</td><td>Ignored</td><td>Prix 350000 superieur au plafond</td><td>https://www.agencewellington.be/fr/bien/a-vendre/maison/1440-braine-le-chateau/7680034</td></tr><tr><td>Agence Wellington</td><td>WHISE</td><td>Ignored</td><td>Prix 640000 superieur au plafond</td><td>https://www.agencewellington.be/fr/bien/a-vendre/maison/1440-braine-le-chateau-wauthier-braine/7676688</td></tr><tr><td>Agence Wellington</td><td>WHISE</td><td>Ignored</td><td>Prix absent</td><td>https://www.agencewellington.be/fr/bien/a-vendre/maison/1490-court-saint-etienne/4858257</td></tr><tr><td>Agence Wellington</td><td>WHISE</td><td>Ignored</td><td>Prix absent</td><td>https://www.agencewellington.be/fr/bien/a-vendre/maison/1340-ottignies/4858273</td></tr><tr><td>Agence Wellington</td><td>WHISE</td><td>Ignored</td><td>Prix absent</td><td>https://www.agencewellington.be/fr/bien/a-vendre/maison/1340-ottignies/4858276</td></tr><tr><td>Agence Wellington</td><td>WHISE</td><td>Ignored</td><td>Prix absent</td><td>https://www.agencewellington.be/fr/bien/a-vendre/maison/1330-rixensart/4858277</td></tr><tr><td>Agence Wellington</td><td>WHISE</td><td>Ignored</td><td>Prix 865000 superieur au plafond</td><td>https://www.agencewellington.be/fr/bien/a-vendre/maison/1830-machelen/5324206</td></tr><tr><td>Agence Wellington</td><td>WHISE</td><td>Ignored</td><td>Prix 650000 superieur au plafond</td><td>https://www.agencewellington.be/fr/bien/a-vendre/maison/1070-anderlecht/5564414</td></tr><tr><td>Agence Wellington</td><td>WHISE</td><td>Ignored</td><td>Prix absent</td><td>https://www.agencewellington.be/fr/bien/a-vendre/maison/1190-forest/5570434</td></tr><tr><td>Agence Wellington</td><td>WHISE</td><td>Ignored</td><td>Prix 350000 superieur au plafond</td><td>https://www.agencewellington.be/fr/bien/a-vendre/maison/1410-waterloo/5918081</td></tr><tr><td>Arcadia</td><td>WordPress</td><td>Ignored</td><td>Prix 487000 superieur au plafond</td><td>https://www.arcadiabelgium.be/properties/agreable-et-spacieuse-maison-neuve-4chs-grand-jardin-et-2-terrasses/</td></tr><tr><td>Arcadia</td><td>WordPress</td><td>Ignored</td><td>Prix 535000 superieur au plafond</td><td>https://www.arcadiabelgium.be/properties/maison-de-rapport-3-lots-a-vendre-petite-copropriete-de-4-biens-dont-une-profession-liberale/</td></tr><tr><td>Arcadia</td><td>WordPress</td><td>Ignored</td><td>Prix 360000 superieur au plafond</td><td>https://www.arcadiabelgium.be/properties/maison-neuve-2-facade-3-4-chs-avec-grand-jardin/</td></tr><tr><td>Berth Immobiliën</td><td>Unknown</td><td>Ignored</td><td>Prix absent</td><td>https://www.berth.be/fr/l/a-vendre/maison/1630-linkebeek/lis_jvpyw796lvw0o4p99g2rvwar/</td></tr><tr><td>Berth Immobiliën</td><td>Unknown</td><td>Ignored</td><td>Prix absent</td><td>https://www.berth.be/fr/l/a-vendre/immeuble-de-rapport/1070-anderlecht/lis_qb84aahlv8dd8inrl4j6ibe7/</td></tr><tr><td>Berth Immobiliën</td><td>Unknown</td><td>Ignored</td><td>Prix absent</td><td>https://www.berth.be/fr/l/a-vendre/maison/1600-sint-pieters-leeuw/lis_c4p7cnlguafjvzv2z3dx6ooh/</td></tr><tr><td>Berth Immobiliën</td><td>Unknown</td><td>Listing</td><td>200000 EUR</td><td>https://www.berth.be/fr/l/a-vendre/maison/1060-sint-gillis/lis_ozzinurgkwsjsw2e5nhi70uq/</td></tr><tr><td>De Immobiliers</td><td>Skarabee</td><td>Ignored</td><td>Prix absent</td><td>https://www.deimmobiliers.be/detail/vente-villa-maison-pajottegem/7582731</td></tr><tr><td>Destryker</td><td>Skarabee</td><td>Ignored</td><td>Prix absent</td><td>https://destryker.be/nl/aanbod/4087451/huis-optie-koop-in-1502-lembeek</td></tr><tr><td>Destryker</td><td>Skarabee</td><td>Ignored</td><td>Prix 580000 superieur au plafond</td><td>https://destryker.be/nl/aanbod/4240543/handelspand-met-woonst-te-koop-in-1502-lembeek</td></tr><tr><td>Destryker</td><td>Skarabee</td><td>Ignored</td><td>Prix 580000 superieur au plafond</td><td>https://destryker.be/nl/aanbod/4259118/handelspand-met-woonst-te-koop-in-1500-halle</td></tr></tbody></table></div>
+      </details>
+    </section>
+  </main>
+
+  <div class="modal" id="imageModal" role="dialog" aria-modal="true" aria-label="Photo">
+    <button type="button" id="closeModal">Retour</button>
+    <img id="modalImage" alt="">
+  </div>
+  <script>
+    const modal = document.getElementById("imageModal");
+    const modalImage = document.getElementById("modalImage");
+    document.querySelectorAll(".photoButton").forEach((button) => {
+      button.addEventListener("click", () => {
+        modalImage.src = button.dataset.full;
+        modal.classList.add("open");
+      });
+    });
+    document.getElementById("closeModal").addEventListener("click", () => modal.classList.remove("open"));
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) modal.classList.remove("open");
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") modal.classList.remove("open");
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,328 @@
+{
+  "maxPrice": 285000,
+  "propertyType": "maison",
+  "strictExactLocation": true,
+  "excludeMonthlySupplement": true,
+  "excludeNotarialSales": true,
+  "includeOpenStreetMapAgencies": true,
+  "agencySearchBbox": {
+    "south": 50.72,
+    "west": 4.18,
+    "north": 50.93,
+    "east": 4.55
+  },
+  "locations": [
+    {
+      "name": "Wemmel",
+      "postalCode": "1780",
+      "immowebSlug": "wemmel",
+      "zimmoSlug": "wemmel",
+      "immovlanSlug": "wemmel",
+      "latitude": 50.908,
+      "longitude": 4.307
+    },
+    {
+      "name": "Dilbeek",
+      "postalCode": "1700",
+      "immowebSlug": "dilbeek",
+      "zimmoSlug": "dilbeek",
+      "immovlanSlug": "dilbeek",
+      "latitude": 50.847,
+      "longitude": 4.259
+    },
+    {
+      "name": "Sint-Pieters-Leeuw",
+      "postalCode": "1600",
+      "immowebSlug": "sint-pieters-leeuw",
+      "zimmoSlug": "sint-pieters-leeuw",
+      "immovlanSlug": "sint-pieters-leeuw",
+      "latitude": 50.779,
+      "longitude": 4.243
+    },
+    {
+      "name": "Alsemberg",
+      "postalCode": "1652",
+      "immowebSlug": "alsemberg",
+      "zimmoSlug": "alsemberg",
+      "immovlanSlug": "alsemberg",
+      "latitude": 50.742,
+      "longitude": 4.337
+    },
+    {
+      "name": "Huizingen",
+      "postalCode": "1654",
+      "immowebSlug": "huizingen",
+      "zimmoSlug": "huizingen",
+      "immovlanSlug": "huizingen",
+      "latitude": 50.746,
+      "longitude": 4.276
+    },
+    {
+      "name": "Ruisbroek",
+      "postalCode": "1601",
+      "immowebSlug": "ruisbroek",
+      "zimmoSlug": "ruisbroek",
+      "immovlanSlug": "ruisbroek",
+      "latitude": 50.791,
+      "longitude": 4.298
+    },
+    {
+      "name": "Sint-Genesius-Rode",
+      "postalCode": "1640",
+      "immowebSlug": "sint-genesius-rode",
+      "zimmoSlug": "sint-genesius-rode",
+      "immovlanSlug": "sint-genesius-rode",
+      "latitude": 50.746,
+      "longitude": 4.357
+    },
+    {
+      "name": "Hoeilaart",
+      "postalCode": "1560",
+      "immowebSlug": "hoeilaart",
+      "zimmoSlug": "hoeilaart",
+      "immovlanSlug": "hoeilaart",
+      "latitude": 50.767,
+      "longitude": 4.468
+    },
+    {
+      "name": "Linkebeek",
+      "postalCode": "1630",
+      "immowebSlug": "linkebeek",
+      "zimmoSlug": "linkebeek",
+      "immovlanSlug": "linkebeek",
+      "latitude": 50.767,
+      "longitude": 4.335
+    },
+    {
+      "name": "Anderlecht",
+      "postalCode": "1070",
+      "immowebSlug": "anderlecht",
+      "zimmoSlug": "anderlecht",
+      "immovlanSlug": "anderlecht",
+      "latitude": 50.836,
+      "longitude": 4.306
+    },
+    {
+      "name": "Auderghem",
+      "postalCode": "1160",
+      "immowebSlug": "auderghem",
+      "zimmoSlug": "auderghem",
+      "immovlanSlug": "auderghem",
+      "latitude": 50.816,
+      "longitude": 4.433
+    },
+    {
+      "name": "Berchem-Sainte-Agathe",
+      "postalCode": "1082",
+      "immowebSlug": "berchem-sainte-agathe",
+      "zimmoSlug": "berchem-sainte-agathe",
+      "immovlanSlug": "berchem-sainte-agathe",
+      "latitude": 50.865,
+      "longitude": 4.294
+    },
+    {
+      "name": "Bruxelles-ville",
+      "postalCode": "1000",
+      "immowebSlug": "bruxelles",
+      "zimmoSlug": "bruxelles",
+      "immovlanSlug": "bruxelles",
+      "latitude": 50.847,
+      "longitude": 4.352
+    },
+    {
+      "name": "Bruxelles-ville - Laeken",
+      "postalCode": "1020",
+      "immowebSlug": "laeken",
+      "zimmoSlug": "laeken",
+      "immovlanSlug": "laeken",
+      "latitude": 50.883,
+      "longitude": 4.348
+    },
+    {
+      "name": "Bruxelles-ville - Neder-over-Heembeek",
+      "postalCode": "1120",
+      "immowebSlug": "neder-over-heembeek",
+      "zimmoSlug": "neder-over-heembeek",
+      "immovlanSlug": "neder-over-heembeek",
+      "latitude": 50.895,
+      "longitude": 4.383
+    },
+    {
+      "name": "Bruxelles-ville - Haren",
+      "postalCode": "1130",
+      "immowebSlug": "haren",
+      "zimmoSlug": "haren",
+      "immovlanSlug": "haren",
+      "latitude": 50.893,
+      "longitude": 4.418
+    },
+    {
+      "name": "Etterbeek",
+      "postalCode": "1040",
+      "immowebSlug": "etterbeek",
+      "zimmoSlug": "etterbeek",
+      "immovlanSlug": "etterbeek",
+      "latitude": 50.836,
+      "longitude": 4.389
+    },
+    {
+      "name": "Evere",
+      "postalCode": "1140",
+      "immowebSlug": "evere",
+      "zimmoSlug": "evere",
+      "immovlanSlug": "evere",
+      "latitude": 50.872,
+      "longitude": 4.403
+    },
+    {
+      "name": "Forest",
+      "postalCode": "1190",
+      "immowebSlug": "forest",
+      "zimmoSlug": "forest",
+      "immovlanSlug": "forest",
+      "latitude": 50.811,
+      "longitude": 4.318
+    },
+    {
+      "name": "Ganshoren",
+      "postalCode": "1083",
+      "immowebSlug": "ganshoren",
+      "zimmoSlug": "ganshoren",
+      "immovlanSlug": "ganshoren",
+      "latitude": 50.871,
+      "longitude": 4.315
+    },
+    {
+      "name": "Ixelles",
+      "postalCode": "1050",
+      "immowebSlug": "ixelles",
+      "zimmoSlug": "ixelles",
+      "immovlanSlug": "ixelles",
+      "latitude": 50.833,
+      "longitude": 4.366
+    },
+    {
+      "name": "Jette",
+      "postalCode": "1090",
+      "immowebSlug": "jette",
+      "zimmoSlug": "jette",
+      "immovlanSlug": "jette",
+      "latitude": 50.877,
+      "longitude": 4.326
+    },
+    {
+      "name": "Koekelberg",
+      "postalCode": "1081",
+      "immowebSlug": "koekelberg",
+      "zimmoSlug": "koekelberg",
+      "immovlanSlug": "koekelberg",
+      "latitude": 50.863,
+      "longitude": 4.326
+    },
+    {
+      "name": "Molenbeek-Saint-Jean",
+      "postalCode": "1080",
+      "immowebSlug": "molenbeek-saint-jean",
+      "zimmoSlug": "molenbeek-saint-jean",
+      "immovlanSlug": "molenbeek-saint-jean",
+      "latitude": 50.854,
+      "longitude": 4.338
+    },
+    {
+      "name": "Saint-Gilles",
+      "postalCode": "1060",
+      "immowebSlug": "saint-gilles",
+      "zimmoSlug": "saint-gilles",
+      "immovlanSlug": "saint-gilles",
+      "latitude": 50.827,
+      "longitude": 4.345
+    },
+    {
+      "name": "Saint-Josse-ten-Noode",
+      "postalCode": "1210",
+      "immowebSlug": "saint-josse-ten-noode",
+      "zimmoSlug": "saint-josse-ten-noode",
+      "immovlanSlug": "saint-josse-ten-noode",
+      "latitude": 50.854,
+      "longitude": 4.372
+    },
+    {
+      "name": "Schaerbeek",
+      "postalCode": "1030",
+      "immowebSlug": "schaerbeek",
+      "zimmoSlug": "schaerbeek",
+      "immovlanSlug": "schaerbeek",
+      "latitude": 50.867,
+      "longitude": 4.373
+    },
+    {
+      "name": "Uccle",
+      "postalCode": "1180",
+      "immowebSlug": "uccle",
+      "zimmoSlug": "uccle",
+      "immovlanSlug": "uccle",
+      "latitude": 50.803,
+      "longitude": 4.337
+    },
+    {
+      "name": "Watermael-Boitsfort",
+      "postalCode": "1170",
+      "immowebSlug": "watermael-boitsfort",
+      "zimmoSlug": "watermael-boitsfort",
+      "immovlanSlug": "watermael-boitsfort",
+      "latitude": 50.799,
+      "longitude": 4.416
+    },
+    {
+      "name": "Woluwe-Saint-Lambert",
+      "postalCode": "1200",
+      "immowebSlug": "woluwe-saint-lambert",
+      "zimmoSlug": "woluwe-saint-lambert",
+      "immovlanSlug": "woluwe-saint-lambert",
+      "latitude": 50.843,
+      "longitude": 4.425
+    },
+    {
+      "name": "Woluwe-Saint-Pierre",
+      "postalCode": "1150",
+      "immowebSlug": "woluwe-saint-pierre",
+      "zimmoSlug": "woluwe-saint-pierre",
+      "immovlanSlug": "woluwe-saint-pierre",
+      "latitude": 50.83,
+      "longitude": 4.442
+    }
+  ],
+  "localAgencySearches": [
+    "agence immobiliere maison a vendre Wemmel 285000",
+    "agence immobiliere maison a vendre Dilbeek 285000",
+    "agence immobiliere maison a vendre Sint-Pieters-Leeuw 285000",
+    "agence immobiliere maison a vendre Alsemberg 285000",
+    "agence immobiliere maison a vendre Huizingen 285000",
+    "agence immobiliere maison a vendre Ruisbroek 285000",
+    "agence immobiliere maison a vendre Sint-Genesius-Rode 285000",
+    "agence immobiliere maison a vendre Hoeilaart 285000",
+    "agence immobiliere maison a vendre Linkebeek 285000",
+    "agence immobiliere maison a vendre Anderlecht 285000",
+    "agence immobiliere maison a vendre Auderghem 285000",
+    "agence immobiliere maison a vendre Berchem-Sainte-Agathe 285000",
+    "agence immobiliere maison a vendre Bruxelles-ville 285000",
+    "agence immobiliere maison a vendre Laeken 285000",
+    "agence immobiliere maison a vendre Neder-over-Heembeek 285000",
+    "agence immobiliere maison a vendre Haren Bruxelles 285000",
+    "agence immobiliere maison a vendre Etterbeek 285000",
+    "agence immobiliere maison a vendre Evere 285000",
+    "agence immobiliere maison a vendre Forest 285000",
+    "agence immobiliere maison a vendre Ganshoren 285000",
+    "agence immobiliere maison a vendre Ixelles 285000",
+    "agence immobiliere maison a vendre Jette 285000",
+    "agence immobiliere maison a vendre Koekelberg 285000",
+    "agence immobiliere maison a vendre Molenbeek-Saint-Jean 285000",
+    "agence immobiliere maison a vendre Saint-Gilles 285000",
+    "agence immobiliere maison a vendre Saint-Josse-ten-Noode 285000",
+    "agence immobiliere maison a vendre Schaerbeek 285000",
+    "agence immobiliere maison a vendre Uccle 285000",
+    "agence immobiliere maison a vendre Watermael-Boitsfort 285000",
+    "agence immobiliere maison a vendre Woluwe-Saint-Lambert 285000",
+    "agence immobiliere maison a vendre Woluwe-Saint-Pierre 285000"
+  ]
+}

@@ -1,0 +1,61 @@
+name: Daily real estate watch
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 6 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-report:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run scraper
+        shell: pwsh
+        run: |
+          ./scripts/run-veille-immo.ps1 `
+            -ConfigPath config/veille-immo.json `
+            -OutputDir reports `
+            -PagesPerLocation 2 `
+            -RequestDelayMs 700
+
+      - name: Build browser report and JSON feed
+        shell: pwsh
+        run: |
+          ./scripts/make-browser-report.ps1 `
+            -SourceHtml reports/index.html `
+            -OutputHtml index.html
+
+          $csv = Get-ChildItem -LiteralPath reports -Filter "veille-immo-*.csv" |
+            Sort-Object LastWriteTime -Descending |
+            Select-Object -First 1
+
+          if (-not $csv) {
+            throw "No veille-immo CSV produced"
+          }
+
+          ./scripts/make-results-json.ps1 `
+            -CsvPath $csv.FullName `
+            -OutputPath results.json `
+            -ReportUrl "https://lmpg-devel.github.io/veille-immo-report/"
+
+      - name: Commit updates
+        shell: pwsh
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html results.json reports mobile-index.html
+          git diff --cached --quiet
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host "No changes to commit"
+            exit 0
+          }
+          $stamp = Get-Date -Format "yyyy-MM-dd HH:mm"
+          git commit -m "Update real estate watch $stamp"
+          git push

@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-const APP_VERSION = "pwa-2026-06-19-12";
+const APP_VERSION = "pwa-2026-06-19-13";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const STORAGE_KEY = "veille-immo-seen-ids";
@@ -437,15 +437,19 @@ const APP_VERSION = "pwa-2026-06-19-12";
     const counts = sourceCounts(listings);
     const localAgencyCount = counts["Agence locale (site direct)"] || 0;
     const immovlanCount = counts.Immovlan || 0;
+    const zimmoCount = counts.Zimmo || 0;
     const secondHandCount = counts["2ememain"] || 0;
+    const zimmoMessage = zimmoCount > 0
+      ? "Import Apify actif: " + zimmoCount + " annonce(s) integree(s)."
+      : "Connecteur Apify pret: definir APIFY_TOKEN et APIFY_ZIMMO_ACTOR_ID cote pipeline pour integrer les annonces Zimmo.";
     const section = document.createElement("section");
     section.id = "otherSourcesSection";
     section.innerHTML = [
       "<h2>Autres sources</h2>",
-      "<div class='other-source-note'>Sources publiees dans cette PWA: Immoweb " + (counts.Immoweb || 0) + ", Immovlan " + immovlanCount + ", agences locales " + localAgencyCount + ", 2ememain " + secondHandCount + ". Zimmo reste consulte en diagnostic mais ne fournit pas encore d'annonce exploitable dans le rapport publie.</div>",
+      "<div class='other-source-note'>Sources publiees dans cette PWA: Immoweb " + (counts.Immoweb || 0) + ", Immovlan " + immovlanCount + ", Zimmo " + zimmoCount + ", agences locales " + localAgencyCount + ", 2ememain " + secondHandCount + ".</div>",
       "<div class='source-diagnostic-list'>",
       "<div class='source-diagnostic-item'><strong>Agences locales</strong>" + localAgencyCount + " annonce(s) integree(s) depuis les sites directs.</div>",
-      "<div class='source-diagnostic-item'><strong>Zimmo</strong>Protection navigateur/Cloudflare detectee. Extraction automatique non integree sans source publique stable.</div>",
+      "<div class='source-diagnostic-item'><strong>Zimmo</strong>" + zimmoMessage + "</div>",
       "<div class='source-diagnostic-item'><strong>Immovlan</strong>Extraction avancee active: HTML public, donnees structurees JSON-LD et endpoint telephone public. " + immovlanCount + " annonce(s) integree(s).</div>",
       "<div class='source-diagnostic-item'><strong>2ememain</strong>Extraction avancee active via pages publiques et window.__CONFIG__. " + secondHandCount + " annonce(s) integree(s) apres filtres stricts localisation/type/prix.</div>",
       "<div class='source-diagnostic-item'><strong>Facebook Marketplace</strong>Lien de controle ajoute. Extraction automatique non active sans session utilisateur.</div>",

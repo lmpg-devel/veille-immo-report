@@ -5,15 +5,24 @@ const DEFAULT_CONFIG = "config/veille-immo.json";
 const DEFAULT_RESULTS = "publish/veille-immo-report/results.json";
 const DEFAULT_OUT = "reports-experimental/advanced-source-results.json";
 const USER_AGENT = "Mozilla/5.0 veille-immo-advanced/1.0";
+const APIFY_API_BASE = "https://api.apify.com/v2";
 
 function parseArgs(argv) {
   const args = {
     config: DEFAULT_CONFIG,
     baseResults: DEFAULT_RESULTS,
     outJson: DEFAULT_OUT,
-    sources: "immovlan,2ememain",
+    sources: "immovlan,2ememain,zimmo-apify",
     maxPerLocation: 12,
-    delayMs: 350
+    delayMs: 350,
+    apifyToken: process.env.APIFY_TOKEN || "",
+    apifyZimmoActorId: process.env.APIFY_ZIMMO_ACTOR_ID || "",
+    apifyZimmoInput: process.env.APIFY_ZIMMO_INPUT_PATH || "",
+    apifyZimmoInputJson: process.env.APIFY_ZIMMO_INPUT_JSON || "",
+    apifyWaitSecs: 60,
+    apifyPollSecs: 20,
+    apifyRunTimeoutMs: 600000,
+    apifyDatasetLimit: 500
   };
   for (let index = 2; index < argv.length; index += 1) {
     const item = argv[index];
@@ -29,6 +38,10 @@ function parseArgs(argv) {
   }
   args.maxPerLocation = Number(args.maxPerLocation || 12);
   args.delayMs = Number(args.delayMs || 350);
+  args.apifyWaitSecs = Number(args.apifyWaitSecs || 60);
+  args.apifyPollSecs = Number(args.apifyPollSecs || 20);
+  args.apifyRunTimeoutMs = Number(args.apifyRunTimeoutMs || 600000);
+  args.apifyDatasetLimit = Number(args.apifyDatasetLimit || 500);
   return args;
 }
 
@@ -132,6 +145,76 @@ function toNumber(value) {
   if (value == null || value === "") return null;
   const digits = String(value).replace(/[^\d]/g, "");
   return digits ? Number(digits) : null;
+}
+
+function cleanText(value) {
+  if (value == null) return "";
+  if (Array.isArray(value)) return cleanText(value.find((item) => cleanText(item)));
+  if (typeof value === "object") {
+    return cleanText(value.name || value.title || value.label || value.value || value.text || "");
+  }
+  return decodeHtml(String(value)).replace(/\s+/g, " ").trim();
+}
+
+function getPath(object, dottedPath) {
+  return String(dottedPath || "").split(".").reduce((current, part) => {
+    if (current == null) return undefined;
+    return current[part];
+  }, object);
+}
+
+function firstField(object, paths) {
+  for (const fieldPath of paths) {
+    const value = typeof fieldPath === "function" ? fieldPath(object) : getPath(object, fieldPath);
+    if (value == null) continue;
+    if (Array.isArray(value) && value.length === 0) continue;
+    if (typeof value === "string" && !value.trim()) continue;
+    return value;
+  }
+  return "";
+}
+
+function numberFromAny(value) {
+  if (value == null || value === "") return null;
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "object") {
+    return numberFromAny(firstField(value, ["amount", "value", "price", "raw", "formatted"]));
+  }
+  const match = String(value).match(/\d[\d\s.,]*/);
+  if (!match) return null;
+  const compact = match[0].replace(/\s+/g, "");
+  const thousandsOrDecimal = compact.match(/^\d{1,3}([.,]\d{3})+([.,]\d{1,2})?$/);
+  const plainDecimal = compact.match(/^\d+[.,]\d{1,2}$/);
+  const normalized = thousandsOrDecimal
+    ? compact.replace(/[.,](?=\d{3}([.,]|$))/g, "").replace(",", ".")
+    : plainDecimal
+      ? compact.replace(",", ".")
+      : compact.replace(/[^\d]/g, "");
+  const number = Number(normalized);
+  return Number.isFinite(number) ? number : null;
+}
+
+function floatFromAny(value) {
+  if (value == null || value === "") return null;
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  const number = Number(String(value).trim().replace(",", "."));
+  return Number.isFinite(number) ? number : null;
+}
+
+function collectImageUrls(value, output = []) {
+  if (!value) return output;
+  if (Array.isArray(value)) {
+    value.forEach((item) => collectImageUrls(item, output));
+    return output;
+  }
+  if (typeof value === "string") {
+    output.push(value);
+    return output;
+  }
+  if (typeof value === "object") {
+    ["url", "src", "href", "large", "medium", "small", "base", "original"].forEach((key) => collectImageUrls(value[key], output));
+  }
+  return output;
 }
 
 function parseJsonLdObjects(html) {
@@ -365,6 +448,354 @@ async function extractSecondHand(config, locations, diagnostics) {
   return listings;
 }
 
+function zimmoSearchUrl(location, maxPrice) {
+  return `https://www.zimmo.be/fr/${location.zimmoSlug}-${location.postalCode}/a-vendre/maison/?priceIncludeUnknown=0&priceMax=${maxPrice}`;
+}
+
+function normalizeApifyActorId(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return "";
+  try {
+    const parsed = new URL(raw);
+    const parts = parsed.pathname.split("/").filter(Boolean);
+    if (parts.length >= 2) return `${parts[0]}~${parts[1]}`;
+  } catch {
+    // Not a URL; normalize below.
+  }
+  const parts = raw.split("/").filter(Boolean);
+  if (parts.length >= 2) return `${parts[0]}~${parts[1]}`;
+  return raw;
+}
+
+function buildZimmoApifyInput(config, args) {
+  if (args.apifyZimmoInput) {
+    const inputPath = path.resolve(args.apifyZimmoInput);
+    return JSON.parse(fs.readFileSync(inputPath, "utf8"));
+  }
+  if (args.apifyZimmoInputJson) {
+    return JSON.parse(args.apifyZimmoInputJson);
+  }
+  return {
+    startUrls: (config.locations || []).map((location) => ({
+      url: zimmoSearchUrl(location, config.maxPrice),
+      userData: {
+        location: location.name,
+        postalCode: location.postalCode
+      }
+    })),
+    maxItems: Number(args.apifyDatasetLimit || 500),
+    maxPrice: Number(config.maxPrice || 285000),
+    propertyType: config.propertyType || "maison",
+    locations: (config.locations || []).map((location) => ({
+      name: location.name,
+      postalCode: location.postalCode,
+      latitude: location.latitude,
+      longitude: location.longitude
+    })),
+    proxyConfiguration: {
+      useApifyProxy: true
+    }
+  };
+}
+
+async function apifyJson(url, options = {}) {
+  const headers = {
+    Accept: "application/json",
+    Authorization: `Bearer ${options.token}`
+  };
+  const request = {
+    method: options.method || "GET",
+    headers
+  };
+  if (options.body != null) {
+    headers["Content-Type"] = "application/json";
+    request.body = JSON.stringify(options.body);
+  }
+  const response = await fetch(url, request);
+  const text = await response.text();
+  let json = null;
+  if (text) {
+    try {
+      json = JSON.parse(text);
+    } catch {
+      json = { raw: text };
+    }
+  }
+  if (!response.ok) {
+    const message = json?.error?.message || json?.message || String(text || "").slice(0, 240) || `HTTP ${response.status}`;
+    throw new Error(`HTTP ${response.status}: ${message}`);
+  }
+  return json;
+}
+
+async function waitForApifyRun(runId, token, args) {
+  const deadline = Date.now() + Number(args.apifyRunTimeoutMs || 600000);
+  let lastRun = null;
+  while (Date.now() < deadline) {
+    const waitSecs = Math.max(1, Number(args.apifyPollSecs || 20));
+    const payload = await apifyJson(`${APIFY_API_BASE}/actor-runs/${encodeURIComponent(runId)}?waitForFinish=${waitSecs}`, { token });
+    lastRun = payload?.data || payload;
+    if (["SUCCEEDED", "FAILED", "ABORTED", "TIMED-OUT"].includes(lastRun?.status)) {
+      return lastRun;
+    }
+  }
+  return lastRun;
+}
+
+async function runApifyActor(actorId, token, input, args) {
+  const waitSecs = Math.max(0, Number(args.apifyWaitSecs || 60));
+  const runPayload = await apifyJson(`${APIFY_API_BASE}/actors/${encodeURIComponent(actorId)}/runs?waitForFinish=${waitSecs}`, {
+    method: "POST",
+    token,
+    body: input
+  });
+  let run = runPayload?.data || runPayload;
+  if (!["SUCCEEDED", "FAILED", "ABORTED", "TIMED-OUT"].includes(run?.status)) {
+    run = await waitForApifyRun(run.id, token, args);
+  }
+  if (!run || run.status !== "SUCCEEDED") {
+    throw new Error(`run ${run?.id || "inconnu"} ${run?.status || "sans statut"}`);
+  }
+  if (!run.defaultDatasetId) {
+    return { run, items: [] };
+  }
+  const limit = Math.max(1, Number(args.apifyDatasetLimit || 500));
+  const items = await apifyJson(`${APIFY_API_BASE}/datasets/${encodeURIComponent(run.defaultDatasetId)}/items?clean=true&format=json&limit=${limit}`, { token });
+  return { run, items: Array.isArray(items) ? items : [] };
+}
+
+function findMatchingLocation(config, fields) {
+  const postalCode = cleanText(fields.find((field) => /^\d{4}$/.test(cleanText(field))) || "");
+  if (postalCode) {
+    const byPostal = (config.locations || []).find((location) => String(location.postalCode) === postalCode);
+    if (byPostal) return byPostal;
+  }
+  return (config.locations || []).find((location) => locationMatches(location, fields)) || null;
+}
+
+function normalizeZimmoApifyItem(item, config) {
+  const url = cleanText(firstField(item, [
+    "url",
+    "link",
+    "detailUrl",
+    "propertyUrl",
+    "listingUrl",
+    "sourceUrl",
+    "canonicalUrl"
+  ]));
+  if (!url) return { listing: null, message: "URL absente" };
+
+  const addressObject = firstField(item, ["address", "location.address", "property.address"]) || {};
+  const postalCode = cleanText(firstField(item, [
+    "postalCode",
+    "zip",
+    "zipCode",
+    "address.postalCode",
+    "address.zip",
+    "location.postalCode",
+    "property.address.postalCode",
+    "userData.postalCode"
+  ]));
+  const locality = cleanText(firstField(item, [
+    "locality",
+    "city",
+    "municipality",
+    "address.locality",
+    "address.city",
+    "address.addressLocality",
+    "location.city",
+    "userData.location"
+  ]));
+  const street = cleanText(firstField(item, [
+    "street",
+    "streetAddress",
+    "address.street",
+    "address.streetAddress",
+    "property.address.streetAddress"
+  ]));
+  const address = cleanText(firstField(item, [
+    "fullAddress",
+    "addressText",
+    "address.full",
+    "location.addressText",
+    () => [street, postalCode, locality].filter(Boolean).join(" ")
+  ]));
+  const titleBase = cleanText(firstField(item, [
+    "title",
+    "name",
+    "heading",
+    "propertyTitle",
+    "summary",
+    "description"
+  ])) || `Maison a vendre - ${locality || postalCode || "Zimmo"}`;
+  const title = /zimmo/i.test(titleBase) ? titleBase : `${titleBase} - Zimmo`;
+
+  const priceCents = numberFromAny(firstField(item, ["priceCents", "priceInfo.priceCents"]));
+  const price = priceCents ? Math.round(priceCents / 100) : numberFromAny(firstField(item, [
+    "price",
+    "priceValue",
+    "priceAmount",
+    "askingPrice",
+    "transaction.price",
+    "pricing.price",
+    "details.price",
+    "sale.price"
+  ]));
+  if (!price || price > Number(config.maxPrice || 285000)) return { listing: null, message: `prix ${price || "absent"} hors filtre` };
+
+  const haystack = `${title} ${url} ${address} ${locality} ${postalCode} ${cleanText(firstField(item, ["propertyType", "type", "category"]))}`;
+  if (config.excludeNotarialSales !== false && isNotarial(haystack)) return { listing: null, message: "vente notariale exclue" };
+  if (badHouseText(haystack)) return { listing: null, message: "type non maison probable" };
+
+  const matchedLocation = findMatchingLocation(config, [
+    postalCode,
+    locality,
+    address,
+    street,
+    url,
+    title,
+    firstField(item, ["userData.location", "searchLocation"])
+  ]);
+  if (config.strictExactLocation !== false && !matchedLocation) {
+    return { listing: null, message: "commune cible absente" };
+  }
+
+  const latitude = floatFromAny(firstField(item, [
+    "latitude",
+    "lat",
+    "geo.latitude",
+    "location.latitude",
+    "coordinates.latitude",
+    "address.latitude"
+  ]));
+  const longitude = floatFromAny(firstField(item, [
+    "longitude",
+    "lon",
+    "lng",
+    "geo.longitude",
+    "location.longitude",
+    "coordinates.longitude",
+    "address.longitude"
+  ]));
+
+  const agentObject = firstField(item, ["agent", "agency", "broker", "realtor", "advertiser", "seller"]) || {};
+  const agentName = cleanText(firstField(item, [
+    "agentName",
+    "agencyName",
+    "brokerName",
+    "realtorName",
+    "advertiserName",
+    () => agentObject.name,
+    () => agentObject.companyName
+  ])) || "Zimmo";
+  const agentPhone = cleanText(firstField(item, [
+    "agentPhone",
+    "phone",
+    "telephone",
+    "contact.phone",
+    () => agentObject.phone,
+    () => agentObject.telephone
+  ]));
+  const agentEmail = cleanText(firstField(item, [
+    "agentEmail",
+    "email",
+    "contact.email",
+    () => agentObject.email
+  ]));
+  const agentWebsite = cleanText(firstField(item, [
+    "agentWebsite",
+    "agencyWebsite",
+    "website",
+    () => agentObject.url,
+    () => agentObject.website
+  ])) || "https://www.zimmo.be";
+  const images = [...new Set([
+    ...collectImageUrls(firstField(item, ["photoUrls", "photos", "images", "imageUrls", "gallery", "media"])),
+    ...collectImageUrls(firstField(item, ["image", "photo", "thumbnail"]))
+  ].map(normalizeImageUrl).filter(Boolean))].slice(0, 12);
+
+  return {
+    listing: {
+      source: "Zimmo",
+      id: `zimmo-${cleanText(firstField(item, ["id", "listingId", "propertyId", "zimmoId", "reference", "referenceId"])) || shortId(url)}`,
+      title,
+      price,
+      bedrooms: numberFromAny(firstField(item, ["bedrooms", "numberOfBedrooms", "rooms.bedrooms", "details.bedrooms"])) || null,
+      surfaceM2: numberFromAny(firstField(item, ["surface", "surfaceM2", "livingArea", "area", "habitableSurface", "details.surface"])) || null,
+      locality: locality || matchedLocation?.name || "",
+      requestedLocation: matchedLocation?.name || locality || "",
+      postalCode: postalCode || matchedLocation?.postalCode || "",
+      address: address || cleanText(addressObject) || locality || "",
+      latitude: latitude || matchedLocation?.latitude || null,
+      longitude: longitude || matchedLocation?.longitude || null,
+      geoPrecision: latitude && longitude ? "adresse publiee - Zimmo/Apify" : "centre commune - Zimmo/Apify",
+      agentName,
+      agentPhone,
+      agentEmail,
+      agentWebsite,
+      photoCount: images.length,
+      photoUrl: images[0] || null,
+      photoUrls: images,
+      url
+    },
+    message: `${price} EUR`
+  };
+}
+
+async function extractZimmoApify(config, args, diagnostics) {
+  const actorId = normalizeApifyActorId(args.apifyZimmoActorId || config.apify?.zimmo?.actorId || "");
+  const token = args.apifyToken || "";
+  if (!token || !actorId) {
+    diagnostics.push({
+      source: "Zimmo (Apify)",
+      location: "Configuration",
+      status: "Connecteur pret",
+      message: "Definir APIFY_TOKEN et APIFY_ZIMMO_ACTOR_ID pour activer l'import Zimmo via Apify.",
+      url: "https://docs.apify.com/api/v2"
+    });
+    return [];
+  }
+  const listings = [];
+  try {
+    const input = buildZimmoApifyInput(config, args);
+    diagnostics.push({
+      source: "Zimmo (Apify)",
+      location: "Toutes communes",
+      status: "Execution lancee",
+      message: `${(input.startUrls || []).length || "schema acteur"} recherche(s) envoyee(s) a ${actorId}`,
+      url: "https://apify.com"
+    });
+    const { run, items } = await runApifyActor(actorId, token, input, args);
+    diagnostics.push({
+      source: "Zimmo (Apify)",
+      location: "Dataset",
+      status: "Dataset recu",
+      message: `${items.length} ligne(s) brutes, run ${run.id}`,
+      url: run.defaultDatasetId ? `${APIFY_API_BASE}/datasets/${run.defaultDatasetId}/items` : "https://apify.com"
+    });
+    for (const item of items) {
+      const { listing, message } = normalizeZimmoApifyItem(item, config);
+      diagnostics.push({
+        source: "Zimmo (Apify)",
+        location: listing?.requestedLocation || cleanText(firstField(item, ["userData.location", "locality", "city", "address.city"])) || "Annonce",
+        status: listing ? "Fiche exploitable" : "Candidat ignore",
+        message,
+        url: listing?.url || cleanText(firstField(item, ["url", "link", "detailUrl", "propertyUrl"])) || "https://www.zimmo.be"
+      });
+      if (listing) listings.push(listing);
+    }
+  } catch (error) {
+    diagnostics.push({
+      source: "Zimmo (Apify)",
+      location: "Execution",
+      status: "Erreur Apify",
+      message: error.message,
+      url: "https://docs.apify.com/api/v2"
+    });
+  }
+  return listings;
+}
+
 function mergeResults(base, additions) {
   const seen = new Set((base.listings || []).map((listing) => canonicalUrl(listing.url)));
   const merged = [...(base.listings || [])];
@@ -397,6 +828,9 @@ async function run() {
   }
   if (sources.includes("2ememain")) {
     additions.push(...await extractSecondHand(config, config.locations, diagnostics));
+  }
+  if (sources.some((source) => ["zimmo", "zimmo-apify", "apify-zimmo"].includes(source))) {
+    additions.push(...await extractZimmoApify(config, args, diagnostics));
   }
   const merged = mergeResults(base, additions);
   merged.sourceDiagnostics = diagnostics;

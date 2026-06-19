@@ -1490,7 +1490,7 @@ a:hover { text-decoration: underline; }
   <div class="photo-viewer-panel">
     <div class="photo-viewer-toolbar">
       <div id="photoViewerTitle" class="photo-viewer-title"></div>
-      <button id="photoViewerClose" class="photo-viewer-close" type="button">Retour Ã  la page principale</button>
+      <button id="photoViewerClose" class="photo-viewer-close" type="button">Retour à la page principale</button>
     </div>
     <img id="photoViewerImage" alt="Photo annonce agrandie">
   </div>
@@ -1622,14 +1622,14 @@ externalLinkCopy.addEventListener("click", async () => {
   try {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       await navigator.clipboard.writeText(url);
-      externalLinkStatus.textContent = "Lien copiÃ©";
+      externalLinkStatus.textContent = "Lien copié";
     } else {
       throw new Error("Clipboard unavailable");
     }
   } catch {
     externalLinkUrl.focus();
     externalLinkUrl.select();
-    externalLinkStatus.textContent = "Lien sÃ©lectionnÃ©";
+    externalLinkStatus.textContent = "Lien sélectionné";
   }
 });
 

@@ -467,6 +467,29 @@ function Convert-ExternalLinksToLocalActions {
     })
 }
 
+function ConvertTo-CoordinateDouble {
+  param([object]$Value)
+
+  if ($null -eq $Value) {
+    return $null
+  }
+  if ($Value -is [double] -or $Value -is [float] -or $Value -is [decimal]) {
+    return [double]$Value
+  }
+
+  $text = ([string]$Value).Trim()
+  if ([string]::IsNullOrWhiteSpace($text)) {
+    return $null
+  }
+
+  $normalized = ($text -replace '\s', '')
+  if ($normalized -match '^-?\d+,\d+$') {
+    $normalized = $normalized -replace ',', '.'
+  }
+
+  return [double]::Parse($normalized, [System.Globalization.CultureInfo]::InvariantCulture)
+}
+
 function New-HtmlReport {
   param(
     [object]$Config,
@@ -678,8 +701,8 @@ a:hover { text-decoration: underline; }
         id = $_.Id
         title = $_.Title
         price = [int]$_.Price
-        lat = [double]$_.Latitude
-        lon = [double]$_.Longitude
+        lat = ConvertTo-CoordinateDouble $_.Latitude
+        lon = ConvertTo-CoordinateDouble $_.Longitude
         address = $_.Address
         precision = $_.GeoPrecision
         agent = $_.AgentName
@@ -690,8 +713,8 @@ a:hover { text-decoration: underline; }
   $agencyMarkers = @($LocalAgencies | Where-Object { $_.Latitude -and $_.Longitude } | ForEach-Object {
       [pscustomobject]@{
         name = $_.Name
-        lat = [double]$_.Latitude
-        lon = [double]$_.Longitude
+        lat = ConvertTo-CoordinateDouble $_.Latitude
+        lon = ConvertTo-CoordinateDouble $_.Longitude
         address = $_.Address
         phone = $_.Phone
         url = $_.OsmUrl
@@ -852,6 +875,8 @@ externalLinkViewer.addEventListener("click", (event) => {
 
 const mapElement = document.getElementById("map");
 if (window.L && (listingMarkers.length || agencyMarkers.length)) {
+  window.listingMarkers = listingMarkers;
+  window.agencyMarkers = agencyMarkers;
   mapElement.innerHTML = "";
   const map = L.map("map", { scrollWheelZoom: true, attributionControl: true });
   map.attributionControl.setPrefix("");
@@ -862,6 +887,7 @@ if (window.L && (listingMarkers.length || agencyMarkers.length)) {
 
   const listingLayer = L.layerGroup().addTo(map);
   const agencyLayer = L.layerGroup();
+  window.veilleImmoAgencyLayer = agencyLayer;
   const listingBounds = [];
   const allBounds = [];
   listingMarkers.forEach((item) => {

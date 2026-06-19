@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-19-2";
+  const APP_VERSION = "pwa-2026-06-19-3";
   const RESULTS_URL = "results.json";
   const STORAGE_KEY = "veille-immo-seen-ids";
   const INIT_KEY = "veille-immo-initialized";
@@ -22,6 +22,10 @@
       ".pwa-controls button{border:1px solid #c8d1d8;background:#fff;color:#17202a;border-radius:6px;padding:9px 11px;font:600 13px Arial,sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.14)}",
       ".pwa-controls button.primary{background:#0b5c86;border-color:#0b5c86;color:#fff}",
       ".pwa-status{position:fixed;left:14px;bottom:62px;z-index:10001;max-width:420px;background:#17202a;color:#fff;border-radius:8px;padding:10px 12px;font:13px Arial,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.25)}",
+      ".other-source-note{background:#eef7fb;border:1px solid #b8d9e8;border-radius:6px;padding:12px 14px;margin:18px 0;color:#253540}",
+      ".source-diagnostic-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0 20px}",
+      ".source-diagnostic-item{background:#fff;border:1px solid #d9e0e4;border-radius:6px;padding:10px}",
+      ".source-diagnostic-item strong{display:block;margin-bottom:4px}",
       "@media(max-width:680px){.pwa-controls{left:12px;right:12px}.pwa-controls button{flex:1}}"
     ].join("");
     document.head.appendChild(style);
@@ -170,6 +174,99 @@
     return price + " - " + locality;
   }
 
+  function escapeHtml(value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function formatPrice(value) {
+    const number = Number(value || 0);
+    return number > 0 ? new Intl.NumberFormat("fr-BE").format(number) + " EUR" : "Prix a verifier";
+  }
+
+  function sourceCounts(listings) {
+    return listings.reduce(function (acc, listing) {
+      const source = String(listing.source || "Source inconnue");
+      acc[source] = (acc[source] || 0) + 1;
+      return acc;
+    }, {});
+  }
+
+  function renderOtherSources(payload) {
+    const listings = Array.isArray(payload && payload.listings) ? payload.listings : [];
+    const others = listings.filter(function (listing) {
+      return String(listing.source || "").toLowerCase() !== "immoweb";
+    });
+    const existing = document.getElementById("otherSourcesSection");
+    if (existing) {
+      existing.remove();
+    }
+
+    const anchor = Array.from(document.querySelectorAll("h2")).find(function (heading) {
+      return /annonces trouvees automatiquement/i.test(heading.textContent || "");
+    });
+    if (!anchor || !anchor.parentNode) {
+      return;
+    }
+
+    const counts = sourceCounts(listings);
+    const section = document.createElement("section");
+    section.id = "otherSourcesSection";
+    section.innerHTML = [
+      "<h2>Autres sources</h2>",
+      "<div class='other-source-note'>Sources publiees dans cette PWA: Immoweb " + (counts.Immoweb || 0) + ", autres sources " + others.length + ". Zimmo et Immovlan restent consultes en diagnostic mais ne fournissent pas encore d'annonce exploitable dans le rapport publie.</div>",
+      "<div class='source-diagnostic-list'>",
+      "<div class='source-diagnostic-item'><strong>Agences locales</strong>" + others.length + " annonce(s) integree(s) depuis les sites directs.</div>",
+      "<div class='source-diagnostic-item'><strong>Zimmo</strong>Blocage navigateur detecte lors du test automatise. 0 annonce integree.</div>",
+      "<div class='source-diagnostic-item'><strong>Immovlan</strong>HTTP 403 lors du test automatise. 0 annonce integree.</div>",
+      "</div>",
+      others.length ? "<section class='cards'>" + others.map(renderOtherSourceCard).join("") + "</section>" : "<div class='empty'>Aucune annonce non-Immoweb exploitable dans le dernier jeu de donnees publie.</div>"
+    ].join("");
+    anchor.parentNode.insertBefore(section, anchor);
+  }
+
+  function renderOtherSourceCard(listing) {
+    const details = [];
+    if (listing.locality) {
+      details.push("<div><span class='fact-label'>Commune</span> " + escapeHtml(listing.locality) + "</div>");
+    }
+    if (listing.requestedLocation) {
+      details.push("<div><span class='fact-label'>Recherche</span> " + escapeHtml(listing.requestedLocation) + "</div>");
+    }
+    if (Number(listing.bedrooms || 0) > 0) {
+      details.push("<div><span class='fact-label'>Ch.</span> " + escapeHtml(listing.bedrooms) + "</div>");
+    }
+    if (Number(listing.surfaceM2 || 0) > 0) {
+      details.push("<div><span class='fact-label'>Surface</span> " + escapeHtml(listing.surfaceM2) + " m2</div>");
+    }
+    const contactParts = [];
+    if (listing.agentPhone) {
+      contactParts.push("<a href='tel:" + escapeHtml(listing.agentPhone) + "'>" + escapeHtml(listing.agentPhone) + "</a>");
+    }
+    if (listing.agentEmail) {
+      contactParts.push("<a href='mailto:" + escapeHtml(listing.agentEmail) + "'>" + escapeHtml(listing.agentEmail) + "</a>");
+    }
+    if (listing.agentWebsite) {
+      contactParts.push("<button type='button' class='external-link-button' data-external-url='" + escapeHtml(listing.agentWebsite) + "'>Site agence</button>");
+    }
+    return [
+      "<article class='listing-card' id='listing-other-" + escapeHtml(listing.id || listing.url || "") + "'>",
+      listing.photoUrl ? "<div class='photo-strip'><button type='button' class='photo-button' data-photo-src='" + escapeHtml(listing.photoUrl) + "' data-photo-title='" + escapeHtml(listing.title || "Annonce") + "'><img loading='lazy' src='" + escapeHtml(listing.photoUrl) + "' alt='Photo annonce'></button></div>" : "<div class='photo-strip'><div class='photo-empty'>Photos non disponibles depuis cette source</div></div>",
+      "<div class='listing-body'>",
+      "<div class='listing-title'>" + escapeHtml(listing.title || "Annonce autre source") + "</div>",
+      "<div class='facts'><div><span class='fact-label'>Prix</span> <span class='price'>" + escapeHtml(formatPrice(listing.price)) + "</span></div>" + details.join("") + "</div>",
+      listing.address ? "<div class='small'>" + escapeHtml(listing.address) + "</div>" : "",
+      "<div class='contact'><strong>" + escapeHtml(listing.agentName || listing.source || "Source") + "</strong>" + (contactParts.length ? "<br>" + contactParts.join(" · ") : "") + "</div>",
+      "<div class='links'><button type='button' class='external-link-button' data-external-url='" + escapeHtml(listing.url || "#") + "'>Ouvrir l'annonce</button></div>",
+      "</div>",
+      "</article>"
+    ].join("");
+  }
+
   async function notifyNewListings(newListings) {
     if (!("Notification" in window) || Notification.permission !== "granted" || newListings.length === 0) {
       return;
@@ -290,6 +387,7 @@
     } catch (error) {
     }
     updateInstallButtons();
+    fetchResults().then(renderOtherSources).catch(function () {});
     checkForNewListings(false);
   });
 

@@ -1,8 +1,8 @@
 {
     "schemaVersion":  1,
-    "generatedAt":  "2026-06-18T21:32:46.4210252Z",
+    "generatedAt":  "2026-06-19T11:46:19.0371173Z",
     "reportUrl":  "https://lmpg-devel.github.io/veille-immo-report/",
-    "count":  37,
+    "count":  38,
     "listings":  [
                      {
                          "source":  "Immoweb",
@@ -817,6 +817,28 @@
                          "photoCount":  28,
                          "photoUrl":  "https://media-resize.immowebstatic.be/classifieds/0f9b2f71-1db8-4774-9c52-0fcbe1284116/736x736/88e45781a566d799faf1650836fd4904.jpg",
                          "url":  "https://www.immoweb.be/fr/annonce/maison/a-vendre/schaerbeek/1030/21461892"
+                     },
+                     {
+                         "source":  "Agence locale (site direct)",
+                         "id":  "d0bd8cda",
+                         "title":  "Maison à vendre à Sint-Gillis | Berth Immo",
+                         "price":  200000,
+                         "bedrooms":  4,
+                         "surfaceM2":  null,
+                         "locality":  "Saint-Gilles",
+                         "requestedLocation":  "Saint-Gilles",
+                         "postalCode":  "1060",
+                         "address":  "",
+                         "latitude":  50.827,
+                         "longitude":  4.345,
+                         "geoPrecision":  "centre commune - agence experimental",
+                         "agentName":  "Berth Immobiliën",
+                         "agentPhone":  "+32 2 356 04 34",
+                         "agentEmail":  "",
+                         "agentWebsite":  "https://www.berth.be",
+                         "photoCount":  0,
+                         "photoUrl":  null,
+                         "url":  "https://www.berth.be/fr/l/a-vendre/maison/1060-sint-gillis/lis_ozzinurgkwsjsw2e5nhi70uq/"
                      }
                  ]
 }

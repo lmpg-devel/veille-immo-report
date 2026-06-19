@@ -1,4 +1,4 @@
-const CACHE_NAME = "veille-immo-pwa-2026-06-19-7";
+const CACHE_NAME = "veille-immo-pwa-2026-06-19-8";
 const DB_NAME = "veille-immo-pwa";
 const DB_VERSION = 1;
 const STORE_NAME = "state";

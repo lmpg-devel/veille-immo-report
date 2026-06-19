@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-19-4";
+  const APP_VERSION = "pwa-2026-06-19-5";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const STORAGE_KEY = "veille-immo-seen-ids";
@@ -208,6 +208,56 @@
     }, {});
   }
 
+  function renderDiagnosticSummary(diagnostics) {
+    if (!Array.isArray(diagnostics) || diagnostics.length === 0) {
+      return "";
+    }
+    const groups = diagnostics.reduce(function (acc, item) {
+      const source = String(item.source || "Source inconnue");
+      const status = String(item.status || "Etat inconnu");
+      const key = source + "||" + status;
+      if (!acc[key]) {
+        acc[key] = { source: source, status: status, count: 0, message: item.message || "", url: item.url || "" };
+      }
+      acc[key].count += 1;
+      return acc;
+    }, {});
+    const rows = Object.keys(groups).sort().map(function (key) {
+      const group = groups[key];
+      return [
+        "<tr>",
+        "<td>" + escapeHtml(group.source) + "</td>",
+        "<td>" + escapeHtml(group.status) + "</td>",
+        "<td>" + escapeHtml(group.count) + "</td>",
+        "<td>" + escapeHtml(group.message || "") + "</td>",
+        "</tr>"
+      ].join("");
+    }).join("");
+    return [
+      "<details class='source-diagnostic-details'>",
+      "<summary>Diagnostic technique des sources consultees</summary>",
+      "<table><thead><tr><th>Source</th><th>Etat</th><th>Nb</th><th>Exemple</th></tr></thead><tbody>",
+      rows,
+      "</tbody></table>",
+      "</details>"
+    ].join("");
+  }
+
+  function renderPhotoStrip(listing) {
+    const photos = Array.isArray(listing.photoUrls) ? listing.photoUrls.filter(Boolean) : [];
+    const sources = photos.length ? photos : (listing.photoUrl ? [listing.photoUrl] : []);
+    if (!sources.length) {
+      return "<div class='photo-strip'><div class='photo-empty'>Photos non disponibles depuis cette source</div></div>";
+    }
+    return "<div class='photo-strip'>" + sources.slice(0, 12).map(function (src, index) {
+      return [
+        "<button type='button' class='photo-button' data-photo-src='" + escapeHtml(src) + "' data-photo-title='" + escapeHtml((listing.title || "Annonce") + " - photo " + (index + 1)) + "'>",
+        "<img loading='lazy' src='" + escapeHtml(src) + "' alt='Photo annonce'>",
+        "</button>"
+      ].join("");
+    }).join("") + "</div>";
+  }
+
   function slugForPath(value) {
     return String(value || "")
       .normalize("NFD")
@@ -272,18 +322,22 @@
     }
 
     const counts = sourceCounts(listings);
+    const localAgencyCount = counts["Agence locale (site direct)"] || 0;
+    const immovlanCount = counts.Immovlan || 0;
+    const secondHandCount = counts["2ememain"] || 0;
     const section = document.createElement("section");
     section.id = "otherSourcesSection";
     section.innerHTML = [
       "<h2>Autres sources</h2>",
-      "<div class='other-source-note'>Sources publiees dans cette PWA: Immoweb " + (counts.Immoweb || 0) + ", autres sources " + others.length + ". Zimmo et Immovlan restent consultes en diagnostic mais ne fournissent pas encore d'annonce exploitable dans le rapport publie.</div>",
+      "<div class='other-source-note'>Sources publiees dans cette PWA: Immoweb " + (counts.Immoweb || 0) + ", Immovlan " + immovlanCount + ", agences locales " + localAgencyCount + ", 2ememain " + secondHandCount + ". Zimmo reste consulte en diagnostic mais ne fournit pas encore d'annonce exploitable dans le rapport publie.</div>",
       "<div class='source-diagnostic-list'>",
-      "<div class='source-diagnostic-item'><strong>Agences locales</strong>" + others.length + " annonce(s) integree(s) depuis les sites directs.</div>",
-      "<div class='source-diagnostic-item'><strong>Zimmo</strong>Blocage navigateur detecte lors du test automatise. 0 annonce integree.</div>",
-      "<div class='source-diagnostic-item'><strong>Immovlan</strong>HTTP 403 lors du test automatise. 0 annonce integree.</div>",
-      "<div class='source-diagnostic-item'><strong>2ememain</strong>Source particulier a particulier ajoutee en experimental. 0 annonce integree dans le jeu publie actuel.</div>",
+      "<div class='source-diagnostic-item'><strong>Agences locales</strong>" + localAgencyCount + " annonce(s) integree(s) depuis les sites directs.</div>",
+      "<div class='source-diagnostic-item'><strong>Zimmo</strong>Protection navigateur/Cloudflare detectee. Extraction automatique non integree sans source publique stable.</div>",
+      "<div class='source-diagnostic-item'><strong>Immovlan</strong>Extraction avancee active: HTML public, donnees structurees JSON-LD et endpoint telephone public. " + immovlanCount + " annonce(s) integree(s).</div>",
+      "<div class='source-diagnostic-item'><strong>2ememain</strong>Extraction avancee active via pages publiques et window.__CONFIG__. " + secondHandCount + " annonce(s) integree(s) apres filtres stricts localisation/type/prix.</div>",
       "<div class='source-diagnostic-item'><strong>Facebook Marketplace</strong>Lien de controle ajoute. Extraction automatique non active sans session utilisateur.</div>",
       "</div>",
+      renderDiagnosticSummary(payload.sourceDiagnostics),
       renderPrivateSourceLinks(config),
       others.length ? "<section class='cards'>" + others.map(renderOtherSourceCard).join("") + "</section>" : "<div class='empty'>Aucune annonce non-Immoweb exploitable dans le dernier jeu de donnees publie.</div>"
     ].join("");
@@ -316,7 +370,7 @@
     }
     return [
       "<article class='listing-card' id='listing-other-" + escapeHtml(listing.id || listing.url || "") + "'>",
-      listing.photoUrl ? "<div class='photo-strip'><button type='button' class='photo-button' data-photo-src='" + escapeHtml(listing.photoUrl) + "' data-photo-title='" + escapeHtml(listing.title || "Annonce") + "'><img loading='lazy' src='" + escapeHtml(listing.photoUrl) + "' alt='Photo annonce'></button></div>" : "<div class='photo-strip'><div class='photo-empty'>Photos non disponibles depuis cette source</div></div>",
+      renderPhotoStrip(listing),
       "<div class='listing-body'>",
       "<div class='listing-title'>" + escapeHtml(listing.title || "Annonce autre source") + "</div>",
       "<div class='facts'><div><span class='fact-label'>Prix</span> <span class='price'>" + escapeHtml(formatPrice(listing.price)) + "</span></div>" + details.join("") + "</div>",

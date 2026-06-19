@@ -1,0 +1,421 @@
+import fs from "node:fs";
+import path from "node:path";
+
+const DEFAULT_CONFIG = "config/veille-immo.json";
+const DEFAULT_RESULTS = "publish/veille-immo-report/results.json";
+const DEFAULT_OUT = "reports-experimental/advanced-source-results.json";
+const USER_AGENT = "Mozilla/5.0 veille-immo-advanced/1.0";
+
+function parseArgs(argv) {
+  const args = {
+    config: DEFAULT_CONFIG,
+    baseResults: DEFAULT_RESULTS,
+    outJson: DEFAULT_OUT,
+    sources: "immovlan,2ememain",
+    maxPerLocation: 12,
+    delayMs: 350
+  };
+  for (let index = 2; index < argv.length; index += 1) {
+    const item = argv[index];
+    if (!item.startsWith("--")) continue;
+    const key = item.slice(2);
+    const next = argv[index + 1];
+    if (next && !next.startsWith("--")) {
+      args[key] = next;
+      index += 1;
+    } else {
+      args[key] = true;
+    }
+  }
+  args.maxPerLocation = Number(args.maxPerLocation || 12);
+  args.delayMs = Number(args.delayMs || 350);
+  return args;
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function slug(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function decodeHtml(value) {
+  return String(value || "")
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, number) => String.fromCharCode(parseInt(number, 10)))
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&nbsp;/g, " ");
+}
+
+function textFromHtml(html) {
+  return decodeHtml(String(html || "").replace(/<script[\s\S]*?<\/script>/gi, " ").replace(/<style[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim());
+}
+
+function getFirstMatch(text, regex) {
+  const match = String(text || "").match(regex);
+  return match ? match[1] : "";
+}
+
+async function fetchText(url, referer = "") {
+  const headers = {
+    "User-Agent": USER_AGENT,
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "fr-BE,fr;q=0.9,nl;q=0.8"
+  };
+  if (referer) headers.Referer = referer;
+  const response = await fetch(url, { headers, redirect: "follow" });
+  const text = await response.text();
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
+  return text;
+}
+
+function normalizeImageUrl(url) {
+  let value = decodeHtml(url || "").trim();
+  if (!value) return "";
+  if (value.startsWith("//")) value = "https:" + value;
+  value = value.replace("$_#.jpg", "$_83.jpg").replace("$_#", "$_83");
+  return value;
+}
+
+function canonicalUrl(url) {
+  try {
+    const parsed = new URL(url);
+    return `${parsed.origin}${parsed.pathname}`.replace(/\/$/, "").toLowerCase();
+  } catch {
+    return String(url || "").replace(/[?#].*$/, "").replace(/\/$/, "").toLowerCase();
+  }
+}
+
+function sourceLabel(source) {
+  return source === "2ememain" ? "2ememain" : source === "immovlan" ? "Immovlan" : source;
+}
+
+function shortId(value) {
+  let hash = 2166136261;
+  for (const char of String(value || "")) {
+    hash ^= char.charCodeAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0).toString(16).padStart(8, "0").slice(0, 8);
+}
+
+function badHouseText(text) {
+  return /\b(appartement|apparemment|appartementen|apartment|flat|studio|studios|garage|garages|parking|staanplaats|box|terrain|grond|kot|kamer|chambre|commercial|commerce|mur uniquement)\b/i.test(text || "");
+}
+
+function isNotarial(text) {
+  return /\b(biddit|notaire|notaires|notaris|notarissen|vente publique|openbare verkoop)\b/i.test(text || "");
+}
+
+function locationMatches(location, fields) {
+  const haystack = slug(fields.filter(Boolean).join(" "));
+  const needles = [location.name, location.postalCode, location.immowebSlug, location.immovlanSlug, location.zimmoSlug]
+    .filter(Boolean)
+    .map(slug)
+    .filter(Boolean);
+  return needles.some((needle) => haystack.includes(needle));
+}
+
+function toNumber(value) {
+  if (value == null || value === "") return null;
+  const digits = String(value).replace(/[^\d]/g, "");
+  return digits ? Number(digits) : null;
+}
+
+function parseJsonLdObjects(html) {
+  const objects = [];
+  const regex = /<script[^>]+type=["']application\/ld(?:\+|&#x2B;)json["'][^>]*>([\s\S]*?)<\/script>/gi;
+  for (const match of html.matchAll(regex)) {
+    const raw = decodeHtml(match[1]).trim();
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) objects.push(...parsed);
+      else objects.push(parsed);
+    } catch {
+      // Ignore malformed analytics/schema blocks.
+    }
+  }
+  return objects;
+}
+
+function findJsonLd(objects, type) {
+  return objects.find((item) => String(item && item["@type"] || "").trim().toLowerCase() === type.toLowerCase()) || null;
+}
+
+function immovlanSearchUrl(location, maxPrice) {
+  return `https://www.immovlan.be/fr/immobilier/maison/a-vendre/${location.immovlanSlug}?maxprice=${maxPrice}`;
+}
+
+function immovlanAbsolute(url) {
+  return new URL(url, "https://www.immovlan.be").href;
+}
+
+async function getImmovlanPhone(vlanCode, detailUrl) {
+  if (!vlanCode) return "";
+  try {
+    const html = await fetchText(`https://www.immovlan.be/fr/workers/property/view/contact-by-phone/${vlanCode}/ContactRequestPropertyDetail`, detailUrl);
+    const text = textFromHtml(html);
+    const phones = [...text.matchAll(/(?:\+32|0)\s?\d[\d\s./-]{6,}/g)].map((match) => match[0].replace(/\s+/g, " ").trim());
+    return phones.find((phone) => phone.replace(/[^\d+]/g, "").length >= 9) || "";
+  } catch {
+    return "";
+  }
+}
+
+async function parseImmovlanDetail(url, location, config) {
+  const html = await fetchText(url);
+  const text = textFromHtml(html);
+  const objects = parseJsonLdObjects(html);
+  const house = findJsonLd(objects, "House");
+  const sell = findJsonLd(objects, "SellAction");
+  const geo = findJsonLd(objects, "GeoCoordinates");
+  const address = findJsonLd(objects, "PostalAddress") || house?.address || sell?.location || {};
+  const agent = findJsonLd(objects, "RealEstateAgent") || {};
+  const title = decodeHtml(getFirstMatch(html, /<title>([\s\S]*?)<\/title>/i)).trim();
+  if (config.excludeNotarialSales !== false && isNotarial(`${url} ${title} ${house?.description || ""} ${sell?.description || ""}`)) {
+    return { listing: null, message: "vente notariale exclue" };
+  }
+  const price = Number(sell?.price || sell?.priceSpecification?.price || getFirstMatch(html, /name="cXenseParse:rbf-immovlan-prix"\s+content="([\d,.]+)/i).replace(",", "."));
+  const surface = Number(house?.floorSize?.value || getFirstMatch(text, /Surface habitable\s+(\d{2,4})m/i));
+  const bedrooms = Number(house?.numberOfRooms || getFirstMatch(text, /(\d+)\s*Chambres?/i));
+  const postalCode = String(address?.postalCode || "");
+  const locality = decodeHtml(address?.addressLocality || "");
+  const street = decodeHtml(address?.streetAddress || "");
+  const vlanCode = (url.match(/\/([^/]+)$/) || [])[1] || "";
+
+  if (!price || price > Number(config.maxPrice || 285000)) return { listing: null, message: `prix ${price || "absent"} hors filtre` };
+  if (postalCode && String(location.postalCode) !== postalCode) return { listing: null, message: `code postal ${postalCode} hors commune` };
+  if (!locationMatches(location, [locality, postalCode, street, url, title])) return { listing: null, message: "commune cible absente" };
+  if (badHouseText(`${title} ${url}`)) return { listing: null, message: "type non maison probable" };
+
+  const imageMatches = [...html.matchAll(/data-src=["']([^"']*api-image\.immovlan\.be\/v1\/property\/[^"']+)["']/gi)].map((match) => decodeHtml(match[1]));
+  const images = [...new Set([
+    house?.image,
+    sell?.image,
+    getFirstMatch(html, /<meta property="og:image" content="([^"]+)"/i),
+    ...imageMatches
+  ].map(normalizeImageUrl).filter(Boolean))].slice(0, 12);
+  const phone = await getImmovlanPhone(vlanCode.toUpperCase(), url);
+
+  return {
+    listing: {
+      source: "Immovlan",
+      id: `immovlan-${vlanCode.toLowerCase() || shortId(url)}`,
+      title: title || `Maison a vendre - ${locality || location.name} - Immovlan`,
+      price,
+      bedrooms: bedrooms || null,
+      surfaceM2: surface || null,
+      locality: locality || location.name,
+      requestedLocation: location.name,
+      postalCode: postalCode || location.postalCode,
+      address: [street, postalCode, locality].filter(Boolean).join(" "),
+      latitude: geo?.latitude || location.latitude || null,
+      longitude: geo?.longitude || location.longitude || null,
+      geoPrecision: geo?.latitude && geo?.longitude ? "adresse publiee - Immovlan" : "centre commune - Immovlan",
+      agentName: decodeHtml(agent?.name || "Immovlan"),
+      agentPhone: phone,
+      agentEmail: "",
+      agentWebsite: agent?.url ? immovlanAbsolute(agent.url) : "https://www.immovlan.be",
+      photoCount: images.length,
+      photoUrl: images[0] || null,
+      photoUrls: images,
+      url
+    },
+    message: `${price} EUR`
+  };
+}
+
+async function extractImmovlan(config, locations, diagnostics) {
+  const listings = [];
+  const seen = new Set();
+  for (const location of locations) {
+    const searchUrl = immovlanSearchUrl(location, config.maxPrice);
+    try {
+      const html = await fetchText(searchUrl);
+      const links = [...new Map([...html.matchAll(/(?:https:\/\/www\.immovlan\.be)?\/fr\/detail\/(?:maison|villa|immeuble-de-rapport|bien-exceptionnel)\/a-vendre\/[^"'<> \n]+/gi)]
+        .map((match) => immovlanAbsolute(match[0]))
+        .map((url) => [canonicalUrl(url), url])).values()]
+        .filter((url) => !seen.has(canonicalUrl(url)));
+      diagnostics.push({ source: "Immovlan", location: location.name, status: "Recherche OK", message: `${links.length} URL candidates`, url: searchUrl });
+      for (const detailUrl of links.slice(0, config.maxPerLocation || 12)) {
+        seen.add(canonicalUrl(detailUrl));
+        await sleep(config.delayMs || 350);
+        try {
+          const { listing, message } = await parseImmovlanDetail(detailUrl, location, config);
+          diagnostics.push({ source: "Immovlan", location: location.name, status: listing ? "Fiche exploitable" : "Candidat ignore", message, url: detailUrl });
+          if (listing) listings.push(listing);
+        } catch (error) {
+          diagnostics.push({ source: "Immovlan", location: location.name, status: "Erreur detail", message: error.message, url: detailUrl });
+        }
+      }
+    } catch (error) {
+      diagnostics.push({ source: "Immovlan", location: location.name, status: "Recherche indisponible", message: error.message, url: searchUrl });
+    }
+  }
+  return listings;
+}
+
+function secondHandSearchUrl(location, maxPrice) {
+  return `https://www.2ememain.be/l/immo/maisons-a-vendre/q/${encodeURIComponent(slug(location.name))}/?priceTo=${encodeURIComponent(maxPrice)}`;
+}
+
+function parseSecondHandConfig(html) {
+  const match = html.match(/window\.__CONFIG__\s*=\s*(\{.*?\});\s*window\.__BE_API_GATEWAY_URL__/s) || html.match(/window\.__CONFIG__\s*=\s*(\{.*?\});/s);
+  if (!match) return null;
+  try {
+    return JSON.parse(match[1]);
+  } catch {
+    return null;
+  }
+}
+
+async function parseSecondHandDetail(url, location, config) {
+  const html = await fetchText(url);
+  const cfg = parseSecondHandConfig(html);
+  const listing = cfg?.listing;
+  if (!listing) return { listing: null, message: "configuration annonce absente" };
+
+  const price = Number(listing.priceInfo?.priceCents || 0) / 100;
+  const seller = listing.seller || {};
+  const sellerLocation = seller.location || {};
+  const locality = decodeHtml(sellerLocation.cityName || "");
+  const title = decodeHtml(listing.title || getFirstMatch(html, /<title>([\s\S]*?)<\/title>/i));
+  const category = `${listing.category?.parentName || ""} ${listing.category?.fullName || ""} ${listing.category?.name || ""}`;
+  const haystack = `${title} ${category} ${locality} ${url}`;
+
+  if (!price || price > Number(config.maxPrice || 285000)) return { listing: null, message: `prix ${price || "absent"} hors filtre` };
+  if (price < 50000) return { listing: null, message: `prix ${price} sous seuil coherent` };
+  if (!/maisons?/i.test(category)) return { listing: null, message: "categorie non maison" };
+  if (badHouseText(`${title} ${url}`)) return { listing: null, message: "type non maison probable" };
+  if (seller.sellerType && seller.sellerType !== "CONSUMER") return { listing: null, message: `vendeur ${seller.sellerType} non particulier` };
+  if (!locationMatches(location, [url, title])) return { listing: null, message: `commune absente du titre/url; vendeur ${locality || "sans localite"}` };
+  if (config.excludeNotarialSales !== false && isNotarial(haystack)) return { listing: null, message: "vente notariale exclue" };
+
+  const images = [...new Set((listing.gallery?.imageUrls || listing.gallery?.media?.images?.map((image) => image.base) || [])
+    .map(normalizeImageUrl)
+    .filter(Boolean))].slice(0, 12);
+
+  return {
+    listing: {
+      source: "2ememain",
+      id: `2ememain-${listing.itemId || shortId(url)}`,
+      title: `${title} - 2ememain`,
+      price,
+      bedrooms: null,
+      surfaceM2: null,
+      locality: locality || location.name,
+      requestedLocation: location.name,
+      postalCode: location.postalCode,
+      address: locality || "",
+      latitude: location.latitude || null,
+      longitude: location.longitude || null,
+      geoPrecision: "centre commune - 2ememain",
+      agentName: decodeHtml(seller.name || "Particulier 2ememain"),
+      agentPhone: "",
+      agentEmail: "",
+      agentWebsite: seller.sellerProfileUrl ? new URL(seller.sellerProfileUrl, "https://www.2ememain.be").href : "https://www.2ememain.be",
+      photoCount: images.length,
+      photoUrl: images[0] || null,
+      photoUrls: images,
+      url
+    },
+    message: `${price} EUR`
+  };
+}
+
+async function extractSecondHand(config, locations, diagnostics) {
+  const listings = [];
+  const seen = new Set();
+  for (const location of locations) {
+    const searchUrl = secondHandSearchUrl(location, config.maxPrice);
+    try {
+      const html = await fetchText(searchUrl);
+      const links = [...new Map([...html.matchAll(/(?:https:\/\/www\.2ememain\.be)?\/v\/immo\/maisons-a-vendre\/m\d+[^"'<> \n]*/gi)]
+        .map((match) => new URL(match[0], "https://www.2ememain.be").href)
+        .map((url) => [canonicalUrl(url), url])).values()]
+        .filter((url) => !seen.has(canonicalUrl(url)));
+      diagnostics.push({ source: "2ememain", location: location.name, status: "Recherche OK", message: `${links.length} URL candidates`, url: searchUrl });
+      for (const detailUrl of links.slice(0, config.maxPerLocation || 12)) {
+        seen.add(canonicalUrl(detailUrl));
+        await sleep(config.delayMs || 350);
+        try {
+          const { listing, message } = await parseSecondHandDetail(detailUrl, location, config);
+          diagnostics.push({ source: "2ememain", location: location.name, status: listing ? "Fiche exploitable" : "Candidat ignore", message, url: detailUrl });
+          if (listing) listings.push(listing);
+        } catch (error) {
+          diagnostics.push({ source: "2ememain", location: location.name, status: "Erreur detail", message: error.message, url: detailUrl });
+        }
+      }
+    } catch (error) {
+      diagnostics.push({ source: "2ememain", location: location.name, status: "Recherche indisponible", message: error.message, url: searchUrl });
+    }
+  }
+  return listings;
+}
+
+function mergeResults(base, additions) {
+  const seen = new Set((base.listings || []).map((listing) => canonicalUrl(listing.url)));
+  const merged = [...(base.listings || [])];
+  for (const listing of additions) {
+    const key = canonicalUrl(listing.url);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    merged.push(listing);
+  }
+  merged.sort((a, b) => Number(a.price || 0) - Number(b.price || 0));
+  return {
+    ...base,
+    generatedAt: new Date().toISOString(),
+    count: merged.length,
+    listings: merged
+  };
+}
+
+async function run() {
+  const args = parseArgs(process.argv);
+  const config = JSON.parse(fs.readFileSync(args.config, "utf8"));
+  config.maxPerLocation = args.maxPerLocation;
+  config.delayMs = args.delayMs;
+  const base = JSON.parse(fs.readFileSync(args.baseResults, "utf8"));
+  const sources = String(args.sources || "").split(",").map((item) => item.trim().toLowerCase()).filter(Boolean);
+  const diagnostics = [];
+  const additions = [];
+  if (sources.includes("immovlan")) {
+    additions.push(...await extractImmovlan(config, config.locations, diagnostics));
+  }
+  if (sources.includes("2ememain")) {
+    additions.push(...await extractSecondHand(config, config.locations, diagnostics));
+  }
+  const merged = mergeResults(base, additions);
+  merged.sourceDiagnostics = diagnostics;
+  fs.mkdirSync(path.dirname(args.outJson), { recursive: true });
+  fs.writeFileSync(args.outJson, JSON.stringify(merged, null, 2), "utf8");
+  fs.writeFileSync(args.outJson.replace(/\.json$/, "-diagnostics.json"), JSON.stringify({ generatedAt: new Date().toISOString(), count: diagnostics.length, diagnostics }, null, 2), "utf8");
+  console.log(JSON.stringify({
+    baseCount: base.count,
+    additions: additions.length,
+    mergedCount: merged.count,
+    diagnostics: diagnostics.length,
+    bySource: additions.reduce((acc, item) => {
+      acc[item.source] = (acc[item.source] || 0) + 1;
+      return acc;
+    }, {})
+  }, null, 2));
+}
+
+run().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

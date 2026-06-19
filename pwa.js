@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-19-5";
+  const APP_VERSION = "pwa-2026-06-19-6";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const STORAGE_KEY = "veille-immo-seen-ids";
@@ -27,6 +27,21 @@
       ".source-diagnostic-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0 20px}",
       ".source-diagnostic-item{background:#fff;border:1px solid #d9e0e4;border-radius:6px;padding:10px}",
       ".source-diagnostic-item strong{display:block;margin-bottom:4px}",
+      ".source-badge-row{display:flex;align-items:center;gap:8px;margin-bottom:9px}",
+      ".source-badge{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;color:#fff;font:700 11px/1 Arial,sans-serif;text-transform:uppercase;letter-spacing:.02em}",
+      ".source-badge-immoweb{background:#0b5c86}",
+      ".source-badge-immovlan{background:#00897b}",
+      ".source-badge-zimmo{background:#7c3aed}",
+      ".source-badge-agency{background:#2f6f3e}",
+      ".source-badge-p2p{background:#d97706}",
+      ".source-map-icon-wrap{background:transparent;border:0}",
+      ".source-map-pin{display:block;width:18px;height:18px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid #fff;box-shadow:0 2px 7px rgba(0,0,0,.35)}",
+      ".source-map-pin::after{content:'';position:absolute;width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.88);left:6px;top:6px}",
+      ".source-map-pin-immoweb{background:#0b5c86}",
+      ".source-map-pin-immovlan{background:#00897b}",
+      ".source-map-pin-zimmo{background:#7c3aed}",
+      ".source-map-pin-agency{background:#2f6f3e}",
+      ".source-map-pin-p2p{background:#d97706}",
       "@media(max-width:680px){.pwa-controls{left:12px;right:12px}.pwa-controls button{flex:1}}"
     ].join("");
     document.head.appendChild(style);
@@ -208,6 +223,100 @@
     }, {});
   }
 
+  function sourceKind(source) {
+    const value = String(source || "").toLowerCase();
+    if (value.indexOf("immoweb") !== -1) return "immoweb";
+    if (value.indexOf("immovlan") !== -1) return "immovlan";
+    if (value.indexOf("zimmo") !== -1) return "zimmo";
+    if (value.indexOf("2ememain") !== -1 || value.indexOf("particulier") !== -1) return "p2p";
+    return "agency";
+  }
+
+  function sourceLabel(source) {
+    const kind = sourceKind(source);
+    if (kind === "immoweb") return "Immoweb";
+    if (kind === "immovlan") return "Immovlan";
+    if (kind === "zimmo") return "Zimmo";
+    if (kind === "p2p") return String(source || "").toLowerCase().indexOf("2ememain") !== -1 ? "2ememain" : "Particulier";
+    return "Agence locale";
+  }
+
+  function renderSourceBadge(source) {
+    const kind = sourceKind(source);
+    return "<div class='source-badge-row'><span class='source-badge source-badge-" + kind + "'>" + escapeHtml(sourceLabel(source)) + "</span></div>";
+  }
+
+  function sourceMarkerIcon(source) {
+    if (!window.L) {
+      return null;
+    }
+    const kind = sourceKind(source);
+    return window.L.divIcon({
+      className: "source-map-icon-wrap",
+      html: "<span class='source-map-pin source-map-pin-" + kind + "'></span>",
+      iconSize: [24, 24],
+      iconAnchor: [12, 24],
+      popupAnchor: [0, -22]
+    });
+  }
+
+  function annotateSourceBadges(payload) {
+    const listings = Array.isArray(payload && payload.listings) ? payload.listings : [];
+    const byId = listings.reduce(function (acc, listing) {
+      if (listing.id) {
+        acc[String(listing.id)] = listing;
+      }
+      return acc;
+    }, {});
+    document.querySelectorAll(".listing-card[id^='listing-']").forEach(function (card) {
+      if (card.querySelector(".source-badge-row")) {
+        return;
+      }
+      const id = String(card.id || "").replace(/^listing-other-/, "").replace(/^listing-/, "");
+      const listing = byId[id];
+      if (!listing) {
+        return;
+      }
+      const body = card.querySelector(".listing-body");
+      if (body) {
+        body.insertAdjacentHTML("afterbegin", renderSourceBadge(listing.source));
+      }
+    });
+  }
+
+  function syncSourceMapMarkers(payload) {
+    if (!window.L || !window.veilleImmoMap) {
+      return;
+    }
+    if (window.veilleImmoExtraSourceMarkers) {
+      window.veilleImmoMap.removeLayer(window.veilleImmoExtraSourceMarkers);
+    }
+    const layer = window.L.layerGroup().addTo(window.veilleImmoMap);
+    const listings = Array.isArray(payload && payload.listings) ? payload.listings : [];
+    listings.forEach(function (listing) {
+      const kind = sourceKind(listing.source);
+      if (kind === "immoweb") {
+        return;
+      }
+      const lat = Number(listing.latitude);
+      const lon = Number(listing.longitude);
+      if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+        return;
+      }
+      const icon = sourceMarkerIcon(listing.source);
+      const marker = window.L.marker([lat, lon], icon ? { icon: icon } : {}).addTo(layer);
+      marker.bindPopup([
+        "<strong>" + escapeHtml(formatPrice(listing.price)) + "</strong><br>",
+        "<span>" + escapeHtml(sourceLabel(listing.source)) + "</span><br>",
+        listing.address ? escapeHtml(listing.address) + "<br>" : "",
+        listing.geoPrecision ? "<span>" + escapeHtml(listing.geoPrecision) + "</span><br>" : "",
+        escapeHtml(listing.agentName || "") + (listing.agentPhone ? " " + escapeHtml(listing.agentPhone) : "") + "<br>",
+        "<button type='button' class='external-link-button' data-external-url='" + escapeHtml(listing.url || "#") + "'>Ouvrir l'annonce</button>"
+      ].join(""));
+    });
+    window.veilleImmoExtraSourceMarkers = layer;
+  }
+
   function renderDiagnosticSummary(diagnostics) {
     if (!Array.isArray(diagnostics) || diagnostics.length === 0) {
       return "";
@@ -372,6 +481,7 @@
       "<article class='listing-card' id='listing-other-" + escapeHtml(listing.id || listing.url || "") + "'>",
       renderPhotoStrip(listing),
       "<div class='listing-body'>",
+      renderSourceBadge(listing.source),
       "<div class='listing-title'>" + escapeHtml(listing.title || "Annonce autre source") + "</div>",
       "<div class='facts'><div><span class='fact-label'>Prix</span> <span class='price'>" + escapeHtml(formatPrice(listing.price)) + "</span></div>" + details.join("") + "</div>",
       listing.address ? "<div class='small'>" + escapeHtml(listing.address) + "</div>" : "",
@@ -503,9 +613,19 @@
     }
     updateInstallButtons();
     fetchResults().then(function (payload) {
+      annotateSourceBadges(payload);
+      syncSourceMapMarkers(payload);
       return fetchConfig()
-        .then(function (config) { renderOtherSources(payload, config); })
-        .catch(function () { renderOtherSources(payload, null); });
+        .then(function (config) {
+          renderOtherSources(payload, config);
+          annotateSourceBadges(payload);
+          syncSourceMapMarkers(payload);
+        })
+        .catch(function () {
+          renderOtherSources(payload, null);
+          annotateSourceBadges(payload);
+          syncSourceMapMarkers(payload);
+        });
     }).catch(function () {});
     checkForNewListings(false);
   });

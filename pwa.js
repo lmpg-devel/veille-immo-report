@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-1.0";
+  const APP_VERSION = "pwa-2026-06-19-2";
   const RESULTS_URL = "results.json";
   const STORAGE_KEY = "veille-immo-seen-ids";
   const INIT_KEY = "veille-immo-initialized";
@@ -21,6 +21,7 @@
       ".pwa-controls{position:fixed;right:14px;bottom:14px;z-index:10001;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}",
       ".pwa-controls button{border:1px solid #c8d1d8;background:#fff;color:#17202a;border-radius:6px;padding:9px 11px;font:600 13px Arial,sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.14)}",
       ".pwa-controls button.primary{background:#0b5c86;border-color:#0b5c86;color:#fff}",
+      ".pwa-status{position:fixed;left:14px;bottom:62px;z-index:10001;max-width:420px;background:#17202a;color:#fff;border-radius:8px;padding:10px 12px;font:13px Arial,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.25)}",
       "@media(max-width:680px){.pwa-controls{left:12px;right:12px}.pwa-controls button{flex:1}}"
     ].join("");
     document.head.appendChild(style);
@@ -36,6 +37,12 @@
       checkForNewListings(true);
     });
     controls.appendChild(refreshButton);
+
+    const updateButton = document.createElement("button");
+    updateButton.type = "button";
+    updateButton.textContent = "Actualiser app";
+    updateButton.addEventListener("click", hardRefreshApplication);
+    controls.appendChild(updateButton);
 
     if ("Notification" in window) {
       const notificationButton = document.createElement("button");
@@ -62,6 +69,24 @@
       return null;
     }
     const registration = await navigator.serviceWorker.register("sw.js");
+    registration.addEventListener("updatefound", function () {
+      const installing = registration.installing;
+      if (!installing) {
+        return;
+      }
+      installing.addEventListener("statechange", function () {
+        if (installing.state === "installed" && navigator.serviceWorker.controller) {
+          showStatus("Nouvelle version prete. Touche Actualiser app.");
+        }
+      });
+    });
+    if (registration.waiting) {
+      showStatus("Nouvelle version prete. Touche Actualiser app.");
+    }
+    try {
+      await registration.update();
+    } catch (error) {
+    }
     if ("periodicSync" in registration) {
       try {
         await registration.periodicSync.register("check-listings", {
@@ -72,6 +97,47 @@
       }
     }
     return registration;
+  }
+
+  function showStatus(message) {
+    let node = document.getElementById("pwaStatus");
+    if (!node) {
+      node = document.createElement("div");
+      node.id = "pwaStatus";
+      node.className = "pwa-status";
+      document.body.appendChild(node);
+    }
+    node.textContent = message;
+    window.setTimeout(function () {
+      if (node && node.parentNode) {
+        node.parentNode.removeChild(node);
+      }
+    }, 9000);
+  }
+
+  async function hardRefreshApplication() {
+    try {
+      if ("serviceWorker" in navigator) {
+        const registration = await navigator.serviceWorker.getRegistration();
+        if (registration && registration.waiting) {
+          registration.waiting.postMessage({ type: "SKIP_WAITING" });
+        }
+        if (registration && registration.active) {
+          registration.active.postMessage({ type: "CLEAR_RUNTIME_CACHE" });
+          await registration.update();
+        }
+      }
+      if ("caches" in window) {
+        const names = await caches.keys();
+        await Promise.all(names.filter(function (name) {
+          return name.indexOf("veille-immo-pwa-") === 0;
+        }).map(function (name) {
+          return caches.delete(name);
+        }));
+      }
+    } catch (error) {
+    }
+    window.location.replace(window.location.pathname + "?refresh=" + Date.now());
   }
 
   function seenIdsFromStorage() {
@@ -202,6 +268,17 @@
     updateInstallButtons();
   });
 
+  let refreshing = false;
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.addEventListener("controllerchange", function () {
+      if (refreshing) {
+        return;
+      }
+      refreshing = true;
+      window.location.reload();
+    });
+  }
+
   window.addEventListener("load", async function () {
     injectControls();
     const pageButton = document.getElementById("installButton");
@@ -218,6 +295,7 @@
 
   window.VeilleImmoPwa = {
     version: APP_VERSION,
-    checkForNewListings: checkForNewListings
+    checkForNewListings: checkForNewListings,
+    hardRefreshApplication: hardRefreshApplication
   };
 })();

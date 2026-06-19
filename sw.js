@@ -1,4 +1,4 @@
-const CACHE_NAME = "veille-immo-pwa-v1";
+const CACHE_NAME = "veille-immo-pwa-2026-06-19-2";
 const DB_NAME = "veille-immo-pwa";
 const DB_VERSION = 1;
 const STORE_NAME = "state";
@@ -8,7 +8,6 @@ const STATIC_ASSETS = [
   "install.html",
   "manifest.webmanifest",
   "pwa.js",
-  "results.json",
   "icons/icon.svg",
   "icons/icon-192.png",
   "icons/icon-512.png"
@@ -40,16 +39,62 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  event.respondWith(
-    fetch(request)
-      .then((response) => {
-        const copy = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
-        return response;
-      })
-      .catch(() => caches.match(request).then((cached) => cached || caches.match("index.html")))
-  );
+  if (isFreshResource(request, url)) {
+    event.respondWith(networkFirst(request, "index.html"));
+    return;
+  }
+
+  event.respondWith(networkFirst(request, null));
 });
+
+self.addEventListener("message", (event) => {
+  const type = event.data && event.data.type;
+  if (type === "SKIP_WAITING") {
+    self.skipWaiting();
+    return;
+  }
+  if (type === "CLEAR_RUNTIME_CACHE") {
+    event.waitUntil(
+      caches.keys()
+        .then((keys) => Promise.all(keys.filter((key) => key.indexOf("veille-immo-pwa-") === 0).map((key) => caches.delete(key))))
+    );
+  }
+});
+
+function isFreshResource(request, url) {
+  if (request.mode === "navigate") {
+    return true;
+  }
+  return url.pathname.endsWith("/index.html")
+    || url.pathname.endsWith("/install.html")
+    || url.pathname.endsWith("/pwa.js")
+    || url.pathname.endsWith("/results.json")
+    || url.pathname.endsWith("/manifest.webmanifest");
+}
+
+async function networkFirst(request, fallbackPath) {
+  try {
+    const response = await fetch(request, { cache: "no-store" });
+    if (response && response.ok) {
+      const copy = response.clone();
+      const cache = await caches.open(CACHE_NAME);
+      await cache.put(request, copy);
+    }
+    return response;
+  } catch (error) {
+    const cached = await caches.match(request);
+    if (cached) {
+      return cached;
+    }
+    if (fallbackPath) {
+      const fallback = await caches.match(fallbackPath);
+      if (fallback) {
+        return fallback;
+      }
+    }
+    throw error;
+  }
+}
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();

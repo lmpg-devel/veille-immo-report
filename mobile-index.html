@@ -19,6 +19,13 @@ h2 { margin: 34px 0 12px; font-size: 20px; }
 .legend-dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
 .legend-listing { background: #0b5c86; }
 .legend-agency { background: #fff; border: 1px solid #5f6b73; }
+.source-map-pin { display: block; width: 18px; height: 18px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 2px solid #fff; box-shadow: 0 2px 7px rgba(0,0,0,.35); }
+.source-map-pin::after { content: ""; position: absolute; width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.88); left: 6px; top: 6px; }
+.source-map-pin-immoweb { background: #0b5c86; }
+.source-map-pin-immovlan { background: #e11d48; }
+.source-map-pin-zimmo { background: #7c3aed; }
+.source-map-pin-agency { background: #2f6f3e; }
+.source-map-pin-p2p { background: #d97706; }
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 16px; }
 .listing-card { background: #fff; border: 1px solid #dde2e5; border-radius: 6px; overflow: hidden; }
 .listing-body { padding: 14px; }

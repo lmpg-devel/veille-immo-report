@@ -1576,6 +1576,7 @@ if (window.L && (listingMarkers.length || agencyMarkers.length)) {
   window.agencyMarkers = agencyMarkers;
   mapElement.innerHTML = "";
   const map = L.map("map", { scrollWheelZoom: true, attributionControl: true });
+  window.veilleImmoMap = map;
   map.attributionControl.setPrefix("");
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,

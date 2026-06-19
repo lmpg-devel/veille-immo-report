@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-const APP_VERSION = "pwa-2026-06-19-13";
+const APP_VERSION = "pwa-2026-06-20-01";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const STORAGE_KEY = "veille-immo-seen-ids";
@@ -441,7 +441,7 @@ const APP_VERSION = "pwa-2026-06-19-13";
     const secondHandCount = counts["2ememain"] || 0;
     const zimmoMessage = zimmoCount > 0
       ? "Import Apify actif: " + zimmoCount + " annonce(s) integree(s)."
-      : "Connecteur Apify pret: definir APIFY_TOKEN et APIFY_ZIMMO_ACTOR_ID cote pipeline pour integrer les annonces Zimmo.";
+      : "Connecteur Apify pret: acteur dz_omar/zimmo-scraper identifie. Definir APIFY_TOKEN cote pipeline pour integrer les annonces Zimmo.";
     const section = document.createElement("section");
     section.id = "otherSourcesSection";
     section.innerHTML = [

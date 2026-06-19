@@ -6,6 +6,7 @@ const DEFAULT_RESULTS = "publish/veille-immo-report/results.json";
 const DEFAULT_OUT = "reports-experimental/advanced-source-results.json";
 const USER_AGENT = "Mozilla/5.0 veille-immo-advanced/1.0";
 const APIFY_API_BASE = "https://api.apify.com/v2";
+const DEFAULT_ZIMMO_APIFY_ACTOR_ID = "dz_omar~zimmo-scraper";
 
 function parseArgs(argv) {
   const args = {
@@ -16,13 +17,15 @@ function parseArgs(argv) {
     maxPerLocation: 12,
     delayMs: 350,
     apifyToken: process.env.APIFY_TOKEN || "",
-    apifyZimmoActorId: process.env.APIFY_ZIMMO_ACTOR_ID || "",
+    apifyZimmoActorId: process.env.APIFY_ZIMMO_ACTOR_ID || DEFAULT_ZIMMO_APIFY_ACTOR_ID,
     apifyZimmoInput: process.env.APIFY_ZIMMO_INPUT_PATH || "",
     apifyZimmoInputJson: process.env.APIFY_ZIMMO_INPUT_JSON || "",
+    apifyZimmoStartUrls: process.env.APIFY_ZIMMO_START_URLS || "",
     apifyWaitSecs: 60,
     apifyPollSecs: 20,
     apifyRunTimeoutMs: 600000,
-    apifyDatasetLimit: 500
+    apifyDatasetLimit: 500,
+    apifyMaxResultsPerUrl: 10
   };
   for (let index = 2; index < argv.length; index += 1) {
     const item = argv[index];
@@ -42,6 +45,7 @@ function parseArgs(argv) {
   args.apifyPollSecs = Number(args.apifyPollSecs || 20);
   args.apifyRunTimeoutMs = Number(args.apifyRunTimeoutMs || 600000);
   args.apifyDatasetLimit = Number(args.apifyDatasetLimit || 500);
+  args.apifyMaxResultsPerUrl = Number(args.apifyMaxResultsPerUrl || 10);
   return args;
 }
 
@@ -452,6 +456,22 @@ function zimmoSearchUrl(location, maxPrice) {
   return `https://www.zimmo.be/fr/${location.zimmoSlug}-${location.postalCode}/a-vendre/maison/?priceIncludeUnknown=0&priceMax=${maxPrice}`;
 }
 
+function zimmoEncodedSearchUrl(location, maxPrice) {
+  if (!location.zimmoPlaceId) return "";
+  const search = {
+    filter: {
+      status: { in: ["FOR_SALE", "TAKE_OVER"] },
+      placeId: { in: [Number(location.zimmoPlaceId)] },
+      price: { unknown: false, range: { min: 0, max: Number(maxPrice || 285000) } },
+      category: { in: ["HOUSE"] }
+    },
+    paging: { from: 0, size: 17 },
+    sorting: [{ type: "PRICE", order: "ASC" }]
+  };
+  const encoded = encodeURIComponent(Buffer.from(JSON.stringify(search), "utf8").toString("base64"));
+  return `https://www.zimmo.be/fr/rechercher/?search=${encoded}&p=1#combi`;
+}
+
 function normalizeApifyActorId(value) {
   const raw = String(value || "").trim();
   if (!raw) return "";
@@ -475,26 +495,17 @@ function buildZimmoApifyInput(config, args) {
   if (args.apifyZimmoInputJson) {
     return JSON.parse(args.apifyZimmoInputJson);
   }
+  const configuredUrls = [
+    ...String(args.apifyZimmoStartUrls || "").split(/[\r\n,;]+/),
+    ...(config.apify?.zimmo?.startUrls || [])
+  ].map((item) => typeof item === "string" ? item : item?.url).map((url) => String(url || "").trim()).filter(Boolean);
+  const generatedUrls = configuredUrls.length
+    ? configuredUrls
+    : (config.locations || []).map((location) => zimmoEncodedSearchUrl(location, config.maxPrice) || zimmoSearchUrl(location, config.maxPrice));
   return {
-    startUrls: (config.locations || []).map((location) => ({
-      url: zimmoSearchUrl(location, config.maxPrice),
-      userData: {
-        location: location.name,
-        postalCode: location.postalCode
-      }
-    })),
-    maxItems: Number(args.apifyDatasetLimit || 500),
-    maxPrice: Number(config.maxPrice || 285000),
-    propertyType: config.propertyType || "maison",
-    locations: (config.locations || []).map((location) => ({
-      name: location.name,
-      postalCode: location.postalCode,
-      latitude: location.latitude,
-      longitude: location.longitude
-    })),
-    proxyConfiguration: {
-      useApifyProxy: true
-    }
+    startUrls: generatedUrls.map((url) => ({ url })),
+    maxResults: Number(config.apify?.zimmo?.maxResultsPerUrl || args.apifyMaxResultsPerUrl || 10),
+    proxyConfiguration: config.apify?.zimmo?.proxyConfiguration || { useApifyProxy: false }
   };
 }
 
@@ -745,13 +756,23 @@ function normalizeZimmoApifyItem(item, config) {
 async function extractZimmoApify(config, args, diagnostics) {
   const actorId = normalizeApifyActorId(args.apifyZimmoActorId || config.apify?.zimmo?.actorId || "");
   const token = args.apifyToken || "";
-  if (!token || !actorId) {
+  if (!token) {
     diagnostics.push({
       source: "Zimmo (Apify)",
       location: "Configuration",
       status: "Connecteur pret",
-      message: "Definir APIFY_TOKEN et APIFY_ZIMMO_ACTOR_ID pour activer l'import Zimmo via Apify.",
-      url: "https://docs.apify.com/api/v2"
+      message: `Acteur ${actorId || DEFAULT_ZIMMO_APIFY_ACTOR_ID} identifie. Definir APIFY_TOKEN pour activer l'import Zimmo via Apify.`,
+      url: "https://apify.com/dz_omar/zimmo-scraper"
+    });
+    return [];
+  }
+  if (!actorId) {
+    diagnostics.push({
+      source: "Zimmo (Apify)",
+      location: "Configuration",
+      status: "Connecteur incomplet",
+      message: "APIFY_ZIMMO_ACTOR_ID absent.",
+      url: "https://apify.com/dz_omar/zimmo-scraper"
     });
     return [];
   }

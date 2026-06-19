@@ -5,6 +5,16 @@
   "excludeMonthlySupplement": true,
   "excludeNotarialSales": true,
   "includeOpenStreetMapAgencies": true,
+  "apify": {
+    "zimmo": {
+      "actorId": "dz_omar~zimmo-scraper",
+      "maxResultsPerUrl": 10,
+      "startUrls": [],
+      "proxyConfiguration": {
+        "useApifyProxy": false
+      }
+    }
+  },
   "agencySearchBbox": {
     "south": 50.72,
     "west": 4.18,

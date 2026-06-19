@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Veille immobiliere web - 2026-06-19</title>
+  <title>Veille immobiliere - 2026-06-19</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>body { font-family: Segoe UI, Arial, sans-serif; margin: 0; color: #182026; background: #f6f7f8; }
 main { max-width: 1440px; margin: 0 auto; padding: 28px; }
@@ -69,17 +69,12 @@ a:hover { text-decoration: underline; }
   .external-link-panel { width: 100%; }
   #map { height: 360px; }
 }</style>
-  <meta name="theme-color" content="#0b5c86">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="Veille Immo">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
 </head>
 <body>
 <main>
   <h1>Veille immobiliere quotidienne</h1>
   <div class="meta">Maisons a vendre jusqu'a 285000 EUR - rapport du 2026-06-19 16:21 - 37 annonce(s) retenue(s), 156 agence(s) locale(s) OSM.</div>
-  <div class="note">Version navigateur: les annonces s ouvrent dans un onglet separe. Extraction automatique detaillee: Immoweb. Les coordonnees, contacts et photos proviennent des donnees publiques de l'annonce quand elles sont publiees. Zimmo, Immovlan et certains sites d'agences peuvent bloquer l'extraction automatique; les liens de controle restent inclus.</div>
+  <div class="note">Extraction automatique detaillee: Immoweb. Les coordonnees, contacts et photos proviennent des donnees publiques de l'annonce quand elles sont publiees. Zimmo, Immovlan et certains sites d'agences peuvent bloquer l'extraction automatique; les liens de controle restent inclus.</div>
 
   <h2>Carte des biens</h2>
   <div class="map-tools">
@@ -1516,14 +1511,14 @@ const externalLinkStatus = document.getElementById("externalLinkStatus");
 let lastExternalButton = null;
 
 function openExternalLinkPanel(button) {
-  const url = button.dataset.externalUrl || "";
-  if (!url) {
-    return;
-  }
-  const opened = window.open(url, "_blank", "noopener,noreferrer");
-  if (opened) {
-    opened.opener = null;
-  }
+  lastExternalButton = button;
+  externalLinkTitle.textContent = button.textContent.trim() || "Lien externe";
+  externalLinkUrl.value = button.dataset.externalUrl || "";
+  externalLinkStatus.textContent = "";
+  externalLinkViewer.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+  externalLinkUrl.focus();
+  externalLinkUrl.select();
 }
 
 function closeExternalLinkPanel() {
@@ -1676,6 +1671,5 @@ document.addEventListener("keydown", (event) => {
   }
 });
 </script>
-<script src="pwa.js" defer></script>
 </body>
 </html>

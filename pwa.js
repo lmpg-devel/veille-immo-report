@@ -1,8 +1,9 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-19-3";
+  const APP_VERSION = "pwa-2026-06-19-4";
   const RESULTS_URL = "results.json";
+  const CONFIG_URL = "config/veille-immo.json";
   const STORAGE_KEY = "veille-immo-seen-ids";
   const INIT_KEY = "veille-immo-initialized";
   let deferredInstallPrompt = null;
@@ -168,6 +169,17 @@
     return response.json();
   }
 
+  async function fetchConfig() {
+    const response = await fetch(CONFIG_URL + "?t=" + Date.now(), {
+      cache: "no-store",
+      headers: { "Accept": "application/json" }
+    });
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status);
+    }
+    return response.json();
+  }
+
   function listingText(listing) {
     const price = listing.price ? new Intl.NumberFormat("fr-BE").format(listing.price) + " EUR" : "Prix inconnu";
     const locality = listing.locality || "Commune inconnue";
@@ -196,7 +208,53 @@
     }, {});
   }
 
-  function renderOtherSources(payload) {
+  function slugForPath(value) {
+    return String(value || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
+  function secondHandSearchUrl(location, maxPrice) {
+    return "https://www.2ememain.be/l/immo/maisons-a-vendre/q/" + encodeURIComponent(slugForPath(location.name)) + "/?priceTo=" + encodeURIComponent(maxPrice);
+  }
+
+  function facebookMarketplaceSearchUrl(location, maxPrice) {
+    return "https://www.facebook.com/marketplace/search/?query=" + encodeURIComponent("maison a vendre " + location.name + " " + maxPrice);
+  }
+
+  function privateWebSearchUrl(location, maxPrice) {
+    return "https://www.bing.com/search?q=" + encodeURIComponent("maison a vendre " + location.name + " " + maxPrice + " particulier sans agence");
+  }
+
+  function renderPrivateSourceLinks(config) {
+    const locations = Array.isArray(config && config.locations) ? config.locations : [];
+    const maxPrice = Number(config && config.maxPrice ? config.maxPrice : 285000);
+    if (!locations.length) {
+      return "";
+    }
+    const rows = locations.map(function (location) {
+      return [
+        "<tr>",
+        "<td>" + escapeHtml(location.name || "") + "</td>",
+        "<td><button type='button' class='external-link-button' data-external-url='" + escapeHtml(secondHandSearchUrl(location, maxPrice)) + "'>2ememain</button></td>",
+        "<td><button type='button' class='external-link-button' data-external-url='" + escapeHtml(facebookMarketplaceSearchUrl(location, maxPrice)) + "'>Facebook</button></td>",
+        "<td><button type='button' class='external-link-button' data-external-url='" + escapeHtml(privateWebSearchUrl(location, maxPrice)) + "'>Web privé</button></td>",
+        "</tr>"
+      ].join("");
+    }).join("");
+    return [
+      "<h3>Particulier a particulier</h3>",
+      "<div class='other-source-note'>2ememain est teste comme source experimentale. Facebook Marketplace et la recherche Web privee sont fournis comme liens de controle, car l'extraction automatique y depend souvent d'une session utilisateur.</div>",
+      "<table><thead><tr><th>Commune</th><th>2ememain</th><th>Facebook Marketplace</th><th>Recherche web</th></tr></thead><tbody>",
+      rows,
+      "</tbody></table>"
+    ].join("");
+  }
+
+  function renderOtherSources(payload, config) {
     const listings = Array.isArray(payload && payload.listings) ? payload.listings : [];
     const others = listings.filter(function (listing) {
       return String(listing.source || "").toLowerCase() !== "immoweb";
@@ -223,7 +281,10 @@
       "<div class='source-diagnostic-item'><strong>Agences locales</strong>" + others.length + " annonce(s) integree(s) depuis les sites directs.</div>",
       "<div class='source-diagnostic-item'><strong>Zimmo</strong>Blocage navigateur detecte lors du test automatise. 0 annonce integree.</div>",
       "<div class='source-diagnostic-item'><strong>Immovlan</strong>HTTP 403 lors du test automatise. 0 annonce integree.</div>",
+      "<div class='source-diagnostic-item'><strong>2ememain</strong>Source particulier a particulier ajoutee en experimental. 0 annonce integree dans le jeu publie actuel.</div>",
+      "<div class='source-diagnostic-item'><strong>Facebook Marketplace</strong>Lien de controle ajoute. Extraction automatique non active sans session utilisateur.</div>",
       "</div>",
+      renderPrivateSourceLinks(config),
       others.length ? "<section class='cards'>" + others.map(renderOtherSourceCard).join("") + "</section>" : "<div class='empty'>Aucune annonce non-Immoweb exploitable dans le dernier jeu de donnees publie.</div>"
     ].join("");
     anchor.parentNode.insertBefore(section, anchor);
@@ -387,7 +448,11 @@
     } catch (error) {
     }
     updateInstallButtons();
-    fetchResults().then(renderOtherSources).catch(function () {});
+    fetchResults().then(function (payload) {
+      return fetchConfig()
+        .then(function (config) { renderOtherSources(payload, config); })
+        .catch(function () { renderOtherSources(payload, null); });
+    }).catch(function () {});
     checkForNewListings(false);
   });
 

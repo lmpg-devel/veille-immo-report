@@ -3,7 +3,9 @@ param(
   [string]$OutputDir = "reports",
   [int]$PagesPerLocation = 2,
   [int]$RequestDelayMs = 300,
-  [int]$AgencyWebsiteLimit = 20
+  [int]$AgencyWebsiteLimit = 20,
+  [string[]]$AdditionalListingsCsv = @(),
+  [switch]$NoMobileIndexCopy
 )
 
 $ErrorActionPreference = "Stop"
@@ -249,6 +251,82 @@ function Get-ImmowebSearchUrl {
   return "https://www.immoweb.be/fr/recherche/maison/a-vendre/$($Location.immowebSlug)/$($Location.postalCode)?countries=BE&maxPrice=$MaxPrice&orderBy=newest&page=$Page"
 }
 
+function ConvertTo-PathSlug {
+  param([string]$Value)
+
+  return ((ConvertTo-Slug -Value $Value) -replace '\+', '-')
+}
+
+function Get-SecondHandSearchUrl {
+  param(
+    [object]$Location,
+    [int]$MaxPrice
+  )
+
+  $query = [uri]::EscapeDataString((ConvertTo-PathSlug -Value $Location.name))
+  return "https://www.2ememain.be/l/immo/maisons-a-vendre/q/$query/?priceTo=$MaxPrice"
+}
+
+function Get-FacebookMarketplaceSearchUrl {
+  param(
+    [object]$Location,
+    [int]$MaxPrice
+  )
+
+  $query = [uri]::EscapeDataString("maison a vendre $($Location.name) $MaxPrice")
+  return "https://www.facebook.com/marketplace/search/?query=$query"
+}
+
+function Get-ExperimentalListingRejectionReason {
+  param(
+    [string]$Source,
+    [string]$Title,
+    [string]$Html,
+    [int]$Price,
+    [object]$Location,
+    [string]$Url
+  )
+
+  if ($Source -ne "2ememain") {
+    return $null
+  }
+
+  $titleAndHead = "$Title " + ($Html.Substring(0, [Math]::Min($Html.Length, 5000)))
+  $identitySlug = ConvertTo-PathSlug -Value "$Title $Url"
+  $locationNeedles = @()
+  if ($Location) {
+    $locationNeedles += $Location.name
+    $locationNeedles += $Location.postalCode
+    $locationNeedles += $Location.immowebSlug
+    $locationNeedles += $Location.zimmoSlug
+    $locationNeedles += $Location.immovlanSlug
+  }
+  $locationNeedles = @($locationNeedles | Where-Object { -not [string]::IsNullOrWhiteSpace([string]$_) } | ForEach-Object { ConvertTo-PathSlug -Value ([string]$_) } | Where-Object { $_ } | Select-Object -Unique)
+
+  if ($Price -lt 50000) {
+    return "Prix $Price sous le seuil coherent pour une vente"
+  }
+
+  if ($titleAndHead -match '(?i)\b(appartement|apparemment|appartementen|apartment|flat|studio|garage|garages|parking|staanplaats|box|terrain|grond|kot|kamer|chambre)\b') {
+    return "Annonce non maison probable"
+  }
+
+  if ($locationNeedles.Count -gt 0) {
+    $matchesLocation = $false
+    foreach ($needle in $locationNeedles) {
+      if ($identitySlug.Contains($needle)) {
+        $matchesLocation = $true
+        break
+      }
+    }
+    if (-not $matchesLocation) {
+      return "Commune cible absente de la fiche"
+    }
+  }
+
+  return $null
+}
+
 function Get-PortalLinks {
   param(
     [object]$Config,
@@ -259,12 +337,16 @@ function Get-PortalLinks {
   $zimmoSlug = $Location.zimmoSlug
   $immovlanSlug = $Location.immovlanSlug
   $encodedLocalAgencyQuery = [uri]::EscapeDataString("maison a vendre $($Location.name) $maxPrice agence immobiliere")
+  $encodedPrivateQuery = [uri]::EscapeDataString("maison a vendre $($Location.name) $maxPrice particulier sans agence")
 
   return [pscustomobject]@{
     Location = $Location.name
     Immoweb = Get-ImmowebSearchUrl -Location $Location -MaxPrice $maxPrice -Page 1
     Zimmo = "https://www.zimmo.be/fr/$zimmoSlug-$($Location.postalCode)/a-vendre/maison/?priceIncludeUnknown=0&priceMax=$maxPrice"
     Immovlan = "https://immo.vlan.be/fr/immobilier/maison/a-vendre/$immovlanSlug?maxprice=$maxPrice"
+    SecondHand = Get-SecondHandSearchUrl -Location $Location -MaxPrice $maxPrice
+    FacebookMarketplace = Get-FacebookMarketplaceSearchUrl -Location $Location -MaxPrice $maxPrice
+    PrivateSearch = "https://www.bing.com/search?q=$encodedPrivateQuery"
     LocalAgencies = "https://www.bing.com/search?q=$encodedLocalAgencyQuery"
   }
 }
@@ -451,6 +533,14 @@ function Read-ExperimentalListingPage {
       $title = "$Source - annonce candidate"
     }
 
+    if ($config.excludeNotarialSales -ne $false) {
+      $notarialText = "$title $Url $html"
+      if ($notarialText -match '(?i)\bbiddit\b|\bnotaire\b|\bnotaires\b|\bnotaris\b|\bnotarissen\b|\bnotary\b') {
+        Add-SourceDiagnostic -Source $Source -Location $(if ($Location) { $Location.name } elseif ($Agency) { $Agency.Name } else { "Experimental" }) -Status "Candidat ignore" -Message "Vente notariale ou Biddit exclue" -Url $Url
+        return $null
+      }
+    }
+
     $priceText = Get-FirstRegexGroup -Text $html -Pattern '(\d[\d\s\.\u00A0\u202F]{3,})\s*(?:EUR|€)'
     if (-not $priceText) {
       $priceText = Get-FirstRegexGroup -Text $title -Pattern '(\d[\d\s\.\u00A0\u202F]{3,})\s*(?:EUR|€)'
@@ -458,6 +548,12 @@ function Read-ExperimentalListingPage {
     $price = ConvertFrom-PriceText -Value $priceText
     if ($null -eq $price -or $price -gt $MaxPrice) {
       Add-SourceDiagnostic -Source $Source -Location $(if ($Location) { $Location.name } elseif ($Agency) { $Agency.Name } else { "Experimental" }) -Status "Candidat ignore" -Message "Prix absent ou superieur au plafond" -Url $Url
+      return $null
+    }
+
+    $rejectionReason = Get-ExperimentalListingRejectionReason -Source $Source -Title $title -Html $html -Price $price -Location $Location -Url $Url
+    if ($rejectionReason) {
+      Add-SourceDiagnostic -Source $Source -Location $(if ($Location) { $Location.name } elseif ($Agency) { $Agency.Name } else { "Experimental" }) -Status "Candidat ignore" -Message $rejectionReason -Url $Url
       return $null
     }
 
@@ -592,6 +688,41 @@ function Get-ImmovlanListings {
   }
   catch {
     Add-SourceDiagnostic -Source "Immovlan" -Location $Location.name -Status "Bloque ou indisponible" -Message $_.Exception.Message -Url $searchUrl
+  }
+
+  return $results
+}
+
+function Get-SecondHandListings {
+  param(
+    [object]$Config,
+    [object]$Location,
+    [int]$RequestDelayMs
+  )
+
+  $maxPrice = [int]$Config.maxPrice
+  $searchUrl = Get-SecondHandSearchUrl -Location $Location -MaxPrice $maxPrice
+  $results = New-Object System.Collections.Generic.List[object]
+
+  try {
+    $response = Invoke-Page -Url $searchUrl
+    $urlMatches = [regex]::Matches($response.Content, '(?:https://www\.2ememain\.be)?/v/immo/maisons-a-vendre/m\d+[^"'']*', [Text.RegularExpressions.RegexOptions]::IgnoreCase)
+    $urls = @($urlMatches | ForEach-Object {
+        Resolve-AbsoluteUrl -BaseUrl "https://www.2ememain.be" -Url $_.Value
+      } | Where-Object { $_ } | Select-Object -Unique | Select-Object -First 20)
+
+    Add-SourceDiagnostic -Source "2ememain" -Location $Location.name -Status "Recherche OK" -Message "$($urls.Count) URL(s) candidate(s) particulier/portail" -Url $searchUrl
+
+    foreach ($url in $urls) {
+      $listing = Read-ExperimentalListingPage -Url $url -Source "2ememain" -Location $Location -MaxPrice $maxPrice
+      if ($listing) {
+        $results.Add($listing)
+      }
+      Start-Sleep -Milliseconds $RequestDelayMs
+    }
+  }
+  catch {
+    Add-SourceDiagnostic -Source "2ememain" -Location $Location.name -Status "Bloque ou indisponible" -Message $_.Exception.Message -Url $searchUrl
   }
 
   return $results
@@ -1009,7 +1140,7 @@ a:hover { text-decoration: underline; }
 
   $portalRows = ($PortalLinks | ForEach-Object {
       $location = [System.Net.WebUtility]::HtmlEncode($_.Location)
-      "<tr><td>$location</td><td><a href='$($_.Immoweb)' target='_blank' rel='noopener noreferrer'>Immoweb</a></td><td><a href='$($_.Zimmo)' target='_blank' rel='noopener noreferrer'>Zimmo</a></td><td><a href='$($_.Immovlan)' target='_blank' rel='noopener noreferrer'>Immovlan</a></td><td><a href='$($_.LocalAgencies)' target='_blank' rel='noopener noreferrer'>Agences locales</a></td></tr>"
+      "<tr><td>$location</td><td><a href='$($_.Immoweb)' target='_blank' rel='noopener noreferrer'>Immoweb</a></td><td><a href='$($_.Zimmo)' target='_blank' rel='noopener noreferrer'>Zimmo</a></td><td><a href='$($_.Immovlan)' target='_blank' rel='noopener noreferrer'>Immovlan</a></td><td><a href='$($_.SecondHand)' target='_blank' rel='noopener noreferrer'>2ememain</a></td><td><a href='$($_.FacebookMarketplace)' target='_blank' rel='noopener noreferrer'>Facebook</a> · <a href='$($_.PrivateSearch)' target='_blank' rel='noopener noreferrer'>Web</a></td><td><a href='$($_.LocalAgencies)' target='_blank' rel='noopener noreferrer'>Agences locales</a></td></tr>"
     }) -join "`n"
 
   $listingMarkers = @($Listings | Where-Object { $_.Latitude -and $_.Longitude } | ForEach-Object {
@@ -1053,7 +1184,7 @@ a:hover { text-decoration: underline; }
 <main>
   <h1>Veille immobiliere quotidienne - experimental multi-sources</h1>
   <div class="meta">Maisons a vendre jusqu'a $($Config.maxPrice) EUR - rapport du $($RunAt.ToString("yyyy-MM-dd HH:mm")) - $($Listings.Count) annonce(s) retenue(s), $($LocalAgencies.Count) agence(s) locale(s) OSM. Sources: $sourceSummary.</div>
-  <div class="note">Version experimentale: Immoweb reste la source detaillee stable. Zimmo, Immovlan et les sites d'agences locales sont testes separement; les blocages ou resultats incomplets sont visibles dans le diagnostic des sources.</div>
+  <div class="note">Version experimentale: Immoweb reste la source detaillee stable. Zimmo, Immovlan, 2ememain, les recherches particulier a particulier et les sites d'agences locales sont testes separement; les blocages ou resultats incomplets sont visibles dans le diagnostic des sources.</div>
 
   <h2>Carte des biens</h2>
   <div class="map-tools">
@@ -1088,6 +1219,8 @@ a:hover { text-decoration: underline; }
         <th>Immoweb</th>
         <th>Zimmo</th>
         <th>Immovlan</th>
+        <th>2ememain</th>
+        <th>Particuliers</th>
         <th>Agences locales</th>
       </tr>
     </thead>
@@ -1354,12 +1487,36 @@ foreach ($location in $config.locations) {
   foreach ($listing in $immovlanListings) {
     Add-ListingIfNew -Collection $allListings -Listing $listing
   }
+
+  Write-Host "Recherche 2ememain experimental: $($location.name)"
+  $secondHandListings = Get-SecondHandListings -Config $config -Location $location -RequestDelayMs $RequestDelayMs
+  foreach ($listing in $secondHandListings) {
+    Add-ListingIfNew -Collection $allListings -Listing $listing
+  }
 }
 
 Write-Host "Recherche sites agences locales experimental"
 $agencyWebsiteListings = Get-AgencyWebsiteListings -Config $config -LocalAgencies $localAgenciesArray -RequestDelayMs $RequestDelayMs -MaxAgencies $AgencyWebsiteLimit
 foreach ($listing in $agencyWebsiteListings) {
   Add-ListingIfNew -Collection $allListings -Listing $listing
+}
+
+foreach ($additionalCsv in $AdditionalListingsCsv) {
+  if ([string]::IsNullOrWhiteSpace($additionalCsv)) {
+    continue
+  }
+
+  $resolvedAdditionalCsv = Resolve-FromWorkspace $additionalCsv
+  if (-not (Test-Path -LiteralPath $resolvedAdditionalCsv)) {
+    Add-SourceDiagnostic -Source "Alertes email" -Location "CSV complementaire" -Status "Absent" -Message "Fichier introuvable: $additionalCsv" -Url ""
+    continue
+  }
+
+  $additionalListings = @(Import-Csv -LiteralPath $resolvedAdditionalCsv)
+  foreach ($listing in $additionalListings) {
+    Add-ListingIfNew -Collection $allListings -Listing $listing
+  }
+  Add-SourceDiagnostic -Source "Alertes email" -Location (Split-Path -Leaf $resolvedAdditionalCsv) -Status "Import CSV" -Message "$($additionalListings.Count) annonce(s) importee(s) avant deduplication" -Url ""
 }
 
 $csvPath = Join-Path $resolvedOutputDir "veille-immo-$dateStamp.csv"
@@ -1385,12 +1542,16 @@ Set-Content -LiteralPath $htmlPath -Value $html -Encoding UTF8
 Set-Content -LiteralPath $latestPath -Value $html -Encoding UTF8
 Set-Content -LiteralPath $indexPath -Value $html -Encoding UTF8
 $mobileIndexPath = Join-Path (Split-Path -Parent $PSScriptRoot) "experimental-mobile-index.html"
-Set-Content -LiteralPath $mobileIndexPath -Value $html -Encoding UTF8
+if (-not $NoMobileIndexCopy) {
+  Set-Content -LiteralPath $mobileIndexPath -Value $html -Encoding UTF8
+}
 
 Write-Host ""
 Write-Host "Rapport HTML: $htmlPath"
 Write-Host "Index HTML: $indexPath"
-Write-Host "Index mobile: $mobileIndexPath"
+if (-not $NoMobileIndexCopy) {
+  Write-Host "Index mobile: $mobileIndexPath"
+}
 Write-Host "CSV: $csvPath"
 Write-Host "CSV agences locales: $agenciesCsvPath"
 Write-Host "Annonces multi-sources retenues: $($allListings.Count)"

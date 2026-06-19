@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-19-8";
+  const APP_VERSION = "pwa-2026-06-19-9";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const STORAGE_KEY = "veille-immo-seen-ids";
@@ -30,7 +30,7 @@
       ".source-badge-row{display:flex;align-items:center;gap:8px;margin-bottom:9px}",
       ".source-badge{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;color:#fff;font:700 11px/1 Arial,sans-serif;text-transform:uppercase;letter-spacing:.02em}",
       ".source-badge-immoweb{background:#0b5c86}",
-      ".source-badge-immovlan{background:#00897b}",
+      ".source-badge-immovlan{background:#e11d48}",
       ".source-badge-zimmo{background:#7c3aed}",
       ".source-badge-agency{background:#2f6f3e}",
       ".source-badge-p2p{background:#d97706}",
@@ -38,7 +38,7 @@
       ".source-map-pin{display:block;width:18px;height:18px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid #fff;box-shadow:0 2px 7px rgba(0,0,0,.35)}",
       ".source-map-pin::after{content:'';position:absolute;width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.88);left:6px;top:6px}",
       ".source-map-pin-immoweb{background:#0b5c86}",
-      ".source-map-pin-immovlan{background:#00897b}",
+      ".source-map-pin-immovlan{background:#e11d48}",
       ".source-map-pin-zimmo{background:#7c3aed}",
       ".source-map-pin-agency{background:#2f6f3e}",
       ".source-map-pin-p2p{background:#d97706}",

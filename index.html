@@ -1549,6 +1549,36 @@ function sourceMarkerIcon(source) {
   });
 }
 
+function listingPopupHtml(item) {
+  return "<strong>" + escapeHtml(money(item.price)) + "</strong><br>" +
+    "<span>" + escapeHtml(sourceLabel(item.source || "Immoweb")) + "</span><br>" +
+    escapeHtml(item.address) + "<br>" +
+    "<span>" + escapeHtml(item.precision) + "</span><br>" +
+    escapeHtml(item.agent) + " " + escapeHtml(item.phone) + "<br>" +
+    "<button type='button' class='external-link-button' data-external-url='" + escapeHtml(item.url) + "'>Ouvrir l'annonce</button>";
+}
+
+function normalizeListingMarker(listing) {
+  const lat = Number(listing.latitude || listing.lat);
+  const lon = Number(listing.longitude || listing.lon);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+    return null;
+  }
+  return {
+    id: listing.id || "",
+    title: listing.title || "Annonce",
+    price: Number(listing.price || 0),
+    lat: lat,
+    lon: lon,
+    address: listing.address || "",
+    precision: listing.geoPrecision || listing.precision || "",
+    agent: listing.agentName || listing.agent || "",
+    phone: listing.agentPhone || listing.phone || "",
+    url: listing.url || "#",
+    source: listing.source || "Immoweb"
+  };
+}
+
 const externalLinkViewer = document.getElementById("externalLinkViewer");
 const externalLinkTitle = document.getElementById("externalLinkTitle");
 const externalLinkUrl = document.getElementById("externalLinkUrl");
@@ -1626,18 +1656,32 @@ if (window.L && (listingMarkers.length || agencyMarkers.length)) {
   window.veilleImmoListingLayer = listingLayer;
   window.veilleImmoSourceMarkerIcon = sourceMarkerIcon;
   window.veilleImmoSourceLabel = sourceLabel;
+  window.veilleImmoRenderMapFromPayload = (payload) => {
+    const listings = Array.isArray(payload && payload.listings) ? payload.listings : [];
+    const points = listings.map(normalizeListingMarker).filter(Boolean);
+    if (!points.length) {
+      return;
+    }
+    listingLayer.clearLayers();
+    const bounds = [];
+    points.forEach((item) => {
+      L.marker([item.lat, item.lon], { icon: sourceMarkerIcon(item.source) })
+        .addTo(listingLayer)
+        .bindPopup(listingPopupHtml(item));
+      bounds.push([item.lat, item.lon]);
+    });
+    window.veilleImmoMapDataDriven = true;
+    if (bounds.length === 1) {
+      map.setView(bounds[0], 14);
+    } else {
+      map.fitBounds(bounds, { padding: [26, 26] });
+    }
+  };
   const listingBounds = [];
   const allBounds = [];
   listingMarkers.forEach((item) => {
     const marker = L.marker([item.lat, item.lon], { icon: sourceMarkerIcon(item.source || "Immoweb") }).addTo(listingLayer);
-    marker.bindPopup(
-      "<strong>" + escapeHtml(money(item.price)) + "</strong><br>" +
-      "<span>" + escapeHtml(sourceLabel(item.source || "Immoweb")) + "</span><br>" +
-      escapeHtml(item.address) + "<br>" +
-      "<span>" + escapeHtml(item.precision) + "</span><br>" +
-      escapeHtml(item.agent) + " " + escapeHtml(item.phone) + "<br>" +
-      "<button type='button' class='external-link-button' data-external-url='" + escapeHtml(item.url) + "'>Ouvrir l'annonce</button>"
-    );
+    marker.bindPopup(listingPopupHtml({ ...item, source: item.source || "Immoweb" }));
     listingBounds.push([item.lat, item.lon]);
     allBounds.push([item.lat, item.lon]);
   });

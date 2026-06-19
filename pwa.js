@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-19-6";
+  const APP_VERSION = "pwa-2026-06-19-7";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const STORAGE_KEY = "veille-immo-seen-ids";
@@ -285,6 +285,10 @@
   }
 
   function syncSourceMapMarkers(payload) {
+    if (typeof window.veilleImmoRenderMapFromPayload === "function") {
+      window.veilleImmoRenderMapFromPayload(payload);
+      return;
+    }
     if (!window.L || !window.veilleImmoMap) {
       return;
     }

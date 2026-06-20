@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-const APP_VERSION = "pwa-2026-06-20-05";
+const APP_VERSION = "pwa-2026-06-20-06";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const STORAGE_KEY = "veille-immo-seen-ids";
@@ -550,8 +550,7 @@ const APP_VERSION = "pwa-2026-06-20-05";
   }
 
   function renderPhotoStrip(listing) {
-    const photos = Array.isArray(listing.photoUrls) ? listing.photoUrls.filter(Boolean) : [];
-    const sources = photos.length ? photos : (listing.photoUrl ? [listing.photoUrl] : []);
+    const sources = dedupePhotoUrls(listing);
     if (!sources.length) {
       return "<div class='photo-strip'><div class='photo-empty'>Photos non disponibles depuis cette source</div></div>";
     }
@@ -562,6 +561,47 @@ const APP_VERSION = "pwa-2026-06-20-05";
         "</button>"
       ].join("");
     }).join("") + "</div>";
+  }
+
+  function photoUrlKey(url) {
+    const raw = String(url || "").trim();
+    if (!raw) {
+      return "";
+    }
+    try {
+      const parsed = new URL(raw, window.location.href);
+      const imageMatch = parsed.pathname.match(/\/images\/([^/]+)\//i);
+      if (imageMatch) {
+        return "image:" + imageMatch[1].toLowerCase();
+      }
+      return (parsed.origin + parsed.pathname)
+        .replace(/\/(?:thumbnail-webp\/[^/?#]+|gallery-like-image\/[^?#]+)$/i, "")
+        .toLowerCase();
+    } catch (error) {
+      return raw.replace(/[?#].*$/, "").toLowerCase();
+    }
+  }
+
+  function dedupePhotoUrls(listing) {
+    const rawPhotos = Array.isArray(listing.photoUrls) ? listing.photoUrls.filter(Boolean) : [];
+    const allPhotos = rawPhotos.length ? rawPhotos : (listing.photoUrl ? [listing.photoUrl] : []);
+    const hasImmovlanImages = allPhotos.some(function (url) {
+      return /api-image\.immovlan\.be\/v1\/property\/[^/]+\/images\//i.test(String(url || ""));
+    });
+    const filtered = hasImmovlanImages
+      ? allPhotos.filter(function (url) {
+        return !/api-image\.immovlan\.be\/v1\/property\/[^/]+\/(?:thumbnail-webp|gallery-like-image)\//i.test(String(url || ""));
+      })
+      : allPhotos;
+    const seen = new Set();
+    return filtered.filter(function (url) {
+      const key = photoUrlKey(url);
+      if (!key || seen.has(key)) {
+        return false;
+      }
+      seen.add(key);
+      return true;
+    });
   }
 
   function slugForPath(value) {

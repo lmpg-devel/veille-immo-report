@@ -106,6 +106,36 @@ function normalizeImageUrl(url) {
   return value;
 }
 
+function imageIdentityKey(url) {
+  const value = normalizeImageUrl(url);
+  if (!value) return "";
+  try {
+    const parsed = new URL(value);
+    const imageMatch = parsed.pathname.match(/\/images\/([^/]+)\//i);
+    if (imageMatch) return `image:${imageMatch[1].toLowerCase()}`;
+    return `${parsed.origin}${parsed.pathname}`
+      .replace(/\/(?:thumbnail-webp\/[^/?#]+|gallery-like-image\/[^?#]+)$/i, "")
+      .toLowerCase();
+  } catch {
+    return value.replace(/[?#].*$/, "").toLowerCase();
+  }
+}
+
+function dedupeImageUrls(urls) {
+  const normalized = (urls || []).map(normalizeImageUrl).filter(Boolean);
+  const hasImmovlanImages = normalized.some((url) => /api-image\.immovlan\.be\/v1\/property\/[^/]+\/images\//i.test(url));
+  const candidates = hasImmovlanImages
+    ? normalized.filter((url) => !/api-image\.immovlan\.be\/v1\/property\/[^/]+\/(?:thumbnail-webp|gallery-like-image)\//i.test(url))
+    : normalized;
+  const seen = new Set();
+  return candidates.filter((url) => {
+    const key = imageIdentityKey(url);
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 function canonicalUrl(url) {
   try {
     const parsed = new URL(url);
@@ -348,12 +378,12 @@ async function parseImmovlanDetail(url, location, config) {
   if (rejection) return { listing: null, message: rejection };
 
   const imageMatches = [...html.matchAll(/data-src=["']([^"']*api-image\.immovlan\.be\/v1\/property\/[^"']+)["']/gi)].map((match) => decodeHtml(match[1]));
-  const images = [...new Set([
+  const images = dedupeImageUrls([
     house?.image,
     sell?.image,
     getFirstMatch(html, /<meta property="og:image" content="([^"]+)"/i),
     ...imageMatches
-  ].map(normalizeImageUrl).filter(Boolean))].slice(0, 12);
+  ]).slice(0, 12);
   const phone = await getImmovlanPhone(vlanCode.toUpperCase(), url);
 
   return {

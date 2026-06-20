@@ -512,8 +512,19 @@ h2 { margin: 34px 0 12px; font-size: 20px; }
 .map-toggle { display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #d8dee3; border-radius: 5px; padding: 8px 10px; }
 .map-legend { display: inline-flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .legend-dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
-.legend-listing { background: #0b5c86; }
-.legend-agency { background: #fff; border: 1px solid #5f6b73; }
+.legend-immoweb { background: #0b5c86; }
+.legend-immovlan { background: #e11d48; }
+.legend-zimmo { background: #7c3aed; }
+.legend-agency-direct { background: #2f6f3e; }
+.legend-p2p { background: #d97706; }
+.legend-osm { background: #fff; border: 1px solid #5f6b73; }
+.source-map-pin { display: block; width: 18px; height: 18px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 2px solid #fff; box-shadow: 0 2px 7px rgba(0,0,0,.35); }
+.source-map-pin::after { content: ""; position: absolute; width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.88); left: 6px; top: 6px; }
+.source-map-pin-immoweb { background: #0b5c86; }
+.source-map-pin-immovlan { background: #e11d48; }
+.source-map-pin-zimmo { background: #7c3aed; }
+.source-map-pin-agency { background: #2f6f3e; }
+.source-map-pin-p2p { background: #d97706; }
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 16px; }
 .listing-card { background: #fff; border: 1px solid #dde2e5; border-radius: 6px; overflow: hidden; }
 .listing-body { padding: 14px; }
@@ -708,6 +719,7 @@ a:hover { text-decoration: underline; }
         agent = $_.AgentName
         phone = if ($_.AgentMobile) { $_.AgentMobile } else { $_.AgentPhone }
         url = $_.Url
+        source = $_.Source
       }
     })
   $agencyMarkers = @($LocalAgencies | Where-Object { $_.Latitude -and $_.Longitude } | ForEach-Object {
@@ -742,8 +754,12 @@ a:hover { text-decoration: underline; }
   <h2>Carte des biens</h2>
   <div class="map-tools">
     <div class="map-legend">
-      <span><span class="legend-dot legend-listing"></span>Biens retenus</span>
-      <span><span class="legend-dot legend-agency"></span>Agences locales</span>
+      <span><span class="legend-dot legend-immoweb"></span>Immoweb</span>
+      <span><span class="legend-dot legend-immovlan"></span>Immovlan</span>
+      <span><span class="legend-dot legend-zimmo"></span>Zimmo</span>
+      <span><span class="legend-dot legend-agency-direct"></span>Agence locale</span>
+      <span><span class="legend-dot legend-p2p"></span>Particulier</span>
+      <span><span class="legend-dot legend-osm"></span>Agences OSM</span>
     </div>
     <label class="map-toggle"><input id="toggleAgencies" type="checkbox"> Afficher les agences locales</label>
   </div>
@@ -810,6 +826,26 @@ function escapeHtml(value) {
 
 function money(value) {
   return new Intl.NumberFormat("fr-BE", { maximumFractionDigits: 0 }).format(value) + " EUR";
+}
+
+function staticSourceKind(source) {
+  const name = String(source || "").toLowerCase();
+  if (name.includes("immovlan")) return "immovlan";
+  if (name.includes("zimmo")) return "zimmo";
+  if (name.includes("agence locale") || name.includes("site direct")) return "agency";
+  if (name.includes("2ememain") || name.includes("particulier")) return "p2p";
+  return "immoweb";
+}
+
+function staticSourceIcon(source) {
+  const kind = staticSourceKind(source);
+  return L.divIcon({
+    className: "source-map-marker",
+    html: "<span class='source-map-pin source-map-pin-" + kind + "'></span>",
+    iconSize: [18, 18],
+    iconAnchor: [9, 18],
+    popupAnchor: [0, -18]
+  });
 }
 
 const externalLinkViewer = document.getElementById("externalLinkViewer");
@@ -891,7 +927,7 @@ if (window.L && (listingMarkers.length || agencyMarkers.length)) {
   const listingBounds = [];
   const allBounds = [];
   listingMarkers.forEach((item) => {
-    const marker = L.marker([item.lat, item.lon]).addTo(listingLayer);
+    const marker = L.marker([item.lat, item.lon], { icon: staticSourceIcon(item.source) }).addTo(listingLayer);
     marker.bindPopup(
       "<strong>" + escapeHtml(money(item.price)) + "</strong><br>" +
       escapeHtml(item.address) + "<br>" +

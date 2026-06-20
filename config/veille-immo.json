@@ -5,6 +5,11 @@
   "excludeMonthlySupplement": true,
   "excludeNotarialSales": true,
   "includeOpenStreetMapAgencies": true,
+  "browser": {
+    "zimmo": {
+      "startUrls": []
+    }
+  },
   "apify": {
     "zimmo": {
       "actorId": "dz_omar~zimmo-scraper",

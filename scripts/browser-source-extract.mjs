@@ -22,8 +22,14 @@ function parseArgs(argv) {
     headless: "true",
     keepOpen: "false",
     setupOnly: "false",
+    prepareBeforeRun: "false",
     setupWaitMs: 120000,
-    captureNetwork: "true"
+    captureNetwork: "true",
+    networkBodyTimeoutMs: 5000,
+    captureScreenshots: "false",
+    screenshotsDir: "reports-experimental/browser-source-screenshots",
+    debugLog: "",
+    zimmoStartUrls: ""
   };
 
   for (let i = 2; i < argv.length; i += 1) {
@@ -32,7 +38,7 @@ function parseArgs(argv) {
     if (!key.startsWith("--")) continue;
     i += 1;
     const name = key.slice(2);
-    if (["maxDetailPerLocation", "locationLimit", "delayMs", "navigationTimeoutMs", "setupWaitMs"].includes(name)) {
+    if (["maxDetailPerLocation", "locationLimit", "delayMs", "navigationTimeoutMs", "setupWaitMs", "networkBodyTimeoutMs"].includes(name)) {
       args[name] = Number(value);
     } else {
       args[name] = value;
@@ -92,6 +98,22 @@ function writeCsv(filePath, rows, columns) {
   fs.writeFileSync(filePath, `${lines.join("\n")}\n`, "utf8");
 }
 
+function debugLog(args, message) {
+  if (!args?.debugLog) return;
+  fs.mkdirSync(path.dirname(args.debugLog), { recursive: true });
+  fs.appendFileSync(args.debugLog, `[${new Date().toISOString()}] ${message}\n`, "utf8");
+}
+
+async function fetchJsonWithTimeout(url, timeoutMs) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { signal: controller.signal }).then((response) => response.json());
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 function normalizePrice(text) {
   if (!text) return null;
   const match = String(text).match(/(\d[\d\s.,\u00A0\u202F]{3,})\s*(?:EUR|€)/i);
@@ -125,6 +147,69 @@ function searchUrl(source, location, maxPrice) {
   throw new Error(`Source inconnue: ${source}`);
 }
 
+function splitUrlList(value) {
+  return String(value || "")
+    .split(/[\r\n,;]+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function normalizeConfiguredUrl(item) {
+  if (!item) return "";
+  if (typeof item === "string") return item.trim();
+  if (typeof item === "object" && item.url) return String(item.url).trim();
+  return "";
+}
+
+function configuredStartUrls(source, config, args) {
+  if (source !== "zimmo") return [];
+  const urls = [
+    ...splitUrlList(args.zimmoStartUrls),
+    ...(config.browser?.zimmo?.startUrls || []).map(normalizeConfiguredUrl),
+    ...(config.apify?.zimmo?.startUrls || []).map(normalizeConfiguredUrl)
+  ].filter(Boolean);
+  return [...new Set(urls)].filter((url) => {
+    try {
+      return /(^|\.)zimmo\.be$/i.test(new URL(url).hostname);
+    } catch {
+      return false;
+    }
+  });
+}
+
+function locationForUrl(url, locations) {
+  const haystack = slugForPath(decodeURIComponent(String(url || "")));
+  const match = (locations || []).find((location) => {
+    return [location.postalCode, location.zimmoSlug, location.name]
+      .filter(Boolean)
+      .map(slugForPath)
+      .some((needle) => needle && haystack.includes(needle));
+  });
+  return match || (locations || [])[0] || {
+    name: "Zimmo",
+    postalCode: "",
+    latitude: "",
+    longitude: ""
+  };
+}
+
+function buildSearchTargets(sources, locations, maxPrice, config, args) {
+  const targets = [];
+  for (const source of sources) {
+    const startUrls = configuredStartUrls(source, config, args);
+    if (startUrls.length) {
+      for (const url of startUrls) {
+        targets.push({ source, location: locationForUrl(url, locations), url });
+      }
+      continue;
+    }
+    for (const location of locations) {
+      targets.push({ source, location, url: searchUrl(source, location, maxPrice) });
+    }
+  }
+  return targets;
+}
+
 function slugForPath(value) {
   return String(value || "")
     .normalize("NFD")
@@ -132,6 +217,10 @@ function slugForPath(value) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+function safeFilePart(value) {
+  return slugForPath(value).slice(0, 80) || "page";
 }
 
 function sourceLabel(source) {
@@ -313,7 +402,7 @@ class CdpPage {
   }
 
   async collectResponseBody(requestId, response) {
-    const result = await this.send("Network.getResponseBody", { requestId });
+    const result = await this.send("Network.getResponseBody", { requestId }, Number(this.options.networkBodyTimeoutMs || 5000));
     if (!result?.body) return;
     const body = result.base64Encoded ? Buffer.from(result.body, "base64").toString("utf8") : result.body;
     if (!body || body.length < 20) return;
@@ -348,8 +437,32 @@ class CdpPage {
     return result.result?.value;
   }
 
+  async captureScreenshot(filePath) {
+    fs.mkdirSync(path.dirname(filePath), { recursive: true });
+    const result = await this.send("Page.captureScreenshot", {
+      format: "png",
+      fromSurface: true,
+      captureBeyondViewport: true
+    }, 30000);
+    if (!result?.data) throw new Error("Capture screenshot vide");
+    fs.writeFileSync(filePath, Buffer.from(result.data, "base64"));
+    return filePath;
+  }
+
   close() {
     try { this.ws?.close(); } catch {}
+  }
+}
+
+async function maybeCaptureScreenshot(page, args, source, location, kind, url) {
+  if (!asBoolean(args.captureScreenshots)) return "";
+  const locationPart = safeFilePart(location?.name || "global");
+  const fileName = `${safeFilePart(sourceLabel(source))}-${locationPart}-${safeFilePart(kind)}-${shortHash(url)}.png`;
+  const filePath = path.join(args.screenshotsDir, fileName);
+  try {
+    return await page.captureScreenshot(filePath);
+  } catch (error) {
+    return `capture impossible: ${error.message}`;
   }
 }
 
@@ -358,6 +471,9 @@ async function startChrome(args) {
   const profileDir = resolveProfileDir(args.profileDir);
   const temporaryProfile = !args.profileDir || args.profileDir === "temp";
   fs.mkdirSync(profileDir, { recursive: true });
+  const devToolsFile = path.join(profileDir, "DevToolsActivePort");
+  try { fs.rmSync(devToolsFile, { force: true }); } catch {}
+  debugLog(args, `startChrome profile=${profileDir} headless=${args.headless}`);
 
   const chromeArgs = [
     "--no-first-run",
@@ -373,14 +489,20 @@ async function startChrome(args) {
   }
 
   const chrome = spawn(chromePath, chromeArgs, { stdio: "ignore" });
+  debugLog(args, `chrome spawned pid=${chrome.pid || ""}`);
 
-  const devToolsFile = path.join(profileDir, "DevToolsActivePort");
   await waitForFile(devToolsFile, 15000);
+  debugLog(args, "DevToolsActivePort ready");
   const [port] = fs.readFileSync(devToolsFile, "utf8").trim().split(/\r?\n/);
-  const tabs = await fetch(`http://127.0.0.1:${port}/json`).then((response) => response.json());
+  const tabs = await fetchJsonWithTimeout(`http://127.0.0.1:${port}/json`, 7000);
+  debugLog(args, `DevTools tabs=${tabs.length}`);
   const tab = tabs.find((item) => item.type === "page") || tabs[0];
-  const page = new CdpPage(tab.webSocketDebuggerUrl, { captureNetwork: asBoolean(args.captureNetwork) });
+    const page = new CdpPage(tab.webSocketDebuggerUrl, {
+      captureNetwork: asBoolean(args.captureNetwork),
+      networkBodyTimeoutMs: args.networkBodyTimeoutMs
+    });
   await page.connect();
+  debugLog(args, "CDP connected");
 
   return {
     page,
@@ -464,6 +586,7 @@ async function pageTextSample(page) {
 
 async function extractDetail(page, source, location, url, args, maxPrice) {
   const nav = await page.navigate(url, args.navigationTimeoutMs, args.delayMs);
+  const screenshot = await maybeCaptureScreenshot(page, args, source, location, "detail", url);
   const data = await page.evaluate(`(() => {
     const meta = (name) => document.querySelector('meta[property="' + name + '"], meta[name="' + name + '"]')?.content || "";
     return {
@@ -482,7 +605,8 @@ async function extractDetail(page, source, location, url, args, maxPrice) {
       location: location.name,
       status: "Candidat ignore",
       message: price ? `Prix ${price} superieur au plafond` : "Prix absent dans le DOM navigateur",
-      url
+      url,
+      screenshot
     }};
   }
 
@@ -493,7 +617,8 @@ async function extractDetail(page, source, location, url, args, maxPrice) {
       location: location.name,
       status: "Candidat ignore",
       message: rejectionReason,
-      url
+      url,
+      screenshot
     }};
   }
 
@@ -530,13 +655,15 @@ async function extractDetail(page, source, location, url, args, maxPrice) {
       location: location.name,
       status: "Fiche exploitable",
       message: `${price} EUR`,
-      url: data.url || url
+      url: data.url || url,
+      screenshot
     }
   };
 }
 
 async function run() {
   const args = parseArgs(process.argv);
+  debugLog(args, `run start sources=${args.sources} locationLimit=${args.locationLimit}`);
   const config = JSON.parse(fs.readFileSync(args.config, "utf8"));
   const maxPrice = Number(config.maxPrice || DEFAULT_MAX_PRICE);
   const sources = args.sources.split(",").map((item) => item.trim().toLowerCase()).filter(Boolean);
@@ -549,26 +676,34 @@ async function run() {
 
   try {
     const locations = args.locationLimit > 0 ? (config.locations || []).slice(0, args.locationLimit) : (config.locations || []);
-    if (asBoolean(args.setupOnly)) {
+    if (asBoolean(args.setupOnly) || asBoolean(args.prepareBeforeRun)) {
       const setupLocations = locations.slice(0, Math.max(1, Math.min(locations.length, 2)));
-      for (const location of setupLocations) {
-        for (const source of sources) {
-          const url = searchUrl(source, location, maxPrice);
-          console.log(`Setup navigateur: ${sourceLabel(source)} ${location.name} -> ${url}`);
-          await chrome.page.navigate(url, args.navigationTimeoutMs, args.delayMs);
-        }
+      const setupTargets = buildSearchTargets(sources, setupLocations, maxPrice, config, args);
+      for (const target of setupTargets) {
+        console.log(`Setup navigateur: ${sourceLabel(target.source)} ${target.location.name} -> ${target.url}`);
+        debugLog(args, `setup navigate ${sourceLabel(target.source)} ${target.location.name}`);
+        await chrome.page.navigate(target.url, args.navigationTimeoutMs, args.delayMs);
+        const screenshot = await maybeCaptureScreenshot(chrome.page, args, target.source, target.location, "setup", target.url);
+        if (screenshot) console.log(`Capture setup: ${screenshot}`);
       }
       console.log(`Setup ouvert. Attente ${args.setupWaitMs} ms pour cookies/consentements/challenges si Chrome est visible.`);
       await sleep(args.setupWaitMs);
-      return;
+      if (asBoolean(args.setupOnly)) return;
+      console.log("Setup termine. Extraction dans la meme session Chrome.");
+      debugLog(args, "setup wait complete; continuing extraction");
     }
 
-    for (const location of locations) {
-      for (const source of sources) {
-        const url = searchUrl(source, location, maxPrice);
+    const targets = buildSearchTargets(sources, locations, maxPrice, config, args);
+    for (const target of targets) {
+        const { source, location, url } = target;
         try {
+          debugLog(args, `search navigate ${sourceLabel(source)} ${location.name} ${url}`);
           const nav = await chrome.page.navigate(url, args.navigationTimeoutMs, args.delayMs);
+          debugLog(args, `search navigated status=${nav.status || ""} title=${nav.title || ""}`);
+          const screenshot = await maybeCaptureScreenshot(chrome.page, args, source, location, "search", url);
+          if (screenshot) debugLog(args, `search screenshot ${screenshot}`);
           const links = await extractCandidateLinks(chrome.page, source, url);
+          debugLog(args, `candidate links ${links.length}`);
           const networkPayloadCount = chrome.page.networkPayloads.length;
           for (const payload of chrome.page.networkPayloads) {
             networkDumps.push({
@@ -589,7 +724,8 @@ async function run() {
             location: location.name,
             status: blocked ? "Blocage navigateur" : (nav.status && nav.status >= 400 ? `HTTP ${nav.status}` : "Recherche navigateur OK"),
             message: `${links.length} lien(s) candidat(s), ${networkPayloadCount} reponse(s) reseau capturee(s), titre: ${nav.title || ""}`.trim(),
-            url
+            url,
+            screenshot
           });
 
           for (const detailUrl of links.slice(0, args.maxDetailPerLocation)) {
@@ -610,13 +746,13 @@ async function run() {
             url
           });
         }
-      }
     }
   } finally {
     chrome.stop();
   }
 
   fs.mkdirSync(path.dirname(args.outJson), { recursive: true });
+  debugLog(args, `write outputs listings=${listings.length} diagnostics=${diagnostics.length}`);
   fs.writeFileSync(args.outJson, JSON.stringify({ generatedAt: new Date().toISOString(), count: listings.length, listings }, null, 2), "utf8");
   fs.writeFileSync(args.diagnosticsJson, JSON.stringify({ generatedAt: new Date().toISOString(), count: diagnostics.length, diagnostics }, null, 2), "utf8");
   fs.writeFileSync(args.networkJson, JSON.stringify({ generatedAt: new Date().toISOString(), count: networkDumps.length, networkDumps }, null, 2), "utf8");
@@ -625,7 +761,7 @@ async function run() {
     "GeoPrecision", "Price", "Bedrooms", "SurfaceM2", "AgentName", "AgentPhone", "AgentMobile",
     "AgentEmail", "AgentWebsite", "PhotoCount", "PhotoUrls", "Title", "Url"
   ]);
-  writeCsv(args.diagnosticsCsv, diagnostics, ["source", "location", "status", "message", "url"]);
+  writeCsv(args.diagnosticsCsv, diagnostics, ["source", "location", "status", "message", "url", "screenshot"]);
   console.log(`Browser listings: ${listings.length}`);
   console.log(`Browser diagnostics: ${diagnostics.length}`);
 }

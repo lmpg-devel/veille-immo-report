@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-21-01";
+  const APP_VERSION = "pwa-2026-06-21-02";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const STORAGE_KEY = "veille-immo-seen-ids";
@@ -10,7 +10,7 @@
   const SHOW_OPTION_KEY = "veille-immo-show-option";
   const LOCATION_FILTER_KEY = "veille-immo-selected-locations";
   const DEFAULT_MAX_PRICE = 285000;
-  const USER_PRICE_LIMIT_MAX = 1000000;
+  const USER_PRICE_LIMIT_MAX = 350000;
   let deferredInstallPrompt = null;
   let latestPayload = null;
   let latestConfig = null;
@@ -74,6 +74,13 @@
       ".source-map-pin-zimmo{background:#7c3aed}",
       ".source-map-pin-agency{background:#2f6f3e}",
       ".source-map-pin-p2p{background:#d97706}",
+      ".map-popup{min-width:220px;max-width:290px}",
+      ".map-popup-source{display:inline-flex;border-radius:999px;padding:3px 7px;background:#eef3f6;color:#253540;font:700 11px Arial,sans-serif;text-transform:uppercase;margin-bottom:6px}",
+      ".map-popup-title{font:700 14px/1.3 Arial,sans-serif;color:#17202a;margin-bottom:5px}",
+      ".map-popup-price{font:700 14px Arial,sans-serif;color:#0b513c;margin-bottom:6px}",
+      ".map-popup-details,.map-popup-address,.map-popup-contact{font:12px/1.35 Arial,sans-serif;color:#3d4852;margin-top:5px}",
+      ".map-popup-actions{margin-top:8px}",
+      ".map-popup-actions button{border:0;background:#fff;color:#0b5c86;font:600 12px Arial,sans-serif;padding:0}",
       "@media(max-width:760px){.price-filter-panel{grid-template-columns:1fr}.price-filter-inputs{justify-content:flex-start}.price-filter-inputs input{width:140px}.filter-source-counts{grid-column:auto}}",
       "@media(max-width:680px){.pwa-controls{left:12px;right:12px}.pwa-controls button{flex:1}}"
     ].join("");
@@ -267,8 +274,7 @@
     }).filter(function (price) {
       return Number.isFinite(price) && price > 0;
     });
-    const configuredMax = configuredPriceMax(config);
-    const max = Math.max(USER_PRICE_LIMIT_MAX, configuredMax || DEFAULT_MAX_PRICE, prices.length ? Math.max.apply(null, prices) : DEFAULT_MAX_PRICE);
+    const max = USER_PRICE_LIMIT_MAX;
     const min = Math.max(0, Math.floor((prices.length ? Math.min.apply(null, prices) : 0) / 5000) * 5000);
     return { min: min, max: max };
   }
@@ -474,7 +480,7 @@
       panel.innerHTML = [
         "<div><div class='price-filter-title'>Prix max</div><div id='priceFilterCount' class='price-filter-count' aria-live='polite'></div></div>",
         "<input id='priceFilterRange' class='price-filter-range' type='range' step='5000' aria-label='Prix maximum'>",
-        "<div class='price-filter-inputs'><input id='priceFilterInput' type='number' inputmode='numeric' step='1000' aria-label='Prix maximum' placeholder='Prix max'><button id='priceFilterReset' type='button'>Réinit.</button></div>",
+        "<div class='price-filter-inputs'><input id='priceFilterInput' type='number' inputmode='numeric' step='1000' aria-label='Prix maximum' placeholder='Prix max'><button id='priceFilterReset' type='button'>Réinit.</button><button id='reportRebuildButton' type='button'>Recalculer</button></div>",
         "<label class='filter-toggle'><input id='optionFilterToggle' type='checkbox'> Inclure sous option</label>",
         "<div id='sourceFilterCount' class='filter-source-counts' aria-live='polite'></div>"
       ].join("");
@@ -492,8 +498,9 @@
     const range = document.getElementById("priceFilterRange");
     const input = document.getElementById("priceFilterInput");
     const reset = document.getElementById("priceFilterReset");
+    const rebuild = document.getElementById("reportRebuildButton");
     const optionToggle = document.getElementById("optionFilterToggle");
-    if (!range || !input || !reset || !optionToggle) {
+    if (!range || !input || !reset || !rebuild || !optionToggle) {
       return;
     }
 
@@ -538,6 +545,12 @@
       reset.dataset.priceFilterBound = "1";
       reset.addEventListener("click", function () {
         setPrice(configuredPriceMax(latestConfig));
+      });
+    }
+    if (!rebuild.dataset.priceFilterBound) {
+      rebuild.dataset.priceFilterBound = "1";
+      rebuild.addEventListener("click", function () {
+        refreshReportData(true);
       });
     }
     if (!optionToggle.dataset.priceFilterBound) {
@@ -680,11 +693,78 @@
     }
     const kind = sourceKind(source);
     return window.L.divIcon({
-      className: "source-map-icon-wrap",
+      className: "source-map-icon-wrap source-map-marker",
       html: "<span class='source-map-pin source-map-pin-" + kind + "'></span>",
       iconSize: [24, 24],
       iconAnchor: [12, 24],
       popupAnchor: [0, -22]
+    });
+  }
+
+  function listingDetailsHtml(listing) {
+    const details = [];
+    if (listing && listing.locality) {
+      details.push("<span><strong>Commune</strong> " + escapeHtml(listing.locality) + "</span>");
+    }
+    if (listing && listing.requestedLocation) {
+      details.push("<span><strong>Recherche</strong> " + escapeHtml(listing.requestedLocation) + "</span>");
+    }
+    if (Number(listing && listing.bedrooms || 0) > 0) {
+      details.push("<span><strong>Ch.</strong> " + escapeHtml(listing.bedrooms) + "</span>");
+    }
+    if (Number(listing && listing.surfaceM2 || 0) > 0) {
+      details.push("<span><strong>Surface</strong> " + escapeHtml(listing.surfaceM2) + " m2</span>");
+    }
+    return details.length ? "<div class='map-popup-details'>" + details.join(" · ") + "</div>" : "";
+  }
+
+  function listingContactHtml(listing) {
+    const pieces = [];
+    const name = listing && (listing.agentName || listing.contact || listing.agent);
+    const phone = listing && (listing.agentPhone || listing.phone);
+    const email = listing && listing.agentEmail;
+    if (name) {
+      pieces.push(escapeHtml(name));
+    }
+    if (phone) {
+      pieces.push("<a href='tel:" + escapeHtml(phone) + "'>" + escapeHtml(phone) + "</a>");
+    }
+    if (email) {
+      pieces.push("<a href='mailto:" + escapeHtml(email) + "'>" + escapeHtml(email) + "</a>");
+    }
+    return pieces.length ? "<div class='map-popup-contact'><strong>Contact</strong> " + pieces.join(" · ") + "</div>" : "";
+  }
+
+  function mapPopupHtml(listing) {
+    const title = listing && listing.title ? listing.title : "Annonce";
+    const source = listing && listing.source ? listing.source : "Source inconnue";
+    const url = listing && listing.url ? listing.url : "#";
+    return [
+      "<div class='map-popup'>",
+      "<div class='map-popup-source'>" + escapeHtml(sourceLabel(source)) + "</div>",
+      "<div class='map-popup-title'>" + escapeHtml(title) + "</div>",
+      "<div class='map-popup-price'>" + escapeHtml(formatPrice(listing && listing.price)) + "</div>",
+      listingDetailsHtml(listing),
+      listing && listing.address ? "<div class='map-popup-address'>" + escapeHtml(listing.address) + "</div>" : "",
+      listingContactHtml(listing),
+      "<div class='map-popup-actions'><button type='button' class='external-link-button' data-external-url='" + escapeHtml(url) + "'>Ouvrir l'annonce</button></div>",
+      "</div>"
+    ].join("");
+  }
+
+  function refreshStaticMapPopups(payload) {
+    if (!window.veilleImmoListingLayer || typeof window.veilleImmoListingLayer.eachLayer !== "function") {
+      return;
+    }
+    const markerSource = Array.isArray(window.listingMarkers) ? window.listingMarkers : [];
+    const byUrl = listingByUrl(payload);
+    let index = 0;
+    window.veilleImmoListingLayer.eachLayer(function (layer) {
+      const listing = markerListing(markerSource[index], byUrl);
+      if (layer && typeof layer.bindPopup === "function") {
+        layer.bindPopup(mapPopupHtml(listing));
+      }
+      index += 1;
     });
   }
 
@@ -719,6 +799,7 @@
       return;
     }
     if (window.veilleImmoStaticMapIncludesAllListings) {
+      refreshStaticMapPopups(payload);
       return;
     }
     if (!window.L || !window.veilleImmoMap) {
@@ -741,14 +822,7 @@
       }
       const icon = sourceMarkerIcon(listing.source);
       const marker = window.L.marker([lat, lon], icon ? { icon: icon } : {}).addTo(layer);
-      marker.bindPopup([
-        "<strong>" + escapeHtml(formatPrice(listing.price)) + "</strong><br>",
-        "<span>" + escapeHtml(sourceLabel(listing.source)) + "</span><br>",
-        listing.address ? escapeHtml(listing.address) + "<br>" : "",
-        listing.geoPrecision ? "<span>" + escapeHtml(listing.geoPrecision) + "</span><br>" : "",
-        escapeHtml(listing.agentName || "") + (listing.agentPhone ? " " + escapeHtml(listing.agentPhone) : "") + "<br>",
-        "<button type='button' class='external-link-button' data-external-url='" + escapeHtml(listing.url || "#") + "'>Ouvrir l'annonce</button>"
-      ].join(""));
+      marker.bindPopup(mapPopupHtml(listing));
     });
     window.veilleImmoExtraSourceMarkers = layer;
   }
@@ -1175,6 +1249,38 @@
     ].join("");
   }
 
+  async function refreshReportData(manual) {
+    try {
+      const payload = await fetchResults();
+      let config = latestConfig;
+      try {
+        config = await fetchConfig();
+      } catch (error) {
+      }
+      latestPayload = payload;
+      latestConfig = config || latestConfig;
+      annotateSourceBadges(payload);
+      syncSourceMapMarkers(payload);
+      injectPriceFilter(payload, latestConfig);
+      if (latestConfig) {
+        injectLocationFilter(latestConfig);
+      }
+      renderOtherSources(payload, latestConfig);
+      annotateSourceBadges(payload);
+      syncSourceMapMarkers(payload);
+      applyPriceFilter();
+      if (manual) {
+        showStatus("Carte et liste recalculees depuis les donnees publiees.");
+      }
+      return payload;
+    } catch (error) {
+      if (manual) {
+        showStatus("Recalcul impossible pour le moment.");
+      }
+      throw error;
+    }
+  }
+
   async function notifyNewListings(newListings) {
     if (!("Notification" in window) || Notification.permission !== "granted" || newListings.length === 0) {
       return;
@@ -1295,34 +1401,14 @@
     } catch (error) {
     }
     updateInstallButtons();
-    fetchResults().then(function (payload) {
-      annotateSourceBadges(payload);
-      syncSourceMapMarkers(payload);
-      injectPriceFilter(payload, null);
-      applyPriceFilter();
-      return fetchConfig()
-        .then(function (config) {
-          injectPriceFilter(payload, config);
-          injectLocationFilter(config);
-          renderOtherSources(payload, config);
-          annotateSourceBadges(payload);
-          syncSourceMapMarkers(payload);
-          applyPriceFilter();
-        })
-        .catch(function () {
-          renderOtherSources(payload, null);
-          annotateSourceBadges(payload);
-          syncSourceMapMarkers(payload);
-          injectPriceFilter(payload, null);
-          applyPriceFilter();
-        });
-    }).catch(function () {});
+    refreshReportData(false).catch(function () {});
     checkForNewListings(false);
   });
 
   window.VeilleImmoPwa = {
     version: APP_VERSION,
     checkForNewListings: checkForNewListings,
+    refreshReportData: refreshReportData,
     hardRefreshApplication: hardRefreshApplication
   };
 })();

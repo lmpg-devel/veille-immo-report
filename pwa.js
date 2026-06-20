@@ -1,15 +1,12 @@
 (function () {
   "use strict";
 
-const APP_VERSION = "pwa-2026-06-20-02";
+const APP_VERSION = "pwa-2026-06-20-01";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const STORAGE_KEY = "veille-immo-seen-ids";
   const INIT_KEY = "veille-immo-initialized";
-  const LOCAL_IMPORTS_KEY = "veille-immo-local-zimmo-imports";
   let deferredInstallPrompt = null;
-  let latestPayload = null;
-  let latestConfig = null;
 
   function isStandalone() {
     return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
@@ -45,17 +42,6 @@ const APP_VERSION = "pwa-2026-06-20-02";
       ".source-map-pin-zimmo{background:#7c3aed}",
       ".source-map-pin-agency{background:#2f6f3e}",
       ".source-map-pin-p2p{background:#d97706}",
-      ".zimmo-import-panel{background:#fff;border:1px solid #d4dce2;border-radius:6px;padding:12px 14px;margin:14px 0 96px}",
-      ".zimmo-import-panel h3{margin:0 0 10px;font-size:16px}",
-      ".zimmo-import-grid{display:grid;grid-template-columns:minmax(160px,1fr) repeat(2,auto);gap:8px;align-items:end}",
-      ".zimmo-import-panel label{display:flex;flex-direction:column;gap:4px;font:600 12px Arial,sans-serif;color:#33424d}",
-      ".zimmo-import-panel select,.zimmo-import-panel input,.zimmo-import-panel textarea{border:1px solid #cbd5dc;border-radius:5px;padding:8px;font:14px Arial,sans-serif;background:#fff;color:#17202a}",
-      ".zimmo-import-panel textarea{width:100%;min-height:86px;resize:vertical;margin-top:10px}",
-      ".zimmo-import-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:10px}",
-      ".zimmo-import-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}",
-      ".zimmo-import-actions button,.zimmo-import-grid button{border:1px solid #0b5c86;background:#0b5c86;color:#fff;border-radius:5px;padding:8px 10px;font:700 13px Arial,sans-serif}",
-      ".zimmo-import-actions button.secondary,.zimmo-import-grid button.secondary{background:#fff;color:#0b5c86}",
-      ".zimmo-import-status{font:13px Arial,sans-serif;color:#33424d}",
       "@media(max-width:680px){.pwa-controls{left:12px;right:12px}.pwa-controls button{flex:1}}"
     ].join("");
     document.head.appendChild(style);
@@ -77,21 +63,6 @@ const APP_VERSION = "pwa-2026-06-20-02";
     updateButton.textContent = "Actualiser app";
     updateButton.addEventListener("click", hardRefreshApplication);
     controls.appendChild(updateButton);
-
-    const zimmoButton = document.createElement("button");
-    zimmoButton.type = "button";
-    zimmoButton.textContent = "Importer Zimmo";
-    zimmoButton.addEventListener("click", function () {
-      const panel = document.getElementById("zimmoImportPanel");
-      if (panel) {
-        panel.scrollIntoView({ behavior: "smooth", block: "start" });
-        const textarea = document.getElementById("zimmoImportText");
-        if (textarea) textarea.focus();
-      } else {
-        showStatus("Le module Zimmo se charge avec les resultats.");
-      }
-    });
-    controls.appendChild(zimmoButton);
 
     if ("Notification" in window) {
       const notificationButton = document.createElement("button");
@@ -289,215 +260,6 @@ const APP_VERSION = "pwa-2026-06-20-02";
     });
   }
 
-  function shortHash(value) {
-    let hash = 0x811c9dc5;
-    String(value || "").split("").forEach(function (char) {
-      hash ^= char.charCodeAt(0);
-      hash = Math.imul(hash, 0x01000193);
-    });
-    return (hash >>> 0).toString(16).padStart(8, "0");
-  }
-
-  function readLocalImports() {
-    try {
-      const value = JSON.parse(localStorage.getItem(LOCAL_IMPORTS_KEY) || "[]");
-      return Array.isArray(value) ? value.filter(function (item) {
-        return item && item.source === "Zimmo";
-      }) : [];
-    } catch (error) {
-      return [];
-    }
-  }
-
-  function writeLocalImports(items) {
-    localStorage.setItem(LOCAL_IMPORTS_KEY, JSON.stringify(items));
-  }
-
-  function mergeLocalImports(payload) {
-    const base = Array.isArray(payload && payload.listings) ? payload.listings : [];
-    const imports = readLocalImports();
-    const byId = {};
-    base.concat(imports).forEach(function (listing) {
-      const id = String(listing.id || listing.url || shortHash(JSON.stringify(listing)));
-      byId[id] = Object.assign({}, listing, { id: id });
-    });
-    return Object.assign({}, payload || {}, {
-      listings: Object.keys(byId).map(function (id) { return byId[id]; })
-    });
-  }
-
-  function locationsFromConfig(config) {
-    return Array.isArray(config && config.locations) ? config.locations : [];
-  }
-
-  function selectedLocation(config) {
-    const select = document.getElementById("zimmoImportLocation");
-    const index = select ? Number(select.value || 0) : 0;
-    const locations = locationsFromConfig(config);
-    return locations[Math.max(0, Math.min(index, locations.length - 1))] || null;
-  }
-
-  function zimmoSearchUrl(location, config) {
-    const maxPrice = Number(config && config.maxPrice ? config.maxPrice : 285000);
-    if (!location) return "https://www.zimmo.be/fr/rechercher/?search=";
-    return "https://www.zimmo.be/fr/" + encodeURIComponent(location.zimmoSlug || slugForPath(location.name)) + "-" + encodeURIComponent(location.postalCode || "") + "/a-vendre/maison/?priceIncludeUnknown=0&priceMax=" + encodeURIComponent(maxPrice);
-  }
-
-  function parsePriceFromText(text) {
-    const match = String(text || "").match(/(\d[\d .,\u00a0\u202f]{3,})[ \t\u00a0\u202f]*(?:EUR|€)/i);
-    if (!match) return "";
-    const value = Number(match[1].replace(/[^\d]/g, ""));
-    return Number.isFinite(value) ? value : "";
-  }
-
-  function firstNumber(regex, text) {
-    const match = String(text || "").match(regex);
-    return match ? Number(match[1].replace(/[^\d]/g, "")) || "" : "";
-  }
-
-  function firstUrl(text) {
-    const match = String(text || "").match(/https?:\/\/(?:www\.)?zimmo\.be[^\s<>"']*/i);
-    return match ? match[0].replace(/[),.;]+$/, "") : "";
-  }
-
-  function parseZimmoText(text, location) {
-    const lines = String(text || "").split(/\r?\n/).map(function (line) {
-      return line.trim();
-    }).filter(Boolean);
-    const url = firstUrl(text);
-    const title = lines.find(function (line) {
-      return !/^https?:\/\//i.test(line) && !/^(prix|contact|description)$/i.test(line);
-    }) || (location ? "Annonce Zimmo - " + location.name : "Annonce Zimmo");
-    const postal = location && location.postalCode ? location.postalCode : "";
-    const addressMatch = postal ? String(text || "").match(new RegExp("([^\\n]{3,80}" + postal + "[^\\n]{0,80})", "i")) : null;
-    const photoMatch = String(text || "").match(/https?:\/\/[^\s<>"']+\.(?:jpg|jpeg|png|webp)(?:\?[^\s<>"']*)?/i);
-    return {
-      title: title,
-      url: url,
-      price: parsePriceFromText(text),
-      bedrooms: firstNumber(/(\d+)\s*(?:chambres?|slaapkamers?|bedrooms?)/i, text),
-      surfaceM2: firstNumber(/(\d{2,4})\s*m(?:²|2|\b)/i, text),
-      address: addressMatch ? addressMatch[1].trim() : "",
-      photoUrl: photoMatch ? photoMatch[0] : ""
-    };
-  }
-
-  function fillZimmoImportForm(data) {
-    [
-      ["zimmoImportTitle", data.title],
-      ["zimmoImportUrl", data.url],
-      ["zimmoImportPrice", data.price],
-      ["zimmoImportBedrooms", data.bedrooms],
-      ["zimmoImportSurface", data.surfaceM2],
-      ["zimmoImportAddress", data.address],
-      ["zimmoImportPhoto", data.photoUrl]
-    ].forEach(function (pair) {
-      const node = document.getElementById(pair[0]);
-      if (node && pair[1] !== undefined && pair[1] !== "") node.value = pair[1];
-    });
-  }
-
-  function readZimmoImportForm(config) {
-    const location = selectedLocation(config);
-    const value = function (id) {
-      const node = document.getElementById(id);
-      return node ? String(node.value || "").trim() : "";
-    };
-    const url = value("zimmoImportUrl") || firstUrl(value("zimmoImportText"));
-    const title = value("zimmoImportTitle") || (location ? "Annonce Zimmo - " + location.name : "Annonce Zimmo");
-    const photo = value("zimmoImportPhoto");
-    const price = Number(String(value("zimmoImportPrice")).replace(/[^\d]/g, "")) || 0;
-    return {
-      source: "Zimmo",
-      id: "zimmo-local-" + shortHash(url || title + "|" + price + "|" + Date.now()),
-      title: title,
-      price: price,
-      bedrooms: Number(value("zimmoImportBedrooms")) || "",
-      surfaceM2: Number(value("zimmoImportSurface")) || "",
-      locality: location ? location.name : "",
-      requestedLocation: location ? location.name : "",
-      postalCode: location ? location.postalCode : "",
-      address: value("zimmoImportAddress") || (location ? location.name : ""),
-      latitude: location ? Number(location.latitude) : "",
-      longitude: location ? Number(location.longitude) : "",
-      geoPrecision: "centre commune - import manuel Zimmo",
-      agentName: "Zimmo",
-      agentPhone: "",
-      agentEmail: "",
-      agentWebsite: "",
-      photoCount: photo ? 1 : 0,
-      photoUrl: photo,
-      photoUrls: photo ? [photo] : [],
-      url: url || "https://www.zimmo.be",
-      localImport: true
-    };
-  }
-
-  function setZimmoStatus(message) {
-    const node = document.getElementById("zimmoImportStatus");
-    if (node) node.textContent = message;
-    showStatus(message);
-  }
-
-  function refreshRenderedPayload() {
-    if (!latestPayload) return;
-    const merged = mergeLocalImports(latestPayload);
-    renderOtherSources(merged, latestConfig);
-    annotateSourceBadges(merged);
-    syncImportedZimmoMapMarkers(readLocalImports());
-    bindZimmoAssistantEvents();
-  }
-
-  function saveZimmoImport(config) {
-    const listing = readZimmoImportForm(config);
-    if (!listing.price || listing.price > Number(config && config.maxPrice ? config.maxPrice : 285000)) {
-      setZimmoStatus("Prix absent ou superieur au plafond.");
-      return;
-    }
-    const imports = readLocalImports().filter(function (item) {
-      return item.id !== listing.id && item.url !== listing.url;
-    });
-    imports.unshift(listing);
-    writeLocalImports(imports.slice(0, 80));
-    refreshRenderedPayload();
-    setZimmoStatus("Annonce Zimmo ajoutee localement.");
-  }
-
-  function removeZimmoImport(id) {
-    writeLocalImports(readLocalImports().filter(function (item) {
-      return String(item.id) !== String(id);
-    }));
-    refreshRenderedPayload();
-    setZimmoStatus("Annonce Zimmo retiree.");
-  }
-
-  function clearZimmoImports() {
-    writeLocalImports([]);
-    refreshRenderedPayload();
-    setZimmoStatus("Imports Zimmo effaces.");
-  }
-
-  function syncImportedZimmoMapMarkers(imports) {
-    if (!window.L || !window.veilleImmoMap) return;
-    if (window.veilleImmoLocalZimmoLayer) {
-      window.veilleImmoMap.removeLayer(window.veilleImmoLocalZimmoLayer);
-    }
-    const layer = window.L.layerGroup().addTo(window.veilleImmoMap);
-    imports.forEach(function (listing) {
-      const lat = Number(listing.latitude);
-      const lon = Number(listing.longitude);
-      if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
-      const marker = window.L.marker([lat, lon], { icon: sourceMarkerIcon("Zimmo") }).addTo(layer);
-      marker.bindPopup([
-        "<strong>" + escapeHtml(formatPrice(listing.price)) + "</strong><br>",
-        "<span>Zimmo</span><br>",
-        escapeHtml(listing.address || listing.locality || "") + "<br>",
-        "<button type='button' class='external-link-button' data-external-url='" + escapeHtml(listing.url || "https://www.zimmo.be") + "'>Ouvrir l'annonce</button>"
-      ].join(""));
-    });
-    window.veilleImmoLocalZimmoLayer = layer;
-  }
-
   function annotateSourceBadges(payload) {
     const listings = Array.isArray(payload && payload.listings) ? payload.listings : [];
     const byId = listings.reduce(function (acc, listing) {
@@ -525,7 +287,38 @@ const APP_VERSION = "pwa-2026-06-20-02";
   function syncSourceMapMarkers(payload) {
     if (typeof window.veilleImmoRenderMapFromPayload === "function") {
       window.veilleImmoRenderMapFromPayload(payload);
+      return;
     }
+    if (!window.L || !window.veilleImmoMap) {
+      return;
+    }
+    if (window.veilleImmoExtraSourceMarkers) {
+      window.veilleImmoMap.removeLayer(window.veilleImmoExtraSourceMarkers);
+    }
+    const layer = window.L.layerGroup().addTo(window.veilleImmoMap);
+    const listings = Array.isArray(payload && payload.listings) ? payload.listings : [];
+    listings.forEach(function (listing) {
+      const kind = sourceKind(listing.source);
+      if (kind === "immoweb") {
+        return;
+      }
+      const lat = Number(listing.latitude);
+      const lon = Number(listing.longitude);
+      if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+        return;
+      }
+      const icon = sourceMarkerIcon(listing.source);
+      const marker = window.L.marker([lat, lon], icon ? { icon: icon } : {}).addTo(layer);
+      marker.bindPopup([
+        "<strong>" + escapeHtml(formatPrice(listing.price)) + "</strong><br>",
+        "<span>" + escapeHtml(sourceLabel(listing.source)) + "</span><br>",
+        listing.address ? escapeHtml(listing.address) + "<br>" : "",
+        listing.geoPrecision ? "<span>" + escapeHtml(listing.geoPrecision) + "</span><br>" : "",
+        escapeHtml(listing.agentName || "") + (listing.agentPhone ? " " + escapeHtml(listing.agentPhone) : "") + "<br>",
+        "<button type='button' class='external-link-button' data-external-url='" + escapeHtml(listing.url || "#") + "'>Ouvrir l'annonce</button>"
+      ].join(""));
+    });
+    window.veilleImmoExtraSourceMarkers = layer;
   }
 
   function renderDiagnosticSummary(diagnostics) {
@@ -599,77 +392,6 @@ const APP_VERSION = "pwa-2026-06-20-02";
     return "https://www.bing.com/search?q=" + encodeURIComponent("maison a vendre " + location.name + " " + maxPrice + " particulier sans agence");
   }
 
-  function renderZimmoImportPanel(config) {
-    const locations = locationsFromConfig(config);
-    const options = locations.map(function (location, index) {
-      return "<option value='" + escapeHtml(index) + "'>" + escapeHtml(location.name + " " + (location.postalCode || "")) + "</option>";
-    }).join("");
-    return [
-      "<section id='zimmoImportPanel' class='zimmo-import-panel'>",
-      "<h3>Zimmo - import assiste</h3>",
-      "<div class='zimmo-import-grid'>",
-      "<label>Commune<select id='zimmoImportLocation'>" + options + "</select></label>",
-      "<button id='zimmoOpenSearchButton' class='secondary' type='button'>Ouvrir Zimmo</button>",
-      "<button id='zimmoParseButton' type='button'>Analyser le texte</button>",
-      "</div>",
-      "<textarea id='zimmoImportText' placeholder='Coller ici le lien ou le texte de l annonce Zimmo apres validation humaine'></textarea>",
-      "<div class='zimmo-import-fields'>",
-      "<label>Titre<input id='zimmoImportTitle' type='text'></label>",
-      "<label>Prix EUR<input id='zimmoImportPrice' inputmode='numeric' type='text'></label>",
-      "<label>Chambres<input id='zimmoImportBedrooms' inputmode='numeric' type='text'></label>",
-      "<label>Surface m2<input id='zimmoImportSurface' inputmode='numeric' type='text'></label>",
-      "<label>Adresse<input id='zimmoImportAddress' type='text'></label>",
-      "<label>Lien annonce<input id='zimmoImportUrl' type='url'></label>",
-      "<label>Photo URL<input id='zimmoImportPhoto' type='url'></label>",
-      "</div>",
-      "<div class='zimmo-import-actions'>",
-      "<button id='zimmoSaveButton' type='button'>Ajouter a la carte</button>",
-      "<button id='zimmoClearImportsButton' class='secondary' type='button'>Effacer imports Zimmo</button>",
-      "<span id='zimmoImportStatus' class='zimmo-import-status'></span>",
-      "</div>",
-      "</section>"
-    ].join("");
-  }
-
-  function bindZimmoAssistantEvents() {
-    const panel = document.getElementById("zimmoImportPanel");
-    if (!panel || panel.dataset.bound === "1") return;
-    panel.dataset.bound = "1";
-    const parseButton = document.getElementById("zimmoParseButton");
-    const openButton = document.getElementById("zimmoOpenSearchButton");
-    const saveButton = document.getElementById("zimmoSaveButton");
-    const clearButton = document.getElementById("zimmoClearImportsButton");
-    const textarea = document.getElementById("zimmoImportText");
-    if (openButton) {
-      openButton.addEventListener("click", function () {
-        const url = zimmoSearchUrl(selectedLocation(latestConfig), latestConfig);
-        const opened = window.open(url, "_blank", "noopener,noreferrer");
-        if (opened) opened.opener = null;
-      });
-    }
-    if (parseButton) {
-      parseButton.addEventListener("click", function () {
-        fillZimmoImportForm(parseZimmoText(textarea ? textarea.value : "", selectedLocation(latestConfig)));
-        setZimmoStatus("Texte analyse. Complete les champs manquants puis ajoute.");
-      });
-    }
-    if (textarea) {
-      textarea.addEventListener("paste", function () {
-        window.setTimeout(function () {
-          fillZimmoImportForm(parseZimmoText(textarea.value, selectedLocation(latestConfig)));
-        }, 0);
-      });
-    }
-    if (saveButton) {
-      saveButton.addEventListener("click", function () {
-        saveZimmoImport(latestConfig || {});
-      });
-    }
-    if (clearButton) {
-      clearButton.addEventListener("click", clearZimmoImports);
-    }
-  }
-
   function renderPrivateSourceLinks(config) {
     const locations = Array.isArray(config && config.locations) ? config.locations : [];
     const maxPrice = Number(config && config.maxPrice ? config.maxPrice : 285000);
@@ -732,7 +454,6 @@ const APP_VERSION = "pwa-2026-06-20-02";
       "<div class='source-diagnostic-item'><strong>2ememain</strong>Extraction avancee active via pages publiques et window.__CONFIG__. " + secondHandCount + " annonce(s) integree(s) apres filtres stricts localisation/type/prix.</div>",
       "<div class='source-diagnostic-item'><strong>Facebook Marketplace</strong>Lien de controle ajoute. Extraction automatique non active sans session utilisateur.</div>",
       "</div>",
-      renderZimmoImportPanel(config || {}),
       renderDiagnosticSummary(payload.sourceDiagnostics),
       renderPrivateSourceLinks(config),
       others.length ? "<section class='cards'>" + others.map(renderOtherSourceCard).join("") + "</section>" : "<div class='empty'>Aucune annonce non-Immoweb exploitable dans le dernier jeu de donnees publie.</div>"
@@ -773,7 +494,7 @@ const APP_VERSION = "pwa-2026-06-20-02";
       "<div class='facts'><div><span class='fact-label'>Prix</span> <span class='price'>" + escapeHtml(formatPrice(listing.price)) + "</span></div>" + details.join("") + "</div>",
       listing.address ? "<div class='small'>" + escapeHtml(listing.address) + "</div>" : "",
       "<div class='contact'><strong>" + escapeHtml(listing.agentName || listing.source || "Source") + "</strong>" + (contactParts.length ? "<br>" + contactParts.join(" · ") : "") + "</div>",
-      "<div class='links'><button type='button' class='external-link-button' data-external-url='" + escapeHtml(listing.url || "#") + "'>Ouvrir l'annonce</button>" + (listing.localImport ? " <button type='button' class='zimmo-local-remove' data-zimmo-id='" + escapeHtml(listing.id) + "'>Retirer</button>" : "") + "</div>",
+      "<div class='links'><button type='button' class='external-link-button' data-external-url='" + escapeHtml(listing.url || "#") + "'>Ouvrir l'annonce</button></div>",
       "</div>",
       "</article>"
     ].join("");
@@ -877,13 +598,6 @@ const APP_VERSION = "pwa-2026-06-20-02";
     updateInstallButtons();
   });
 
-  document.addEventListener("click", function (event) {
-    const button = event.target.closest(".zimmo-local-remove");
-    if (!button) return;
-    event.preventDefault();
-    removeZimmoImport(button.dataset.zimmoId || "");
-  });
-
   let refreshing = false;
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.addEventListener("controllerchange", function () {
@@ -907,28 +621,18 @@ const APP_VERSION = "pwa-2026-06-20-02";
     }
     updateInstallButtons();
     fetchResults().then(function (payload) {
-      latestPayload = payload;
-      const initialPayload = mergeLocalImports(payload);
-      annotateSourceBadges(initialPayload);
-      syncSourceMapMarkers(initialPayload);
+      annotateSourceBadges(payload);
+      syncSourceMapMarkers(payload);
       return fetchConfig()
         .then(function (config) {
-          latestConfig = config;
-          const merged = mergeLocalImports(payload);
-          renderOtherSources(merged, config);
-          bindZimmoAssistantEvents();
-          annotateSourceBadges(merged);
-          syncSourceMapMarkers(merged);
-          syncImportedZimmoMapMarkers(readLocalImports());
+          renderOtherSources(payload, config);
+          annotateSourceBadges(payload);
+          syncSourceMapMarkers(payload);
         })
         .catch(function () {
-          latestConfig = null;
-          const merged = mergeLocalImports(payload);
-          renderOtherSources(merged, null);
-          bindZimmoAssistantEvents();
-          annotateSourceBadges(merged);
-          syncSourceMapMarkers(merged);
-          syncImportedZimmoMapMarkers(readLocalImports());
+          renderOtherSources(payload, null);
+          annotateSourceBadges(payload);
+          syncSourceMapMarkers(payload);
         });
     }).catch(function () {});
     checkForNewListings(false);

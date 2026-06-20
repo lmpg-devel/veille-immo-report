@@ -49,6 +49,17 @@ $listings = foreach ($row in $rows) {
   if (-not [string]::IsNullOrWhiteSpace($row.PhotoUrls)) {
     $photos = @($row.PhotoUrls -split "\s+\|\s+" | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
   }
+  $statusText = @($row.SaleStatus, $row.Status, $row.Availability, $row.Title) -join " "
+  $isUnderOption = $false
+  if ($row.PSObject.Properties.Name -contains "IsUnderOption" -and "$($row.IsUnderOption)" -match "^(?i:true|1|yes|oui)$") {
+    $isUnderOption = $true
+  }
+  elseif ($row.PSObject.Properties.Name -contains "UnderOption" -and "$($row.UnderOption)" -match "^(?i:true|1|yes|oui)$") {
+    $isUnderOption = $true
+  }
+  elseif ($statusText -match '(?i)sous[-\s]?option|onder\s+optie|under\s+option|sale\s+agreed|r(?:e|é)serv(?:e|é|ee|ée)|compromis') {
+    $isUnderOption = $true
+  }
 
   [ordered]@{
     source = $row.Source
@@ -68,8 +79,12 @@ $listings = foreach ($row in $rows) {
     agentPhone = $row.AgentPhone
     agentEmail = $row.AgentEmail
     agentWebsite = $row.AgentWebsite
+    isUnderOption = $isUnderOption
+    underOption = $isUnderOption
+    saleStatus = if ($isUnderOption) { "sous option" } else { $row.SaleStatus }
     photoCount = ConvertTo-NullableInt $row.PhotoCount
     photoUrl = if ($photos.Count -gt 0) { $photos[0] } else { $null }
+    photoUrls = @($photos)
     url = $row.Url
   }
 }

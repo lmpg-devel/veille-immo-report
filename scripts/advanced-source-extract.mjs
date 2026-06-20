@@ -189,6 +189,13 @@ function hasMonthlySupplementText(text) {
     || /\+\s*\d[\d\s.,]*(?:eur|euro|\u20ac)?\s*\/?\s*(?:mois|maand|month)/i.test(raw);
 }
 
+function isUnderOptionText(text) {
+  const raw = String(text || "");
+  const haystack = normalizedWords(raw);
+  return /\b(sous option|vendu sous option|onder optie|under option|sale agreed|reserved|reserve|reservee|compromis)\b/i.test(haystack)
+    || /\b(sous[-\s]?option|onder\s+optie|under\s+option|sale\s+agreed|r(?:e|é)serv(?:e|é|ee|ée)|compromis)\b/i.test(raw);
+}
+
 function sourceQualityRejectionReason(source, fields, location, config) {
   const price = Number(fields.price || 0);
   const maxPrice = Number(config.maxPrice || 285000);
@@ -363,11 +370,13 @@ async function parseImmovlanDetail(url, location, config) {
   const locality = decodeHtml(address?.addressLocality || "");
   const street = decodeHtml(address?.streetAddress || "");
   const vlanCode = (url.match(/\/([^/]+)$/) || [])[1] || "";
+  const description = `${house?.description || ""} ${sell?.description || ""}`;
+  const isUnderOption = isUnderOptionText([title, description, text].filter(Boolean).join(" "));
 
   if (postalCode && String(location.postalCode) !== postalCode) return { listing: null, message: `code postal ${postalCode} hors commune` };
   const rejection = sourceQualityRejectionReason("Immovlan", {
     title,
-    description: `${house?.description || ""} ${sell?.description || ""}`,
+    description,
     category: "maison villa",
     locality,
     postalCode,
@@ -405,6 +414,9 @@ async function parseImmovlanDetail(url, location, config) {
       agentPhone: phone,
       agentEmail: "",
       agentWebsite: agent?.url ? immovlanAbsolute(agent.url) : "https://www.immovlan.be",
+      isUnderOption,
+      underOption: isUnderOption,
+      saleStatus: isUnderOption ? "sous option" : "",
       photoCount: images.length,
       photoUrl: images[0] || null,
       photoUrls: images,
@@ -768,6 +780,17 @@ function normalizeZimmoApifyItem(item, config) {
     "description"
   ])) || `Maison a vendre - ${locality || postalCode || "Zimmo"}`;
   const title = /zimmo/i.test(titleBase) ? titleBase : `${titleBase} - Zimmo`;
+  const description = cleanText(firstField(item, ["description", "summary", "property.description", "details.description"]));
+  const statusText = cleanText(firstField(item, [
+    "status",
+    "availability",
+    "transactionStatus",
+    "saleStatus",
+    "publicationStatus",
+    "property.status",
+    "details.status"
+  ]));
+  const isUnderOption = isUnderOptionText([title, description, statusText].filter(Boolean).join(" "));
 
   const priceCents = numberFromAny(firstField(item, ["priceCents", "priceInfo.priceCents"]));
   const price = priceCents ? Math.round(priceCents / 100) : numberFromAny(firstField(item, [
@@ -797,7 +820,7 @@ function normalizeZimmoApifyItem(item, config) {
 
   const rejection = sourceQualityRejectionReason("Zimmo", {
     title,
-    description: cleanText(firstField(item, ["description", "summary", "property.description", "details.description"])),
+    description,
     category: cleanText(firstField(item, ["propertyType", "type", "category"])),
     locality,
     postalCode,
@@ -880,6 +903,9 @@ function normalizeZimmoApifyItem(item, config) {
       agentPhone,
       agentEmail,
       agentWebsite,
+      isUnderOption,
+      underOption: isUnderOption,
+      saleStatus: isUnderOption ? "sous option" : statusText,
       photoCount: images.length,
       photoUrl: images[0] || null,
       photoUrls: images,

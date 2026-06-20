@@ -1,17 +1,24 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-20-07";
+  const APP_VERSION = "pwa-2026-06-21-01";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const STORAGE_KEY = "veille-immo-seen-ids";
   const INIT_KEY = "veille-immo-initialized";
   const PRICE_FILTER_KEY = "veille-immo-price-max";
+  const SHOW_OPTION_KEY = "veille-immo-show-option";
+  const LOCATION_FILTER_KEY = "veille-immo-selected-locations";
   const DEFAULT_MAX_PRICE = 285000;
+  const USER_PRICE_LIMIT_MAX = 1000000;
   let deferredInstallPrompt = null;
   let latestPayload = null;
   let latestConfig = null;
   let currentPriceMax = null;
+  let showOptionListings = false;
+  let selectedLocationKeys = null;
+  let locationMarkerLayer = null;
+  let locationMarkersByKey = {};
 
   function isStandalone() {
     return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
@@ -35,6 +42,19 @@
       ".price-filter-inputs{display:flex;align-items:center;gap:8px;justify-content:flex-end}",
       ".price-filter-inputs input{width:122px;border:1px solid #c8d1d8;border-radius:6px;padding:8px 9px;font:600 14px Arial,sans-serif;color:#182026}",
       ".price-filter-inputs button{border:1px solid #c8d1d8;background:#fff;border-radius:6px;padding:8px 10px;font:600 13px Arial,sans-serif;color:#17202a}",
+      ".filter-toggle{display:inline-flex;align-items:center;gap:8px;font:600 13px Arial,sans-serif;color:#253540;white-space:nowrap}",
+      ".filter-source-counts{grid-column:1/-1;font-size:13px;color:#41515d;border-top:1px solid #e5eaee;padding-top:10px}",
+      ".location-filter-panel{background:#fff;border:1px solid #d8dee3;border-radius:7px;margin:-8px 0 24px;padding:12px 14px}",
+      ".location-filter-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}",
+      ".location-filter-title{font-weight:700;color:#182026}",
+      ".location-filter-count{font-size:13px;color:#5c6670;margin-left:8px}",
+      ".location-filter-actions{display:flex;gap:8px;flex-wrap:wrap}",
+      ".location-filter-actions button,.location-chip{border:1px solid #c8d1d8;background:#fff;border-radius:999px;padding:7px 10px;font:600 13px Arial,sans-serif;color:#17202a;cursor:pointer}",
+      ".location-chip-list{display:flex;flex-wrap:wrap;gap:8px}",
+      ".location-chip.is-active{background:#0b5c86;border-color:#0b5c86;color:#fff}",
+      ".location-chip:focus-visible,.location-filter-actions button:focus-visible{outline:3px solid rgba(11,92,134,.28);outline-offset:2px}",
+      ".listing-card.is-under-option{border-color:#d97706;box-shadow:inset 0 0 0 1px rgba(217,119,6,.28)}",
+      ".option-badge{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;background:#d97706;color:#fff;font:700 11px/1 Arial,sans-serif;text-transform:uppercase;letter-spacing:.02em}",
       ".other-source-note{background:#eef7fb;border:1px solid #b8d9e8;border-radius:6px;padding:12px 14px;margin:18px 0;color:#253540}",
       ".source-diagnostic-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0 20px}",
       ".source-diagnostic-item{background:#fff;border:1px solid #d9e0e4;border-radius:6px;padding:10px}",
@@ -54,7 +74,7 @@
       ".source-map-pin-zimmo{background:#7c3aed}",
       ".source-map-pin-agency{background:#2f6f3e}",
       ".source-map-pin-p2p{background:#d97706}",
-      "@media(max-width:760px){.price-filter-panel{grid-template-columns:1fr}.price-filter-inputs{justify-content:flex-start}.price-filter-inputs input{width:140px}}",
+      "@media(max-width:760px){.price-filter-panel{grid-template-columns:1fr}.price-filter-inputs{justify-content:flex-start}.price-filter-inputs input{width:140px}.filter-source-counts{grid-column:auto}}",
       "@media(max-width:680px){.pwa-controls{left:12px;right:12px}.pwa-controls button{flex:1}}"
     ].join("");
     document.head.appendChild(style);
@@ -236,6 +256,10 @@
     return Math.min(max, Math.max(min, Math.round(number / 1000) * 1000));
   }
 
+  function configuredPriceMax(config) {
+    return Number(config && config.maxPrice ? config.maxPrice : DEFAULT_MAX_PRICE);
+  }
+
   function priceBounds(payload, config) {
     const listings = Array.isArray(payload && payload.listings) ? payload.listings : [];
     const prices = listings.map(function (listing) {
@@ -243,18 +267,39 @@
     }).filter(function (price) {
       return Number.isFinite(price) && price > 0;
     });
-    const configuredMax = Number(config && config.maxPrice ? config.maxPrice : DEFAULT_MAX_PRICE);
-    const max = Math.max(configuredMax || DEFAULT_MAX_PRICE, prices.length ? Math.max.apply(null, prices) : DEFAULT_MAX_PRICE);
+    const configuredMax = configuredPriceMax(config);
+    const max = Math.max(USER_PRICE_LIMIT_MAX, configuredMax || DEFAULT_MAX_PRICE, prices.length ? Math.max.apply(null, prices) : DEFAULT_MAX_PRICE);
     const min = Math.max(0, Math.floor((prices.length ? Math.min.apply(null, prices) : 0) / 5000) * 5000);
     return { min: min, max: max };
   }
 
-  function storedPriceMax(bounds) {
+  function storedPriceMax(bounds, config) {
     try {
       const stored = Number(localStorage.getItem(PRICE_FILTER_KEY) || 0);
-      return clampPrice(stored || bounds.max, bounds.min, bounds.max);
+      return clampPrice(stored || configuredPriceMax(config), bounds.min, bounds.max);
     } catch (error) {
-      return bounds.max;
+      return clampPrice(configuredPriceMax(config), bounds.min, bounds.max);
+    }
+  }
+
+  function storedShowOption() {
+    try {
+      return localStorage.getItem(SHOW_OPTION_KEY) === "1";
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function listingUrlKey(url) {
+    const raw = String(url || "").trim();
+    if (!raw) {
+      return "";
+    }
+    try {
+      const parsed = new URL(raw, window.location.href);
+      return (parsed.origin + parsed.pathname).toLowerCase();
+    } catch (error) {
+      return raw.split(/[?#]/)[0].toLowerCase();
     }
   }
 
@@ -277,9 +322,137 @@
     return Number.isFinite(price) && price > 0 && price <= maxPrice;
   }
 
-  function markerIsWithinPrice(marker, maxPrice) {
-    const price = Number(marker && marker.price || 0);
-    return Number.isFinite(price) && price > 0 && price <= maxPrice;
+  function listingOptionText(listing) {
+    return [
+      listing && listing.availability,
+      listing && listing.optionStatus,
+      listing && listing.status,
+      listing && listing.saleStatus,
+      listing && listing.transactionStatus,
+      listing && listing.title
+    ].filter(Boolean).join(" ");
+  }
+
+  function listingIsUnderOption(listing) {
+    if (!listing) {
+      return false;
+    }
+    if (listing.isUnderOption === true || listing.underOption === true || listing.option === true) {
+      return true;
+    }
+    const text = listingOptionText(listing);
+    return /\b(sous[-\s]?option|optionn(?:e|é|ee|ée)|onder\s+optie|under\s+option|sale\s+agreed|reserved|r(?:e|é)serv(?:e|é|ee|ée)|compromis)\b/i.test(text);
+  }
+
+  function listingPassesOptionFilter(listing) {
+    return showOptionListings || !listingIsUnderOption(listing);
+  }
+
+  function locationKey(value) {
+    return slugForPath(value);
+  }
+
+  function listingLocationCandidates(listing) {
+    return [
+      listing && listing.requestedLocation,
+      listing && listing.locality,
+      listing && listing.postalCode,
+      listing && listing.address,
+      listing && listing.title
+    ].filter(Boolean).map(locationKey).filter(Boolean);
+  }
+
+  function locationAliases(location) {
+    return [
+      location && location.name,
+      location && location.postalCode,
+      location && location.immowebSlug,
+      location && location.zimmoSlug,
+      location && location.immovlanSlug
+    ].filter(Boolean).map(locationKey).filter(Boolean);
+  }
+
+  function configLocations(config) {
+    return Array.isArray(config && config.locations) ? config.locations : [];
+  }
+
+  function defaultLocationKeys(config) {
+    return configLocations(config).map(function (location) {
+      return locationKey(location.name || location.postalCode || "");
+    }).filter(Boolean);
+  }
+
+  function selectedLocationsFromStorage(config) {
+    const validKeys = new Set(defaultLocationKeys(config));
+    try {
+      const stored = JSON.parse(localStorage.getItem(LOCATION_FILTER_KEY) || "null");
+      if (Array.isArray(stored)) {
+        return new Set(stored.filter(function (key) { return validKeys.has(key); }));
+      }
+    } catch (error) {
+    }
+    return new Set(validKeys);
+  }
+
+  function saveSelectedLocations() {
+    try {
+      localStorage.setItem(LOCATION_FILTER_KEY, JSON.stringify(Array.from(selectedLocationKeys || [])));
+    } catch (error) {
+    }
+  }
+
+  function listingPassesLocationFilter(listing) {
+    const locations = configLocations(latestConfig);
+    if (!locations.length || !selectedLocationKeys) {
+      return true;
+    }
+    if (selectedLocationKeys.size === 0) {
+      return false;
+    }
+    const candidates = listingLocationCandidates(listing);
+    return locations.some(function (location) {
+      const key = locationKey(location.name || location.postalCode || "");
+      if (!key || !selectedLocationKeys.has(key)) {
+        return false;
+      }
+      return locationAliases(location).some(function (alias) {
+        return candidates.some(function (candidate) {
+          return candidate === alias || candidate.indexOf(alias) !== -1;
+        });
+      });
+    });
+  }
+
+  function listingPassesFilters(listing, maxPrice) {
+    return listingIsWithinPrice(listing, maxPrice)
+      && listingPassesOptionFilter(listing)
+      && listingPassesLocationFilter(listing);
+  }
+
+  function listingByUrl(payload) {
+    return (Array.isArray(payload && payload.listings) ? payload.listings : []).reduce(function (acc, listing) {
+      const key = listingUrlKey(listing.url);
+      if (key) {
+        acc[key] = listing;
+      }
+      return acc;
+    }, {});
+  }
+
+  function listingByCardKey(payload) {
+    return (Array.isArray(payload && payload.listings) ? payload.listings : []).reduce(function (acc, listing) {
+      listingCardKeys(listing).forEach(function (key) {
+        if (key) {
+          acc[key] = listing;
+        }
+      });
+      return acc;
+    }, {});
+  }
+
+  function markerListing(marker, byUrl) {
+    const key = listingUrlKey(marker && marker.url);
+    return key && byUrl[key] ? byUrl[key] : marker;
   }
 
   function injectPriceFilter(payload, config) {
@@ -287,10 +460,11 @@
     latestConfig = config || latestConfig;
     const bounds = priceBounds(payload, latestConfig);
     if (currentPriceMax == null) {
-      currentPriceMax = storedPriceMax(bounds);
+      currentPriceMax = storedPriceMax(bounds, latestConfig);
     } else {
       currentPriceMax = clampPrice(currentPriceMax, bounds.min, bounds.max);
     }
+    showOptionListings = storedShowOption();
 
     let panel = document.getElementById("priceFilterPanel");
     if (!panel) {
@@ -300,7 +474,9 @@
       panel.innerHTML = [
         "<div><div class='price-filter-title'>Prix max</div><div id='priceFilterCount' class='price-filter-count' aria-live='polite'></div></div>",
         "<input id='priceFilterRange' class='price-filter-range' type='range' step='5000' aria-label='Prix maximum'>",
-        "<div class='price-filter-inputs'><input id='priceFilterInput' type='number' inputmode='numeric' step='1000' aria-label='Prix maximum' placeholder='Prix max'><button id='priceFilterReset' type='button'>Réinit.</button></div>"
+        "<div class='price-filter-inputs'><input id='priceFilterInput' type='number' inputmode='numeric' step='1000' aria-label='Prix maximum' placeholder='Prix max'><button id='priceFilterReset' type='button'>Réinit.</button></div>",
+        "<label class='filter-toggle'><input id='optionFilterToggle' type='checkbox'> Inclure sous option</label>",
+        "<div id='sourceFilterCount' class='filter-source-counts' aria-live='polite'></div>"
       ].join("");
       const note = document.querySelector(".note");
       const main = document.querySelector("main");
@@ -316,7 +492,8 @@
     const range = document.getElementById("priceFilterRange");
     const input = document.getElementById("priceFilterInput");
     const reset = document.getElementById("priceFilterReset");
-    if (!range || !input || !reset) {
+    const optionToggle = document.getElementById("optionFilterToggle");
+    if (!range || !input || !reset || !optionToggle) {
       return;
     }
 
@@ -326,6 +503,7 @@
     input.min = String(bounds.min);
     input.max = String(bounds.max);
     input.value = String(currentPriceMax);
+    optionToggle.checked = showOptionListings;
 
     function setPrice(value) {
       currentPriceMax = clampPrice(value, bounds.min, bounds.max);
@@ -359,7 +537,18 @@
     if (!reset.dataset.priceFilterBound) {
       reset.dataset.priceFilterBound = "1";
       reset.addEventListener("click", function () {
-        setPrice(Number(latestConfig && latestConfig.maxPrice ? latestConfig.maxPrice : DEFAULT_MAX_PRICE));
+        setPrice(configuredPriceMax(latestConfig));
+      });
+    }
+    if (!optionToggle.dataset.priceFilterBound) {
+      optionToggle.dataset.priceFilterBound = "1";
+      optionToggle.addEventListener("change", function () {
+        showOptionListings = optionToggle.checked;
+        try {
+          localStorage.setItem(SHOW_OPTION_KEY, showOptionListings ? "1" : "0");
+        } catch (error) {
+        }
+        applyPriceFilter();
       });
     }
   }
@@ -368,15 +557,23 @@
     const payload = latestPayload || {};
     const listings = Array.isArray(payload.listings) ? payload.listings : [];
     const bounds = priceBounds(payload, latestConfig);
-    const maxPrice = clampPrice(currentPriceMax || bounds.max, bounds.min, bounds.max);
+    const maxPrice = clampPrice(currentPriceMax || configuredPriceMax(latestConfig), bounds.min, bounds.max);
+    const byCardKey = listingByCardKey(payload);
+    const byUrl = listingByUrl(payload);
     const visibleKeys = new Set();
+    const visibleSources = emptySourceCounts();
+    let optionHiddenCount = 0;
     let visibleCount = 0;
 
     listings.forEach(function (listing) {
-      if (!listingIsWithinPrice(listing, maxPrice)) {
+      if (!listingPassesFilters(listing, maxPrice)) {
+        if (!showOptionListings && listingIsUnderOption(listing) && listingIsWithinPrice(listing, maxPrice) && listingPassesLocationFilter(listing)) {
+          optionHiddenCount += 1;
+        }
         return;
       }
       visibleCount += 1;
+      incrementSourceCount(visibleSources, listing.source);
       listingCardKeys(listing).forEach(function (key) {
         visibleKeys.add(key);
       });
@@ -385,14 +582,19 @@
     document.querySelectorAll(".listing-card").forEach(function (card) {
       const id = String(card.id || "");
       const bare = id.replace(/^listing-other-/, "").replace(/^listing-/, "");
+      const listing = byCardKey[id] || byCardKey[bare] || byCardKey["listing-" + bare] || byCardKey["listing-other-" + bare] || null;
       const visible = visibleKeys.has(id) || visibleKeys.has(bare);
       card.hidden = !visible;
+      if (listing) {
+        card.classList.toggle("is-under-option", listingIsUnderOption(listing));
+      }
     });
 
     const markerSource = Array.isArray(window.listingMarkers) ? window.listingMarkers : [];
     const markerIcons = document.querySelectorAll(".leaflet-marker-icon.source-map-marker");
     markerIcons.forEach(function (icon, index) {
-      const visible = markerIsWithinPrice(markerSource[index], maxPrice);
+      const listing = markerListing(markerSource[index], byUrl);
+      const visible = listingPassesFilters(listing, maxPrice);
       icon.style.display = visible ? "" : "none";
       icon.setAttribute("aria-hidden", visible ? "false" : "true");
     });
@@ -401,10 +603,20 @@
     if (count) {
       count.textContent = visibleCount + " / " + listings.length + " annonces sous " + formatPrice(maxPrice);
     }
+    const sourceCount = document.getElementById("sourceFilterCount");
+    if (sourceCount) {
+      sourceCount.textContent = "Visibles: " + sourceCountSummary(visibleSources) + (optionHiddenCount ? " · sous option masquees: " + optionHiddenCount : "");
+    }
+    updateLocationFilterUi();
+    updatePrivateSourceLinks();
     window.veilleImmoPriceFilterState = {
       maxPrice: maxPrice,
+      showOptionListings: showOptionListings,
+      selectedLocations: Array.from(selectedLocationKeys || []),
       visibleCount: visibleCount,
-      totalCount: listings.length
+      totalCount: listings.length,
+      sourceCounts: visibleSources,
+      optionHiddenCount: optionHiddenCount
     };
   }
 
@@ -434,9 +646,32 @@
     return "Agence locale";
   }
 
-  function renderSourceBadge(source) {
+  function emptySourceCounts() {
+    return { immoweb: 0, immovlan: 0, zimmo: 0, agency: 0, p2p: 0 };
+  }
+
+  function incrementSourceCount(counts, source) {
     const kind = sourceKind(source);
-    return "<div class='source-badge-row'><span class='source-badge source-badge-" + kind + "'>" + escapeHtml(sourceLabel(source)) + "</span></div>";
+    counts[kind] = (counts[kind] || 0) + 1;
+  }
+
+  function sourceCountSummary(counts) {
+    return [
+      "Immoweb " + (counts.immoweb || 0),
+      "Immovlan " + (counts.immovlan || 0),
+      "Zimmo " + (counts.zimmo || 0),
+      "Agences " + (counts.agency || 0),
+      "Particulier " + (counts.p2p || 0)
+    ].join(" · ");
+  }
+
+  function renderOptionBadge(listing) {
+    return listingIsUnderOption(listing) ? "<span class='option-badge'>Sous option</span>" : "";
+  }
+
+  function renderSourceBadge(source, listing) {
+    const kind = sourceKind(source);
+    return "<div class='source-badge-row'><span class='source-badge source-badge-" + kind + "'>" + escapeHtml(sourceLabel(source)) + "</span>" + renderOptionBadge(listing) + "</div>";
   }
 
   function sourceMarkerIcon(source) {
@@ -472,7 +707,8 @@
       }
       const body = card.querySelector(".listing-body");
       if (body) {
-        body.insertAdjacentHTML("afterbegin", renderSourceBadge(listing.source));
+        card.classList.toggle("is-under-option", listingIsUnderOption(listing));
+        body.insertAdjacentHTML("afterbegin", renderSourceBadge(listing.source, listing));
       }
     });
   }
@@ -480,6 +716,9 @@
   function syncSourceMapMarkers(payload) {
     if (typeof window.veilleImmoRenderMapFromPayload === "function") {
       window.veilleImmoRenderMapFromPayload(payload);
+      return;
+    }
+    if (window.veilleImmoStaticMapIncludesAllListings) {
       return;
     }
     if (!window.L || !window.veilleImmoMap) {
@@ -512,6 +751,157 @@
       ].join(""));
     });
     window.veilleImmoExtraSourceMarkers = layer;
+  }
+
+  function locationMarkerStyle(active) {
+    return {
+      radius: active ? 7 : 5,
+      color: active ? "#0b5c86" : "#8aa0ad",
+      weight: active ? 3 : 2,
+      fillColor: active ? "#0b5c86" : "#ffffff",
+      fillOpacity: active ? 0.9 : 0.75,
+      className: "location-filter-map-marker"
+    };
+  }
+
+  function setSelectedLocations(keys) {
+    selectedLocationKeys = new Set(keys);
+    saveSelectedLocations();
+    updateLocationFilterUi();
+    applyPriceFilter();
+  }
+
+  function toggleSelectedLocation(key) {
+    if (!selectedLocationKeys) {
+      selectedLocationKeys = selectedLocationsFromStorage(latestConfig);
+    }
+    if (selectedLocationKeys.has(key)) {
+      selectedLocationKeys.delete(key);
+    } else {
+      selectedLocationKeys.add(key);
+    }
+    saveSelectedLocations();
+    updateLocationFilterUi();
+    applyPriceFilter();
+  }
+
+  function renderLocationChips(locations) {
+    const list = document.getElementById("locationChipList");
+    if (!list) {
+      return;
+    }
+    list.innerHTML = locations.map(function (location) {
+      const key = locationKey(location.name || location.postalCode || "");
+      return "<button type='button' class='location-chip' data-location-key='" + escapeHtml(key) + "' aria-pressed='true'>" + escapeHtml(location.name || location.postalCode || "") + "</button>";
+    }).join("");
+  }
+
+  function injectLocationFilter(config) {
+    latestConfig = config || latestConfig;
+    const locations = configLocations(latestConfig);
+    if (!locations.length) {
+      return;
+    }
+    if (!selectedLocationKeys) {
+      selectedLocationKeys = selectedLocationsFromStorage(latestConfig);
+    }
+
+    let panel = document.getElementById("locationFilterPanel");
+    if (!panel) {
+      panel = document.createElement("section");
+      panel.id = "locationFilterPanel";
+      panel.className = "location-filter-panel";
+      panel.innerHTML = [
+        "<div class='location-filter-head'>",
+        "<div><span class='location-filter-title'>Communes incluses</span><span id='locationFilterCount' class='location-filter-count'></span></div>",
+        "<div class='location-filter-actions'><button id='locationSelectAll' type='button'>Tout cocher</button><button id='locationSelectNone' type='button'>Tout décocher</button></div>",
+        "</div>",
+        "<div id='locationChipList' class='location-chip-list'></div>"
+      ].join("");
+      const map = document.getElementById("map");
+      const anchor = map ? map.closest("section") : null;
+      if (anchor && anchor.parentNode) {
+        anchor.parentNode.insertBefore(panel, anchor.nextSibling);
+      } else {
+        const pricePanel = document.getElementById("priceFilterPanel");
+        if (pricePanel && pricePanel.parentNode) {
+          pricePanel.parentNode.insertBefore(panel, pricePanel.nextSibling);
+        }
+      }
+    }
+
+    renderLocationChips(locations);
+    if (!panel.dataset.locationFilterBound) {
+      panel.dataset.locationFilterBound = "1";
+      panel.addEventListener("click", function (event) {
+        const chip = event.target.closest("[data-location-key]");
+        if (chip) {
+          toggleSelectedLocation(chip.dataset.locationKey);
+          return;
+        }
+        if (event.target.id === "locationSelectAll") {
+          setSelectedLocations(defaultLocationKeys(latestConfig));
+        }
+        if (event.target.id === "locationSelectNone") {
+          setSelectedLocations([]);
+        }
+      });
+    }
+    syncLocationMapMarkers(latestConfig);
+    updateLocationFilterUi();
+  }
+
+  function updateLocationFilterUi() {
+    const locations = configLocations(latestConfig);
+    if (!locations.length || !selectedLocationKeys) {
+      return;
+    }
+    const selectedCount = selectedLocationKeys.size;
+    const count = document.getElementById("locationFilterCount");
+    if (count) {
+      count.textContent = selectedCount + " / " + locations.length;
+    }
+    document.querySelectorAll("[data-location-key]").forEach(function (node) {
+      const active = selectedLocationKeys.has(node.dataset.locationKey);
+      node.classList.toggle("is-active", active);
+      node.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+    Object.keys(locationMarkersByKey).forEach(function (key) {
+      const marker = locationMarkersByKey[key];
+      if (marker && typeof marker.setStyle === "function") {
+        marker.setStyle(locationMarkerStyle(selectedLocationKeys.has(key)));
+      }
+    });
+  }
+
+  function syncLocationMapMarkers(config) {
+    if (!window.L || !window.veilleImmoMap) {
+      return;
+    }
+    const locations = configLocations(config);
+    if (!locations.length) {
+      return;
+    }
+    if (locationMarkerLayer) {
+      window.veilleImmoMap.removeLayer(locationMarkerLayer);
+    }
+    locationMarkersByKey = {};
+    locationMarkerLayer = window.L.layerGroup().addTo(window.veilleImmoMap);
+    locations.forEach(function (location) {
+      const lat = Number(location.latitude);
+      const lon = Number(location.longitude);
+      const key = locationKey(location.name || location.postalCode || "");
+      if (!key || !Number.isFinite(lat) || !Number.isFinite(lon)) {
+        return;
+      }
+      const active = !selectedLocationKeys || selectedLocationKeys.has(key);
+      const marker = window.L.circleMarker([lat, lon], locationMarkerStyle(active)).addTo(locationMarkerLayer);
+      marker.bindTooltip(location.name || location.postalCode || "", { direction: "top" });
+      marker.on("click", function () {
+        toggleSelectedLocation(key);
+      });
+      locationMarkersByKey[key] = marker;
+    });
   }
 
   function renderDiagnosticSummary(diagnostics) {
@@ -625,6 +1015,32 @@
     return "https://www.bing.com/search?q=" + encodeURIComponent("maison a vendre " + location.name + " " + maxPrice + " particulier sans agence");
   }
 
+  function locationByKey(config, key) {
+    return configLocations(config).find(function (location) {
+      return locationKey(location.name || location.postalCode || "") === key;
+    }) || null;
+  }
+
+  function updatePrivateSourceLinks() {
+    if (!latestConfig) {
+      return;
+    }
+    const maxPrice = Number(currentPriceMax || configuredPriceMax(latestConfig));
+    document.querySelectorAll("[data-private-source][data-private-location]").forEach(function (button) {
+      const location = locationByKey(latestConfig, button.dataset.privateLocation);
+      if (!location) {
+        return;
+      }
+      if (button.dataset.privateSource === "2ememain") {
+        button.dataset.externalUrl = secondHandSearchUrl(location, maxPrice);
+      } else if (button.dataset.privateSource === "facebook") {
+        button.dataset.externalUrl = facebookMarketplaceSearchUrl(location, maxPrice);
+      } else if (button.dataset.privateSource === "web") {
+        button.dataset.externalUrl = privateWebSearchUrl(location, maxPrice);
+      }
+    });
+  }
+
   function isPrivateListing(listing) {
     return sourceKind(listing && listing.source) === "p2p";
   }
@@ -644,17 +1060,18 @@
 
   function renderPrivateSourceLinks(config) {
     const locations = Array.isArray(config && config.locations) ? config.locations : [];
-    const maxPrice = Number(config && config.maxPrice ? config.maxPrice : 285000);
+    const maxPrice = Number(currentPriceMax || configuredPriceMax(config));
     if (!locations.length) {
       return "";
     }
     const rows = locations.map(function (location) {
+      const key = locationKey(location.name || location.postalCode || "");
       return [
         "<tr>",
         "<td>" + escapeHtml(location.name || "") + "</td>",
-        "<td><button type='button' class='external-link-button' data-external-url='" + escapeHtml(secondHandSearchUrl(location, maxPrice)) + "'>2ememain</button></td>",
-        "<td><button type='button' class='external-link-button' data-external-url='" + escapeHtml(facebookMarketplaceSearchUrl(location, maxPrice)) + "'>Facebook</button></td>",
-        "<td><button type='button' class='external-link-button' data-external-url='" + escapeHtml(privateWebSearchUrl(location, maxPrice)) + "'>Web privé</button></td>",
+        "<td><button type='button' class='external-link-button' data-private-source='2ememain' data-private-location='" + escapeHtml(key) + "' data-external-url='" + escapeHtml(secondHandSearchUrl(location, maxPrice)) + "'>2ememain</button></td>",
+        "<td><button type='button' class='external-link-button' data-private-source='facebook' data-private-location='" + escapeHtml(key) + "' data-external-url='" + escapeHtml(facebookMarketplaceSearchUrl(location, maxPrice)) + "'>Facebook</button></td>",
+        "<td><button type='button' class='external-link-button' data-private-source='web' data-private-location='" + escapeHtml(key) + "' data-external-url='" + escapeHtml(privateWebSearchUrl(location, maxPrice)) + "'>Web privé</button></td>",
         "</tr>"
       ].join("");
     }).join("");
@@ -744,10 +1161,10 @@
       contactParts.push("<button type='button' class='external-link-button' data-external-url='" + escapeHtml(listing.agentWebsite) + "'>Site agence</button>");
     }
     return [
-      "<article class='listing-card' id='listing-other-" + escapeHtml(listing.id || listing.url || "") + "'>",
+      "<article class='listing-card" + (listingIsUnderOption(listing) ? " is-under-option" : "") + "' id='listing-other-" + escapeHtml(listing.id || listing.url || "") + "'>",
       renderPhotoStrip(listing),
       "<div class='listing-body'>",
-      renderSourceBadge(listing.source),
+      renderSourceBadge(listing.source, listing),
       "<div class='listing-title'>" + escapeHtml(listing.title || "Annonce autre source") + "</div>",
       "<div class='facts'><div><span class='fact-label'>Prix</span> <span class='price'>" + escapeHtml(formatPrice(listing.price)) + "</span></div>" + details.join("") + "</div>",
       listing.address ? "<div class='small'>" + escapeHtml(listing.address) + "</div>" : "",
@@ -885,10 +1302,11 @@
       applyPriceFilter();
       return fetchConfig()
         .then(function (config) {
+          injectPriceFilter(payload, config);
+          injectLocationFilter(config);
           renderOtherSources(payload, config);
           annotateSourceBadges(payload);
           syncSourceMapMarkers(payload);
-          injectPriceFilter(payload, config);
           applyPriceFilter();
         })
         .catch(function () {

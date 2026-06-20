@@ -273,6 +273,10 @@ function Read-ImmowebListing {
     $agentEmail = if ($customer) { $customer.email } else { $null }
     $agentWebsite = if ($customer) { $customer.website } else { $null }
     $id = Get-FirstRegexGroup -Text $Url -Pattern '/(\d{6,})(?:\?.*)?$'
+    $statusText = Join-NonEmpty @($title, $classified.status, $classified.transactionStatus, $classified.saleStatus)
+    $statusFlag = $classified -and $classified.flags -and ($classified.flags.isUnderOption -or $classified.flags.isOption -or $classified.flags.isReserved)
+    $statusPattern = '(?i)sous[-\s]?option|onder\s+optie|under\s+option|sale\s+agreed|r(?:e|é)serv(?:e|é|ee|ée)|compromis'
+    $isUnderOption = [bool]($statusFlag -or $statusText -match $statusPattern -or $html -match $statusPattern)
 
     return [pscustomobject]@{
       Source = "Immoweb"
@@ -292,6 +296,9 @@ function Read-ImmowebListing {
       AgentMobile = $agentMobile
       AgentEmail = $agentEmail
       AgentWebsite = $agentWebsite
+      IsUnderOption = $isUnderOption
+      UnderOption = $isUnderOption
+      SaleStatus = if ($isUnderOption) { "sous option" } else { "" }
       PhotoCount = $pictures.Count
       PhotoUrls = ($pictures -join " | ")
       Title = $title
@@ -920,9 +927,12 @@ if (window.L && (listingMarkers.length || agencyMarkers.length)) {
     maxZoom: 19,
     attribution: "&copy; OpenStreetMap contributors"
   }).addTo(map);
+  window.veilleImmoMap = map;
+  window.veilleImmoStaticMapIncludesAllListings = true;
 
   const listingLayer = L.layerGroup().addTo(map);
   const agencyLayer = L.layerGroup();
+  window.veilleImmoListingLayer = listingLayer;
   window.veilleImmoAgencyLayer = agencyLayer;
   const listingBounds = [];
   const allBounds = [];

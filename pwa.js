@@ -1,12 +1,17 @@
 (function () {
   "use strict";
 
-const APP_VERSION = "pwa-2026-06-20-04";
+const APP_VERSION = "pwa-2026-06-20-05";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const STORAGE_KEY = "veille-immo-seen-ids";
   const INIT_KEY = "veille-immo-initialized";
+  const PRICE_FILTER_KEY = "veille-immo-price-max";
+  const DEFAULT_MAX_PRICE = 285000;
   let deferredInstallPrompt = null;
+  let latestPayload = null;
+  let latestConfig = null;
+  let currentPriceMax = null;
 
   function isStandalone() {
     return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
@@ -23,6 +28,13 @@ const APP_VERSION = "pwa-2026-06-20-04";
       ".pwa-controls button{border:1px solid #c8d1d8;background:#fff;color:#17202a;border-radius:6px;padding:9px 11px;font:600 13px Arial,sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.14)}",
       ".pwa-controls button.primary{background:#0b5c86;border-color:#0b5c86;color:#fff}",
       ".pwa-status{position:fixed;left:14px;bottom:62px;z-index:10001;max-width:420px;background:#17202a;color:#fff;border-radius:8px;padding:10px 12px;font:13px Arial,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.25)}",
+      ".price-filter-panel{background:#fff;border:1px solid #d8dee3;border-radius:7px;margin:16px 0 22px;padding:14px;display:grid;grid-template-columns:minmax(190px,1fr) minmax(220px,2fr) auto;gap:12px;align-items:center}",
+      ".price-filter-title{font-weight:700;color:#182026}",
+      ".price-filter-count{font-size:13px;color:#5c6670;margin-top:4px}",
+      ".price-filter-range{width:100%;accent-color:#0b5c86}",
+      ".price-filter-inputs{display:flex;align-items:center;gap:8px;justify-content:flex-end}",
+      ".price-filter-inputs input{width:122px;border:1px solid #c8d1d8;border-radius:6px;padding:8px 9px;font:600 14px Arial,sans-serif;color:#182026}",
+      ".price-filter-inputs button{border:1px solid #c8d1d8;background:#fff;border-radius:6px;padding:8px 10px;font:600 13px Arial,sans-serif;color:#17202a}",
       ".other-source-note{background:#eef7fb;border:1px solid #b8d9e8;border-radius:6px;padding:12px 14px;margin:18px 0;color:#253540}",
       ".source-diagnostic-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0 20px}",
       ".source-diagnostic-item{background:#fff;border:1px solid #d9e0e4;border-radius:6px;padding:10px}",
@@ -42,6 +54,7 @@ const APP_VERSION = "pwa-2026-06-20-04";
       ".source-map-pin-zimmo{background:#7c3aed}",
       ".source-map-pin-agency{background:#2f6f3e}",
       ".source-map-pin-p2p{background:#d97706}",
+      "@media(max-width:760px){.price-filter-panel{grid-template-columns:1fr}.price-filter-inputs{justify-content:flex-start}.price-filter-inputs input{width:140px}}",
       "@media(max-width:680px){.pwa-controls{left:12px;right:12px}.pwa-controls button{flex:1}}"
     ].join("");
     document.head.appendChild(style);
@@ -213,6 +226,186 @@ const APP_VERSION = "pwa-2026-06-20-04";
   function formatPrice(value) {
     const number = Number(value || 0);
     return number > 0 ? new Intl.NumberFormat("fr-BE").format(number) + " EUR" : "Prix a verifier";
+  }
+
+  function clampPrice(value, min, max) {
+    const number = Number(value || 0);
+    if (!Number.isFinite(number) || number <= 0) {
+      return max;
+    }
+    return Math.min(max, Math.max(min, Math.round(number / 1000) * 1000));
+  }
+
+  function priceBounds(payload, config) {
+    const listings = Array.isArray(payload && payload.listings) ? payload.listings : [];
+    const prices = listings.map(function (listing) {
+      return Number(listing.price || 0);
+    }).filter(function (price) {
+      return Number.isFinite(price) && price > 0;
+    });
+    const configuredMax = Number(config && config.maxPrice ? config.maxPrice : DEFAULT_MAX_PRICE);
+    const max = Math.max(configuredMax || DEFAULT_MAX_PRICE, prices.length ? Math.max.apply(null, prices) : DEFAULT_MAX_PRICE);
+    const min = Math.max(0, Math.floor((prices.length ? Math.min.apply(null, prices) : 0) / 5000) * 5000);
+    return { min: min, max: max };
+  }
+
+  function storedPriceMax(bounds) {
+    try {
+      const stored = Number(localStorage.getItem(PRICE_FILTER_KEY) || 0);
+      return clampPrice(stored || bounds.max, bounds.min, bounds.max);
+    } catch (error) {
+      return bounds.max;
+    }
+  }
+
+  function listingCardKeys(listing) {
+    const keys = [];
+    if (listing.id) {
+      keys.push("listing-" + listing.id);
+      keys.push("listing-other-" + listing.id);
+      keys.push(String(listing.id));
+    }
+    if (listing.url) {
+      keys.push("listing-other-" + listing.url);
+      keys.push(String(listing.url));
+    }
+    return keys;
+  }
+
+  function listingIsWithinPrice(listing, maxPrice) {
+    const price = Number(listing && listing.price || 0);
+    return Number.isFinite(price) && price > 0 && price <= maxPrice;
+  }
+
+  function markerIsWithinPrice(marker, maxPrice) {
+    const price = Number(marker && marker.price || 0);
+    return Number.isFinite(price) && price > 0 && price <= maxPrice;
+  }
+
+  function injectPriceFilter(payload, config) {
+    latestPayload = payload;
+    latestConfig = config || latestConfig;
+    const bounds = priceBounds(payload, latestConfig);
+    if (currentPriceMax == null) {
+      currentPriceMax = storedPriceMax(bounds);
+    } else {
+      currentPriceMax = clampPrice(currentPriceMax, bounds.min, bounds.max);
+    }
+
+    let panel = document.getElementById("priceFilterPanel");
+    if (!panel) {
+      panel = document.createElement("section");
+      panel.id = "priceFilterPanel";
+      panel.className = "price-filter-panel";
+      panel.innerHTML = [
+        "<div><div class='price-filter-title'>Prix max</div><div id='priceFilterCount' class='price-filter-count' aria-live='polite'></div></div>",
+        "<input id='priceFilterRange' class='price-filter-range' type='range' step='5000' aria-label='Prix maximum'>",
+        "<div class='price-filter-inputs'><input id='priceFilterInput' type='number' inputmode='numeric' step='1000' aria-label='Prix maximum' placeholder='Prix max'><button id='priceFilterReset' type='button'>Réinit.</button></div>"
+      ].join("");
+      const note = document.querySelector(".note");
+      const main = document.querySelector("main");
+      if (note && note.parentNode) {
+        note.parentNode.insertBefore(panel, note.nextSibling);
+      } else if (main) {
+        main.insertBefore(panel, main.firstChild);
+      } else {
+        document.body.insertBefore(panel, document.body.firstChild);
+      }
+    }
+
+    const range = document.getElementById("priceFilterRange");
+    const input = document.getElementById("priceFilterInput");
+    const reset = document.getElementById("priceFilterReset");
+    if (!range || !input || !reset) {
+      return;
+    }
+
+    range.min = String(bounds.min);
+    range.max = String(bounds.max);
+    range.value = String(currentPriceMax);
+    input.min = String(bounds.min);
+    input.max = String(bounds.max);
+    input.value = String(currentPriceMax);
+
+    function setPrice(value) {
+      currentPriceMax = clampPrice(value, bounds.min, bounds.max);
+      range.value = String(currentPriceMax);
+      input.value = String(currentPriceMax);
+      try {
+        localStorage.setItem(PRICE_FILTER_KEY, String(currentPriceMax));
+      } catch (error) {
+      }
+      applyPriceFilter();
+    }
+
+    if (!range.dataset.priceFilterBound) {
+      range.dataset.priceFilterBound = "1";
+      range.addEventListener("input", function () {
+        setPrice(range.value);
+      });
+    }
+    if (!input.dataset.priceFilterBound) {
+      input.dataset.priceFilterBound = "1";
+      input.addEventListener("change", function () {
+        setPrice(input.value);
+      });
+      input.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+          setPrice(input.value);
+          input.blur();
+        }
+      });
+    }
+    if (!reset.dataset.priceFilterBound) {
+      reset.dataset.priceFilterBound = "1";
+      reset.addEventListener("click", function () {
+        setPrice(Number(latestConfig && latestConfig.maxPrice ? latestConfig.maxPrice : DEFAULT_MAX_PRICE));
+      });
+    }
+  }
+
+  function applyPriceFilter() {
+    const payload = latestPayload || {};
+    const listings = Array.isArray(payload.listings) ? payload.listings : [];
+    const bounds = priceBounds(payload, latestConfig);
+    const maxPrice = clampPrice(currentPriceMax || bounds.max, bounds.min, bounds.max);
+    const visibleKeys = new Set();
+    let visibleCount = 0;
+
+    listings.forEach(function (listing) {
+      if (!listingIsWithinPrice(listing, maxPrice)) {
+        return;
+      }
+      visibleCount += 1;
+      listingCardKeys(listing).forEach(function (key) {
+        visibleKeys.add(key);
+      });
+    });
+
+    document.querySelectorAll(".listing-card").forEach(function (card) {
+      const id = String(card.id || "");
+      const bare = id.replace(/^listing-other-/, "").replace(/^listing-/, "");
+      const visible = visibleKeys.has(id) || visibleKeys.has(bare);
+      card.hidden = !visible;
+    });
+
+    const markerSource = Array.isArray(window.listingMarkers) ? window.listingMarkers : [];
+    const markerIcons = document.querySelectorAll(".leaflet-marker-icon.source-map-marker");
+    markerIcons.forEach(function (icon, index) {
+      const visible = markerIsWithinPrice(markerSource[index], maxPrice);
+      icon.style.display = visible ? "" : "none";
+      icon.setAttribute("aria-hidden", visible ? "false" : "true");
+    });
+
+    const count = document.getElementById("priceFilterCount");
+    if (count) {
+      count.textContent = visibleCount + " / " + listings.length + " annonces sous " + formatPrice(maxPrice);
+    }
+    window.veilleImmoPriceFilterState = {
+      maxPrice: maxPrice,
+      visibleCount: visibleCount,
+      totalCount: listings.length
+    };
   }
 
   function sourceCounts(listings) {
@@ -623,16 +816,22 @@ const APP_VERSION = "pwa-2026-06-20-04";
     fetchResults().then(function (payload) {
       annotateSourceBadges(payload);
       syncSourceMapMarkers(payload);
+      injectPriceFilter(payload, null);
+      applyPriceFilter();
       return fetchConfig()
         .then(function (config) {
           renderOtherSources(payload, config);
           annotateSourceBadges(payload);
           syncSourceMapMarkers(payload);
+          injectPriceFilter(payload, config);
+          applyPriceFilter();
         })
         .catch(function () {
           renderOtherSources(payload, null);
           annotateSourceBadges(payload);
           syncSourceMapMarkers(payload);
+          injectPriceFilter(payload, null);
+          applyPriceFilter();
         });
     }).catch(function () {});
     checkForNewListings(false);

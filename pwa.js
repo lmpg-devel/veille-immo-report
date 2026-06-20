@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-21-02";
+  const APP_VERSION = "pwa-2026-06-21-03";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const STORAGE_KEY = "veille-immo-seen-ids";
@@ -42,8 +42,10 @@
       ".price-filter-inputs{display:flex;align-items:center;gap:8px;justify-content:flex-end}",
       ".price-filter-inputs input{width:122px;border:1px solid #c8d1d8;border-radius:6px;padding:8px 9px;font:600 14px Arial,sans-serif;color:#182026}",
       ".price-filter-inputs button{border:1px solid #c8d1d8;background:#fff;border-radius:6px;padding:8px 10px;font:600 13px Arial,sans-serif;color:#17202a}",
+      ".price-filter-inputs button:disabled{opacity:.65;cursor:wait}",
       ".filter-toggle{display:inline-flex;align-items:center;gap:8px;font:600 13px Arial,sans-serif;color:#253540;white-space:nowrap}",
       ".filter-source-counts{grid-column:1/-1;font-size:13px;color:#41515d;border-top:1px solid #e5eaee;padding-top:10px}",
+      ".filter-refresh-status{grid-column:1/-1;font-size:13px;color:#0b5c86;font-weight:700;min-height:18px}",
       ".location-filter-panel{background:#fff;border:1px solid #d8dee3;border-radius:7px;margin:-8px 0 24px;padding:12px 14px}",
       ".location-filter-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}",
       ".location-filter-title{font-weight:700;color:#182026}",
@@ -482,7 +484,8 @@
         "<input id='priceFilterRange' class='price-filter-range' type='range' step='5000' aria-label='Prix maximum'>",
         "<div class='price-filter-inputs'><input id='priceFilterInput' type='number' inputmode='numeric' step='1000' aria-label='Prix maximum' placeholder='Prix max'><button id='priceFilterReset' type='button'>Réinit.</button><button id='reportRebuildButton' type='button'>Recalculer</button></div>",
         "<label class='filter-toggle'><input id='optionFilterToggle' type='checkbox'> Inclure sous option</label>",
-        "<div id='sourceFilterCount' class='filter-source-counts' aria-live='polite'></div>"
+        "<div id='sourceFilterCount' class='filter-source-counts' aria-live='polite'></div>",
+        "<div id='reportRebuildStatus' class='filter-refresh-status' aria-live='polite'></div>"
       ].join("");
       const note = document.querySelector(".note");
       const main = document.querySelector("main");
@@ -1249,8 +1252,27 @@
     ].join("");
   }
 
+  function setRebuildFeedback(message, busy) {
+    const button = document.getElementById("reportRebuildButton");
+    const status = document.getElementById("reportRebuildStatus");
+    if (button) {
+      button.disabled = Boolean(busy);
+      button.textContent = busy ? "Recalcul..." : "Recalculer";
+      button.setAttribute("aria-busy", busy ? "true" : "false");
+    }
+    if (status) {
+      status.textContent = message || "";
+    }
+    if (message) {
+      showStatus(message);
+    }
+  }
+
   async function refreshReportData(manual) {
     try {
+      if (manual) {
+        setRebuildFeedback("Clic confirme. Recalcul en cours...", true);
+      }
       const payload = await fetchResults();
       let config = latestConfig;
       try {
@@ -1270,12 +1292,12 @@
       syncSourceMapMarkers(payload);
       applyPriceFilter();
       if (manual) {
-        showStatus("Carte et liste recalculees depuis les donnees publiees.");
+        setRebuildFeedback("Recalcul termine: carte et liste mises a jour.", false);
       }
       return payload;
     } catch (error) {
       if (manual) {
-        showStatus("Recalcul impossible pour le moment.");
+        setRebuildFeedback("Recalcul impossible pour le moment.", false);
       }
       throw error;
     }

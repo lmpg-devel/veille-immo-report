@@ -458,6 +458,18 @@ function parseSecondHandConfig(html) {
   }
 }
 
+function extractSurfaceFromText(text) {
+  const value = cleanText(text);
+  const match = value.match(/\b(\d{2,4})\s*(?:m2|m\u00b2|m\s*2|m(?:e|è)tre[s]?\s*carr(?:e|é)s?)\b/i);
+  return match ? Number(match[1]) : null;
+}
+
+function extractBedroomsFromText(text) {
+  const value = cleanText(text);
+  const match = value.match(/\b([1-9]\d?)\s*(?:ch(?:ambre|ambres)?|kamer|kamers|slaapkamer|slaapkamers)\b/i);
+  return match ? Number(match[1]) : null;
+}
+
 async function parseSecondHandDetail(url, location, config) {
   const html = await fetchText(url);
   const cfg = parseSecondHandConfig(html);
@@ -487,6 +499,28 @@ async function parseSecondHandDetail(url, location, config) {
   const images = [...new Set((listing.gallery?.imageUrls || listing.gallery?.media?.images?.map((image) => image.base) || [])
     .map(normalizeImageUrl)
     .filter(Boolean))].slice(0, 12);
+  const detailText = [title, description].join(" ");
+  const bedrooms = numberFromAny(firstField(listing, [
+    "bedrooms",
+    "numberOfBedrooms",
+    "attributes.bedrooms",
+    "property.bedrooms"
+  ])) || extractBedroomsFromText(detailText);
+  const surfaceM2 = numberFromAny(firstField(listing, [
+    "surface",
+    "surfaceM2",
+    "livingArea",
+    "attributes.surface",
+    "property.surface",
+    "property.livingArea"
+  ])) || extractSurfaceFromText(detailText);
+  const sellerProfileUrl = seller.sellerProfileUrl ? new URL(seller.sellerProfileUrl, "https://www.2ememain.be").href : "";
+  const sellerName = decodeHtml(seller.name || "");
+  const hasSpecificSeller = sellerName && !/^particulier(?:\s+2ememain)?$/i.test(sellerName);
+
+  if (!images.length) return { listing: null, message: "photos absentes - annonce particulier non exploitable" };
+  if (!surfaceM2 && !bedrooms) return { listing: null, message: "surface/chambres absentes - annonce particulier non exploitable" };
+  if (!sellerProfileUrl && !hasSpecificSeller) return { listing: null, message: "contact vendeur absent - annonce particulier non exploitable" };
 
   return {
     listing: {
@@ -494,8 +528,8 @@ async function parseSecondHandDetail(url, location, config) {
       id: `2ememain-${listing.itemId || shortId(url)}`,
       title: `${title} - 2ememain`,
       price,
-      bedrooms: null,
-      surfaceM2: null,
+      bedrooms: bedrooms || null,
+      surfaceM2: surfaceM2 || null,
       locality: locality || location.name,
       requestedLocation: location.name,
       postalCode: location.postalCode,
@@ -503,10 +537,10 @@ async function parseSecondHandDetail(url, location, config) {
       latitude: location.latitude || null,
       longitude: location.longitude || null,
       geoPrecision: "centre commune - 2ememain",
-      agentName: decodeHtml(seller.name || "Particulier 2ememain"),
+      agentName: sellerName || "Particulier 2ememain",
       agentPhone: "",
       agentEmail: "",
-      agentWebsite: seller.sellerProfileUrl ? new URL(seller.sellerProfileUrl, "https://www.2ememain.be").href : "https://www.2ememain.be",
+      agentWebsite: sellerProfileUrl,
       photoCount: images.length,
       photoUrl: images[0] || null,
       photoUrls: images,

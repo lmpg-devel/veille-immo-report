@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-const APP_VERSION = "pwa-2026-06-20-06";
+  const APP_VERSION = "pwa-2026-06-20-07";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const STORAGE_KEY = "veille-immo-seen-ids";
@@ -625,6 +625,23 @@ const APP_VERSION = "pwa-2026-06-20-06";
     return "https://www.bing.com/search?q=" + encodeURIComponent("maison a vendre " + location.name + " " + maxPrice + " particulier sans agence");
   }
 
+  function isPrivateListing(listing) {
+    return sourceKind(listing && listing.source) === "p2p";
+  }
+
+  function hasUsablePrivateListing(listing) {
+    if (!isPrivateListing(listing)) {
+      return true;
+    }
+    const sellerName = String(listing.agentName || "").trim();
+    const sellerProfile = String(listing.agentWebsite || "").trim();
+    const hasSpecificSeller = sellerName && !/^particulier(?:\s+2ememain)?$/i.test(sellerName);
+    const hasSpecificProfile = sellerProfile && !/^https:\/\/www\.2ememain\.be\/?$/i.test(sellerProfile);
+    const hasContact = Boolean(String(listing.agentPhone || listing.agentEmail || "").trim() || hasSpecificSeller || hasSpecificProfile);
+    const hasDetails = Number(listing.surfaceM2 || 0) > 0 || Number(listing.bedrooms || 0) > 0;
+    return dedupePhotoUrls(listing).length > 0 && hasDetails && hasContact;
+  }
+
   function renderPrivateSourceLinks(config) {
     const locations = Array.isArray(config && config.locations) ? config.locations : [];
     const maxPrice = Number(config && config.maxPrice ? config.maxPrice : 285000);
@@ -642,11 +659,13 @@ const APP_VERSION = "pwa-2026-06-20-06";
       ].join("");
     }).join("");
     return [
-      "<h3>Particulier a particulier</h3>",
-      "<div class='other-source-note'>2ememain est teste comme source experimentale. Facebook Marketplace et la recherche Web privee sont fournis comme liens de controle, car l'extraction automatique y depend souvent d'une session utilisateur.</div>",
+      "<section id='privateSourceLinks'>",
+      "<h3>Liens de controle particulier a particulier</h3>",
+      "<div class='other-source-note'>Ces liens restent en bas de section. Les annonces particulier a particulier ne sont affichees en cartes que si elles ont des photos, des details de surface ou chambres et un contact ou profil vendeur exploitable.</div>",
       "<table><thead><tr><th>Commune</th><th>2ememain</th><th>Facebook Marketplace</th><th>Recherche web</th></tr></thead><tbody>",
       rows,
-      "</tbody></table>"
+      "</tbody></table>",
+      "</section>"
     ].join("");
   }
 
@@ -655,6 +674,12 @@ const APP_VERSION = "pwa-2026-06-20-06";
     const others = listings.filter(function (listing) {
       return String(listing.source || "").toLowerCase() !== "immoweb";
     });
+    const properOthers = others.filter(function (listing) {
+      return !isPrivateListing(listing) || hasUsablePrivateListing(listing);
+    });
+    const usableSecondHandCount = properOthers.filter(function (listing) {
+      return String(listing.source || "").toLowerCase().indexOf("2ememain") !== -1;
+    }).length;
     const existing = document.getElementById("otherSourcesSection");
     if (existing) {
       existing.remove();
@@ -684,12 +709,12 @@ const APP_VERSION = "pwa-2026-06-20-06";
       "<div class='source-diagnostic-item'><strong>Agences locales</strong>" + localAgencyCount + " annonce(s) integree(s) depuis les sites directs.</div>",
       "<div class='source-diagnostic-item'><strong>Zimmo</strong>" + zimmoMessage + "</div>",
       "<div class='source-diagnostic-item'><strong>Immovlan</strong>Extraction avancee active: HTML public, donnees structurees JSON-LD et endpoint telephone public. " + immovlanCount + " annonce(s) integree(s).</div>",
-      "<div class='source-diagnostic-item'><strong>2ememain</strong>Extraction avancee active via pages publiques et window.__CONFIG__. " + secondHandCount + " annonce(s) integree(s) apres filtres stricts localisation/type/prix.</div>",
+      "<div class='source-diagnostic-item'><strong>2ememain</strong>Extraction avancee active via pages publiques et window.__CONFIG__. " + usableSecondHandCount + " annonce(s) exploitable(s) en cartes sur " + secondHandCount + " candidate(s) publiee(s).</div>",
       "<div class='source-diagnostic-item'><strong>Facebook Marketplace</strong>Lien de controle ajoute. Extraction automatique non active sans session utilisateur.</div>",
       "</div>",
       renderDiagnosticSummary(payload.sourceDiagnostics),
-      renderPrivateSourceLinks(config),
-      others.length ? "<section class='cards'>" + others.map(renderOtherSourceCard).join("") + "</section>" : "<div class='empty'>Aucune annonce non-Immoweb exploitable dans le dernier jeu de donnees publie.</div>"
+      properOthers.length ? "<section class='cards' id='otherSourceCards'>" + properOthers.map(renderOtherSourceCard).join("") + "</section>" : "<div class='empty'>Aucune annonce non-Immoweb exploitable dans le dernier jeu de donnees publie.</div>",
+      renderPrivateSourceLinks(config)
     ].join("");
     anchor.parentNode.insertBefore(section, anchor);
   }

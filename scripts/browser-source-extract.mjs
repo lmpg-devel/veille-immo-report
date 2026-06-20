@@ -227,6 +227,37 @@ function sourceLabel(source) {
   return source === "zimmo" ? "Zimmo" : source === "immovlan" ? "Immovlan" : source === "2ememain" ? "2ememain" : source;
 }
 
+function normalizedWords(text) {
+  return slugForPath(text).replace(/-/g, " ");
+}
+
+function hasHouseSignal(text) {
+  const haystack = normalizedWords(text);
+  return /\b(maison|maisons|house|houses|huis|woning|woningen|villa|bungalow|bel etage|rijwoning|eengezinswoning|halfopen|fermette|habitation)\b/i.test(haystack);
+}
+
+function badHouseText(text) {
+  const haystack = normalizedWords(text);
+  return /\b(appartement|apparemment|appartementen|apartment|flat|studio|studios|garage|garages|garagebox|parking|staanplaats|box|terrain|terrein|grond|bouwgrond|kot|kamer|chambre|room|commercial|commerce|handelsruimte|bureau|kantoor|entrepot|magazijn|hangar|loft|duplex|mur uniquement)\b/i.test(haystack);
+}
+
+function isNotarial(text) {
+  const haystack = normalizedWords(text);
+  return /\b(biddit|notaire|notaires|notaris|notarissen|vente publique|openbare verkoop)\b/i.test(haystack);
+}
+
+function isRentalText(text) {
+  const haystack = normalizedWords(text);
+  return /\b(a louer|louer|location|te huur|huur|huurwoning|for rent|rent)\b/i.test(haystack);
+}
+
+function hasMonthlySupplementText(text) {
+  const raw = String(text || "");
+  const haystack = normalizedWords(raw);
+  return /\b(viager|lijfrente|rente viagere|rente|bouquet|mensualite|mensualites|maandelijkse|emphyteose|erfpacht)\b/i.test(haystack)
+    || /\+\s*\d[\d\s.,]*(?:eur|euro|\u20ac)?\s*\/?\s*(?:mois|maand|month)/i.test(raw);
+}
+
 function experimentalListingRejectionReason(source, data, price, location) {
   if (source !== "2ememain") return "";
   const titleAndDescription = `${data.title || ""}\n${data.description || ""}`;
@@ -239,10 +270,13 @@ function experimentalListingRejectionReason(source, data, price, location) {
     location.immovlanSlug
   ].filter(Boolean).map(slugForPath).filter(Boolean);
 
+  if (!price || price > 285000) return `Prix ${price || "absent"} hors filtre`;
   if (price < 50000) return `Prix ${price} sous le seuil coherent pour une vente`;
-  if (/\b(appartement|apparemment|appartementen|apartment|flat|studio|garage|garages|parking|staanplaats|box|terrain|grond|kot|kamer|chambre)\b/i.test(titleAndDescription)) {
-    return "Annonce non maison probable";
-  }
+  if (isNotarial(titleAndDescription)) return "Vente notariale exclue";
+  if (isRentalText(titleAndDescription)) return "Location exclue";
+  if (hasMonthlySupplementText(titleAndDescription)) return "Viager/rente/mensualite exclu";
+  if (badHouseText(`${data.title || ""}\n${data.url || ""}`)) return "Annonce non maison probable";
+  if (!hasHouseSignal(`${data.title || ""}\n${data.url || ""}`)) return "Signal maison absent";
   if (locationNeedles.length && !locationNeedles.some((needle) => identitySlug.includes(needle))) {
     return "Commune cible absente de la fiche";
   }

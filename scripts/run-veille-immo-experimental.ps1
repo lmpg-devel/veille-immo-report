@@ -291,7 +291,8 @@ function Get-ExperimentalListingRejectionReason {
     return $null
   }
 
-  $titleAndHead = "$Title " + ($Html.Substring(0, [Math]::Min($Html.Length, 5000)))
+  $qualityText = "$Title $Url"
+  $qualitySlug = (ConvertTo-PathSlug -Value $qualityText) -replace '-', ' '
   $identitySlug = ConvertTo-PathSlug -Value "$Title $Url"
   $locationNeedles = @()
   if ($Location) {
@@ -307,8 +308,24 @@ function Get-ExperimentalListingRejectionReason {
     return "Prix $Price sous le seuil coherent pour une vente"
   }
 
-  if ($titleAndHead -match '(?i)\b(appartement|apparemment|appartementen|apartment|flat|studio|garage|garages|parking|staanplaats|box|terrain|grond|kot|kamer|chambre)\b') {
+  if ($qualitySlug -match '(?i)\b(biddit|notaire|notaires|notaris|notarissen|vente publique|openbare verkoop)\b') {
+    return "Vente notariale exclue"
+  }
+
+  if ($qualitySlug -match '(?i)\b(a louer|louer|location|te huur|huur|huurwoning|for rent|rent)\b') {
+    return "Location exclue"
+  }
+
+  if (($qualitySlug -match '(?i)\b(viager|lijfrente|rente viagere|rente|bouquet|mensualite|mensualites|maandelijkse|emphyteose|erfpacht)\b') -or ($qualityText -match '(?i)\+\s*\d[\d\s\.,]*(?:eur|euro|€)?\s*/?\s*(?:mois|maand|month)')) {
+    return "Viager/rente/mensualite exclu"
+  }
+
+  if ($qualitySlug -match '(?i)\b(appartement|apparemment|appartementen|apartment|flat|studio|studios|garage|garages|garagebox|parking|staanplaats|box|terrain|terrein|grond|bouwgrond|kot|kamer|chambre|room|commercial|commerce|handelsruimte|bureau|kantoor|entrepot|magazijn|hangar|loft|duplex|mur uniquement)\b') {
     return "Annonce non maison probable"
+  }
+
+  if ($qualitySlug -notmatch '(?i)\b(maison|maisons|house|houses|huis|woning|woningen|villa|bungalow|bel etage|rijwoning|eengezinswoning|halfopen|fermette|habitation)\b') {
+    return "Signal maison absent"
   }
 
   if ($locationNeedles.Count -gt 0) {

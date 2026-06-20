@@ -129,11 +129,66 @@ function shortId(value) {
 }
 
 function badHouseText(text) {
-  return /\b(appartement|apparemment|appartementen|apartment|flat|studio|studios|garage|garages|parking|staanplaats|box|terrain|grond|kot|kamer|chambre|commercial|commerce|mur uniquement)\b/i.test(text || "");
+  const haystack = normalizedWords(text);
+  return /\b(appartement|apparemment|appartementen|apartment|flat|studio|studios|garage|garages|garagebox|parking|staanplaats|box|terrain|terrein|grond|bouwgrond|kot|kamer|chambre|room|commercial|commerce|handelsruimte|bureau|kantoor|entrepot|magazijn|hangar|loft|duplex|mur uniquement)\b/i.test(haystack);
 }
 
 function isNotarial(text) {
-  return /\b(biddit|notaire|notaires|notaris|notarissen|vente publique|openbare verkoop)\b/i.test(text || "");
+  const haystack = normalizedWords(text);
+  return /\b(biddit|notaire|notaires|notaris|notarissen|vente publique|openbare verkoop)\b/i.test(haystack);
+}
+
+function normalizedWords(text) {
+  return slug(text).replace(/-/g, " ");
+}
+
+function hasHouseSignal(text) {
+  const haystack = normalizedWords(text);
+  return /\b(maison|maisons|house|houses|huis|woning|woningen|villa|bungalow|bel etage|rijwoning|eengezinswoning|halfopen|fermette|habitation)\b/i.test(haystack);
+}
+
+function isRentalText(text) {
+  const haystack = normalizedWords(text);
+  return /\b(a louer|louer|location|te huur|huur|huurwoning|for rent|rent)\b/i.test(haystack);
+}
+
+function hasMonthlySupplementText(text) {
+  const raw = String(text || "");
+  const haystack = normalizedWords(raw);
+  return /\b(viager|lijfrente|rente viagere|rente|bouquet|mensualite|mensualites|maandelijkse|emphyteose|erfpacht)\b/i.test(haystack)
+    || /\+\s*\d[\d\s.,]*(?:eur|euro|\u20ac)?\s*\/?\s*(?:mois|maand|month)/i.test(raw);
+}
+
+function sourceQualityRejectionReason(source, fields, location, config) {
+  const price = Number(fields.price || 0);
+  const maxPrice = Number(config.maxPrice || 285000);
+  const haystack = [
+    fields.title,
+    fields.description,
+    fields.category,
+    fields.locality,
+    fields.url
+  ].filter(Boolean).join(" ");
+  const identityText = [
+    fields.title,
+    fields.category,
+    fields.url
+  ].filter(Boolean).join(" ");
+
+  if (!price || price > maxPrice) return `prix ${price || "absent"} hors filtre`;
+  if (price < 50000) return `prix ${price} sous seuil coherent`;
+  if (config.excludeNotarialSales !== false && isNotarial(haystack)) return "vente notariale exclue";
+  if (isRentalText(haystack)) return "location exclue";
+  if (hasMonthlySupplementText(haystack)) return "viager/rente/mensualite exclu";
+  if (badHouseText(identityText)) return "type non maison probable";
+  if (!hasHouseSignal(identityText)) return "signal maison absent";
+  if (location && source === "2ememain" && !locationMatches(location, [fields.url, fields.title])) {
+    return `commune absente du titre/url; vendeur ${fields.locality || "sans localite"}`;
+  }
+  if (location && source !== "2ememain" && !locationMatches(location, [fields.locality, fields.postalCode, fields.street, fields.url, fields.title])) {
+    return "commune cible absente";
+  }
+  return "";
 }
 
 function locationMatches(location, fields) {
@@ -271,9 +326,6 @@ async function parseImmovlanDetail(url, location, config) {
   const address = findJsonLd(objects, "PostalAddress") || house?.address || sell?.location || {};
   const agent = findJsonLd(objects, "RealEstateAgent") || {};
   const title = decodeHtml(getFirstMatch(html, /<title>([\s\S]*?)<\/title>/i)).trim();
-  if (config.excludeNotarialSales !== false && isNotarial(`${url} ${title} ${house?.description || ""} ${sell?.description || ""}`)) {
-    return { listing: null, message: "vente notariale exclue" };
-  }
   const price = Number(sell?.price || sell?.priceSpecification?.price || getFirstMatch(html, /name="cXenseParse:rbf-immovlan-prix"\s+content="([\d,.]+)/i).replace(",", "."));
   const surface = Number(house?.floorSize?.value || getFirstMatch(text, /Surface habitable\s+(\d{2,4})m/i));
   const bedrooms = Number(house?.numberOfRooms || getFirstMatch(text, /(\d+)\s*Chambres?/i));
@@ -282,10 +334,18 @@ async function parseImmovlanDetail(url, location, config) {
   const street = decodeHtml(address?.streetAddress || "");
   const vlanCode = (url.match(/\/([^/]+)$/) || [])[1] || "";
 
-  if (!price || price > Number(config.maxPrice || 285000)) return { listing: null, message: `prix ${price || "absent"} hors filtre` };
   if (postalCode && String(location.postalCode) !== postalCode) return { listing: null, message: `code postal ${postalCode} hors commune` };
-  if (!locationMatches(location, [locality, postalCode, street, url, title])) return { listing: null, message: "commune cible absente" };
-  if (badHouseText(`${title} ${url}`)) return { listing: null, message: "type non maison probable" };
+  const rejection = sourceQualityRejectionReason("Immovlan", {
+    title,
+    description: `${house?.description || ""} ${sell?.description || ""}`,
+    category: "maison villa",
+    locality,
+    postalCode,
+    street,
+    url,
+    price
+  }, location, config);
+  if (rejection) return { listing: null, message: rejection };
 
   const imageMatches = [...html.matchAll(/data-src=["']([^"']*api-image\.immovlan\.be\/v1\/property\/[^"']+)["']/gi)].map((match) => decodeHtml(match[1]));
   const images = [...new Set([
@@ -379,16 +439,20 @@ async function parseSecondHandDetail(url, location, config) {
   const sellerLocation = seller.location || {};
   const locality = decodeHtml(sellerLocation.cityName || "");
   const title = decodeHtml(listing.title || getFirstMatch(html, /<title>([\s\S]*?)<\/title>/i));
+  const description = cleanText(firstField(listing, ["description", "descriptionText", "itemDescription", "body", "content"]));
   const category = `${listing.category?.parentName || ""} ${listing.category?.fullName || ""} ${listing.category?.name || ""}`;
-  const haystack = `${title} ${category} ${locality} ${url}`;
 
-  if (!price || price > Number(config.maxPrice || 285000)) return { listing: null, message: `prix ${price || "absent"} hors filtre` };
-  if (price < 50000) return { listing: null, message: `prix ${price} sous seuil coherent` };
-  if (!/maisons?/i.test(category)) return { listing: null, message: "categorie non maison" };
-  if (badHouseText(`${title} ${url}`)) return { listing: null, message: "type non maison probable" };
+  const rejection = sourceQualityRejectionReason("2ememain", {
+    title,
+    description,
+    category,
+    locality,
+    url,
+    price
+  }, location, config);
+  if (rejection) return { listing: null, message: rejection };
+  if (!/maisons?/i.test(normalizedWords(category))) return { listing: null, message: "categorie non maison" };
   if (seller.sellerType && seller.sellerType !== "CONSUMER") return { listing: null, message: `vendeur ${seller.sellerType} non particulier` };
-  if (!locationMatches(location, [url, title])) return { listing: null, message: `commune absente du titre/url; vendeur ${locality || "sans localite"}` };
-  if (config.excludeNotarialSales !== false && isNotarial(haystack)) return { listing: null, message: "vente notariale exclue" };
 
   const images = [...new Set((listing.gallery?.imageUrls || listing.gallery?.media?.images?.map((image) => image.base) || [])
     .map(normalizeImageUrl)
@@ -654,10 +718,6 @@ function normalizeZimmoApifyItem(item, config) {
   ]));
   if (!price || price > Number(config.maxPrice || 285000)) return { listing: null, message: `prix ${price || "absent"} hors filtre` };
 
-  const haystack = `${title} ${url} ${address} ${locality} ${postalCode} ${cleanText(firstField(item, ["propertyType", "type", "category"]))}`;
-  if (config.excludeNotarialSales !== false && isNotarial(haystack)) return { listing: null, message: "vente notariale exclue" };
-  if (badHouseText(haystack)) return { listing: null, message: "type non maison probable" };
-
   const matchedLocation = findMatchingLocation(config, [
     postalCode,
     locality,
@@ -670,6 +730,18 @@ function normalizeZimmoApifyItem(item, config) {
   if (config.strictExactLocation !== false && !matchedLocation) {
     return { listing: null, message: "commune cible absente" };
   }
+
+  const rejection = sourceQualityRejectionReason("Zimmo", {
+    title,
+    description: cleanText(firstField(item, ["description", "summary", "property.description", "details.description"])),
+    category: cleanText(firstField(item, ["propertyType", "type", "category"])),
+    locality,
+    postalCode,
+    street,
+    url,
+    price
+  }, matchedLocation, config);
+  if (rejection) return { listing: null, message: rejection };
 
   const latitude = floatFromAny(firstField(item, [
     "latitude",
@@ -817,9 +889,21 @@ async function extractZimmoApify(config, args, diagnostics) {
   return listings;
 }
 
-function mergeResults(base, additions) {
-  const seen = new Set((base.listings || []).map((listing) => canonicalUrl(listing.url)));
-  const merged = [...(base.listings || [])];
+function replacementSourceMatches(listingSource, requestedSource) {
+  const source = String(listingSource || "").toLowerCase();
+  if (requestedSource === "immovlan") return source.includes("immovlan");
+  if (requestedSource === "2ememain") return source.includes("2ememain");
+  if (["zimmo", "zimmo-apify", "apify-zimmo"].includes(requestedSource)) return source.includes("zimmo");
+  return false;
+}
+
+function mergeResults(base, additions, replacementSources = []) {
+  const activeReplacementSources = replacementSources.map((source) => String(source || "").toLowerCase()).filter(Boolean);
+  const baseListings = (base.listings || []).filter((listing) => {
+    return !activeReplacementSources.some((source) => replacementSourceMatches(listing.source, source));
+  });
+  const seen = new Set(baseListings.map((listing) => canonicalUrl(listing.url)));
+  const merged = [...baseListings];
   for (const listing of additions) {
     const key = canonicalUrl(listing.url);
     if (seen.has(key)) continue;
@@ -853,7 +937,7 @@ async function run() {
   if (sources.some((source) => ["zimmo", "zimmo-apify", "apify-zimmo"].includes(source))) {
     additions.push(...await extractZimmoApify(config, args, diagnostics));
   }
-  const merged = mergeResults(base, additions);
+  const merged = mergeResults(base, additions, sources);
   merged.sourceDiagnostics = diagnostics;
   fs.mkdirSync(path.dirname(args.outJson), { recursive: true });
   fs.writeFileSync(args.outJson, JSON.stringify(merged, null, 2), "utf8");

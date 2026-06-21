@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-21-09";
+  const APP_VERSION = "pwa-2026-06-21-11";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
@@ -67,7 +67,7 @@
       ".location-chip.is-active{background:#0b5c86;border-color:#0b5c86;color:#fff}",
       ".location-chip:focus-visible,.location-filter-actions button:focus-visible{outline:3px solid rgba(11,92,134,.28);outline-offset:2px}",
       ".location-boundary-path{cursor:pointer;transition:fill-opacity .12s ease,stroke-opacity .12s ease;outline:none}",
-      ".location-boundary-path:focus{outline:none}",
+      ".location-boundary-path:focus,.leaflet-interactive:focus,.leaflet-container path:focus{outline:none}",
       ".listing-card.is-under-option{border-color:#d97706;box-shadow:inset 0 0 0 1px rgba(217,119,6,.28)}",
       ".option-badge{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;background:#d97706;color:#fff;font:700 11px/1 Arial,sans-serif;text-transform:uppercase;letter-spacing:.02em}",
       ".other-source-note{background:#eef7fb;border:1px solid #b8d9e8;border-radius:6px;padding:12px 14px;margin:18px 0;color:#253540}",
@@ -100,6 +100,7 @@
       ".map-popup-route-row label{display:flex;align-items:center;gap:5px}",
       ".map-popup-route-row input{margin:0}",
       ".map-popup-route-note{font-size:11px;color:#66737d;margin-top:5px}",
+      ".route-preview-hide-popups .leaflet-popup{opacity:0;pointer-events:none}",
       ".map-popup-actions{margin-top:8px}",
       ".map-popup-actions button{border:0;background:#fff;color:#0b5c86;font:600 12px Arial,sans-serif;padding:0}",
       "@media(max-width:760px){.price-filter-panel{grid-template-columns:1fr}.price-filter-inputs{justify-content:flex-start}.price-filter-inputs input{width:140px}.filter-source-counts{grid-column:auto}}",
@@ -479,6 +480,83 @@
     }
   }
 
+  function boundaryFeatureByKey(key) {
+    const features = latestLocationBoundaries && Array.isArray(latestLocationBoundaries.features)
+      ? latestLocationBoundaries.features
+      : [];
+    for (let index = 0; index < features.length; index += 1) {
+      if (locationBoundaryKey(features[index]) === key) {
+        return features[index];
+      }
+    }
+    return null;
+  }
+
+  function pointInRing(lon, lat, ring) {
+    let inside = false;
+    if (!Array.isArray(ring) || ring.length < 4) {
+      return false;
+    }
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i, i += 1) {
+      const xi = Number(ring[i][0]);
+      const yi = Number(ring[i][1]);
+      const xj = Number(ring[j][0]);
+      const yj = Number(ring[j][1]);
+      const intersects = ((yi > lat) !== (yj > lat))
+        && (lon < ((xj - xi) * (lat - yi)) / ((yj - yi) || 1e-12) + xi);
+      if (intersects) {
+        inside = !inside;
+      }
+    }
+    return inside;
+  }
+
+  function pointInPolygonCoordinates(lon, lat, polygon) {
+    if (!Array.isArray(polygon) || !polygon.length || !pointInRing(lon, lat, polygon[0])) {
+      return false;
+    }
+    for (let index = 1; index < polygon.length; index += 1) {
+      if (pointInRing(lon, lat, polygon[index])) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function pointInFeature(lon, lat, feature) {
+    const geometry = feature && feature.geometry;
+    if (!geometry) {
+      return false;
+    }
+    if (geometry.type === "Polygon") {
+      return pointInPolygonCoordinates(lon, lat, geometry.coordinates);
+    }
+    if (geometry.type === "MultiPolygon") {
+      return geometry.coordinates.some(function (polygon) {
+        return pointInPolygonCoordinates(lon, lat, polygon);
+      });
+    }
+    return false;
+  }
+
+  function listingPassesSelectedBoundary(listing) {
+    const lat = Number(listing && listing.latitude);
+    const lon = Number(listing && listing.longitude);
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+      return null;
+    }
+    let checkedAnyBoundary = false;
+    const keys = Array.from(selectedLocationKeys || []);
+    return keys.some(function (key) {
+      const feature = boundaryFeatureByKey(key);
+      if (!feature) {
+        return false;
+      }
+      checkedAnyBoundary = true;
+      return pointInFeature(lon, lat, feature);
+    }) || (checkedAnyBoundary ? false : null);
+  }
+
   function listingPassesLocationFilter(listing) {
     const locations = configLocations(latestConfig);
     if (!locations.length || !selectedLocationKeys) {
@@ -486,6 +564,10 @@
     }
     if (selectedLocationKeys.size === 0) {
       return false;
+    }
+    const boundaryMatch = listingPassesSelectedBoundary(listing);
+    if (boundaryMatch !== null) {
+      return boundaryMatch;
     }
     const candidates = listingLocationCandidates(listing);
     return locations.some(function (location) {
@@ -1273,6 +1355,7 @@
     }
     if (!routePreviewLayer) {
       routePreviewLayer = window.L.layerGroup().addTo(window.veilleImmoMap);
+      window.veilleImmoRoutePreviewLayer = routePreviewLayer;
     }
     return routePreviewLayer;
   }
@@ -1298,7 +1381,30 @@
       routePreviewLayer.clearLayers();
     }
     routePreviewEntries = {};
+    if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
+      window.veilleImmoMap.getContainer().classList.remove("route-preview-hide-popups");
+    }
+    document.querySelectorAll(".route-preview-toggle:checked").forEach(function (input) {
+      input.checked = false;
+    });
     window.veilleImmoRoutePreviewState = { count: 0, keys: [] };
+  }
+
+  function removeRoutePreview(key) {
+    const layer = ensureRoutePreviewLayer();
+    if (layer && routePreviewEntries[key]) {
+      layer.removeLayer(routePreviewEntries[key]);
+      delete routePreviewEntries[key];
+    }
+    document.querySelectorAll(".route-preview-toggle").forEach(function (input) {
+      if (routePreviewKey(input) === key) {
+        input.checked = false;
+      }
+    });
+    if (!Object.keys(routePreviewEntries).length && window.veilleImmoMap && window.veilleImmoMap.getContainer) {
+      window.veilleImmoMap.getContainer().classList.remove("route-preview-hide-popups");
+    }
+    window.veilleImmoRoutePreviewState = { count: Object.keys(routePreviewEntries).length, keys: Object.keys(routePreviewEntries), lastAction: "route-click" };
   }
 
   async function fetchBikeRouteLine(origin, dest) {
@@ -1334,6 +1440,9 @@
         layer.removeLayer(routePreviewEntries[key]);
         delete routePreviewEntries[key];
       }
+      if (!Object.keys(routePreviewEntries).length && window.veilleImmoMap && window.veilleImmoMap.getContainer) {
+        window.veilleImmoMap.getContainer().classList.remove("route-preview-hide-popups");
+      }
       window.veilleImmoRoutePreviewState = { count: Object.keys(routePreviewEntries).length, keys: Object.keys(routePreviewEntries) };
       return;
     }
@@ -1358,7 +1467,13 @@
       layer.removeLayer(routePreviewEntries[key]);
     }
     const line = window.L.polyline(points, routePreviewStyle(mode)).addTo(layer);
+    line.on("click", function () {
+      removeRoutePreview(key);
+    });
     routePreviewEntries[key] = line;
+    if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
+      window.veilleImmoMap.getContainer().classList.add("route-preview-hide-popups");
+    }
     if (window.veilleImmoMap && typeof line.getBounds === "function") {
       window.veilleImmoMap.fitBounds(line.getBounds(), { padding: [22, 22], maxZoom: 14 });
     }

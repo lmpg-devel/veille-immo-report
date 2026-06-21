@@ -240,24 +240,6 @@
       ]
     },
     {
-      "name": "Braine-l'Alleud",
-      "postalCode": "1420",
-      "immowebSlug": "braine-l-alleud",
-      "zimmoSlug": "braine-l-alleud",
-      "immovlanSlug": "braine-l-alleud",
-      "latitude": 50.684,
-      "longitude": 4.367
-    },
-    {
-      "name": "Braine-le-Chateau",
-      "postalCode": "1440",
-      "immowebSlug": "braine-le-chateau",
-      "zimmoSlug": "braine-le-chateau",
-      "immovlanSlug": "braine-le-chateau",
-      "latitude": 50.681,
-      "longitude": 4.273
-    },
-    {
       "name": "Dilbeek",
       "postalCode": "1700",
       "immowebSlug": "dilbeek",
@@ -312,24 +294,6 @@
       "longitude": 4.469
     },
     {
-      "name": "La Hulpe",
-      "postalCode": "1310",
-      "immowebSlug": "la-hulpe",
-      "zimmoSlug": "la-hulpe",
-      "immovlanSlug": "la-hulpe",
-      "latitude": 50.731,
-      "longitude": 4.485
-    },
-    {
-      "name": "Lasne",
-      "postalCode": "1380",
-      "immowebSlug": "lasne",
-      "zimmoSlug": "lasne",
-      "immovlanSlug": "lasne",
-      "latitude": 50.687,
-      "longitude": 4.482
-    },
-    {
       "name": "Lennik",
       "postalCode": "1750",
       "immowebSlug": "lennik",
@@ -373,33 +337,6 @@
       "immovlanSlug": "merchtem",
       "latitude": 50.951,
       "longitude": 4.231
-    },
-    {
-      "name": "Overijse",
-      "postalCode": "3090",
-      "immowebSlug": "overijse",
-      "zimmoSlug": "overijse",
-      "immovlanSlug": "overijse",
-      "latitude": 50.772,
-      "longitude": 4.535
-    },
-    {
-      "name": "Pepingen",
-      "postalCode": "1670",
-      "immowebSlug": "pepingen",
-      "zimmoSlug": "pepingen",
-      "immovlanSlug": "pepingen",
-      "latitude": 50.759,
-      "longitude": 4.159
-    },
-    {
-      "name": "Rixensart",
-      "postalCode": "1330",
-      "immowebSlug": "rixensart",
-      "zimmoSlug": "rixensart",
-      "immovlanSlug": "rixensart",
-      "latitude": 50.712,
-      "longitude": 4.526
     },
     {
       "name": "Sint-Genesius-Rode",
@@ -454,15 +391,6 @@
       "longitude": 4.514
     },
     {
-      "name": "Tubize",
-      "postalCode": "1480",
-      "immowebSlug": "tubize",
-      "zimmoSlug": "tubize",
-      "immovlanSlug": "tubize",
-      "latitude": 50.69,
-      "longitude": 4.2
-    },
-    {
       "name": "Vilvoorde",
       "postalCode": "1800",
       "immowebSlug": "vilvoorde",
@@ -506,15 +434,6 @@
       "immovlanSlug": "zaventem",
       "latitude": 50.883,
       "longitude": 4.472
-    },
-    {
-      "name": "Zemst",
-      "postalCode": "1980",
-      "immowebSlug": "zemst",
-      "zimmoSlug": "zemst",
-      "immovlanSlug": "zemst",
-      "latitude": 50.983,
-      "longitude": 4.46
     }
   ],
   "localAgencySearches": [
@@ -539,35 +458,26 @@
     "agence immobiliere maison a vendre Woluwe-Saint-Pierre 350000",
     "agence immobiliere maison a vendre Asse 350000",
     "agence immobiliere maison a vendre Beersel 350000",
-    "agence immobiliere maison a vendre Braine-l'Alleud 350000",
-    "agence immobiliere maison a vendre Braine-le-Chateau 350000",
     "agence immobiliere maison a vendre Dilbeek 350000",
     "agence immobiliere maison a vendre Drogenbos 350000",
     "agence immobiliere maison a vendre Grimbergen 350000",
     "agence immobiliere maison a vendre Halle 350000",
     "agence immobiliere maison a vendre Hoeilaart 350000",
     "agence immobiliere maison a vendre Kraainem 350000",
-    "agence immobiliere maison a vendre La Hulpe 350000",
-    "agence immobiliere maison a vendre Lasne 350000",
     "agence immobiliere maison a vendre Lennik 350000",
     "agence immobiliere maison a vendre Linkebeek 350000",
     "agence immobiliere maison a vendre Machelen 350000",
     "agence immobiliere maison a vendre Meise 350000",
     "agence immobiliere maison a vendre Merchtem 350000",
-    "agence immobiliere maison a vendre Overijse 350000",
-    "agence immobiliere maison a vendre Pepingen 350000",
-    "agence immobiliere maison a vendre Rixensart 350000",
     "agence immobiliere maison a vendre Sint-Genesius-Rode 350000",
     "agence immobiliere maison a vendre Sint-Pieters-Leeuw 350000",
     "agence immobiliere maison a vendre Steenokkerzeel 350000",
     "agence immobiliere maison a vendre Ternat 350000",
     "agence immobiliere maison a vendre Tervuren 350000",
-    "agence immobiliere maison a vendre Tubize 350000",
     "agence immobiliere maison a vendre Vilvoorde 350000",
     "agence immobiliere maison a vendre Waterloo 350000",
     "agence immobiliere maison a vendre Wemmel 350000",
     "agence immobiliere maison a vendre Wezembeek-Oppem 350000",
-    "agence immobiliere maison a vendre Zaventem 350000",
-    "agence immobiliere maison a vendre Zemst 350000"
+    "agence immobiliere maison a vendre Zaventem 350000"
   ]
 }

@@ -926,9 +926,66 @@ function mergeParts(parts) {
   return merged;
 }
 
-function pathToRoute(path, originNearest, destinationNearest, stops, shapesByFeed, railGraph) {
+function stopConnector(type, stop, lineLabel) {
+  if (!stop) {
+    return null;
+  }
+  return {
+    type,
+    name: stop.name,
+    feed: stop.feed,
+    line: lineLabel || "",
+    lat: Number(stop.lat.toFixed(5)),
+    lon: Number(stop.lon.toFixed(5))
+  };
+}
+
+function connectorKey(connector) {
+  return [
+    connector && connector.type,
+    connector && connector.name,
+    connector && connector.lat,
+    connector && connector.lon,
+    connector && connector.line
+  ].join("|");
+}
+
+function addConnector(connectors, connector) {
+  if (!connector) {
+    return;
+  }
+  const key = connectorKey(connector);
+  if (connectors.some((existing) => connectorKey(existing) === key)) {
+    return;
+  }
+  connectors.push(connector);
+}
+
+function walkPart(label, fromPoint, toPoint) {
+  if (!fromPoint || !toPoint) {
+    return null;
+  }
+  const points = [
+    compactPoint([fromPoint.lat, fromPoint.lon]),
+    compactPoint([toPoint.lat, toPoint.lon])
+  ];
+  if (points[0][0] === points[1][0] && points[0][1] === points[1][1]) {
+    return null;
+  }
+  return {
+    kind: "walk",
+    label,
+    points
+  };
+}
+
+function pathToRoute(path, originNearest, destinationNearest, stops, shapesByFeed, railGraph, originPoint, destinationPoint) {
   const parts = [];
+  const connectors = [];
   let missingRequiredGeometry = false;
+  let firstTransitEdge = null;
+  let lastTransitEdge = null;
+  let previousTransitLine = "";
   path.edges.forEach((edge) => {
     const points = edge.points || edgeGeometry(edge, stops, shapesByFeed, railGraph);
     if (!Array.isArray(points) || points.length < 2) {
@@ -942,12 +999,39 @@ function pathToRoute(path, originNearest, destinationNearest, stops, shapesByFee
       label: edge.label || edge.kind || "TC",
       points: points.map(compactPoint)
     });
+    if (edge.kind !== "walk") {
+      const currentLine = `${edge.kind}|${edge.label}`;
+      const fromStop = stops.get(edge.from);
+      if (!firstTransitEdge) {
+        firstTransitEdge = edge;
+        addConnector(connectors, stopConnector("depart", fromStop, edge.label));
+      } else if (currentLine !== previousTransitLine) {
+        addConnector(connectors, stopConnector("change", fromStop, edge.label));
+      }
+      previousTransitLine = currentLine;
+      lastTransitEdge = edge;
+    }
   });
   if (missingRequiredGeometry) {
     return null;
   }
+  if (firstTransitEdge && originPoint && originNearest && originNearest.stop) {
+    const originWalk = walkPart("Marche depart", originPoint, originNearest.stop);
+    if (originWalk) {
+      parts.unshift(originWalk);
+    }
+  }
+  if (lastTransitEdge) {
+    addConnector(connectors, stopConnector("arrivee", stops.get(lastTransitEdge.to), lastTransitEdge.label));
+  }
+  if (destinationPoint && destinationNearest && destinationNearest.stop) {
+    const destinationWalk = walkPart("Marche arrivee", destinationNearest.stop, destinationPoint);
+    if (destinationWalk) {
+      parts.push(destinationWalk);
+    }
+  }
   const displayParts = mergeParts(parts).filter((part) => {
-    return part.kind !== "walk" && Array.isArray(part.points) && part.points.length >= 2;
+    return Array.isArray(part.points) && part.points.length >= 2;
   });
   if (!displayParts.length) {
     return null;
@@ -979,6 +1063,7 @@ function pathToRoute(path, originNearest, destinationNearest, stops, shapesByFee
       feed: destinationNearest.stop.feed,
       distanceM: Math.round(destinationNearest.distanceKm * 1000)
     },
+    connectors,
     parts: displayParts
   };
 }
@@ -1089,7 +1174,7 @@ async function main() {
         unavailableRoutes += 1;
         continue;
       }
-      const route = pathToRoute(path, originNearest, destNearest, allStops, allShapes, railGraph);
+      const route = pathToRoute(path, originNearest, destNearest, allStops, allShapes, railGraph, reference, destination);
       if (!route) {
         routes[key][reference.key] = { available: false, reason: "no-displayable-shape" };
         unavailableRoutes += 1;

@@ -259,13 +259,37 @@ async function main() {
       const pane = window.veilleImmoMap && window.veilleImmoMap.getPane && window.veilleImmoMap.getPane('routePreviewPane');
       const routeLines = document.querySelectorAll('.route-preview-line').length;
       const routeHalos = document.querySelectorAll('.route-preview-halo').length;
+      const connectors = document.querySelectorAll('.route-stop-connector').length;
+      const stopLabels = document.querySelectorAll('.route-stop-tooltip').length;
+      const strokes = Array.from(document.querySelectorAll('.route-preview-line')).map((line) => (line.getAttribute('stroke') || '').toLowerCase());
+      const hasNetworkTile = Boolean(window.veilleImmoTransitTileLayerActive);
       return {
-        ok: state.source === 'gtfs-precomputed' && state.segments > 0 && state.straightFallback === false && layerCount > 0 && routeLines > 0 && routeHalos > 0 && status && status.style.display !== 'none' && /TC/.test(status.textContent || '') && Boolean(pane),
+        ok: state.source === 'gtfs-precomputed'
+          && state.segments > 0
+          && state.straightFallback === false
+          && layerCount > 0
+          && routeLines > 0
+          && routeHalos > 0
+          && connectors >= 2
+          && stopLabels >= 2
+          && !hasNetworkTile
+          && strokes.includes('#111111')
+          && strokes.includes('#2563eb')
+          && strokes.includes('#f2a900')
+          && strokes.includes('#16a34a')
+          && status
+          && status.style.display !== 'none'
+          && /TC/.test(status.textContent || '')
+          && Boolean(pane),
         state,
         routeState,
         layerCount,
         routeLines,
         routeHalos,
+        connectors,
+        stopLabels,
+        strokes,
+        hasNetworkTile,
         statusText: status ? status.textContent.trim().replace(/\\s+/g, ' ') : '',
         panePresent: Boolean(pane)
       };

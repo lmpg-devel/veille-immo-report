@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-21-22";
+  const APP_VERSION = "pwa-2026-06-21-23";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
@@ -139,6 +139,8 @@
       ".route-preview-status strong{display:block;font-size:13px;margin-bottom:3px}",
       ".route-preview-status span{display:block;color:#44515d}",
       ".route-preview-status button{position:absolute;right:5px;top:4px;border:0;background:transparent;color:#4b5563;font:700 16px/1 Arial,sans-serif;padding:2px 5px;cursor:pointer}",
+      ".route-stop-tooltip{background:rgba(255,255,255,.96);border:1px solid #cbd5df;border-radius:5px;box-shadow:0 4px 14px rgba(0,0,0,.18);color:#17202a;font:700 11px Arial,sans-serif;padding:3px 6px}",
+      ".route-stop-tooltip::before{display:none}",
       ".map-popup-actions{margin-top:8px}",
       ".map-popup-actions button{border:0;background:#fff;color:#0b5c86;font:600 12px Arial,sans-serif;padding:0}",
       ".listing-contact-details{margin-top:10px;background:#f4f7f8;border-radius:6px;padding:8px 10px;color:#33424d}",
@@ -1146,11 +1148,11 @@
 
   function transitOperatorColor(kind) {
     return {
-      train: "#0055a4",
+      train: "#111111",
       stib: "#2563eb",
       delijn: "#f2a900",
       tec: "#d71920",
-      walk: "#64748b",
+      walk: "#16a34a",
       other: "#6b7280"
     }[kind] || "#6b7280";
   }
@@ -1158,11 +1160,11 @@
   function transitLegendHtml() {
     return [
       "<div class='map-popup-route-legend'>",
-      "<span><i class='transit-swatch' style='background:#0055a4'></i>Train</span>",
+      "<span><i class='transit-swatch' style='background:#111111'></i>SNCB</span>",
       "<span><i class='transit-swatch' style='background:#2563eb'></i>STIB</span>",
       "<span><i class='transit-swatch' style='background:#f2a900'></i>De Lijn</span>",
       "<span><i class='transit-swatch' style='background:#d71920'></i>TEC</span>",
-      "<span><i class='transit-swatch' style='background:#64748b'></i>Marche</span>",
+      "<span><i class='transit-swatch' style='background:#16a34a'></i>Marche</span>",
       "</div>"
     ].join("");
   }
@@ -1682,6 +1684,9 @@
   function transitRouteOperators(route) {
     const operators = [];
     transitDisplayParts(route && route.parts).forEach(function (part) {
+      if (part.kind === "walk") {
+        return;
+      }
       const label = transitOperatorLabel(part.kind);
       if (operators.indexOf(label) === -1) {
         operators.push(label);
@@ -1749,7 +1754,7 @@
     }
     if (mode === "transit") {
       if (kind === "walk") {
-        return { color: transitOperatorColor("walk"), weight: 3, opacity: 0.78, dashArray: "5 6", pane: "routePreviewPane" };
+        return { color: transitOperatorColor("walk"), weight: 4, opacity: 0.9, dashArray: "3 7", lineCap: "round", pane: "routePreviewPane" };
       }
       return { color: transitOperatorColor(kind || "other"), weight: kind === "train" ? 7 : 6, opacity: 0.96, pane: "routePreviewPane" };
     }
@@ -2281,20 +2286,58 @@
   function transitDisplayParts(parts) {
     return (Array.isArray(parts) ? parts : []).filter(function (part) {
       return part
-        && part.kind !== "walk"
-        && part.mode !== "walk"
         && Array.isArray(part.points)
         && part.points.length >= 2;
     });
   }
 
-  function drawTransitParts(group, parts, key) {
+  function drawTransitConnectors(group, connectors, key) {
     const allPoints = [];
-    transitDisplayParts(parts).forEach(function (part) {
+    (Array.isArray(connectors) ? connectors : []).forEach(function (connector) {
+      const lat = Number(connector && connector.lat);
+      const lon = Number(connector && connector.lon);
+      if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+        return;
+      }
+      const marker = window.L.circleMarker([lat, lon], {
+        pane: "routePreviewPane",
+        radius: connector.type === "change" ? 5 : 6,
+        color: "#111827",
+        weight: 2,
+        fillColor: "#ffffff",
+        fillOpacity: 1,
+        opacity: 1,
+        className: "route-stop-connector",
+        interactive: true
+      }).addTo(group);
+      const name = connector.name || connector.line || "Arret";
+      marker.bindTooltip(escapeHtml(name), {
+        permanent: true,
+        direction: "top",
+        offset: [0, -7],
+        className: "route-stop-tooltip"
+      });
+      marker.on("click", function () {
+        removeRoutePreview(key);
+      });
+      if (typeof marker.bringToFront === "function") {
+        marker.bringToFront();
+      }
+      allPoints.push([lat, lon]);
+    });
+    return allPoints;
+  }
+
+  function drawTransitRoute(group, route, key) {
+    const allPoints = [];
+    transitDisplayParts(route && route.parts).forEach(function (part) {
       addRoutePolyline(group, part.points, routePreviewStyle("transit", part.kind), key);
       (Array.isArray(part.points) ? part.points : []).forEach(function (point) {
         allPoints.push(point);
       });
+    });
+    drawTransitConnectors(group, route && route.connectors, key).forEach(function (point) {
+      allPoints.push(point);
     });
     return allPoints;
   }
@@ -2354,7 +2397,10 @@
     routePreviewEntries[key] = group;
     fitRoutePreview(directPoints);
     if (mode === "transit") {
-      ensureTransitTileLayer();
+      if (transitTileLayer && window.veilleImmoMap && window.veilleImmoMap.hasLayer(transitTileLayer)) {
+        window.veilleImmoMap.removeLayer(transitTileLayer);
+      }
+      window.veilleImmoTransitTileLayerActive = false;
       if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
         window.veilleImmoMap.getContainer().classList.add("route-preview-hide-popups");
       }
@@ -2376,7 +2422,7 @@
     window.veilleImmoRoutePreviewState = {
       count: Object.keys(routePreviewEntries).length,
       keys: Object.keys(routePreviewEntries),
-      lastSource: mode === "transit" ? "transit-real-geometry-loading" : "direct-loading",
+      lastSource: mode === "transit" ? "gtfs-transit-route-loading" : "direct-loading",
       lastMode: mode,
       transitTileLayerActive: Boolean(window.veilleImmoTransitTileLayerActive)
     };
@@ -2402,7 +2448,7 @@
         }
         if (routePreviewEntries[key] === group && typeof group.clearLayers === "function") {
           group.clearLayers();
-          const allPoints = drawTransitParts(group, displayParts, key);
+          const allPoints = drawTransitRoute(group, route, key);
           fitRoutePreview(allPoints.length ? allPoints : directPoints);
           source = "gtfs-transit-graph";
           if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {

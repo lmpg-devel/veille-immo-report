@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-21-17";
+  const APP_VERSION = "pwa-2026-06-21-18";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
@@ -18,6 +18,7 @@
   const PRICE_FILTER_CONFIG_KEY = "veille-immo-price-config-max";
   const SHOW_OPTION_KEY = "veille-immo-show-option";
   const LOCATION_FILTER_KEY = "veille-immo-selected-locations";
+  const FAVORITES_KEY = "veille-immo-favorites";
   const DEFAULT_MAX_PRICE = 350000;
   const USER_PRICE_LIMIT_MAX = 350000;
   let deferredInstallPrompt = null;
@@ -34,6 +35,7 @@
   let routePreviewEntries = {};
   let transitTileLayer = null;
   let renderedMapMarkers = [];
+  let favoriteListingIds = new Set();
   const ROUTE_REFERENCES = [
     { key: "bourse", label: "Bourse de Bruxelles", lat: 50.8478282, lon: 4.3491201 },
     { key: "decoster", label: "110 rue Pierre Decoster, Forest", lat: 50.8230517, lon: 4.3297564 }
@@ -124,16 +126,34 @@
       ".source-map-pin-zimmo{background:#7c3aed}",
       ".source-map-pin-agency{background:#2f6f3e}",
       ".source-map-pin-p2p{background:#d97706}",
+      ".source-map-heart{display:flex;align-items:center;justify-content:center;width:24px;height:24px;background:transparent;border:0;font:700 24px/1 Arial,sans-serif;text-shadow:0 1px 0 #fff,0 -1px 0 #fff,1px 0 0 #fff,-1px 0 0 #fff,0 3px 8px rgba(0,0,0,.35)}",
+      ".source-map-heart-immoweb{color:#0b5c86}",
+      ".source-map-heart-immovlan{color:#e11d48}",
+      ".source-map-heart-zimmo{color:#7c3aed}",
+      ".source-map-heart-agency{color:#2f6f3e}",
+      ".source-map-heart-p2p{color:#d97706}",
       ".map-popup{min-width:245px;max-width:320px}",
+      ".map-popup-head{display:grid;grid-template-columns:54px minmax(0,1fr) 30px;gap:7px;align-items:start;margin-bottom:6px}",
+      ".map-popup-title-wrap{min-width:0}",
+      ".map-popup-thumb{display:block;width:54px;height:42px;border-radius:5px;object-fit:cover;background:#eef3f6;color:#70808b;font:700 10px/42px Arial,sans-serif;text-align:center;overflow:hidden}",
       ".map-popup-source{display:inline-flex;border-radius:999px;padding:3px 7px;background:#eef3f6;color:#253540;font:700 11px Arial,sans-serif;text-transform:uppercase;margin-bottom:6px}",
       ".map-popup-title{font:700 14px/1.3 Arial,sans-serif;color:#17202a;margin-bottom:5px}",
       ".map-popup-price{font:700 14px Arial,sans-serif;color:#0b513c;margin-bottom:6px}",
+      ".favorite-toggle-button{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid #cfd8de;background:#fff;color:#64748b;border-radius:999px;font:700 17px/1 Arial,sans-serif;cursor:pointer;padding:0}",
+      ".favorite-toggle-button.is-active{color:#e11d48;border-color:#e11d48;background:#fff5f7}",
+      ".favorite-toggle-button:focus-visible{outline:3px solid rgba(225,29,72,.24);outline-offset:2px}",
       ".map-popup-details,.map-popup-address,.map-popup-contact{font:12px/1.35 Arial,sans-serif;color:#3d4852;margin-top:5px}",
       ".map-popup-routes{border-top:1px solid #e3e8ec;margin-top:9px;padding-top:8px;font:12px/1.35 Arial,sans-serif;color:#33424d}",
       ".map-popup-route-title{font-weight:700;color:#17202a;margin-bottom:5px}",
       ".map-popup-route-row{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;margin-top:5px}",
       ".map-popup-route-row label{display:flex;align-items:center;gap:5px}",
       ".map-popup-route-row input{margin:0}",
+      ".map-popup-route-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}",
+      ".route-compact-toggle{display:flex;align-items:center;gap:4px;border:1px solid #d8e0e5;border-radius:6px;padding:4px 5px;color:#253540;white-space:nowrap;min-width:0}",
+      ".route-compact-toggle input{margin:0;flex:0 0 auto}",
+      ".route-compact-icon{font-size:13px;line-height:1}",
+      ".route-compact-label{font-weight:700;overflow:hidden;text-overflow:ellipsis}",
+      ".route-compact-time{color:#5e6b75;font-size:11px;margin-left:auto}",
       ".map-popup-route-note{font-size:11px;color:#66737d;margin-top:5px}",
       ".map-popup-route-legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;font-size:11px;color:#4b5563}",
       ".transit-swatch{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:3px;vertical-align:-1px}",
@@ -274,6 +294,24 @@
     localStorage.setItem(INIT_KEY, "1");
   }
 
+  function loadFavoriteListingIds() {
+    try {
+      const stored = JSON.parse(localStorage.getItem(FAVORITES_KEY) || "[]");
+      favoriteListingIds = new Set(Array.isArray(stored) ? stored.filter(Boolean) : []);
+    } catch (error) {
+      favoriteListingIds = new Set();
+    }
+    window.veilleImmoFavorites = Array.from(favoriteListingIds);
+  }
+
+  function saveFavoriteListingIds() {
+    try {
+      localStorage.setItem(FAVORITES_KEY, JSON.stringify(Array.from(favoriteListingIds)));
+    } catch (error) {
+    }
+    window.veilleImmoFavorites = Array.from(favoriteListingIds);
+  }
+
   async function fetchResults() {
     const response = await fetch(RESULTS_URL + "?t=" + Date.now(), {
       cache: "no-store",
@@ -287,6 +325,29 @@
 
   function listingDedupeKey(listing) {
     return listingUrlKey(listing && listing.url) || String(listing && listing.id || "").trim().toLowerCase();
+  }
+
+  function listingFavoriteId(listing) {
+    return listingDedupeKey(listing);
+  }
+
+  function listingIsFavorite(listing) {
+    const id = listingFavoriteId(listing);
+    return Boolean(id && favoriteListingIds.has(id));
+  }
+
+  function setFavoriteListing(id, active) {
+    const key = String(id || "").trim();
+    if (!key) {
+      return;
+    }
+    if (active) {
+      favoriteListingIds.add(key);
+    } else {
+      favoriteListingIds.delete(key);
+    }
+    saveFavoriteListingIds();
+    refreshFavoriteUi();
   }
 
   function dedupeListings(listings) {
@@ -867,6 +928,7 @@
       sourceCounts: visibleSources,
       optionHiddenCount: optionHiddenCount
     };
+    refreshFavoriteUi();
   }
 
   function sourceCounts(listings) {
@@ -923,18 +985,66 @@
     return "<div class='source-badge-row'><span class='source-badge source-badge-" + kind + "'>" + escapeHtml(sourceLabel(source)) + "</span>" + renderOptionBadge(listing) + "</div>";
   }
 
-  function sourceMarkerIcon(source) {
+  function favoriteButtonHtml(listing) {
+    const id = listingFavoriteId(listing);
+    if (!id) {
+      return "";
+    }
+    const active = favoriteListingIds.has(id);
+    return "<button type='button' class='favorite-toggle-button" + (active ? " is-active" : "") + "' data-favorite-id='" + escapeHtml(id) + "' aria-pressed='" + (active ? "true" : "false") + "' aria-label='" + (active ? "Retirer des favoris" : "Ajouter aux favoris") + "' title='" + (active ? "Retirer des favoris" : "Ajouter aux favoris") + "'>" + (active ? "&#9829;" : "&#9825;") + "</button>";
+  }
+
+  function listingThumbnailHtml(listing) {
+    const first = dedupePhotoUrls(listing || {})[0];
+    if (!first) {
+      return "<div class='map-popup-thumb'>Photo</div>";
+    }
+    return "<img class='map-popup-thumb' loading='lazy' src='" + escapeHtml(first) + "' alt='Miniature annonce'>";
+  }
+
+  function sourceMarkerIcon(input) {
     if (!window.L) {
       return null;
     }
+    const source = input && input.source ? input.source : input;
     const kind = sourceKind(source);
+    const favorite = input && typeof input === "object" && listingIsFavorite(input);
     return window.L.divIcon({
       className: "source-map-icon-wrap source-map-marker",
-      html: "<span class='source-map-pin source-map-pin-" + kind + "'></span>",
-      iconSize: [24, 24],
-      iconAnchor: [12, 24],
+      html: favorite
+        ? "<span class='source-map-heart source-map-heart-" + kind + "' aria-hidden='true'>&#9829;</span>"
+        : "<span class='source-map-pin source-map-pin-" + kind + "'></span>",
+      iconSize: favorite ? [26, 26] : [24, 24],
+      iconAnchor: favorite ? [13, 21] : [12, 24],
       popupAnchor: [0, -22]
     });
+  }
+
+  function updateFavoriteMarkerIcons() {
+    if (!renderedMapMarkers.length) {
+      return;
+    }
+    renderedMapMarkers.forEach(function (entry) {
+      if (entry.marker && typeof entry.marker.setIcon === "function") {
+        const icon = sourceMarkerIcon(entry.listing);
+        if (icon) {
+          entry.marker.setIcon(icon);
+        }
+      }
+    });
+  }
+
+  function refreshFavoriteUi() {
+    document.querySelectorAll(".favorite-toggle-button[data-favorite-id]").forEach(function (button) {
+      const active = favoriteListingIds.has(button.dataset.favoriteId);
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", active ? "true" : "false");
+      button.setAttribute("aria-label", active ? "Retirer des favoris" : "Ajouter aux favoris");
+      button.title = active ? "Retirer des favoris" : "Ajouter aux favoris";
+      button.innerHTML = active ? "&#9829;" : "&#9825;";
+    });
+    updateFavoriteMarkerIcons();
+    window.veilleImmoFavorites = Array.from(favoriteListingIds);
   }
 
   function listingDetailsHtml(listing) {
@@ -1061,6 +1171,10 @@
     ].join("");
   }
 
+  function routeOriginShortLabel(origin) {
+    return origin && origin.key === "decoster" ? "Travail" : "Bourse";
+  }
+
   function routePopupHtml(listing) {
     const lat = Number(listing && listing.latitude);
     const lon = Number(listing && listing.longitude);
@@ -1075,25 +1189,30 @@
       const bikeMinutes = (bikeKm / 25) * 60;
       const transitMinutes = 10 + (directKm / 18) * 60;
       const commonData = " data-origin-lat='" + escapeHtml(origin.lat) + "' data-origin-lon='" + escapeHtml(origin.lon) + "' data-dest-lat='" + escapeHtml(dest.lat) + "' data-dest-lon='" + escapeHtml(dest.lon) + "'";
+      const shortLabel = routeOriginShortLabel(origin);
       rows.push(
-        "<div class='map-popup-route-row'>"
-        + "<label><input type='checkbox' class='route-preview-toggle' data-route-mode='bike' data-route-id='bike-" + escapeHtml(origin.key) + "'" + commonData + "> Vélo " + escapeHtml(origin.label) + " · ~" + escapeHtml(routeDurationText(bikeMinutes)) + "</label>"
-        + "<button type='button' class='external-link-button' data-external-url='" + escapeHtml(osmBikeRouteUrl(origin, dest)) + "'>OSM</button>"
-        + "</div>"
+        "<label class='route-compact-toggle' title='Velo " + escapeHtml(shortLabel) + "'>"
+        + "<input type='checkbox' class='route-preview-toggle' data-route-mode='bike' data-route-id='bike-" + escapeHtml(origin.key) + "'" + commonData + ">"
+        + "<span class='route-compact-icon' aria-hidden='true'>&#128690;</span>"
+        + "<span class='route-compact-label'>" + escapeHtml(shortLabel) + "</span>"
+        + "<span class='route-compact-time'>~" + escapeHtml(routeDurationText(bikeMinutes)) + "</span>"
+        + "</label>"
       );
       rows.push(
-        "<div class='map-popup-route-row'>"
-        + "<label><input type='checkbox' class='route-preview-toggle' data-route-mode='transit' data-route-id='transit-" + escapeHtml(origin.key) + "'" + commonData + "> Lignes TC OSM " + escapeHtml(origin.label) + " · ~" + escapeHtml(routeDurationText(transitMinutes)) + "</label>"
-        + "<button type='button' class='external-link-button' data-external-url='" + escapeHtml(transitRouteUrl(origin, dest)) + "'>Carte</button>"
-        + "</div>"
+        "<label class='route-compact-toggle' title='TC " + escapeHtml(shortLabel) + "'>"
+        + "<input type='checkbox' class='route-preview-toggle' data-route-mode='transit' data-route-id='transit-" + escapeHtml(origin.key) + "'" + commonData + ">"
+        + "<span class='route-compact-icon' aria-hidden='true'>&#128646;</span>"
+        + "<span class='route-compact-label'>" + escapeHtml(shortLabel) + "</span>"
+        + "<span class='route-compact-time'>~" + escapeHtml(routeDurationText(transitMinutes)) + "</span>"
+        + "</label>"
       );
     });
     return [
       "<div class='map-popup-routes'>",
-      "<div class='map-popup-route-title'>Trajets et lignes OSM</div>",
+      "<div class='map-popup-route-title'>Trajets</div>",
+      "<div class='map-popup-route-grid'>",
       rows.join(""),
-      transitLegendHtml(),
-      "<div class='map-popup-route-note'>Velo: itineraire OSRM si disponible, sinon estimation locale a 25 km/h. TC: trace immediat, puis graphe OSM Overpass si disponible; sans horaires.</div>",
+      "</div>",
       "</div>"
     ].join("");
   }
@@ -1104,9 +1223,15 @@
     const url = listing && listing.url ? listing.url : "#";
     return [
       "<div class='map-popup'>",
+      "<div class='map-popup-head'>",
+      listingThumbnailHtml(listing),
+      "<div class='map-popup-title-wrap'>",
       "<div class='map-popup-source'>" + escapeHtml(sourceLabel(source)) + "</div>",
       "<div class='map-popup-title'>" + escapeHtml(title) + "</div>",
       "<div class='map-popup-price'>" + escapeHtml(formatPrice(listing && listing.price)) + "</div>",
+      "</div>",
+      favoriteButtonHtml(listing),
+      "</div>",
       listingDetailsHtml(listing),
       listing && listing.address ? "<div class='map-popup-address'>" + escapeHtml(listing.address) + "</div>" : "",
       listingContactHtml(listing),
@@ -1128,6 +1253,12 @@
       const listing = markerListing(markerSource[index], byUrl);
       if (layer && typeof layer.bindPopup === "function") {
         layer.bindPopup(mapPopupHtml(listing));
+        if (typeof layer.setIcon === "function") {
+          const icon = sourceMarkerIcon(listing);
+          if (icon) {
+            layer.setIcon(icon);
+          }
+        }
         renderedMapMarkers.push({ marker: layer, listing: listing });
       }
       index += 1;
@@ -1165,7 +1296,7 @@
     }
     const layer = window.L.layerGroup().addTo(window.veilleImmoMap);
     missing.forEach(function (listing) {
-      const icon = sourceMarkerIcon(listing.source);
+      const icon = sourceMarkerIcon(listing);
       const marker = window.L.marker([Number(listing.latitude), Number(listing.longitude)], icon ? { icon: icon } : {}).addTo(layer);
       marker.bindPopup(mapPopupHtml(listing));
       renderedMapMarkers.push({ marker: marker, listing: listing });
@@ -1237,7 +1368,7 @@
       if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
         return;
       }
-      const icon = sourceMarkerIcon(listing.source);
+      const icon = sourceMarkerIcon(listing);
       const marker = window.L.marker([lat, lon], icon ? { icon: icon } : {}).addTo(layer);
       marker.bindPopup(mapPopupHtml(listing));
       renderedMapMarkers.push({ marker: marker, listing: listing });
@@ -2289,6 +2420,23 @@
     }
   }
 
+  function installFavoriteHandlers() {
+    if (document.documentElement.dataset.favoriteHandlers === "1") {
+      return;
+    }
+    document.documentElement.dataset.favoriteHandlers = "1";
+    document.addEventListener("click", function (event) {
+      const button = event.target && event.target.closest ? event.target.closest(".favorite-toggle-button") : null;
+      if (!button) {
+        return;
+      }
+      event.preventDefault();
+      event.stopPropagation();
+      const id = button.dataset.favoriteId;
+      setFavoriteListing(id, !favoriteListingIds.has(id));
+    }, true);
+  }
+
   function renderDiagnosticSummary(diagnostics) {
     if (!Array.isArray(diagnostics) || diagnostics.length === 0) {
       return "";
@@ -2778,8 +2926,10 @@
   }
 
   window.addEventListener("load", async function () {
+    loadFavoriteListingIds();
     injectControls();
     installRoutePreviewHandlers();
+    installFavoriteHandlers();
     const pageButton = document.getElementById("installButton");
     if (pageButton) {
       pageButton.addEventListener("click", promptInstall);
@@ -2798,6 +2948,9 @@
     checkForNewListings: checkForNewListings,
     refreshReportData: refreshReportData,
     hardRefreshApplication: hardRefreshApplication,
+    favorites: function () {
+      return Array.from(favoriteListingIds);
+    },
     buildTransitRouteFromSegments: buildTransitRouteFromSegments,
     computeTransitRoute: async function (origin, dest) {
       const segments = await fetchTransitRouteSegments(origin, dest);

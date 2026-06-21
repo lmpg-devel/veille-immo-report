@@ -360,7 +360,7 @@ function Get-PortalLinks {
     Location = $Location.name
     Immoweb = Get-ImmowebSearchUrl -Location $Location -MaxPrice $maxPrice -Page 1
     Zimmo = "https://www.zimmo.be/fr/$zimmoSlug-$($Location.postalCode)/a-vendre/maison/?priceIncludeUnknown=0&priceMax=$maxPrice"
-    Immovlan = "https://immo.vlan.be/fr/immobilier/maison/a-vendre/$immovlanSlug?maxprice=$maxPrice"
+    Immovlan = "https://immo.vlan.be/fr/immobilier/maison/a-vendre/${immovlanSlug}?maxprice=$maxPrice"
     SecondHand = Get-SecondHandSearchUrl -Location $Location -MaxPrice $maxPrice
     FacebookMarketplace = Get-FacebookMarketplaceSearchUrl -Location $Location -MaxPrice $maxPrice
     PrivateSearch = "https://www.bing.com/search?q=$encodedPrivateQuery"

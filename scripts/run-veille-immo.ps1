@@ -180,7 +180,7 @@ function Get-PortalLinks {
     Location = $Location.name
     Immoweb = Get-ImmowebSearchUrl -Location $Location -MaxPrice $maxPrice -Page 1
     Zimmo = "https://www.zimmo.be/fr/$zimmoSlug-$($Location.postalCode)/a-vendre/maison/?priceIncludeUnknown=0&priceMax=$maxPrice"
-    Immovlan = "https://immo.vlan.be/fr/immobilier/maison/a-vendre/$immovlanSlug?maxprice=$maxPrice"
+    Immovlan = "https://immo.vlan.be/fr/immobilier/maison/a-vendre/${immovlanSlug}?maxprice=$maxPrice"
     LocalAgencies = "https://www.bing.com/search?q=$encodedLocalAgencyQuery"
   }
 }
@@ -276,7 +276,7 @@ function Read-ImmowebListing {
     $statusText = Join-NonEmpty @($title, $classified.status, $classified.transactionStatus, $classified.saleStatus)
     $statusFlag = $classified -and $classified.flags -and ($classified.flags.isUnderOption -or $classified.flags.isOption -or $classified.flags.isReserved)
     $statusPattern = '(?i)sous[-\s]?option|onder\s+optie|under\s+option|sale\s+agreed|r(?:e|é)serv(?:e|é|ee|ée)|compromis'
-    $isUnderOption = [bool]($statusFlag -or $statusText -match $statusPattern -or $html -match $statusPattern)
+    $isUnderOption = [bool]($statusFlag -or $statusText -match $statusPattern)
 
     return [pscustomobject]@{
       Source = "Immoweb"

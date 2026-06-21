@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-21-04";
+  const APP_VERSION = "pwa-2026-06-21-05";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const STORAGE_KEY = "veille-immo-seen-ids";
@@ -19,6 +19,7 @@
   let selectedLocationKeys = null;
   let locationMarkerLayer = null;
   let locationMarkersByKey = {};
+  let renderedMapMarkers = [];
 
   function isStandalone() {
     return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
@@ -255,6 +256,20 @@
   function formatPrice(value) {
     const number = Number(value || 0);
     return number > 0 ? new Intl.NumberFormat("fr-BE").format(number) + " EUR" : "Prix a verifier";
+  }
+
+  function formatDate(value) {
+    const date = value ? new Date(value) : null;
+    if (!date || Number.isNaN(date.getTime())) {
+      return "";
+    }
+    return date.toLocaleString("fr-BE", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
   }
 
   function clampPrice(value, min, max) {
@@ -606,14 +621,27 @@
       }
     });
 
-    const markerSource = Array.isArray(window.listingMarkers) ? window.listingMarkers : [];
-    const markerIcons = document.querySelectorAll(".leaflet-marker-icon.source-map-marker");
-    markerIcons.forEach(function (icon, index) {
-      const listing = markerListing(markerSource[index], byUrl);
-      const visible = listingPassesFilters(listing, maxPrice);
-      icon.style.display = visible ? "" : "none";
-      icon.setAttribute("aria-hidden", visible ? "false" : "true");
-    });
+    if (renderedMapMarkers.length) {
+      renderedMapMarkers.forEach(function (entry) {
+        const visible = listingPassesFilters(entry.listing, maxPrice);
+        if (entry.marker && typeof entry.marker.getElement === "function") {
+          const icon = entry.marker.getElement();
+          if (icon) {
+            icon.style.display = visible ? "" : "none";
+            icon.setAttribute("aria-hidden", visible ? "false" : "true");
+          }
+        }
+      });
+    } else {
+      const markerSource = Array.isArray(window.listingMarkers) ? window.listingMarkers : [];
+      const markerIcons = document.querySelectorAll(".leaflet-marker-icon.source-map-marker");
+      markerIcons.forEach(function (icon, index) {
+        const listing = markerListing(markerSource[index], byUrl);
+        const visible = listingPassesFilters(listing, maxPrice);
+        icon.style.display = visible ? "" : "none";
+        icon.setAttribute("aria-hidden", visible ? "false" : "true");
+      });
+    }
 
     const count = document.getElementById("priceFilterCount");
     if (count) {
@@ -754,6 +782,7 @@
   }
 
   function refreshStaticMapPopups(payload) {
+    renderedMapMarkers = [];
     if (!window.veilleImmoListingLayer || typeof window.veilleImmoListingLayer.eachLayer !== "function") {
       return;
     }
@@ -764,9 +793,65 @@
       const listing = markerListing(markerSource[index], byUrl);
       if (layer && typeof layer.bindPopup === "function") {
         layer.bindPopup(mapPopupHtml(listing));
+        renderedMapMarkers.push({ marker: layer, listing: listing });
       }
       index += 1;
     });
+    window.veilleImmoRenderedMarkerLayers = renderedMapMarkers.map(function (entry) { return entry.marker; });
+    window.veilleImmoRenderedMarkerListings = renderedMapMarkers.map(function (entry) { return entry.listing; });
+  }
+
+  function geocodedListings(payload) {
+    return (Array.isArray(payload && payload.listings) ? payload.listings : []).filter(function (listing) {
+      const lat = Number(listing.latitude);
+      const lon = Number(listing.longitude);
+      return Number.isFinite(lat) && Number.isFinite(lon);
+    });
+  }
+
+  function syncMissingMapMarkers(payload) {
+    if (!window.L || !window.veilleImmoMap) {
+      return;
+    }
+    if (window.veilleImmoExtraSourceMarkers) {
+      window.veilleImmoMap.removeLayer(window.veilleImmoExtraSourceMarkers);
+    }
+    const markerSource = Array.isArray(window.listingMarkers) ? window.listingMarkers : [];
+    const existing = new Set(markerSource.map(function (marker) {
+      return listingUrlKey(marker && marker.url);
+    }).filter(Boolean));
+    const missing = geocodedListings(payload).filter(function (listing) {
+      const key = listingUrlKey(listing.url);
+      return key && !existing.has(key);
+    });
+    if (!missing.length) {
+      window.veilleImmoExtraSourceMarkers = null;
+      return;
+    }
+    const layer = window.L.layerGroup().addTo(window.veilleImmoMap);
+    missing.forEach(function (listing) {
+      const icon = sourceMarkerIcon(listing.source);
+      const marker = window.L.marker([Number(listing.latitude), Number(listing.longitude)], icon ? { icon: icon } : {}).addTo(layer);
+      marker.bindPopup(mapPopupHtml(listing));
+      renderedMapMarkers.push({ marker: marker, listing: listing });
+    });
+    window.veilleImmoExtraSourceMarkers = layer;
+    window.veilleImmoRenderedMarkerLayers = renderedMapMarkers.map(function (entry) { return entry.marker; });
+    window.veilleImmoRenderedMarkerListings = renderedMapMarkers.map(function (entry) { return entry.listing; });
+  }
+
+  function updateReportHeader(payload, config) {
+    const meta = document.querySelector(".meta");
+    if (!meta) {
+      return;
+    }
+    const listings = Array.isArray(payload && payload.listings) ? payload.listings : [];
+    const dateText = formatDate(payload && payload.generatedAt);
+    const counts = sourceCountSummary(listings.reduce(function (acc, listing) {
+      incrementSourceCount(acc, listing.source);
+      return acc;
+    }, emptySourceCounts()));
+    meta.textContent = "Maisons a vendre jusqu'a " + formatPrice(configuredPriceMax(config || latestConfig)) + (dateText ? " - donnees du " + dateText : "") + " - " + listings.length + " annonce(s), " + counts + ".";
   }
 
   function annotateSourceBadges(payload) {
@@ -801,6 +886,7 @@
     }
     if (window.veilleImmoStaticMapIncludesAllListings) {
       refreshStaticMapPopups(payload);
+      syncMissingMapMarkers(payload);
       return;
     }
     if (!window.L || !window.veilleImmoMap) {
@@ -824,8 +910,11 @@
       const icon = sourceMarkerIcon(listing.source);
       const marker = window.L.marker([lat, lon], icon ? { icon: icon } : {}).addTo(layer);
       marker.bindPopup(mapPopupHtml(listing));
+      renderedMapMarkers.push({ marker: marker, listing: listing });
     });
     window.veilleImmoExtraSourceMarkers = layer;
+    window.veilleImmoRenderedMarkerLayers = renderedMapMarkers.map(function (entry) { return entry.marker; });
+    window.veilleImmoRenderedMarkerListings = renderedMapMarkers.map(function (entry) { return entry.listing; });
   }
 
   function locationMarkerStyle(active) {
@@ -1279,6 +1368,7 @@
       }
       latestPayload = payload;
       latestConfig = config || latestConfig;
+      updateReportHeader(payload, latestConfig);
       annotateSourceBadges(payload);
       syncSourceMapMarkers(payload);
       injectPriceFilter(payload, latestConfig);

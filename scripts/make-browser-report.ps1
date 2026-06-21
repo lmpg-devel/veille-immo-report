@@ -10,19 +10,6 @@ $source = Resolve-Path -LiteralPath $SourceHtml
 $outputFullPath = [System.IO.Path]::GetFullPath($OutputHtml)
 $html = Get-Content -Raw -LiteralPath $source
 
-$old = @"
-function openExternalLinkPanel(button) {
-  lastExternalButton = button;
-  externalLinkTitle.textContent = button.textContent.trim() || "Lien externe";
-  externalLinkUrl.value = button.dataset.externalUrl || "";
-  externalLinkStatus.textContent = "";
-  externalLinkViewer.setAttribute("aria-hidden", "false");
-  document.body.style.overflow = "hidden";
-  externalLinkUrl.focus();
-  externalLinkUrl.select();
-}
-"@
-
 $new = @"
 function openExternalLinkPanel(button) {
   const url = button.dataset.externalUrl || "";
@@ -36,11 +23,15 @@ function openExternalLinkPanel(button) {
 }
 "@
 
-if (-not $html.Contains($old)) {
-  throw "Bloc openExternalLinkPanel introuvable dans $SourceHtml"
+$openExternalPattern = 'function\s+openExternalLinkPanel\s*\(\s*button\s*\)\s*\{[\s\S]*?\n\}'
+if ($html -match $openExternalPattern) {
+  if ($html -notmatch 'function\s+openExternalLinkPanel\s*\(\s*button\s*\)\s*\{[\s\S]*?window\.open\(url,\s*"_blank"') {
+    $html = [regex]::Replace($html, $openExternalPattern, [System.Text.RegularExpressions.MatchEvaluator]{ param($m) $new }, 1)
+  }
 }
-
-$html = $html.Replace($old, $new)
+else {
+  throw "Fonction openExternalLinkPanel introuvable dans $SourceHtml"
+}
 $html = $html.Replace("<title>Veille immobiliere", "<title>Veille immobiliere web")
 $html = $html.Replace('<div class="note">Extraction automatique detaillee:', '<div class="note">Version navigateur: les annonces s ouvrent dans un onglet separe. Extraction automatique detaillee:')
 

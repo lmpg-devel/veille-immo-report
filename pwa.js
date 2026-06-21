@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-21-19";
+  const APP_VERSION = "pwa-2026-06-21-20";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
@@ -40,34 +40,6 @@
     { key: "bourse", label: "Bourse de Bruxelles", lat: 50.8478282, lon: 4.3491201 },
     { key: "decoster", label: "110 rue Pierre Decoster, Forest", lat: 50.8230517, lon: 4.3297564 }
   ];
-  const TRANSIT_FALLBACK_HUBS = [
-    { key: "bourse", label: "Bourse", lat: 50.8478282, lon: 4.3491201, kind: "stib" },
-    { key: "central", label: "Bruxelles-Central", lat: 50.84566, lon: 4.35709, kind: "train" },
-    { key: "midi", label: "Bruxelles-Midi", lat: 50.83591, lon: 4.33653, kind: "train" },
-    { key: "nord", label: "Bruxelles-Nord", lat: 50.8597, lon: 4.36085, kind: "train" },
-    { key: "forest-midi", label: "Forest-Midi", lat: 50.81072, lon: 4.31827, kind: "train" },
-    { key: "uccle-calevoet", label: "Uccle-Calevoet", lat: 50.7931, lon: 4.3377, kind: "train" },
-    { key: "linkebeek", label: "Linkebeek", lat: 50.7727, lon: 4.3348, kind: "train" },
-    { key: "beersel", label: "Beersel", lat: 50.7662, lon: 4.3006, kind: "train" },
-    { key: "halle", label: "Halle", lat: 50.7337, lon: 4.2416, kind: "train" },
-    { key: "sint-genesius-rode", label: "Rhode-Saint-Genese", lat: 50.7468, lon: 4.3562, kind: "train" },
-    { key: "groenendaal", label: "Groenendaal", lat: 50.7676, lon: 4.4518, kind: "train" },
-    { key: "hoeilaart", label: "Hoeilaart", lat: 50.7679, lon: 4.4746, kind: "train" },
-    { key: "watermael", label: "Watermael", lat: 50.8098, lon: 4.3997, kind: "train" },
-    { key: "etterbeek", label: "Etterbeek", lat: 50.8221, lon: 4.3895, kind: "train" },
-    { key: "schuman", label: "Schuman", lat: 50.8422, lon: 4.3801, kind: "train" },
-    { key: "vilvoorde", label: "Vilvoorde", lat: 50.928, lon: 4.4322, kind: "train" },
-    { key: "zaventem", label: "Zaventem", lat: 50.8837, lon: 4.4736, kind: "train" },
-    { key: "dilbeek", label: "Dilbeek", lat: 50.8488, lon: 4.2599, kind: "train" },
-    { key: "groot-bijgaarden", label: "Groot-Bijgaarden", lat: 50.8703, lon: 4.2635, kind: "train" },
-    { key: "denderleeuw", label: "Denderleeuw", lat: 50.8878, lon: 4.0724, kind: "train" },
-    { key: "mechelen", label: "Mechelen", lat: 51.0176, lon: 4.4835, kind: "train" },
-    { key: "de-brouckere", label: "De Brouckere", lat: 50.8505, lon: 4.3522, kind: "stib" },
-    { key: "montgomery", label: "Montgomery", lat: 50.8374, lon: 4.4074, kind: "stib" },
-    { key: "herrmann-debroux", label: "Herrmann-Debroux", lat: 50.8124, lon: 4.4296, kind: "stib" },
-    { key: "erasme", label: "Erasme", lat: 50.815, lon: 4.2675, kind: "stib" }
-  ];
-
   function isStandalone() {
     return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
   }
@@ -1150,10 +1122,10 @@
 
   function transitOperatorColor(kind) {
     return {
-      train: "#111827",
+      train: "#0055a4",
       stib: "#2563eb",
-      delijn: "#f59e0b",
-      tec: "#dc2626",
+      delijn: "#f2a900",
+      tec: "#d71920",
       walk: "#64748b",
       other: "#6b7280"
     }[kind] || "#6b7280";
@@ -1162,10 +1134,10 @@
   function transitLegendHtml() {
     return [
       "<div class='map-popup-route-legend'>",
-      "<span><i class='transit-swatch' style='background:#111827'></i>Train</span>",
+      "<span><i class='transit-swatch' style='background:#0055a4'></i>Train</span>",
       "<span><i class='transit-swatch' style='background:#2563eb'></i>STIB</span>",
-      "<span><i class='transit-swatch' style='background:#f59e0b'></i>De Lijn</span>",
-      "<span><i class='transit-swatch' style='background:#dc2626'></i>TEC</span>",
+      "<span><i class='transit-swatch' style='background:#f2a900'></i>De Lijn</span>",
+      "<span><i class='transit-swatch' style='background:#d71920'></i>TEC</span>",
       "<span><i class='transit-swatch' style='background:#64748b'></i>Marche</span>",
       "</div>"
     ].join("");
@@ -2137,102 +2109,6 @@
     };
   }
 
-  function nearestFallbackHub(point) {
-    return TRANSIT_FALLBACK_HUBS.map(function (hub) {
-      return {
-        hub: hub,
-        distanceKm: haversineKm(point.lat, point.lon, hub.lat, hub.lon)
-      };
-    }).sort(function (a, b) {
-      return a.distanceKm - b.distanceKm;
-    })[0].hub;
-  }
-
-  function appendTransitFallbackPart(parts, kind, points, label) {
-    const cleaned = (Array.isArray(points) ? points : []).filter(function (point) {
-      return Array.isArray(point) && Number.isFinite(point[0]) && Number.isFinite(point[1]);
-    });
-    if (cleaned.length < 2) {
-      return;
-    }
-    const first = cleaned[0];
-    const last = cleaned[cleaned.length - 1];
-    if (haversineKm(first[0], first[1], last[0], last[1]) < 0.03) {
-      return;
-    }
-    parts.push({
-      kind: kind,
-      mode: kind === "walk" ? "walk" : "fallback",
-      label: label || transitOperatorLabel(kind),
-      points: cleaned
-    });
-  }
-
-  function buildStaticTransitFallbackRoute(origin, dest) {
-    const startHub = nearestFallbackHub(origin);
-    const endHub = nearestFallbackHub(dest);
-    const central = TRANSIT_FALLBACK_HUBS.find(function (hub) {
-      return hub.key === "central";
-    }) || startHub;
-    const parts = [];
-    appendTransitFallbackPart(parts, "walk", [[origin.lat, origin.lon], [startHub.lat, startHub.lon]], "Marche vers " + startHub.label);
-    if (startHub.key !== central.key) {
-      appendTransitFallbackPart(parts, startHub.kind === "train" ? "train" : "stib", [[startHub.lat, startHub.lon], [central.lat, central.lon]], startHub.label + " - " + central.label);
-    }
-    if (endHub.key !== central.key) {
-      appendTransitFallbackPart(parts, endHub.kind === "stib" ? "stib" : "train", [[central.lat, central.lon], [endHub.lat, endHub.lon]], central.label + " - " + endHub.label);
-    }
-    appendTransitFallbackPart(parts, "walk", [[endHub.lat, endHub.lon], [dest.lat, dest.lon]], "Marche depuis " + endHub.label);
-    if (!parts.length) {
-      appendTransitFallbackPart(parts, "other", [[origin.lat, origin.lon], [dest.lat, dest.lon]], "TC approximatif");
-    }
-    const allPoints = [];
-    parts.forEach(function (part) {
-      part.points.forEach(function (point) {
-        allPoints.push(point);
-      });
-    });
-    return {
-      parts: parts,
-      allPoints: allPoints,
-      source: "static-transit-fallback",
-      startHub: startHub.label,
-      endHub: endHub.label
-    };
-  }
-
-  function buildNearestTransitFallbackRoute(origin, dest, segments) {
-    const nodes = [];
-    (Array.isArray(segments) ? segments : []).forEach(function (segment) {
-      (Array.isArray(segment.points) ? segment.points : []).forEach(function (point) {
-        if (Array.isArray(point) && Number.isFinite(point[0]) && Number.isFinite(point[1])) {
-          nodes.push({ point: point, kind: segment.kind || "other", label: segment.label || transitOperatorLabel(segment.kind || "other") });
-        }
-      });
-    });
-    if (nodes.length < 2) {
-      return buildStaticTransitFallbackRoute(origin, dest);
-    }
-    const start = nodes.map(function (node) {
-      return { node: node, distanceKm: haversineKm(origin.lat, origin.lon, node.point[0], node.point[1]) };
-    }).sort(function (a, b) { return a.distanceKm - b.distanceKm; })[0].node;
-    const end = nodes.map(function (node) {
-      return { node: node, distanceKm: haversineKm(dest.lat, dest.lon, node.point[0], node.point[1]) };
-    }).sort(function (a, b) { return a.distanceKm - b.distanceKm; })[0].node;
-    const kind = end.kind !== "walk" && end.kind !== "other" ? end.kind : (start.kind || "other");
-    const parts = [];
-    appendTransitFallbackPart(parts, "walk", [[origin.lat, origin.lon], start.point], "Marche vers le reseau TC");
-    appendTransitFallbackPart(parts, kind || "other", [start.point, end.point], "Raccord TC approximatif");
-    appendTransitFallbackPart(parts, "walk", [end.point, [dest.lat, dest.lon]], "Marche depuis le reseau TC");
-    const allPoints = [];
-    parts.forEach(function (part) { part.points.forEach(function (point) { allPoints.push(point); }); });
-    return {
-      parts: parts,
-      allPoints: allPoints,
-      source: "nearest-transit-fallback"
-    };
-  }
-
   function addRoutePolyline(group, points, style, key) {
     const line = window.L.polyline(points, style).addTo(group);
     const hitLine = window.L.polyline(points, routePreviewHitStyle()).addTo(group);
@@ -2252,9 +2128,19 @@
     window.veilleImmoMap.fitBounds(bounds, { padding: [22, 22], maxZoom: 14 });
   }
 
+  function transitDisplayParts(parts) {
+    return (Array.isArray(parts) ? parts : []).filter(function (part) {
+      return part
+        && part.kind !== "walk"
+        && part.mode !== "walk"
+        && Array.isArray(part.points)
+        && part.points.length >= 2;
+    });
+  }
+
   function drawTransitParts(group, parts, key) {
     const allPoints = [];
-    (Array.isArray(parts) ? parts : []).forEach(function (part) {
+    transitDisplayParts(parts).forEach(function (part) {
       addRoutePolyline(group, part.points, routePreviewStyle("transit", part.kind), key);
       (Array.isArray(part.points) ? part.points : []).forEach(function (point) {
         allPoints.push(point);
@@ -2306,20 +2192,15 @@
     fitRoutePreview(directPoints);
     if (mode === "transit") {
       ensureTransitTileLayer();
-      const fallbackRoute = buildStaticTransitFallbackRoute(origin, dest);
-      const fallbackPoints = drawTransitParts(group, fallbackRoute.parts, key);
-      fitRoutePreview(fallbackPoints.length ? fallbackPoints : directPoints);
       if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
         window.veilleImmoMap.getContainer().classList.add("route-preview-hide-popups");
       }
       window.veilleImmoTransitPreviewState = {
-        segments: fallbackRoute.parts.length,
-        layerOnly: false,
-        status: "fallback-loading",
-        fallback: true,
-        source: fallbackRoute.source,
-        startHub: fallbackRoute.startHub,
-        endHub: fallbackRoute.endHub
+        segments: 0,
+        layerOnly: true,
+        status: "loading-real-osm-geometry",
+        fallback: false,
+        straightFallback: false
       };
     } else {
       if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
@@ -2330,7 +2211,7 @@
     window.veilleImmoRoutePreviewState = {
       count: Object.keys(routePreviewEntries).length,
       keys: Object.keys(routePreviewEntries),
-      lastSource: mode === "transit" ? "transit-fallback-loading" : "direct-loading",
+      lastSource: mode === "transit" ? "transit-real-geometry-loading" : "direct-loading",
       lastMode: mode,
       transitTileLayerActive: Boolean(window.veilleImmoTransitTileLayerActive)
     };
@@ -2351,36 +2232,54 @@
       try {
         const segments = await fetchTransitRouteSegments(origin, dest);
         const route = buildTransitRouteFromSegments(origin, dest, segments);
+        const displayParts = transitDisplayParts(route.parts);
+        if (!displayParts.length) {
+          throw new Error("Aucun segment TC reel affichable");
+        }
         if (routePreviewEntries[key] === group && typeof group.clearLayers === "function") {
           group.clearLayers();
-          const allPoints = drawTransitParts(group, route.parts, key);
+          const allPoints = drawTransitParts(group, displayParts, key);
           fitRoutePreview(allPoints.length ? allPoints : directPoints);
           source = "osm-transit-graph";
           if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
             window.veilleImmoMap.getContainer().classList.add("route-preview-hide-popups");
           }
           window.veilleImmoTransitPreviewState = {
-            segments: route.parts.length,
+            segments: displayParts.length,
             layerOnly: false,
             minutes: Math.round(route.minutes),
             graphNodes: route.graphNodes,
             graphEdges: route.graphEdges,
             transferEdges: route.transferEdges,
             networkSegments: route.networkSegments,
-            operators: route.parts.reduce(function (acc, part) {
+            operators: displayParts.reduce(function (acc, part) {
               acc[part.kind] = (acc[part.kind] || 0) + 1;
               return acc;
-            }, {})
+            }, {}),
+            fallback: false,
+            straightFallback: false
           };
         }
       } catch (error) {
-        source = "transit-fallback";
+        source = "osm-transit-unavailable";
+        if (group && typeof group.clearLayers === "function") {
+          group.clearLayers();
+        }
+        if (layer && routePreviewEntries[key]) {
+          layer.removeLayer(routePreviewEntries[key]);
+          delete routePreviewEntries[key];
+        }
+        input.checked = false;
+        if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
+          window.veilleImmoMap.getContainer().classList.remove("route-preview-hide-popups");
+        }
+        removeTransitTileLayerIfIdle();
         window.veilleImmoTransitPreviewState = {
-          segments: group && typeof group.getLayers === "function" ? group.getLayers().filter(function (item) {
-            return item && typeof item.getLatLngs === "function" && Number(item.options && item.options.opacity || 1) > 0;
-          }).length : 0,
+          segments: 0,
           layerOnly: false,
-          fallback: true,
+          fallback: false,
+          straightFallback: false,
+          unavailable: true,
           error: error && error.message ? error.message : "Aucune relation TC exploitable"
         };
       }

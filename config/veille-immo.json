@@ -28,87 +28,6 @@
   },
   "locations": [
     {
-      "name": "Wemmel",
-      "postalCode": "1780",
-      "immowebSlug": "wemmel",
-      "zimmoSlug": "wemmel",
-      "immovlanSlug": "wemmel",
-      "latitude": 50.908,
-      "longitude": 4.307
-    },
-    {
-      "name": "Dilbeek",
-      "postalCode": "1700",
-      "immowebSlug": "dilbeek",
-      "zimmoSlug": "dilbeek",
-      "immovlanSlug": "dilbeek",
-      "latitude": 50.847,
-      "longitude": 4.259
-    },
-    {
-      "name": "Sint-Pieters-Leeuw",
-      "postalCode": "1600",
-      "immowebSlug": "sint-pieters-leeuw",
-      "zimmoSlug": "sint-pieters-leeuw",
-      "immovlanSlug": "sint-pieters-leeuw",
-      "latitude": 50.779,
-      "longitude": 4.243
-    },
-    {
-      "name": "Alsemberg",
-      "postalCode": "1652",
-      "immowebSlug": "alsemberg",
-      "zimmoSlug": "alsemberg",
-      "immovlanSlug": "alsemberg",
-      "latitude": 50.742,
-      "longitude": 4.337
-    },
-    {
-      "name": "Huizingen",
-      "postalCode": "1654",
-      "immowebSlug": "huizingen",
-      "zimmoSlug": "huizingen",
-      "immovlanSlug": "huizingen",
-      "latitude": 50.746,
-      "longitude": 4.276
-    },
-    {
-      "name": "Ruisbroek",
-      "postalCode": "1601",
-      "immowebSlug": "ruisbroek",
-      "zimmoSlug": "ruisbroek",
-      "immovlanSlug": "ruisbroek",
-      "latitude": 50.791,
-      "longitude": 4.298
-    },
-    {
-      "name": "Sint-Genesius-Rode",
-      "postalCode": "1640",
-      "immowebSlug": "sint-genesius-rode",
-      "zimmoSlug": "sint-genesius-rode",
-      "immovlanSlug": "sint-genesius-rode",
-      "latitude": 50.746,
-      "longitude": 4.357
-    },
-    {
-      "name": "Hoeilaart",
-      "postalCode": "1560",
-      "immowebSlug": "hoeilaart",
-      "zimmoSlug": "hoeilaart",
-      "immovlanSlug": "hoeilaart",
-      "latitude": 50.767,
-      "longitude": 4.468
-    },
-    {
-      "name": "Linkebeek",
-      "postalCode": "1630",
-      "immowebSlug": "linkebeek",
-      "zimmoSlug": "linkebeek",
-      "immovlanSlug": "linkebeek",
-      "latitude": 50.767,
-      "longitude": 4.335
-    },
-    {
       "name": "Anderlecht",
       "postalCode": "1070",
       "immowebSlug": "anderlecht",
@@ -142,34 +61,20 @@
       "zimmoSlug": "bruxelles",
       "immovlanSlug": "bruxelles",
       "latitude": 50.847,
-      "longitude": 4.352
-    },
-    {
-      "name": "Bruxelles-ville - Laeken",
-      "postalCode": "1020",
-      "immowebSlug": "laeken",
-      "zimmoSlug": "laeken",
-      "immovlanSlug": "laeken",
-      "latitude": 50.883,
-      "longitude": 4.348
-    },
-    {
-      "name": "Bruxelles-ville - Neder-over-Heembeek",
-      "postalCode": "1120",
-      "immowebSlug": "neder-over-heembeek",
-      "zimmoSlug": "neder-over-heembeek",
-      "immovlanSlug": "neder-over-heembeek",
-      "latitude": 50.895,
-      "longitude": 4.383
-    },
-    {
-      "name": "Bruxelles-ville - Haren",
-      "postalCode": "1130",
-      "immowebSlug": "haren",
-      "zimmoSlug": "haren",
-      "immovlanSlug": "haren",
-      "latitude": 50.893,
-      "longitude": 4.418
+      "longitude": 4.352,
+      "aliases": [
+        "Bruxelles",
+        "Brussel",
+        "Laeken",
+        "Laken",
+        "Neder-over-Heembeek",
+        "Neder-Over-Heembeek",
+        "Neder-Over-Hembeek",
+        "Haren",
+        "1020",
+        "1120",
+        "1130"
+      ]
     },
     {
       "name": "Etterbeek",
@@ -305,25 +210,318 @@
       "immovlanSlug": "woluwe-saint-pierre",
       "latitude": 50.83,
       "longitude": 4.442
+    },
+    {
+      "name": "Asse",
+      "postalCode": "1730",
+      "immowebSlug": "asse",
+      "zimmoSlug": "asse",
+      "immovlanSlug": "asse",
+      "latitude": 50.91,
+      "longitude": 4.199
+    },
+    {
+      "name": "Beersel",
+      "postalCode": "1650",
+      "immowebSlug": "beersel",
+      "zimmoSlug": "beersel",
+      "immovlanSlug": "beersel",
+      "latitude": 50.765,
+      "longitude": 4.301,
+      "aliases": [
+        "Alsemberg",
+        "Huizingen",
+        "Lot",
+        "Dworp",
+        "Tourneppe",
+        "1652",
+        "1653",
+        "1654"
+      ]
+    },
+    {
+      "name": "Braine-l'Alleud",
+      "postalCode": "1420",
+      "immowebSlug": "braine-l-alleud",
+      "zimmoSlug": "braine-l-alleud",
+      "immovlanSlug": "braine-l-alleud",
+      "latitude": 50.684,
+      "longitude": 4.367
+    },
+    {
+      "name": "Braine-le-Chateau",
+      "postalCode": "1440",
+      "immowebSlug": "braine-le-chateau",
+      "zimmoSlug": "braine-le-chateau",
+      "immovlanSlug": "braine-le-chateau",
+      "latitude": 50.681,
+      "longitude": 4.273
+    },
+    {
+      "name": "Dilbeek",
+      "postalCode": "1700",
+      "immowebSlug": "dilbeek",
+      "zimmoSlug": "dilbeek",
+      "immovlanSlug": "dilbeek",
+      "latitude": 50.847,
+      "longitude": 4.259
+    },
+    {
+      "name": "Drogenbos",
+      "postalCode": "1620",
+      "immowebSlug": "drogenbos",
+      "zimmoSlug": "drogenbos",
+      "immovlanSlug": "drogenbos",
+      "latitude": 50.787,
+      "longitude": 4.316
+    },
+    {
+      "name": "Grimbergen",
+      "postalCode": "1850",
+      "immowebSlug": "grimbergen",
+      "zimmoSlug": "grimbergen",
+      "immovlanSlug": "grimbergen",
+      "latitude": 50.934,
+      "longitude": 4.372
+    },
+    {
+      "name": "Halle",
+      "postalCode": "1500",
+      "immowebSlug": "halle",
+      "zimmoSlug": "halle",
+      "immovlanSlug": "halle",
+      "latitude": 50.737,
+      "longitude": 4.239
+    },
+    {
+      "name": "Hoeilaart",
+      "postalCode": "1560",
+      "immowebSlug": "hoeilaart",
+      "zimmoSlug": "hoeilaart",
+      "immovlanSlug": "hoeilaart",
+      "latitude": 50.767,
+      "longitude": 4.468
+    },
+    {
+      "name": "Kraainem",
+      "postalCode": "1950",
+      "immowebSlug": "kraainem",
+      "zimmoSlug": "kraainem",
+      "immovlanSlug": "kraainem",
+      "latitude": 50.861,
+      "longitude": 4.469
+    },
+    {
+      "name": "La Hulpe",
+      "postalCode": "1310",
+      "immowebSlug": "la-hulpe",
+      "zimmoSlug": "la-hulpe",
+      "immovlanSlug": "la-hulpe",
+      "latitude": 50.731,
+      "longitude": 4.485
+    },
+    {
+      "name": "Lasne",
+      "postalCode": "1380",
+      "immowebSlug": "lasne",
+      "zimmoSlug": "lasne",
+      "immovlanSlug": "lasne",
+      "latitude": 50.687,
+      "longitude": 4.482
+    },
+    {
+      "name": "Lennik",
+      "postalCode": "1750",
+      "immowebSlug": "lennik",
+      "zimmoSlug": "lennik",
+      "immovlanSlug": "lennik",
+      "latitude": 50.809,
+      "longitude": 4.162
+    },
+    {
+      "name": "Linkebeek",
+      "postalCode": "1630",
+      "immowebSlug": "linkebeek",
+      "zimmoSlug": "linkebeek",
+      "immovlanSlug": "linkebeek",
+      "latitude": 50.767,
+      "longitude": 4.335
+    },
+    {
+      "name": "Machelen",
+      "postalCode": "1830",
+      "immowebSlug": "machelen",
+      "zimmoSlug": "machelen",
+      "immovlanSlug": "machelen",
+      "latitude": 50.911,
+      "longitude": 4.435
+    },
+    {
+      "name": "Meise",
+      "postalCode": "1860",
+      "immowebSlug": "meise",
+      "zimmoSlug": "meise",
+      "immovlanSlug": "meise",
+      "latitude": 50.939,
+      "longitude": 4.326
+    },
+    {
+      "name": "Merchtem",
+      "postalCode": "1785",
+      "immowebSlug": "merchtem",
+      "zimmoSlug": "merchtem",
+      "immovlanSlug": "merchtem",
+      "latitude": 50.951,
+      "longitude": 4.231
+    },
+    {
+      "name": "Overijse",
+      "postalCode": "3090",
+      "immowebSlug": "overijse",
+      "zimmoSlug": "overijse",
+      "immovlanSlug": "overijse",
+      "latitude": 50.772,
+      "longitude": 4.535
+    },
+    {
+      "name": "Pepingen",
+      "postalCode": "1670",
+      "immowebSlug": "pepingen",
+      "zimmoSlug": "pepingen",
+      "immovlanSlug": "pepingen",
+      "latitude": 50.759,
+      "longitude": 4.159
+    },
+    {
+      "name": "Rixensart",
+      "postalCode": "1330",
+      "immowebSlug": "rixensart",
+      "zimmoSlug": "rixensart",
+      "immovlanSlug": "rixensart",
+      "latitude": 50.712,
+      "longitude": 4.526
+    },
+    {
+      "name": "Sint-Genesius-Rode",
+      "postalCode": "1640",
+      "immowebSlug": "sint-genesius-rode",
+      "zimmoSlug": "sint-genesius-rode",
+      "immovlanSlug": "sint-genesius-rode",
+      "latitude": 50.746,
+      "longitude": 4.357
+    },
+    {
+      "name": "Sint-Pieters-Leeuw",
+      "postalCode": "1600",
+      "immowebSlug": "sint-pieters-leeuw",
+      "zimmoSlug": "sint-pieters-leeuw",
+      "immovlanSlug": "sint-pieters-leeuw",
+      "latitude": 50.779,
+      "longitude": 4.243,
+      "aliases": [
+        "Ruisbroek",
+        "Vlezenbeek",
+        "Oudenaken",
+        "1601",
+        "1602"
+      ]
+    },
+    {
+      "name": "Steenokkerzeel",
+      "postalCode": "1820",
+      "immowebSlug": "steenokkerzeel",
+      "zimmoSlug": "steenokkerzeel",
+      "immovlanSlug": "steenokkerzeel",
+      "latitude": 50.918,
+      "longitude": 4.51
+    },
+    {
+      "name": "Ternat",
+      "postalCode": "1740",
+      "immowebSlug": "ternat",
+      "zimmoSlug": "ternat",
+      "immovlanSlug": "ternat",
+      "latitude": 50.866,
+      "longitude": 4.167
+    },
+    {
+      "name": "Tervuren",
+      "postalCode": "3080",
+      "immowebSlug": "tervuren",
+      "zimmoSlug": "tervuren",
+      "immovlanSlug": "tervuren",
+      "latitude": 50.823,
+      "longitude": 4.514
+    },
+    {
+      "name": "Tubize",
+      "postalCode": "1480",
+      "immowebSlug": "tubize",
+      "zimmoSlug": "tubize",
+      "immovlanSlug": "tubize",
+      "latitude": 50.69,
+      "longitude": 4.2
+    },
+    {
+      "name": "Vilvoorde",
+      "postalCode": "1800",
+      "immowebSlug": "vilvoorde",
+      "zimmoSlug": "vilvoorde",
+      "immovlanSlug": "vilvoorde",
+      "latitude": 50.929,
+      "longitude": 4.424
+    },
+    {
+      "name": "Waterloo",
+      "postalCode": "1410",
+      "immowebSlug": "waterloo",
+      "zimmoSlug": "waterloo",
+      "immovlanSlug": "waterloo",
+      "latitude": 50.717,
+      "longitude": 4.399
+    },
+    {
+      "name": "Wemmel",
+      "postalCode": "1780",
+      "immowebSlug": "wemmel",
+      "zimmoSlug": "wemmel",
+      "immovlanSlug": "wemmel",
+      "latitude": 50.908,
+      "longitude": 4.307
+    },
+    {
+      "name": "Wezembeek-Oppem",
+      "postalCode": "1970",
+      "immowebSlug": "wezembeek-oppem",
+      "zimmoSlug": "wezembeek-oppem",
+      "immovlanSlug": "wezembeek-oppem",
+      "latitude": 50.84,
+      "longitude": 4.494
+    },
+    {
+      "name": "Zaventem",
+      "postalCode": "1930",
+      "immowebSlug": "zaventem",
+      "zimmoSlug": "zaventem",
+      "immovlanSlug": "zaventem",
+      "latitude": 50.883,
+      "longitude": 4.472
+    },
+    {
+      "name": "Zemst",
+      "postalCode": "1980",
+      "immowebSlug": "zemst",
+      "zimmoSlug": "zemst",
+      "immovlanSlug": "zemst",
+      "latitude": 50.983,
+      "longitude": 4.46
     }
   ],
   "localAgencySearches": [
-    "agence immobiliere maison a vendre Wemmel 350000",
-    "agence immobiliere maison a vendre Dilbeek 350000",
-    "agence immobiliere maison a vendre Sint-Pieters-Leeuw 350000",
-    "agence immobiliere maison a vendre Alsemberg 350000",
-    "agence immobiliere maison a vendre Huizingen 350000",
-    "agence immobiliere maison a vendre Ruisbroek 350000",
-    "agence immobiliere maison a vendre Sint-Genesius-Rode 350000",
-    "agence immobiliere maison a vendre Hoeilaart 350000",
-    "agence immobiliere maison a vendre Linkebeek 350000",
     "agence immobiliere maison a vendre Anderlecht 350000",
     "agence immobiliere maison a vendre Auderghem 350000",
     "agence immobiliere maison a vendre Berchem-Sainte-Agathe 350000",
     "agence immobiliere maison a vendre Bruxelles-ville 350000",
-    "agence immobiliere maison a vendre Laeken 350000",
-    "agence immobiliere maison a vendre Neder-over-Heembeek 350000",
-    "agence immobiliere maison a vendre Haren Bruxelles 350000",
     "agence immobiliere maison a vendre Etterbeek 350000",
     "agence immobiliere maison a vendre Evere 350000",
     "agence immobiliere maison a vendre Forest 350000",
@@ -338,6 +536,38 @@
     "agence immobiliere maison a vendre Uccle 350000",
     "agence immobiliere maison a vendre Watermael-Boitsfort 350000",
     "agence immobiliere maison a vendre Woluwe-Saint-Lambert 350000",
-    "agence immobiliere maison a vendre Woluwe-Saint-Pierre 350000"
+    "agence immobiliere maison a vendre Woluwe-Saint-Pierre 350000",
+    "agence immobiliere maison a vendre Asse 350000",
+    "agence immobiliere maison a vendre Beersel 350000",
+    "agence immobiliere maison a vendre Braine-l'Alleud 350000",
+    "agence immobiliere maison a vendre Braine-le-Chateau 350000",
+    "agence immobiliere maison a vendre Dilbeek 350000",
+    "agence immobiliere maison a vendre Drogenbos 350000",
+    "agence immobiliere maison a vendre Grimbergen 350000",
+    "agence immobiliere maison a vendre Halle 350000",
+    "agence immobiliere maison a vendre Hoeilaart 350000",
+    "agence immobiliere maison a vendre Kraainem 350000",
+    "agence immobiliere maison a vendre La Hulpe 350000",
+    "agence immobiliere maison a vendre Lasne 350000",
+    "agence immobiliere maison a vendre Lennik 350000",
+    "agence immobiliere maison a vendre Linkebeek 350000",
+    "agence immobiliere maison a vendre Machelen 350000",
+    "agence immobiliere maison a vendre Meise 350000",
+    "agence immobiliere maison a vendre Merchtem 350000",
+    "agence immobiliere maison a vendre Overijse 350000",
+    "agence immobiliere maison a vendre Pepingen 350000",
+    "agence immobiliere maison a vendre Rixensart 350000",
+    "agence immobiliere maison a vendre Sint-Genesius-Rode 350000",
+    "agence immobiliere maison a vendre Sint-Pieters-Leeuw 350000",
+    "agence immobiliere maison a vendre Steenokkerzeel 350000",
+    "agence immobiliere maison a vendre Ternat 350000",
+    "agence immobiliere maison a vendre Tervuren 350000",
+    "agence immobiliere maison a vendre Tubize 350000",
+    "agence immobiliere maison a vendre Vilvoorde 350000",
+    "agence immobiliere maison a vendre Waterloo 350000",
+    "agence immobiliere maison a vendre Wemmel 350000",
+    "agence immobiliere maison a vendre Wezembeek-Oppem 350000",
+    "agence immobiliere maison a vendre Zaventem 350000",
+    "agence immobiliere maison a vendre Zemst 350000"
   ]
 }

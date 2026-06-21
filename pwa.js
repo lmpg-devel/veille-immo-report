@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-21-08";
+  const APP_VERSION = "pwa-2026-06-21-09";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
@@ -23,7 +23,13 @@
   let latestLocationBoundaries = null;
   let locationBoundaryLayer = null;
   let locationBoundariesByKey = {};
+  let routePreviewLayer = null;
+  let routePreviewEntries = {};
   let renderedMapMarkers = [];
+  const ROUTE_REFERENCES = [
+    { key: "bourse", label: "Bourse de Bruxelles", lat: 50.8478282, lon: 4.3491201 },
+    { key: "decoster", label: "110 rue Pierre Decoster, Forest", lat: 50.8230517, lon: 4.3297564 }
+  ];
 
   function isStandalone() {
     return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
@@ -60,7 +66,8 @@
       ".location-chip-list{display:flex;flex-wrap:wrap;gap:8px}",
       ".location-chip.is-active{background:#0b5c86;border-color:#0b5c86;color:#fff}",
       ".location-chip:focus-visible,.location-filter-actions button:focus-visible{outline:3px solid rgba(11,92,134,.28);outline-offset:2px}",
-      ".location-boundary-path{cursor:pointer;transition:fill-opacity .12s ease,stroke-opacity .12s ease}",
+      ".location-boundary-path{cursor:pointer;transition:fill-opacity .12s ease,stroke-opacity .12s ease;outline:none}",
+      ".location-boundary-path:focus{outline:none}",
       ".listing-card.is-under-option{border-color:#d97706;box-shadow:inset 0 0 0 1px rgba(217,119,6,.28)}",
       ".option-badge{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;background:#d97706;color:#fff;font:700 11px/1 Arial,sans-serif;text-transform:uppercase;letter-spacing:.02em}",
       ".other-source-note{background:#eef7fb;border:1px solid #b8d9e8;border-radius:6px;padding:12px 14px;margin:18px 0;color:#253540}",
@@ -82,11 +89,17 @@
       ".source-map-pin-zimmo{background:#7c3aed}",
       ".source-map-pin-agency{background:#2f6f3e}",
       ".source-map-pin-p2p{background:#d97706}",
-      ".map-popup{min-width:220px;max-width:290px}",
+      ".map-popup{min-width:245px;max-width:320px}",
       ".map-popup-source{display:inline-flex;border-radius:999px;padding:3px 7px;background:#eef3f6;color:#253540;font:700 11px Arial,sans-serif;text-transform:uppercase;margin-bottom:6px}",
       ".map-popup-title{font:700 14px/1.3 Arial,sans-serif;color:#17202a;margin-bottom:5px}",
       ".map-popup-price{font:700 14px Arial,sans-serif;color:#0b513c;margin-bottom:6px}",
       ".map-popup-details,.map-popup-address,.map-popup-contact{font:12px/1.35 Arial,sans-serif;color:#3d4852;margin-top:5px}",
+      ".map-popup-routes{border-top:1px solid #e3e8ec;margin-top:9px;padding-top:8px;font:12px/1.35 Arial,sans-serif;color:#33424d}",
+      ".map-popup-route-title{font-weight:700;color:#17202a;margin-bottom:5px}",
+      ".map-popup-route-row{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;margin-top:5px}",
+      ".map-popup-route-row label{display:flex;align-items:center;gap:5px}",
+      ".map-popup-route-row input{margin:0}",
+      ".map-popup-route-note{font-size:11px;color:#66737d;margin-top:5px}",
       ".map-popup-actions{margin-top:8px}",
       ".map-popup-actions button{border:0;background:#fff;color:#0b5c86;font:600 12px Arial,sans-serif;padding:0}",
       "@media(max-width:760px){.price-filter-panel{grid-template-columns:1fr}.price-filter-inputs{justify-content:flex-start}.price-filter-inputs input{width:140px}.filter-source-counts{grid-column:auto}}",
@@ -422,13 +435,19 @@
   }
 
   function locationAliases(location) {
-    return [
+    const aliases = [
       location && location.name,
       location && location.postalCode,
       location && location.immowebSlug,
       location && location.zimmoSlug,
       location && location.immovlanSlug
-    ].filter(Boolean).map(locationKey).filter(Boolean);
+    ];
+    if (Array.isArray(location && location.aliases)) {
+      location.aliases.forEach(function (alias) {
+        aliases.push(alias);
+      });
+    }
+    return aliases.filter(Boolean).map(locationKey).filter(Boolean);
   }
 
   function configLocations(config) {
@@ -800,6 +819,76 @@
     return "<div class='map-popup-contact'><strong>Contact</strong> " + (pieces.length ? pieces.join(" · ") : "non publie") + "</div>";
   }
 
+  function haversineKm(aLat, aLon, bLat, bLon) {
+    const earthKm = 6371;
+    const toRad = Math.PI / 180;
+    const dLat = (bLat - aLat) * toRad;
+    const dLon = (bLon - aLon) * toRad;
+    const lat1 = aLat * toRad;
+    const lat2 = bLat * toRad;
+    const h = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+      + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    return earthKm * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
+  }
+
+  function routeDurationText(minutes) {
+    const value = Math.max(1, Math.round(minutes));
+    if (value < 60) {
+      return value + " min";
+    }
+    const hours = Math.floor(value / 60);
+    const rest = value % 60;
+    return rest ? hours + " h " + rest + " min" : hours + " h";
+  }
+
+  function osmBikeRouteUrl(origin, dest) {
+    return "https://www.openstreetmap.org/directions?engine=fossgis_osrm_bike&route="
+      + encodeURIComponent(origin.lat + "," + origin.lon + ";" + dest.lat + "," + dest.lon);
+  }
+
+  function transitRouteUrl(origin, dest) {
+    return "https://www.google.com/maps/dir/?api=1&origin="
+      + encodeURIComponent(origin.lat + "," + origin.lon)
+      + "&destination=" + encodeURIComponent(dest.lat + "," + dest.lon)
+      + "&travelmode=transit";
+  }
+
+  function routePopupHtml(listing) {
+    const lat = Number(listing && listing.latitude);
+    const lon = Number(listing && listing.longitude);
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+      return "";
+    }
+    const dest = { lat: lat, lon: lon };
+    const rows = [];
+    ROUTE_REFERENCES.forEach(function (origin) {
+      const directKm = haversineKm(origin.lat, origin.lon, dest.lat, dest.lon);
+      const bikeKm = directKm * 1.25;
+      const bikeMinutes = (bikeKm / 25) * 60;
+      const transitMinutes = 10 + (directKm / 18) * 60;
+      const commonData = " data-origin-lat='" + escapeHtml(origin.lat) + "' data-origin-lon='" + escapeHtml(origin.lon) + "' data-dest-lat='" + escapeHtml(dest.lat) + "' data-dest-lon='" + escapeHtml(dest.lon) + "'";
+      rows.push(
+        "<div class='map-popup-route-row'>"
+        + "<label><input type='checkbox' class='route-preview-toggle' data-route-mode='bike' data-route-id='bike-" + escapeHtml(origin.key) + "'" + commonData + "> Vélo " + escapeHtml(origin.label) + " · ~" + escapeHtml(routeDurationText(bikeMinutes)) + "</label>"
+        + "<button type='button' class='external-link-button' data-external-url='" + escapeHtml(osmBikeRouteUrl(origin, dest)) + "'>OSM</button>"
+        + "</div>"
+      );
+      rows.push(
+        "<div class='map-popup-route-row'>"
+        + "<label><input type='checkbox' class='route-preview-toggle' data-route-mode='transit' data-route-id='transit-" + escapeHtml(origin.key) + "'" + commonData + "> TC " + escapeHtml(origin.label) + " · ~" + escapeHtml(routeDurationText(transitMinutes)) + "</label>"
+        + "<button type='button' class='external-link-button' data-external-url='" + escapeHtml(transitRouteUrl(origin, dest)) + "'>Calcul</button>"
+        + "</div>"
+      );
+    });
+    return [
+      "<div class='map-popup-routes'>",
+      "<div class='map-popup-route-title'>Trajets indicatifs</div>",
+      rows.join(""),
+      "<div class='map-popup-route-note'>Velo: estimation locale a 25 km/h. TC: estimation indicative, calcul horaire via le lien externe.</div>",
+      "</div>"
+    ].join("");
+  }
+
   function mapPopupHtml(listing) {
     const title = listing && listing.title ? listing.title : "Annonce";
     const source = listing && listing.source ? listing.source : "Source inconnue";
@@ -812,6 +901,7 @@
       listingDetailsHtml(listing),
       listing && listing.address ? "<div class='map-popup-address'>" + escapeHtml(listing.address) + "</div>" : "",
       listingContactHtml(listing),
+      routePopupHtml(listing),
       "<div class='map-popup-actions'><button type='button' class='external-link-button' data-external-url='" + escapeHtml(url) + "'>Ouvrir l'annonce</button></div>",
       "</div>"
     ].join("");
@@ -1177,6 +1267,124 @@
     window.veilleImmoLocationBoundaryKeys = Object.keys(locationBoundariesByKey);
   }
 
+  function ensureRoutePreviewLayer() {
+    if (!window.L || !window.veilleImmoMap) {
+      return null;
+    }
+    if (!routePreviewLayer) {
+      routePreviewLayer = window.L.layerGroup().addTo(window.veilleImmoMap);
+    }
+    return routePreviewLayer;
+  }
+
+  function routePreviewStyle(mode) {
+    if (mode === "bike") {
+      return { color: "#0f8f63", weight: 5, opacity: 0.88 };
+    }
+    return { color: "#d97706", weight: 4, opacity: 0.86, dashArray: "8 7" };
+  }
+
+  function routePreviewKey(input) {
+    return [
+      input.dataset.routeMode || "route",
+      input.dataset.routeId || "",
+      input.dataset.destLat || "",
+      input.dataset.destLon || ""
+    ].join("|");
+  }
+
+  function clearRoutePreviews() {
+    if (routePreviewLayer && typeof routePreviewLayer.clearLayers === "function") {
+      routePreviewLayer.clearLayers();
+    }
+    routePreviewEntries = {};
+    window.veilleImmoRoutePreviewState = { count: 0, keys: [] };
+  }
+
+  async function fetchBikeRouteLine(origin, dest) {
+    const url = "https://routing.openstreetmap.de/routed-bike/route/v1/bike/"
+      + origin.lon + "," + origin.lat + ";" + dest.lon + "," + dest.lat
+      + "?overview=full&geometries=geojson&steps=false";
+    const response = await fetch(url, { headers: { "Accept": "application/json" } });
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status);
+    }
+    const data = await response.json();
+    const coordinates = data && data.routes && data.routes[0] && data.routes[0].geometry && data.routes[0].geometry.coordinates;
+    if (!Array.isArray(coordinates) || coordinates.length < 2) {
+      throw new Error("Route OSM vide");
+    }
+    return coordinates.map(function (point) {
+      return [point[1], point[0]];
+    });
+  }
+
+  async function drawRoutePreview(input) {
+    if (!input) {
+      return;
+    }
+    const layer = ensureRoutePreviewLayer();
+    if (!layer) {
+      input.checked = false;
+      return;
+    }
+    const key = routePreviewKey(input);
+    if (!input.checked) {
+      if (routePreviewEntries[key]) {
+        layer.removeLayer(routePreviewEntries[key]);
+        delete routePreviewEntries[key];
+      }
+      window.veilleImmoRoutePreviewState = { count: Object.keys(routePreviewEntries).length, keys: Object.keys(routePreviewEntries) };
+      return;
+    }
+    const mode = input.dataset.routeMode || "bike";
+    const origin = { lat: Number(input.dataset.originLat), lon: Number(input.dataset.originLon) };
+    const dest = { lat: Number(input.dataset.destLat), lon: Number(input.dataset.destLon) };
+    if (!Number.isFinite(origin.lat) || !Number.isFinite(origin.lon) || !Number.isFinite(dest.lat) || !Number.isFinite(dest.lon)) {
+      input.checked = false;
+      return;
+    }
+    let points = [[origin.lat, origin.lon], [dest.lat, dest.lon]];
+    let source = "direct";
+    if (mode === "bike") {
+      try {
+        points = await fetchBikeRouteLine(origin, dest);
+        source = "osm-bike";
+      } catch (error) {
+        source = "direct-fallback";
+      }
+    }
+    if (routePreviewEntries[key]) {
+      layer.removeLayer(routePreviewEntries[key]);
+    }
+    const line = window.L.polyline(points, routePreviewStyle(mode)).addTo(layer);
+    routePreviewEntries[key] = line;
+    if (window.veilleImmoMap && typeof line.getBounds === "function") {
+      window.veilleImmoMap.fitBounds(line.getBounds(), { padding: [22, 22], maxZoom: 14 });
+    }
+    window.veilleImmoRoutePreviewState = { count: Object.keys(routePreviewEntries).length, keys: Object.keys(routePreviewEntries), lastSource: source, lastMode: mode };
+  }
+
+  function installRoutePreviewHandlers() {
+    if (document.documentElement.dataset.routePreviewHandlers !== "1") {
+      document.documentElement.dataset.routePreviewHandlers = "1";
+      document.addEventListener("change", function (event) {
+        const input = event.target && event.target.closest ? event.target.closest(".route-preview-toggle") : null;
+        if (!input) {
+          return;
+        }
+        event.stopPropagation();
+        drawRoutePreview(input);
+      }, true);
+    }
+    if (window.veilleImmoMap && typeof window.veilleImmoMap.on === "function" && !window.veilleImmoRoutePopupCloseBound) {
+      window.veilleImmoRoutePopupCloseBound = true;
+      window.veilleImmoMap.on("popupclose", function () {
+        clearRoutePreviews();
+      });
+    }
+  }
+
   function renderDiagnosticSummary(diagnostics) {
     if (!Array.isArray(diagnostics) || diagnostics.length === 0) {
       return "";
@@ -1485,6 +1693,7 @@
       updateReportHeader(payload, latestConfig);
       annotateSourceBadges(payload);
       syncSourceMapMarkers(payload);
+      installRoutePreviewHandlers();
       injectPriceFilter(payload, latestConfig);
       if (latestConfig) {
         injectLocationFilter(latestConfig);
@@ -1492,6 +1701,7 @@
       renderOtherSources(payload, latestConfig);
       annotateSourceBadges(payload);
       syncSourceMapMarkers(payload);
+      installRoutePreviewHandlers();
       applyPriceFilter();
       if (manual) {
         setRebuildFeedback("Recalcul termine: carte et liste mises a jour.", false);
@@ -1616,6 +1826,7 @@
 
   window.addEventListener("load", async function () {
     injectControls();
+    installRoutePreviewHandlers();
     const pageButton = document.getElementById("installButton");
     if (pageButton) {
       pageButton.addEventListener("click", promptInstall);

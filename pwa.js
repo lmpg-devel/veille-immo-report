@@ -1,10 +1,11 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-21-23";
+  const APP_VERSION = "pwa-2026-06-21-24";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
+  const LOCATION_DISTANCES_URL = "data/location-distances.json";
   const TRANSIT_ROUTES_URL = "data/transit-routes.json";
   const OVERPASS_ENDPOINTS = [
     "https://overpass-api.de/api/interpreter",
@@ -19,9 +20,12 @@
   const PRICE_FILTER_CONFIG_KEY = "veille-immo-price-config-max";
   const SHOW_OPTION_KEY = "veille-immo-show-option";
   const LOCATION_FILTER_KEY = "veille-immo-selected-locations";
+  const LOCATION_DISTANCE_KEY = "veille-immo-location-distance-km";
   const FAVORITES_KEY = "veille-immo-favorites";
   const DEFAULT_MAX_PRICE = 350000;
   const USER_PRICE_LIMIT_MAX = 350000;
+  const DEFAULT_LOCATION_DISTANCE_KM = 15;
+  const MAX_LOCATION_DISTANCE_KM = 15;
   let deferredInstallPrompt = null;
   let latestPayload = null;
   let latestConfig = null;
@@ -29,7 +33,9 @@
   let currentPriceConfigMax = null;
   let showOptionListings = false;
   let selectedLocationKeys = null;
+  let currentLocationDistanceKm = null;
   let latestLocationBoundaries = null;
+  let latestLocationDistances = null;
   let latestTransitRoutes = null;
   let locationBoundaryLayer = null;
   let locationBoundariesByKey = {};
@@ -76,6 +82,10 @@
       ".location-filter-count{font-size:13px;color:#5c6670;margin-left:8px}",
       ".location-filter-actions{display:flex;gap:8px;flex-wrap:wrap}",
       ".location-filter-actions button,.location-chip{border:1px solid #c8d1d8;background:#fff;border-radius:999px;padding:7px 10px;font:600 13px Arial,sans-serif;color:#17202a;cursor:pointer}",
+      ".location-distance-filter{display:grid;grid-template-columns:minmax(210px,auto) minmax(180px,1fr) auto;gap:10px;align-items:center;margin:0 0 12px;padding:10px 12px;background:#f7fafc;border:1px solid #d8e2e8;border-radius:7px}",
+      ".location-distance-filter label{font:700 13px Arial,sans-serif;color:#182026}",
+      ".location-distance-filter input{width:100%;accent-color:#0b5c86}",
+      ".location-distance-value{font:700 13px Arial,sans-serif;color:#0b5c86;white-space:nowrap}",
       ".location-chip-list{display:flex;flex-wrap:wrap;gap:8px}",
       ".location-chip.is-active{background:#0b5c86;border-color:#0b5c86;color:#fff}",
       ".location-chip:focus-visible,.location-filter-actions button:focus-visible{outline:3px solid rgba(11,92,134,.28);outline-offset:2px}",
@@ -145,7 +155,7 @@
       ".map-popup-actions button{border:0;background:#fff;color:#0b5c86;font:600 12px Arial,sans-serif;padding:0}",
       ".listing-contact-details{margin-top:10px;background:#f4f7f8;border-radius:6px;padding:8px 10px;color:#33424d}",
       ".listing-contact-details summary{cursor:pointer;font-weight:700;color:#0b5c86}",
-      "@media(max-width:760px){.price-filter-panel{grid-template-columns:1fr}.price-filter-inputs{justify-content:flex-start}.price-filter-inputs input{width:140px}.filter-source-counts{grid-column:auto}}",
+      "@media(max-width:760px){.price-filter-panel{grid-template-columns:1fr}.price-filter-inputs{justify-content:flex-start}.price-filter-inputs input{width:140px}.filter-source-counts{grid-column:auto}.location-distance-filter{grid-template-columns:1fr;align-items:start}.location-distance-value{justify-self:start}}",
       "@media(max-width:680px){.pwa-controls{left:12px;right:12px}.pwa-controls button{flex:1}}"
     ].join("");
     document.head.appendChild(style);
@@ -388,6 +398,21 @@
     return data;
   }
 
+  async function fetchLocationDistances() {
+    const response = await fetch(LOCATION_DISTANCES_URL + "?t=" + Date.now(), {
+      cache: "no-store",
+      headers: { "Accept": "application/json" }
+    });
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status);
+    }
+    const data = await response.json();
+    if (!data || !data.distances) {
+      return { schemaVersion: 1, distances: {} };
+    }
+    return data;
+  }
+
   async function fetchTransitRoutes() {
     const response = await fetch(TRANSIT_ROUTES_URL + "?t=" + Date.now(), {
       cache: "no-store",
@@ -605,6 +630,77 @@
       localStorage.setItem(LOCATION_FILTER_KEY, JSON.stringify(Array.from(selectedLocationKeys || [])));
     } catch (error) {
     }
+  }
+
+  function clampLocationDistanceKm(value) {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) {
+      return DEFAULT_LOCATION_DISTANCE_KM;
+    }
+    return Math.max(0, Math.min(MAX_LOCATION_DISTANCE_KM, Math.round(numeric)));
+  }
+
+  function storedLocationDistanceKm() {
+    try {
+      const stored = localStorage.getItem(LOCATION_DISTANCE_KEY);
+      if (stored != null && stored !== "") {
+        return clampLocationDistanceKm(stored);
+      }
+    } catch (error) {
+    }
+    return DEFAULT_LOCATION_DISTANCE_KM;
+  }
+
+  function saveLocationDistanceKm(value) {
+    try {
+      localStorage.setItem(LOCATION_DISTANCE_KEY, String(clampLocationDistanceKm(value)));
+    } catch (error) {
+    }
+  }
+
+  function locationDistanceEntry(key) {
+    const distances = latestLocationDistances && latestLocationDistances.distances ? latestLocationDistances.distances : {};
+    return distances[key] || null;
+  }
+
+  function locationKeysWithinDistanceKm(value, config) {
+    const limit = clampLocationDistanceKm(value);
+    const distances = latestLocationDistances && latestLocationDistances.distances ? latestLocationDistances.distances : null;
+    if (!distances || !Object.keys(distances).length) {
+      return defaultLocationKeys(config);
+    }
+    return configLocations(config).map(function (location) {
+      return locationKey(location.name || location.postalCode || "");
+    }).filter(function (key) {
+      const entry = locationDistanceEntry(key);
+      const km = entry ? Number(entry.km) : NaN;
+      return key && Number.isFinite(km) && km <= limit + 1e-9;
+    });
+  }
+
+  function updateLocationDistanceUi() {
+    const value = currentLocationDistanceKm == null ? storedLocationDistanceKm() : clampLocationDistanceKm(currentLocationDistanceKm);
+    const slider = document.getElementById("locationDistanceSlider");
+    const output = document.getElementById("locationDistanceValue");
+    if (slider) {
+      slider.value = String(value);
+      slider.setAttribute("aria-valuetext", value + " km");
+    }
+    if (output) {
+      output.textContent = value + " km";
+    }
+    window.veilleImmoLocationDistanceState = {
+      km: value,
+      selected: selectedLocationKeys ? selectedLocationKeys.size : 0,
+      available: Boolean(latestLocationDistances && latestLocationDistances.distances)
+    };
+  }
+
+  function setLocationDistanceKm(value) {
+    currentLocationDistanceKm = clampLocationDistanceKm(value);
+    saveLocationDistanceKm(currentLocationDistanceKm);
+    setSelectedLocations(locationKeysWithinDistanceKm(currentLocationDistanceKm, latestConfig));
+    updateLocationDistanceUi();
   }
 
   function boundaryFeatureByKey(key) {
@@ -1449,12 +1545,22 @@
     selectedLocationKeys = new Set(keys);
     saveSelectedLocations();
     updateLocationFilterUi();
+    updateLocationDistanceUi();
     applyPriceFilter();
   }
 
   function toggleSelectedLocation(key) {
+    if (currentLocationDistanceKm == null) {
+      currentLocationDistanceKm = storedLocationDistanceKm();
+    }
     if (!selectedLocationKeys) {
-      selectedLocationKeys = selectedLocationsFromStorage(latestConfig);
+      if (latestLocationDistances && latestLocationDistances.distances) {
+        selectedLocationKeys = new Set(locationKeysWithinDistanceKm(currentLocationDistanceKm, latestConfig));
+        saveLocationDistanceKm(currentLocationDistanceKm);
+        saveSelectedLocations();
+      } else {
+        selectedLocationKeys = selectedLocationsFromStorage(latestConfig);
+      }
     }
     if (selectedLocationKeys.has(key)) {
       selectedLocationKeys.delete(key);
@@ -1497,6 +1603,11 @@
         "<div><span class='location-filter-title'>Communes incluses</span><span id='locationFilterCount' class='location-filter-count'></span></div>",
         "<div class='location-filter-actions'><button id='locationSelectAll' type='button'>Tout cocher</button><button id='locationSelectNone' type='button'>Tout décocher</button></div>",
         "</div>",
+        "<div class='location-distance-filter'>",
+        "<label for='locationDistanceSlider'>Distance max depuis Bruxelles-Capitale</label>",
+        "<input id='locationDistanceSlider' type='range' min='0' max='" + MAX_LOCATION_DISTANCE_KM + "' step='1' value='" + DEFAULT_LOCATION_DISTANCE_KM + "'>",
+        "<span id='locationDistanceValue' class='location-distance-value'>" + DEFAULT_LOCATION_DISTANCE_KM + " km</span>",
+        "</div>",
         "<div id='locationChipList' class='location-chip-list'></div>"
       ].join("");
       const map = document.getElementById("map");
@@ -1527,9 +1638,20 @@
           setSelectedLocations([]);
         }
       });
+      panel.addEventListener("input", function (event) {
+        if (event.target.id === "locationDistanceSlider") {
+          setLocationDistanceKm(event.target.value);
+        }
+      });
+      panel.addEventListener("change", function (event) {
+        if (event.target.id === "locationDistanceSlider") {
+          setLocationDistanceKm(event.target.value);
+        }
+      });
     }
     syncLocationMapBoundaries(latestConfig);
     updateLocationFilterUi();
+    updateLocationDistanceUi();
   }
 
   function updateLocationFilterUi() {
@@ -2901,12 +3023,18 @@
         latestLocationBoundaries = latestLocationBoundaries || { type: "FeatureCollection", features: [] };
       }
       try {
+        latestLocationDistances = await fetchLocationDistances();
+      } catch (error) {
+        latestLocationDistances = latestLocationDistances || { schemaVersion: 1, distances: {} };
+      }
+      try {
         latestTransitRoutes = await fetchTransitRoutes();
       } catch (error) {
         latestTransitRoutes = latestTransitRoutes || { schemaVersion: 1, routes: {}, diagnostics: { unavailable: true } };
       }
       latestPayload = payload;
       latestConfig = config || latestConfig;
+      window.veilleImmoLocationDistances = latestLocationDistances;
       window.veilleImmoTransitRoutes = latestTransitRoutes;
       updateReportHeader(payload, latestConfig);
       annotateSourceBadges(payload);

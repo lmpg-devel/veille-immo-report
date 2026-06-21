@@ -208,6 +208,83 @@ async function main() {
       markers: window.veilleImmoRenderedMarkerLayers && window.veilleImmoRenderedMarkerLayers.length
     }))()`);
 
+    const distanceInitial = await waitFor(chrome.page, `(() => {
+      const slider = document.querySelector('#locationDistanceSlider');
+      const output = document.querySelector('#locationDistanceValue');
+      const state = window.veilleImmoLocationDistanceState || {};
+      return {
+        ok: Boolean(slider && output && state.available && state.selected > 0),
+        value: slider ? slider.value : null,
+        output: output ? output.textContent.trim() : null,
+        state,
+        chips: document.querySelectorAll('.location-chip.is-active').length,
+        markers: window.veilleImmoRenderedMarkerLayers && window.veilleImmoRenderedMarkerLayers.length
+      };
+    })()`);
+
+    const distanceZero = await chrome.page.evaluate(`(() => {
+      const slider = document.querySelector('#locationDistanceSlider');
+      if (!slider) return { ok: false, reason: 'slider missing' };
+      slider.value = '0';
+      slider.dispatchEvent(new Event('input', { bubbles: true }));
+      slider.dispatchEvent(new Event('change', { bubbles: true }));
+      const output = document.querySelector('#locationDistanceValue');
+      const state = window.veilleImmoLocationDistanceState || {};
+      return {
+        ok: state.km === 0 && /0 km/.test(output ? output.textContent : '') && state.selected < ${distanceInitial.state.selected},
+        value: slider.value,
+        output: output ? output.textContent.trim() : null,
+        state,
+        chips: document.querySelectorAll('.location-chip.is-active').length,
+        markers: window.veilleImmoRenderedMarkerLayers && window.veilleImmoRenderedMarkerLayers.length
+      };
+    })()`);
+    if (!distanceZero.ok) {
+      throw new Error(`Slider 0 km invalide: ${JSON.stringify(distanceZero)}`);
+    }
+
+    await waitFor(chrome.page, `(() => {
+      const state = window.veilleImmoLocationDistanceState || {};
+      const output = document.querySelector('#locationDistanceValue');
+      const active = document.querySelectorAll('.location-chip.is-active').length;
+      return {
+        ok: state.km === 0 && /0 km/.test(output ? output.textContent : '') && active === state.selected && state.selected < ${distanceInitial.state.selected},
+        state,
+        active
+      };
+    })()`);
+    const distanceMax = await chrome.page.evaluate(`(() => {
+      const slider = document.querySelector('#locationDistanceSlider');
+      if (!slider) return { ok: false, reason: 'slider missing' };
+      slider.value = '15';
+      slider.dispatchEvent(new Event('input', { bubbles: true }));
+      slider.dispatchEvent(new Event('change', { bubbles: true }));
+      const output = document.querySelector('#locationDistanceValue');
+      const state = window.veilleImmoLocationDistanceState || {};
+      return {
+        ok: state.km === 15 && /15 km/.test(output ? output.textContent : '') && state.selected >= ${distanceInitial.state.selected},
+        value: slider.value,
+        output: output ? output.textContent.trim() : null,
+        state,
+        chips: document.querySelectorAll('.location-chip.is-active').length,
+        markers: window.veilleImmoRenderedMarkerLayers && window.veilleImmoRenderedMarkerLayers.length
+      };
+    })()`);
+    if (!distanceMax.ok) {
+      throw new Error(`Slider 15 km invalide: ${JSON.stringify(distanceMax)}`);
+    }
+
+    await waitFor(chrome.page, `(() => {
+      const state = window.veilleImmoLocationDistanceState || {};
+      const output = document.querySelector('#locationDistanceValue');
+      const active = document.querySelectorAll('.location-chip.is-active').length;
+      return {
+        ok: state.km === 15 && /15 km/.test(output ? output.textContent : '') && active === state.selected && state.selected >= ${distanceInitial.state.selected},
+        state,
+        active
+      };
+    })()`);
+
     const opened = await chrome.page.evaluate(`(() => {
       function listingUrlKey(url) {
         const raw = String(url || '').trim();
@@ -311,6 +388,9 @@ async function main() {
     console.log(JSON.stringify({
       ok: true,
       url,
+      distanceInitial,
+      distanceZero,
+      distanceMax,
       opened,
       checked,
       drawn,

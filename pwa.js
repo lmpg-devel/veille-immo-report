@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-21-15";
+  const APP_VERSION = "pwa-2026-06-21-16";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
@@ -990,6 +990,9 @@
     if (/\btec\b|otw/.test(text)) {
       return "tec";
     }
+    if (/walk|marche/.test(text)) {
+      return "walk";
+    }
     return "other";
   }
 
@@ -999,6 +1002,7 @@
       stib: "STIB",
       delijn: "De Lijn",
       tec: "TEC",
+      walk: "Marche",
       other: "Autre TC"
     }[kind] || "Autre TC";
   }
@@ -1009,6 +1013,7 @@
       stib: "#2563eb",
       delijn: "#f59e0b",
       tec: "#dc2626",
+      walk: "#64748b",
       other: "#6b7280"
     }[kind] || "#6b7280";
   }
@@ -1020,6 +1025,7 @@
       "<span><i class='transit-swatch' style='background:#2563eb'></i>STIB</span>",
       "<span><i class='transit-swatch' style='background:#f59e0b'></i>De Lijn</span>",
       "<span><i class='transit-swatch' style='background:#dc2626'></i>TEC</span>",
+      "<span><i class='transit-swatch' style='background:#64748b'></i>Marche</span>",
       "</div>"
     ].join("");
   }
@@ -1056,7 +1062,7 @@
       "<div class='map-popup-route-title'>Trajets et lignes OSM</div>",
       rows.join(""),
       transitLegendHtml(),
-      "<div class='map-popup-route-note'>Velo: itineraire OSRM si disponible, sinon estimation locale a 25 km/h. TC: couche transport OSM et relations Overpass quand elles sont exploitables; pas de faux trace direct.</div>",
+      "<div class='map-popup-route-note'>Velo: itineraire OSRM si disponible, sinon estimation locale a 25 km/h. TC: graphe OSM reconstruit avec marche/correspondances, sans horaires; aucun faux trace direct.</div>",
       "</div>"
     ].join("");
   }
@@ -1480,6 +1486,9 @@
       return { color: "#0f8f63", weight: 5, opacity: 0.88 };
     }
     if (mode === "transit") {
+      if (kind === "walk") {
+        return { color: transitOperatorColor("walk"), weight: 3, opacity: 0.78, dashArray: "5 6" };
+      }
       return { color: transitOperatorColor(kind || "other"), weight: kind === "train" ? 5 : 4, opacity: 0.9 };
     }
     return { color: "#d97706", weight: 4, opacity: 0.86, dashArray: "8 7" };
@@ -1553,10 +1562,12 @@
   }
 
   function transitBbox(origin, dest) {
-    const south = Math.min(origin.lat, dest.lat) - 0.025;
-    const north = Math.max(origin.lat, dest.lat) + 0.025;
-    const west = Math.min(origin.lon, dest.lon) - 0.025;
-    const east = Math.max(origin.lon, dest.lon) + 0.025;
+    const directKm = haversineKm(origin.lat, origin.lon, dest.lat, dest.lon);
+    const margin = Math.min(0.14, Math.max(0.035, directKm / 150));
+    const south = Math.min(origin.lat, dest.lat) - margin;
+    const north = Math.max(origin.lat, dest.lat) + margin;
+    const west = Math.min(origin.lon, dest.lon) - margin;
+    const east = Math.max(origin.lon, dest.lon) + margin;
     return [south, west, north, east].map(function (value) {
       return Number(value).toFixed(6);
     }).join(",");
@@ -1567,7 +1578,7 @@
     return [
       "[out:json][timeout:25];",
       "(",
-      "relation[\"type\"=\"route\"][\"route\"~\"^(train|subway|tram|bus)$\"][\"operator\"~\"SNCB|NMBS|STIB|MIVB|De Lijn|TEC|OTW\",i](" + bbox + ");",
+      "relation[\"type\"=\"route\"][\"route\"~\"^(train|subway|tram|light_rail|bus)$\"][\"operator\"~\"SNCB|NMBS|STIB|MIVB|De Lijn|TEC|OTW\",i](" + bbox + ");",
       ");",
       "out tags geom;"
     ].join("");
@@ -1589,6 +1600,7 @@
     const segments = [];
     (Array.isArray(data && data.elements) ? data.elements : []).forEach(function (element) {
       const kind = transitOperatorKind(element.tags || {});
+      const mode = String(element.tags && element.tags.route || "transit").toLowerCase();
       (Array.isArray(element.members) ? element.members : []).forEach(function (member) {
         const geometry = Array.isArray(member.geometry) ? member.geometry : [];
         if (geometry.length < 2) {
@@ -1600,14 +1612,331 @@
           return Number.isFinite(point[0]) && Number.isFinite(point[1]);
         });
         if (points.length >= 2) {
-          segments.push({ kind: kind, label: transitOperatorLabel(kind), points: points });
+          segments.push({ kind: kind, mode: mode, label: transitOperatorLabel(kind), points: points });
         }
       });
     });
     if (!segments.length) {
       throw new Error("Aucune ligne TC OSM");
     }
-    return segments.slice(0, 90);
+    return segments.slice(0, 2200);
+  }
+
+  function transitSpeedKmh(kind, mode) {
+    if (kind === "walk") {
+      return 4.8;
+    }
+    if (kind === "train") {
+      return 48;
+    }
+    if (mode === "subway") {
+      return 28;
+    }
+    if (mode === "tram") {
+      return 20;
+    }
+    if (kind === "delijn" || kind === "tec") {
+      return 22;
+    }
+    if (kind === "stib") {
+      return 18;
+    }
+    return 20;
+  }
+
+  function transitPointKey(point) {
+    return Number(point[0]).toFixed(5) + "," + Number(point[1]).toFixed(5);
+  }
+
+  function transitGraphNode(graph, point, forcedKey) {
+    const key = forcedKey || transitPointKey(point);
+    if (!graph.nodes.has(key)) {
+      graph.nodes.set(key, {
+        key: key,
+        lat: Number(point[0]),
+        lon: Number(point[1]),
+        edges: [],
+        special: Boolean(forcedKey)
+      });
+    }
+    return graph.nodes.get(key);
+  }
+
+  function addTransitGraphEdge(graph, fromNode, toNode, meta) {
+    const distanceKm = haversineKm(fromNode.lat, fromNode.lon, toNode.lat, toNode.lon);
+    if (!Number.isFinite(distanceKm) || distanceKm <= 0 || distanceKm > 8) {
+      return;
+    }
+    const speed = transitSpeedKmh(meta.kind, meta.mode);
+    const penalty = meta.transfer ? 3.5 : 0;
+    const minutes = (distanceKm / speed) * 60 + penalty;
+    fromNode.edges.push({
+      to: toNode.key,
+      kind: meta.kind,
+      mode: meta.mode,
+      label: meta.label,
+      distanceKm: distanceKm,
+      minutes: minutes,
+      transfer: Boolean(meta.transfer),
+      points: [[fromNode.lat, fromNode.lon], [toNode.lat, toNode.lon]]
+    });
+    graph.edgeCount += 1;
+  }
+
+  function addTransitGraphEdgeBothWays(graph, aNode, bNode, meta) {
+    addTransitGraphEdge(graph, aNode, bNode, meta);
+    addTransitGraphEdge(graph, bNode, aNode, meta);
+  }
+
+  function buildTransitGraphFromSegments(segments) {
+    const graph = { nodes: new Map(), edgeCount: 0 };
+    (Array.isArray(segments) ? segments : []).forEach(function (segment) {
+      const points = Array.isArray(segment.points) ? segment.points : [];
+      for (let index = 1; index < points.length; index += 1) {
+        const from = points[index - 1];
+        const to = points[index];
+        if (!Array.isArray(from) || !Array.isArray(to)) {
+          continue;
+        }
+        const fromNode = transitGraphNode(graph, from);
+        const toNode = transitGraphNode(graph, to);
+        addTransitGraphEdgeBothWays(graph, fromNode, toNode, {
+          kind: segment.kind || "other",
+          mode: segment.mode || "transit",
+          label: segment.label || transitOperatorLabel(segment.kind || "other")
+        });
+      }
+    });
+    return graph;
+  }
+
+  function addTransitTransferEdges(graph) {
+    const nodes = Array.from(graph.nodes.values()).filter(function (node) { return !node.special; });
+    const bucketSize = 0.0015;
+    const buckets = new Map();
+    nodes.forEach(function (node) {
+      const x = Math.floor(node.lon / bucketSize);
+      const y = Math.floor(node.lat / bucketSize);
+      const key = x + "," + y;
+      if (!buckets.has(key)) {
+        buckets.set(key, []);
+      }
+      buckets.get(key).push(node);
+    });
+    const seen = new Set();
+    let added = 0;
+    nodes.forEach(function (node) {
+      const x = Math.floor(node.lon / bucketSize);
+      const y = Math.floor(node.lat / bucketSize);
+      for (let dx = -1; dx <= 1; dx += 1) {
+        for (let dy = -1; dy <= 1; dy += 1) {
+          const bucket = buckets.get((x + dx) + "," + (y + dy));
+          if (!bucket) {
+            continue;
+          }
+          bucket.forEach(function (other) {
+            if (other.key === node.key || added > 9000) {
+              return;
+            }
+            const pairKey = node.key < other.key ? node.key + "|" + other.key : other.key + "|" + node.key;
+            if (seen.has(pairKey)) {
+              return;
+            }
+            seen.add(pairKey);
+            const distanceKm = haversineKm(node.lat, node.lon, other.lat, other.lon);
+            if (distanceKm > 0.075) {
+              return;
+            }
+            addTransitGraphEdgeBothWays(graph, node, other, {
+              kind: "walk",
+              mode: "walk",
+              label: "Correspondance a pied",
+              transfer: true
+            });
+            added += 1;
+          });
+        }
+      }
+    });
+    return added;
+  }
+
+  function nearestTransitGraphNodes(graph, point, maxKm, fallbackKm) {
+    const candidates = Array.from(graph.nodes.values()).filter(function (node) {
+      return !node.special;
+    }).map(function (node) {
+      return {
+        node: node,
+        distanceKm: haversineKm(point.lat, point.lon, node.lat, node.lon)
+      };
+    }).sort(function (a, b) {
+      return a.distanceKm - b.distanceKm;
+    });
+    let selected = candidates.filter(function (candidate) {
+      return candidate.distanceKm <= maxKm;
+    });
+    if (!selected.length) {
+      selected = candidates.filter(function (candidate) {
+        return candidate.distanceKm <= fallbackKm;
+      });
+    }
+    return selected.slice(0, 12);
+  }
+
+  function addTransitAccessEdges(graph, key, point, candidates) {
+    const accessNode = transitGraphNode(graph, [point.lat, point.lon], key);
+    candidates.forEach(function (candidate) {
+      addTransitGraphEdgeBothWays(graph, accessNode, candidate.node, {
+        kind: "walk",
+        mode: "walk",
+        label: "Marche",
+        transfer: false
+      });
+    });
+  }
+
+  function MinHeap() {
+    this.items = [];
+  }
+
+  MinHeap.prototype.push = function (item) {
+    this.items.push(item);
+    let index = this.items.length - 1;
+    while (index > 0) {
+      const parent = Math.floor((index - 1) / 2);
+      if (this.items[parent].priority <= item.priority) {
+        break;
+      }
+      this.items[index] = this.items[parent];
+      index = parent;
+    }
+    this.items[index] = item;
+  };
+
+  MinHeap.prototype.pop = function () {
+    if (!this.items.length) {
+      return null;
+    }
+    const first = this.items[0];
+    const last = this.items.pop();
+    if (this.items.length && last) {
+      let index = 0;
+      while (true) {
+        const left = index * 2 + 1;
+        const right = left + 1;
+        if (left >= this.items.length) {
+          break;
+        }
+        let child = left;
+        if (right < this.items.length && this.items[right].priority < this.items[left].priority) {
+          child = right;
+        }
+        if (this.items[child].priority >= last.priority) {
+          break;
+        }
+        this.items[index] = this.items[child];
+        index = child;
+      }
+      this.items[index] = last;
+    }
+    return first;
+  };
+
+  function shortestTransitPath(graph, startKey, endKey) {
+    const distances = new Map();
+    const previous = new Map();
+    const heap = new MinHeap();
+    distances.set(startKey, 0);
+    heap.push({ key: startKey, priority: 0 });
+    while (heap.items.length) {
+      const current = heap.pop();
+      if (!current || current.priority !== distances.get(current.key)) {
+        continue;
+      }
+      if (current.key === endKey) {
+        break;
+      }
+      const node = graph.nodes.get(current.key);
+      if (!node) {
+        continue;
+      }
+      node.edges.forEach(function (edge) {
+        const nextDistance = current.priority + edge.minutes;
+        const knownDistance = distances.has(edge.to) ? distances.get(edge.to) : Infinity;
+        if (nextDistance < knownDistance) {
+          distances.set(edge.to, nextDistance);
+          previous.set(edge.to, { from: current.key, edge: edge });
+          heap.push({ key: edge.to, priority: nextDistance });
+        }
+      });
+    }
+    return { minutes: distances.get(endKey), previous: previous };
+  }
+
+  function mergeTransitPathEdges(edges) {
+    const parts = [];
+    edges.forEach(function (edge) {
+      const last = parts[parts.length - 1];
+      if (last && last.kind === edge.kind && last.mode === edge.mode && last.label === edge.label) {
+        last.points.push(edge.points[1]);
+        last.minutes += edge.minutes;
+        last.distanceKm += edge.distanceKm;
+        return;
+      }
+      parts.push({
+        kind: edge.kind,
+        mode: edge.mode,
+        label: edge.label,
+        points: [edge.points[0], edge.points[1]],
+        minutes: edge.minutes,
+        distanceKm: edge.distanceKm
+      });
+    });
+    return parts;
+  }
+
+  function buildTransitRouteFromSegments(origin, dest, segments) {
+    const graph = buildTransitGraphFromSegments(segments);
+    if (!graph.nodes.size) {
+      throw new Error("Graphe TC vide");
+    }
+    const transferEdges = addTransitTransferEdges(graph);
+    const startCandidates = nearestTransitGraphNodes(graph, origin, 1.1, 2.4);
+    const endCandidates = nearestTransitGraphNodes(graph, dest, 1.1, 2.4);
+    if (!startCandidates.length || !endCandidates.length) {
+      throw new Error("Aucun acces TC proche");
+    }
+    addTransitAccessEdges(graph, "__origin", origin, startCandidates);
+    addTransitAccessEdges(graph, "__destination", dest, endCandidates);
+    const result = shortestTransitPath(graph, "__origin", "__destination");
+    if (!Number.isFinite(result.minutes)) {
+      throw new Error("Aucun chemin TC reconstruit");
+    }
+    const edges = [];
+    let currentKey = "__destination";
+    while (currentKey !== "__origin") {
+      const step = result.previous.get(currentKey);
+      if (!step) {
+        throw new Error("Chemin TC incomplet");
+      }
+      edges.push(step.edge);
+      currentKey = step.from;
+    }
+    edges.reverse();
+    const parts = mergeTransitPathEdges(edges).filter(function (part) {
+      return Array.isArray(part.points) && part.points.length >= 2;
+    });
+    if (!parts.length) {
+      throw new Error("Chemin TC sans segment affichable");
+    }
+    return {
+      parts: parts,
+      minutes: result.minutes,
+      graphNodes: graph.nodes.size,
+      graphEdges: graph.edgeCount,
+      transferEdges: transferEdges,
+      networkSegments: Array.isArray(segments) ? segments.length : 0
+    };
   }
 
   function addRoutePolyline(group, points, style, key) {
@@ -1702,23 +2031,29 @@
     } else if (mode === "transit") {
       try {
         const segments = await fetchTransitRouteSegments(origin, dest);
+        const route = buildTransitRouteFromSegments(origin, dest, segments);
         if (routePreviewEntries[key] === group && typeof group.clearLayers === "function") {
           const allPoints = [];
           group.clearLayers();
-          segments.forEach(function (segment) {
-            addRoutePolyline(group, segment.points, routePreviewStyle(mode, segment.kind), key);
-            segment.points.forEach(function (point) { allPoints.push(point); });
+          route.parts.forEach(function (part) {
+            addRoutePolyline(group, part.points, routePreviewStyle(mode, part.kind), key);
+            part.points.forEach(function (point) { allPoints.push(point); });
           });
           fitRoutePreview(allPoints.length ? allPoints : directPoints);
-          source = "osm-transit";
+          source = "osm-transit-graph";
           if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
             window.veilleImmoMap.getContainer().classList.add("route-preview-hide-popups");
           }
           window.veilleImmoTransitPreviewState = {
-            segments: segments.length,
+            segments: route.parts.length,
             layerOnly: false,
-            operators: segments.reduce(function (acc, segment) {
-              acc[segment.kind] = (acc[segment.kind] || 0) + 1;
+            minutes: Math.round(route.minutes),
+            graphNodes: route.graphNodes,
+            graphEdges: route.graphEdges,
+            transferEdges: route.transferEdges,
+            networkSegments: route.networkSegments,
+            operators: route.parts.reduce(function (acc, part) {
+              acc[part.kind] = (acc[part.kind] || 0) + 1;
               return acc;
             }, {})
           };
@@ -2275,6 +2610,11 @@
     version: APP_VERSION,
     checkForNewListings: checkForNewListings,
     refreshReportData: refreshReportData,
-    hardRefreshApplication: hardRefreshApplication
+    hardRefreshApplication: hardRefreshApplication,
+    buildTransitRouteFromSegments: buildTransitRouteFromSegments,
+    computeTransitRoute: async function (origin, dest) {
+      const segments = await fetchTransitRouteSegments(origin, dest);
+      return buildTransitRouteFromSegments(origin, dest, segments);
+    }
   };
 })();

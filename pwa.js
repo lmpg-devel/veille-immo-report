@@ -1,11 +1,13 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-21-14";
+  const APP_VERSION = "pwa-2026-06-21-15";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
   const OVERPASS_ENDPOINT = "https://overpass-api.de/api/interpreter";
+  const TRANSIT_TILE_URL = "https://tile.memomaps.de/tilegen/{z}/{x}/{y}.png";
+  const TRANSIT_TILE_ATTRIBUTION = "Transport: &copy; OpenStreetMap contributors, OPNVKarte";
   const STORAGE_KEY = "veille-immo-seen-ids";
   const INIT_KEY = "veille-immo-initialized";
   const PRICE_FILTER_KEY = "veille-immo-price-max";
@@ -26,6 +28,7 @@
   let locationBoundariesByKey = {};
   let routePreviewLayer = null;
   let routePreviewEntries = {};
+  let transitTileLayer = null;
   let renderedMapMarkers = [];
   const ROUTE_REFERENCES = [
     { key: "bourse", label: "Bourse de Bruxelles", lat: 50.8478282, lon: 4.3491201 },
@@ -1043,17 +1046,17 @@
       );
       rows.push(
         "<div class='map-popup-route-row'>"
-        + "<label><input type='checkbox' class='route-preview-toggle' data-route-mode='transit' data-route-id='transit-" + escapeHtml(origin.key) + "'" + commonData + "> TC OSM " + escapeHtml(origin.label) + " · ~" + escapeHtml(routeDurationText(transitMinutes)) + "</label>"
+        + "<label><input type='checkbox' class='route-preview-toggle' data-route-mode='transit' data-route-id='transit-" + escapeHtml(origin.key) + "'" + commonData + "> Lignes TC OSM " + escapeHtml(origin.label) + " · ~" + escapeHtml(routeDurationText(transitMinutes)) + "</label>"
         + "<button type='button' class='external-link-button' data-external-url='" + escapeHtml(transitRouteUrl(origin, dest)) + "'>Carte</button>"
         + "</div>"
       );
     });
     return [
       "<div class='map-popup-routes'>",
-      "<div class='map-popup-route-title'>Trajets indicatifs</div>",
+      "<div class='map-popup-route-title'>Trajets et lignes OSM</div>",
       rows.join(""),
       transitLegendHtml(),
-      "<div class='map-popup-route-note'>Velo: estimation locale a 25 km/h. TC: lignes OSM sans horaires, estimation moyenne indicative.</div>",
+      "<div class='map-popup-route-note'>Velo: itineraire OSRM si disponible, sinon estimation locale a 25 km/h. TC: couche transport OSM et relations Overpass quand elles sont exploitables; pas de faux trace direct.</div>",
       "</div>"
     ].join("");
   }
@@ -1443,6 +1446,35 @@
     return routePreviewLayer;
   }
 
+  function ensureTransitTileLayer() {
+    if (!window.L || !window.veilleImmoMap) {
+      return null;
+    }
+    if (!transitTileLayer) {
+      transitTileLayer = window.L.tileLayer(TRANSIT_TILE_URL, {
+        maxZoom: 18,
+        opacity: 0.72,
+        attribution: TRANSIT_TILE_ATTRIBUTION
+      });
+      window.veilleImmoTransitTileLayer = transitTileLayer;
+    }
+    if (!window.veilleImmoMap.hasLayer(transitTileLayer)) {
+      transitTileLayer.addTo(window.veilleImmoMap);
+    }
+    window.veilleImmoTransitTileLayerActive = true;
+    return transitTileLayer;
+  }
+
+  function removeTransitTileLayerIfIdle() {
+    const hasTransitPreview = Object.keys(routePreviewEntries).some(function (key) {
+      return key.indexOf("transit|") === 0;
+    });
+    if (!hasTransitPreview && transitTileLayer && window.veilleImmoMap && window.veilleImmoMap.hasLayer(transitTileLayer)) {
+      window.veilleImmoMap.removeLayer(transitTileLayer);
+    }
+    window.veilleImmoTransitTileLayerActive = Boolean(hasTransitPreview && transitTileLayer && window.veilleImmoMap && window.veilleImmoMap.hasLayer(transitTileLayer));
+  }
+
   function routePreviewStyle(mode, kind) {
     if (mode === "bike") {
       return { color: "#0f8f63", weight: 5, opacity: 0.88 };
@@ -1477,6 +1509,10 @@
     document.querySelectorAll(".route-preview-toggle:checked").forEach(function (input) {
       input.checked = false;
     });
+    if (transitTileLayer && window.veilleImmoMap && window.veilleImmoMap.hasLayer(transitTileLayer)) {
+      window.veilleImmoMap.removeLayer(transitTileLayer);
+    }
+    window.veilleImmoTransitTileLayerActive = false;
     window.veilleImmoRoutePreviewState = { count: 0, keys: [] };
   }
 
@@ -1494,6 +1530,7 @@
     if (!Object.keys(routePreviewEntries).length && window.veilleImmoMap && window.veilleImmoMap.getContainer) {
       window.veilleImmoMap.getContainer().classList.remove("route-preview-hide-popups");
     }
+    removeTransitTileLayerIfIdle();
     window.veilleImmoRoutePreviewState = { count: Object.keys(routePreviewEntries).length, keys: Object.keys(routePreviewEntries), lastAction: "route-click" };
   }
 
@@ -1610,7 +1647,12 @@
       if (!Object.keys(routePreviewEntries).length && window.veilleImmoMap && window.veilleImmoMap.getContainer) {
         window.veilleImmoMap.getContainer().classList.remove("route-preview-hide-popups");
       }
-      window.veilleImmoRoutePreviewState = { count: Object.keys(routePreviewEntries).length, keys: Object.keys(routePreviewEntries) };
+      removeTransitTileLayerIfIdle();
+      window.veilleImmoRoutePreviewState = {
+        count: Object.keys(routePreviewEntries).length,
+        keys: Object.keys(routePreviewEntries),
+        transitTileLayerActive: Boolean(window.veilleImmoTransitTileLayerActive)
+      };
       return;
     }
     const mode = input.dataset.routeMode || "bike";
@@ -1620,19 +1662,30 @@
       input.checked = false;
       return;
     }
-    if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
-      window.veilleImmoMap.getContainer().classList.add("route-preview-hide-popups");
-    }
     const directPoints = [[origin.lat, origin.lon], [dest.lat, dest.lon]];
-    let source = "direct";
+    let source = "loading";
     if (routePreviewEntries[key]) {
       layer.removeLayer(routePreviewEntries[key]);
     }
     const group = window.L.layerGroup().addTo(layer);
-    addRoutePolyline(group, directPoints, routePreviewStyle(mode, "other"), key);
     routePreviewEntries[key] = group;
     fitRoutePreview(directPoints);
-    window.veilleImmoRoutePreviewState = { count: Object.keys(routePreviewEntries).length, keys: Object.keys(routePreviewEntries), lastSource: "direct-loading", lastMode: mode };
+    if (mode === "transit") {
+      ensureTransitTileLayer();
+      window.veilleImmoTransitPreviewState = { segments: 0, layerOnly: true, status: "loading" };
+    } else {
+      if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
+        window.veilleImmoMap.getContainer().classList.add("route-preview-hide-popups");
+      }
+      addRoutePolyline(group, directPoints, routePreviewStyle(mode, "other"), key);
+    }
+    window.veilleImmoRoutePreviewState = {
+      count: Object.keys(routePreviewEntries).length,
+      keys: Object.keys(routePreviewEntries),
+      lastSource: mode === "transit" ? "transit-layer-loading" : "direct-loading",
+      lastMode: mode,
+      transitTileLayerActive: Boolean(window.veilleImmoTransitTileLayerActive)
+    };
 
     if (mode === "bike") {
       try {
@@ -1658,8 +1711,12 @@
           });
           fitRoutePreview(allPoints.length ? allPoints : directPoints);
           source = "osm-transit";
+          if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
+            window.veilleImmoMap.getContainer().classList.add("route-preview-hide-popups");
+          }
           window.veilleImmoTransitPreviewState = {
             segments: segments.length,
+            layerOnly: false,
             operators: segments.reduce(function (acc, segment) {
               acc[segment.kind] = (acc[segment.kind] || 0) + 1;
               return acc;
@@ -1667,16 +1724,27 @@
           };
         }
       } catch (error) {
-        source = "direct-fallback";
+        source = "transit-layer-only";
+        window.veilleImmoTransitPreviewState = {
+          segments: 0,
+          layerOnly: true,
+          error: error && error.message ? error.message : "Aucune relation TC exploitable"
+        };
       }
     }
     if (routePreviewEntries[key] !== group) {
       return;
     }
-    if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
+    if (mode !== "transit" && window.veilleImmoMap && window.veilleImmoMap.getContainer) {
       window.veilleImmoMap.getContainer().classList.add("route-preview-hide-popups");
     }
-    window.veilleImmoRoutePreviewState = { count: Object.keys(routePreviewEntries).length, keys: Object.keys(routePreviewEntries), lastSource: source, lastMode: mode };
+    window.veilleImmoRoutePreviewState = {
+      count: Object.keys(routePreviewEntries).length,
+      keys: Object.keys(routePreviewEntries),
+      lastSource: source,
+      lastMode: mode,
+      transitTileLayerActive: Boolean(window.veilleImmoTransitTileLayerActive)
+    };
   }
 
   function installRoutePreviewHandlers() {

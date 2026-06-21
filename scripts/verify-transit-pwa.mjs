@@ -255,11 +255,19 @@ async function main() {
       const routeState = window.veilleImmoRoutePreviewState || {};
       const layer = window.veilleImmoRoutePreviewLayer;
       const layerCount = layer && layer._layers ? Object.keys(layer._layers).length : 0;
+      const status = document.querySelector('.route-preview-status');
+      const pane = window.veilleImmoMap && window.veilleImmoMap.getPane && window.veilleImmoMap.getPane('routePreviewPane');
+      const routeLines = document.querySelectorAll('.route-preview-line').length;
+      const routeHalos = document.querySelectorAll('.route-preview-halo').length;
       return {
-        ok: state.source === 'gtfs-precomputed' && state.segments > 0 && state.straightFallback === false && layerCount > 0,
+        ok: state.source === 'gtfs-precomputed' && state.segments > 0 && state.straightFallback === false && layerCount > 0 && routeLines > 0 && routeHalos > 0 && status && status.style.display !== 'none' && /TC/.test(status.textContent || '') && Boolean(pane),
         state,
         routeState,
-        layerCount
+        layerCount,
+        routeLines,
+        routeHalos,
+        statusText: status ? status.textContent.trim().replace(/\\s+/g, ' ') : '',
+        panePresent: Boolean(pane)
       };
     })()`, 15000);
 

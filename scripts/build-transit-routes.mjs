@@ -11,6 +11,12 @@ const ROOT = path.resolve(__dirname, "..");
 const CACHE_DIR = path.join(ROOT, ".cache", "gtfs");
 const RESULTS_PATH = path.join(ROOT, "results.json");
 const OUTPUT_PATH = path.join(ROOT, "data", "transit-routes.json");
+const OSM_RAIL_CACHE_PATH = path.join(CACHE_DIR, "osm-railways.json");
+const OVERPASS_ENDPOINTS = [
+  "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+  "https://overpass-api.de/api/interpreter",
+  "https://overpass.kumi.systems/api/interpreter"
+];
 
 const ROUTE_REFERENCES = [
   { key: "bourse", label: "Bourse", lat: 50.8478282, lon: 4.3491201 },
@@ -203,6 +209,43 @@ async function downloadFile(url, filePath) {
   await ensureDir(path.dirname(filePath));
   const buffer = Buffer.from(await response.arrayBuffer());
   await fsp.writeFile(filePath, buffer);
+}
+
+async function fetchOverpass(query) {
+  let lastError = null;
+  for (const endpoint of OVERPASS_ENDPOINTS) {
+    try {
+      const url = `${endpoint}?data=${encodeURIComponent(query)}`;
+      const response = await fetch(url, { headers: { "Accept": "application/json" } });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      return response.json();
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError || new Error("Overpass indisponible");
+}
+
+async function loadRailwayOsm(bbox) {
+  if (fileExists(OSM_RAIL_CACHE_PATH) && !args.refresh) {
+    const cached = JSON.parse(await fsp.readFile(OSM_RAIL_CACHE_PATH, "utf8"));
+    if (cached && Array.isArray(cached.elements)) {
+      return cached;
+    }
+  }
+  const query = [
+    "[out:json][timeout:90];",
+    "way[\"railway\"=\"rail\"](",
+    [bbox.south, bbox.west, bbox.north, bbox.east].join(","),
+    ");",
+    "out tags geom;"
+  ].join("");
+  const data = await fetchOverpass(query);
+  await ensureDir(path.dirname(OSM_RAIL_CACHE_PATH));
+  await fsp.writeFile(OSM_RAIL_CACHE_PATH, JSON.stringify(data));
+  return data;
 }
 
 function expandArchive(zipPath, outDir) {
@@ -463,7 +506,175 @@ function thinPoints(points) {
   return thinned;
 }
 
-function edgeGeometry(edge, stops, shapesByFeed) {
+function buildRailGraph(osm) {
+  const nodes = new Map();
+  const edgeKeys = new Set();
+  const graph = {
+    nodes,
+    edgeCount: 0,
+    pathCache: new Map(),
+    nearestCache: new Map()
+  };
+  function getNode(key, lat, lon) {
+    if (!nodes.has(key)) {
+      nodes.set(key, { key, lat, lon, edges: [] });
+    }
+    return nodes.get(key);
+  }
+  function addEdge(a, b) {
+    if (!a || !b || a.key === b.key) {
+      return;
+    }
+    const key = a.key < b.key ? `${a.key}|${b.key}` : `${b.key}|${a.key}`;
+    if (edgeKeys.has(key)) {
+      return;
+    }
+    edgeKeys.add(key);
+    const km = haversineKm(a.lat, a.lon, b.lat, b.lon);
+    if (!Number.isFinite(km) || km <= 0 || km > 5) {
+      return;
+    }
+    a.edges.push({ to: b.key, km });
+    b.edges.push({ to: a.key, km });
+    graph.edgeCount += 2;
+  }
+  (Array.isArray(osm && osm.elements) ? osm.elements : []).forEach((element) => {
+    const geometry = Array.isArray(element.geometry) ? element.geometry : [];
+    if (geometry.length < 2) {
+      return;
+    }
+    const nodeIds = Array.isArray(element.nodes) ? element.nodes : [];
+    let previous = null;
+    geometry.forEach((point, index) => {
+      const lat = Number(point.lat);
+      const lon = Number(point.lon);
+      if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+        return;
+      }
+      const key = nodeIds[index] != null
+        ? `n${nodeIds[index]}`
+        : `${lat.toFixed(6)},${lon.toFixed(6)}`;
+      const node = getNode(key, lat, lon);
+      if (previous) {
+        addEdge(previous, node);
+      }
+      previous = node;
+    });
+  });
+  return graph;
+}
+
+function nearestRailNode(railGraph, stop, maxKm = 1.5) {
+  if (!railGraph || !railGraph.nodes || !stop) {
+    return null;
+  }
+  if (railGraph.nearestCache.has(stop.id)) {
+    return railGraph.nearestCache.get(stop.id);
+  }
+  let best = null;
+  let bestKm = Infinity;
+  for (const node of railGraph.nodes.values()) {
+    const km = haversineKm(stop.lat, stop.lon, node.lat, node.lon);
+    if (km < bestKm) {
+      best = node;
+      bestKm = km;
+    }
+  }
+  const result = best && bestKm <= maxKm ? { node: best, distanceKm: bestKm } : null;
+  railGraph.nearestCache.set(stop.id, result);
+  return result;
+}
+
+function shortestRailPath(railGraph, startKey, endKey) {
+  const distances = new Map([[startKey, 0]]);
+  const previous = new Map();
+  const heap = new MinHeap();
+  heap.push({ key: startKey, priority: 0 });
+  while (heap.items.length) {
+    const current = heap.pop();
+    if (!current || current.priority !== distances.get(current.key)) {
+      continue;
+    }
+    if (current.key === endKey) {
+      break;
+    }
+    const node = railGraph.nodes.get(current.key);
+    if (!node) {
+      continue;
+    }
+    node.edges.forEach((edge) => {
+      const nextDistance = current.priority + edge.km;
+      if (nextDistance < (distances.get(edge.to) ?? Infinity)) {
+        distances.set(edge.to, nextDistance);
+        previous.set(edge.to, current.key);
+        heap.push({ key: edge.to, priority: nextDistance });
+      }
+    });
+  }
+  if (!Number.isFinite(distances.get(endKey))) {
+    return null;
+  }
+  const keys = [];
+  let current = endKey;
+  while (current !== startKey) {
+    keys.push(current);
+    current = previous.get(current);
+    if (!current) {
+      return null;
+    }
+  }
+  keys.push(startKey);
+  keys.reverse();
+  return {
+    distanceKm: distances.get(endKey),
+    points: keys.map((key) => {
+      const node = railGraph.nodes.get(key);
+      return [node.lat, node.lon];
+    })
+  };
+}
+
+function railEdgeGeometry(edge, stops, railGraph) {
+  if (!railGraph || !railGraph.nodes || !railGraph.nodes.size) {
+    return [];
+  }
+  const fromStop = stops.get(edge.from);
+  const toStop = stops.get(edge.to);
+  if (!fromStop || !toStop) {
+    return [];
+  }
+  const cacheKey = `${edge.from}|${edge.to}`;
+  const reverseCacheKey = `${edge.to}|${edge.from}`;
+  if (railGraph.pathCache.has(cacheKey)) {
+    return railGraph.pathCache.get(cacheKey);
+  }
+  if (railGraph.pathCache.has(reverseCacheKey)) {
+    const reversed = railGraph.pathCache.get(reverseCacheKey).slice().reverse();
+    railGraph.pathCache.set(cacheKey, reversed);
+    return reversed;
+  }
+  const start = nearestRailNode(railGraph, fromStop);
+  const end = nearestRailNode(railGraph, toStop);
+  if (!start || !end) {
+    railGraph.pathCache.set(cacheKey, []);
+    return [];
+  }
+  const path = shortestRailPath(railGraph, start.node.key, end.node.key);
+  if (!path || !Array.isArray(path.points) || path.points.length < 2) {
+    railGraph.pathCache.set(cacheKey, []);
+    return [];
+  }
+  const directKm = haversineKm(fromStop.lat, fromStop.lon, toStop.lat, toStop.lon);
+  if (Number.isFinite(directKm) && path.distanceKm > Math.max(12, directKm * 3.8)) {
+    railGraph.pathCache.set(cacheKey, []);
+    return [];
+  }
+  const points = thinPoints(path.points);
+  railGraph.pathCache.set(cacheKey, points);
+  return points;
+}
+
+function edgeGeometry(edge, stops, shapesByFeed, railGraph) {
   const fromStop = stops.get(edge.from);
   const toStop = stops.get(edge.to);
   if (!fromStop || !toStop) {
@@ -471,6 +682,9 @@ function edgeGeometry(edge, stops, shapesByFeed) {
   }
   const shape = edge.shapeId ? shapesByFeed.get(`${edge.feed}:${edge.shapeId}`) : null;
   if (!shape || shape.length < 2) {
+    if (edge.kind === "train") {
+      return railEdgeGeometry(edge, stops, railGraph);
+    }
     return [[fromStop.lat, fromStop.lon], [toStop.lat, toStop.lon]];
   }
 
@@ -712,11 +926,15 @@ function mergeParts(parts) {
   return merged;
 }
 
-function pathToRoute(path, originNearest, destinationNearest, stops, shapesByFeed) {
+function pathToRoute(path, originNearest, destinationNearest, stops, shapesByFeed, railGraph) {
   const parts = [];
+  let missingRequiredGeometry = false;
   path.edges.forEach((edge) => {
-    const points = edge.points || edgeGeometry(edge, stops, shapesByFeed);
+    const points = edge.points || edgeGeometry(edge, stops, shapesByFeed, railGraph);
     if (!Array.isArray(points) || points.length < 2) {
+      if (edge.kind !== "walk") {
+        missingRequiredGeometry = true;
+      }
       return;
     }
     parts.push({
@@ -725,6 +943,9 @@ function pathToRoute(path, originNearest, destinationNearest, stops, shapesByFee
       points: points.map(compactPoint)
     });
   });
+  if (missingRequiredGeometry) {
+    return null;
+  }
   const displayParts = mergeParts(parts).filter((part) => {
     return part.kind !== "walk" && Array.isArray(part.points) && part.points.length >= 2;
   });
@@ -814,6 +1035,10 @@ async function main() {
   const allEdges = [];
   const allShapes = new Map();
   const diagnostics = [];
+  console.log("[osm] railway graph");
+  const railOsm = await loadRailwayOsm(bbox);
+  const railGraph = buildRailGraph(railOsm);
+  console.log(`[osm] rail ways=${Array.isArray(railOsm.elements) ? railOsm.elements.length : 0} nodes=${railGraph.nodes.size} edges=${railGraph.edgeCount}`);
 
   for (const key of feedKeys) {
     const feed = FEEDS[key];
@@ -864,7 +1089,7 @@ async function main() {
         unavailableRoutes += 1;
         continue;
       }
-      const route = pathToRoute(path, originNearest, destNearest, allStops, allShapes);
+      const route = pathToRoute(path, originNearest, destNearest, allStops, allShapes, railGraph);
       if (!route) {
         routes[key][reference.key] = { available: false, reason: "no-displayable-shape" };
         unavailableRoutes += 1;
@@ -887,6 +1112,10 @@ async function main() {
       stops: allStops.size,
       edges: allEdges.length,
       transferEdges,
+      railWays: Array.isArray(railOsm.elements) ? railOsm.elements.length : 0,
+      railNodes: railGraph.nodes.size,
+      railEdges: railGraph.edgeCount,
+      railPaths: railGraph.pathCache.size,
       computedRoutes,
       unavailableRoutes,
       feeds: diagnostics

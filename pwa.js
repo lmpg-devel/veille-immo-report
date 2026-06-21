@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-21-21";
+  const APP_VERSION = "pwa-2026-06-21-22";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
@@ -34,6 +34,8 @@
   let locationBoundaryLayer = null;
   let locationBoundariesByKey = {};
   let routePreviewLayer = null;
+  let routePreviewStatusControl = null;
+  let routePreviewStatusElement = null;
   let routePreviewEntries = {};
   let transitTileLayer = null;
   let renderedMapMarkers = [];
@@ -133,6 +135,10 @@
       ".map-popup-route-legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;font-size:11px;color:#4b5563}",
       ".transit-swatch{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:3px;vertical-align:-1px}",
       ".route-preview-hide-popups .leaflet-popup,.route-preview-hide-popups .leaflet-popup-pane{opacity:0;pointer-events:none}",
+      ".route-preview-status{background:rgba(255,255,255,.96);border:1px solid #cbd5df;border-radius:7px;box-shadow:0 8px 24px rgba(0,0,0,.22);padding:8px 10px;max-width:310px;font:12px/1.35 Arial,sans-serif;color:#17202a}",
+      ".route-preview-status strong{display:block;font-size:13px;margin-bottom:3px}",
+      ".route-preview-status span{display:block;color:#44515d}",
+      ".route-preview-status button{position:absolute;right:5px;top:4px;border:0;background:transparent;color:#4b5563;font:700 16px/1 Arial,sans-serif;padding:2px 5px;cursor:pointer}",
       ".map-popup-actions{margin-top:8px}",
       ".map-popup-actions button{border:0;background:#fff;color:#0b5c86;font:600 12px Arial,sans-serif;padding:0}",
       ".listing-contact-details{margin-top:10px;background:#f4f7f8;border-radius:6px;padding:8px 10px;color:#33424d}",
@@ -1623,11 +1629,89 @@
     if (!window.L || !window.veilleImmoMap) {
       return null;
     }
+    ensureRoutePreviewPane();
     if (!routePreviewLayer) {
       routePreviewLayer = window.L.layerGroup().addTo(window.veilleImmoMap);
       window.veilleImmoRoutePreviewLayer = routePreviewLayer;
     }
     return routePreviewLayer;
+  }
+
+  function ensureRoutePreviewPane() {
+    if (!window.veilleImmoMap || typeof window.veilleImmoMap.getPane !== "function") {
+      return null;
+    }
+    let pane = window.veilleImmoMap.getPane("routePreviewPane");
+    if (!pane && typeof window.veilleImmoMap.createPane === "function") {
+      pane = window.veilleImmoMap.createPane("routePreviewPane");
+    }
+    if (pane) {
+      pane.style.zIndex = "660";
+      pane.style.pointerEvents = "auto";
+    }
+    return pane;
+  }
+
+  function ensureRoutePreviewStatusControl() {
+    if (!window.L || !window.veilleImmoMap) {
+      return null;
+    }
+    if (!routePreviewStatusControl) {
+      routePreviewStatusControl = window.L.control({ position: "topright" });
+      routePreviewStatusControl.onAdd = function () {
+        routePreviewStatusElement = window.L.DomUtil.create("div", "route-preview-status");
+        routePreviewStatusElement.style.display = "none";
+        if (window.L.DomEvent) {
+          window.L.DomEvent.disableClickPropagation(routePreviewStatusElement);
+          window.L.DomEvent.disableScrollPropagation(routePreviewStatusElement);
+        }
+        return routePreviewStatusElement;
+      };
+      routePreviewStatusControl.addTo(window.veilleImmoMap);
+    }
+    return routePreviewStatusElement;
+  }
+
+  function hideRoutePreviewStatus() {
+    if (routePreviewStatusElement) {
+      routePreviewStatusElement.style.display = "none";
+      routePreviewStatusElement.innerHTML = "";
+    }
+  }
+
+  function transitRouteOperators(route) {
+    const operators = [];
+    transitDisplayParts(route && route.parts).forEach(function (part) {
+      const label = transitOperatorLabel(part.kind);
+      if (operators.indexOf(label) === -1) {
+        operators.push(label);
+      }
+    });
+    return operators;
+  }
+
+  function showTransitRouteStatus(input, route) {
+    const element = ensureRoutePreviewStatusControl();
+    if (!element || !route) {
+      return;
+    }
+    const originLabel = routeOriginShortLabel({ key: input && input.dataset ? input.dataset.originKey : "" });
+    const operators = transitRouteOperators(route);
+    const stopCount = Number(route.stopCount);
+    const transfers = Number(route.transfers);
+    element.innerHTML = [
+      "<button type='button' class='route-preview-close' aria-label='Masquer le trajet' title='Masquer le trajet'>&times;</button>",
+      "<strong>TC " + escapeHtml(originLabel) + "</strong>",
+      "<span>" + (Number.isFinite(stopCount) ? escapeHtml(Math.round(stopCount) + " arrets") : "Trajet calcule") + (Number.isFinite(transfers) ? " · " + escapeHtml(Math.round(transfers) + " chang.") : "") + "</span>",
+      operators.length ? "<span>" + escapeHtml(operators.join(" -> ")) + "</span>" : ""
+    ].join("");
+    const button = element.querySelector(".route-preview-close");
+    if (button) {
+      button.addEventListener("click", function () {
+        removeRoutePreview(routePreviewKey(input));
+      });
+    }
+    element.style.display = "block";
   }
 
   function ensureTransitTileLayer() {
@@ -1661,19 +1745,19 @@
 
   function routePreviewStyle(mode, kind) {
     if (mode === "bike") {
-      return { color: "#0f8f63", weight: 5, opacity: 0.88 };
+      return { color: "#0f8f63", weight: 5, opacity: 0.88, pane: "routePreviewPane" };
     }
     if (mode === "transit") {
       if (kind === "walk") {
-        return { color: transitOperatorColor("walk"), weight: 3, opacity: 0.78, dashArray: "5 6" };
+        return { color: transitOperatorColor("walk"), weight: 3, opacity: 0.78, dashArray: "5 6", pane: "routePreviewPane" };
       }
-      return { color: transitOperatorColor(kind || "other"), weight: kind === "train" ? 5 : 4, opacity: 0.9 };
+      return { color: transitOperatorColor(kind || "other"), weight: kind === "train" ? 7 : 6, opacity: 0.96, pane: "routePreviewPane" };
     }
-    return { color: "#d97706", weight: 4, opacity: 0.86, dashArray: "8 7" };
+    return { color: "#d97706", weight: 4, opacity: 0.86, dashArray: "8 7", pane: "routePreviewPane" };
   }
 
   function routePreviewHitStyle() {
-    return { color: "#000", weight: 22, opacity: 0, interactive: true };
+    return { color: "#000", weight: 30, opacity: 0, interactive: true, pane: "routePreviewPane" };
   }
 
   function routePreviewKey(input) {
@@ -1693,6 +1777,7 @@
     if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
       window.veilleImmoMap.getContainer().classList.remove("route-preview-hide-popups");
     }
+    hideRoutePreviewStatus();
     document.querySelectorAll(".route-preview-toggle:checked").forEach(function (input) {
       input.checked = false;
     });
@@ -1716,6 +1801,7 @@
     });
     if (!Object.keys(routePreviewEntries).length && window.veilleImmoMap && window.veilleImmoMap.getContainer) {
       window.veilleImmoMap.getContainer().classList.remove("route-preview-hide-popups");
+      hideRoutePreviewStatus();
     }
     removeTransitTileLayerIfIdle();
     window.veilleImmoRoutePreviewState = { count: Object.keys(routePreviewEntries).length, keys: Object.keys(routePreviewEntries), lastAction: "route-click" };
@@ -2154,13 +2240,33 @@
   }
 
   function addRoutePolyline(group, points, style, key) {
-    const line = window.L.polyline(points, style).addTo(group);
+    ensureRoutePreviewPane();
+    const baseStyle = Object.assign({ pane: "routePreviewPane" }, style || {});
+    const haloStyle = Object.assign({}, baseStyle, {
+      color: "#ffffff",
+      weight: Math.max(9, Number(baseStyle.weight || 4) + 6),
+      opacity: 0.92,
+      dashArray: null,
+      className: "route-preview-halo"
+    });
+    const halo = window.L.polyline(points, haloStyle).addTo(group);
+    const line = window.L.polyline(points, Object.assign({}, baseStyle, { className: "route-preview-line" })).addTo(group);
     const hitLine = window.L.polyline(points, routePreviewHitStyle()).addTo(group);
     function clearThisRoute() {
       removeRoutePreview(key);
     }
+    halo.on("click", clearThisRoute);
     line.on("click", clearThisRoute);
     hitLine.on("click", clearThisRoute);
+    if (typeof halo.bringToFront === "function") {
+      halo.bringToFront();
+    }
+    if (typeof line.bringToFront === "function") {
+      line.bringToFront();
+    }
+    if (typeof hitLine.bringToFront === "function") {
+      hitLine.bringToFront();
+    }
     return line;
   }
 
@@ -2210,6 +2316,7 @@
       }
       if (!Object.keys(routePreviewEntries).length && window.veilleImmoMap && window.veilleImmoMap.getContainer) {
         window.veilleImmoMap.getContainer().classList.remove("route-preview-hide-popups");
+        hideRoutePreviewStatus();
       }
       removeTransitTileLayerIfIdle();
       window.veilleImmoRoutePreviewState = {
@@ -2301,6 +2408,7 @@
           if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
             window.veilleImmoMap.getContainer().classList.add("route-preview-hide-popups");
           }
+          showTransitRouteStatus(input, route);
           window.veilleImmoTransitPreviewState = {
             segments: displayParts.length,
             layerOnly: false,
@@ -2330,6 +2438,7 @@
         if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
           window.veilleImmoMap.getContainer().classList.remove("route-preview-hide-popups");
         }
+        hideRoutePreviewStatus();
         removeTransitTileLayerIfIdle();
         window.veilleImmoTransitPreviewState = {
           segments: 0,

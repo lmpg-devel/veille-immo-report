@@ -1,9 +1,10 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-21-07";
+  const APP_VERSION = "pwa-2026-06-21-08";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
+  const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
   const STORAGE_KEY = "veille-immo-seen-ids";
   const INIT_KEY = "veille-immo-initialized";
   const PRICE_FILTER_KEY = "veille-immo-price-max";
@@ -19,8 +20,9 @@
   let currentPriceConfigMax = null;
   let showOptionListings = false;
   let selectedLocationKeys = null;
-  let locationMarkerLayer = null;
-  let locationMarkersByKey = {};
+  let latestLocationBoundaries = null;
+  let locationBoundaryLayer = null;
+  let locationBoundariesByKey = {};
   let renderedMapMarkers = [];
 
   function isStandalone() {
@@ -58,6 +60,7 @@
       ".location-chip-list{display:flex;flex-wrap:wrap;gap:8px}",
       ".location-chip.is-active{background:#0b5c86;border-color:#0b5c86;color:#fff}",
       ".location-chip:focus-visible,.location-filter-actions button:focus-visible{outline:3px solid rgba(11,92,134,.28);outline-offset:2px}",
+      ".location-boundary-path{cursor:pointer;transition:fill-opacity .12s ease,stroke-opacity .12s ease}",
       ".listing-card.is-under-option{border-color:#d97706;box-shadow:inset 0 0 0 1px rgba(217,119,6,.28)}",
       ".option-badge{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;background:#d97706;color:#fff;font:700 11px/1 Arial,sans-serif;text-transform:uppercase;letter-spacing:.02em}",
       ".other-source-note{background:#eef7fb;border:1px solid #b8d9e8;border-radius:6px;padding:12px 14px;margin:18px 0;color:#253540}",
@@ -238,6 +241,21 @@
       throw new Error("HTTP " + response.status);
     }
     return response.json();
+  }
+
+  async function fetchLocationBoundaries() {
+    const response = await fetch(LOCATION_BOUNDARIES_URL + "?t=" + Date.now(), {
+      cache: "no-store",
+      headers: { "Accept": "application/geo+json, application/json" }
+    });
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status);
+    }
+    const data = await response.json();
+    if (!data || !Array.isArray(data.features)) {
+      return { type: "FeatureCollection", features: [] };
+    }
+    return data;
   }
 
   function listingText(listing) {
@@ -935,15 +953,46 @@
     window.veilleImmoRenderedMarkerListings = renderedMapMarkers.map(function (entry) { return entry.listing; });
   }
 
-  function locationMarkerStyle(active) {
+  function locationBoundaryStyle(active, hovered) {
     return {
-      radius: active ? 7 : 5,
-      color: active ? "#0b5c86" : "#8aa0ad",
-      weight: active ? 3 : 2,
-      fillColor: active ? "#0b5c86" : "#ffffff",
-      fillOpacity: active ? 0.9 : 0.75,
-      className: "location-filter-map-marker"
+      pane: "locationBoundaryPane",
+      color: hovered ? "#093f5d" : (active ? "#0b5c86" : "#6c7a83"),
+      weight: hovered ? 3 : (active ? 2 : 1),
+      opacity: hovered ? 0.95 : (active ? 0.72 : 0.28),
+      fillColor: "#0b5c86",
+      fillOpacity: hovered ? (active ? 0.3 : 0.12) : (active ? 0.22 : 0.03),
+      className: "location-boundary-path"
     };
+  }
+
+  function ensureLocationBoundaryPane() {
+    if (!window.L || !window.veilleImmoMap) {
+      return;
+    }
+    if (!window.veilleImmoMap.getPane("locationBoundaryPane")) {
+      window.veilleImmoMap.createPane("locationBoundaryPane");
+    }
+    const pane = window.veilleImmoMap.getPane("locationBoundaryPane");
+    if (pane) {
+      pane.style.zIndex = "350";
+      pane.style.pointerEvents = "auto";
+    }
+  }
+
+  function locationBoundaryKey(feature) {
+    const props = feature && feature.properties ? feature.properties : {};
+    return locationKey(props.key || props.name || props.postalCode || "");
+  }
+
+  function configuredLocationKeySet(config) {
+    const keys = new Set();
+    configLocations(config).forEach(function (location) {
+      const key = locationKey(location.name || location.postalCode || "");
+      if (key) {
+        keys.add(key);
+      }
+    });
+    return keys;
   }
 
   function setSelectedLocations(keys) {
@@ -1029,7 +1078,7 @@
         }
       });
     }
-    syncLocationMapMarkers(latestConfig);
+    syncLocationMapBoundaries(latestConfig);
     updateLocationFilterUi();
   }
 
@@ -1048,15 +1097,15 @@
       node.classList.toggle("is-active", active);
       node.setAttribute("aria-pressed", active ? "true" : "false");
     });
-    Object.keys(locationMarkersByKey).forEach(function (key) {
-      const marker = locationMarkersByKey[key];
-      if (marker && typeof marker.setStyle === "function") {
-        marker.setStyle(locationMarkerStyle(selectedLocationKeys.has(key)));
+    Object.keys(locationBoundariesByKey).forEach(function (key) {
+      const boundary = locationBoundariesByKey[key];
+      if (boundary && typeof boundary.setStyle === "function") {
+        boundary.setStyle(locationBoundaryStyle(selectedLocationKeys.has(key), false));
       }
     });
   }
 
-  function syncLocationMapMarkers(config) {
+  function syncLocationMapBoundaries(config) {
     if (!window.L || !window.veilleImmoMap) {
       return;
     }
@@ -1064,26 +1113,68 @@
     if (!locations.length) {
       return;
     }
-    if (locationMarkerLayer) {
-      window.veilleImmoMap.removeLayer(locationMarkerLayer);
+    if (locationBoundaryLayer) {
+      window.veilleImmoMap.removeLayer(locationBoundaryLayer);
     }
-    locationMarkersByKey = {};
-    locationMarkerLayer = window.L.layerGroup().addTo(window.veilleImmoMap);
-    locations.forEach(function (location) {
-      const lat = Number(location.latitude);
-      const lon = Number(location.longitude);
-      const key = locationKey(location.name || location.postalCode || "");
-      if (!key || !Number.isFinite(lat) || !Number.isFinite(lon)) {
-        return;
+    locationBoundariesByKey = {};
+    ensureLocationBoundaryPane();
+    const allowedKeys = configuredLocationKeySet(config);
+    const boundaryFeatures = latestLocationBoundaries && Array.isArray(latestLocationBoundaries.features)
+      ? latestLocationBoundaries.features.filter(function (feature) {
+        return allowedKeys.has(locationBoundaryKey(feature));
+      })
+      : [];
+    if (!boundaryFeatures.length) {
+      window.veilleImmoLocationBoundaryLayer = null;
+      window.veilleImmoLocationBoundariesByKey = {};
+      return;
+    }
+    locationBoundaryLayer = window.L.geoJSON({
+      type: "FeatureCollection",
+      features: boundaryFeatures
+    }, {
+      pane: "locationBoundaryPane",
+      style: function (feature) {
+        const key = locationBoundaryKey(feature);
+        return locationBoundaryStyle(!selectedLocationKeys || selectedLocationKeys.has(key), false);
+      },
+      onEachFeature: function (feature, layer) {
+        const key = locationBoundaryKey(feature);
+        const props = feature && feature.properties ? feature.properties : {};
+        if (!key) {
+          return;
+        }
+        locationBoundariesByKey[key] = layer;
+        layer.bindTooltip(props.name || key, { direction: "top", sticky: true });
+        layer.on("mouseover", function () {
+          layer.setStyle(locationBoundaryStyle(!selectedLocationKeys || selectedLocationKeys.has(key), true));
+          if (typeof layer.bringToFront === "function") {
+            layer.bringToFront();
+          }
+        });
+        layer.on("mouseout", function () {
+          layer.setStyle(locationBoundaryStyle(!selectedLocationKeys || selectedLocationKeys.has(key), false));
+          if (locationBoundaryLayer && typeof locationBoundaryLayer.bringToBack === "function") {
+            locationBoundaryLayer.bringToBack();
+          }
+        });
+        layer.on("click", function (event) {
+          if (window.L && window.L.DomEvent && event && event.originalEvent) {
+            window.L.DomEvent.stopPropagation(event.originalEvent);
+          }
+          if (layer.closeTooltip) {
+            layer.closeTooltip();
+          }
+          toggleSelectedLocation(key);
+        });
       }
-      const active = !selectedLocationKeys || selectedLocationKeys.has(key);
-      const marker = window.L.circleMarker([lat, lon], locationMarkerStyle(active)).addTo(locationMarkerLayer);
-      marker.bindTooltip(location.name || location.postalCode || "", { direction: "top" });
-      marker.on("click", function () {
-        toggleSelectedLocation(key);
-      });
-      locationMarkersByKey[key] = marker;
-    });
+    }).addTo(window.veilleImmoMap);
+    if (typeof locationBoundaryLayer.bringToBack === "function") {
+      locationBoundaryLayer.bringToBack();
+    }
+    window.veilleImmoLocationBoundaryLayer = locationBoundaryLayer;
+    window.veilleImmoLocationBoundariesByKey = locationBoundariesByKey;
+    window.veilleImmoLocationBoundaryKeys = Object.keys(locationBoundariesByKey);
   }
 
   function renderDiagnosticSummary(diagnostics) {
@@ -1383,6 +1474,11 @@
       try {
         config = await fetchConfig();
       } catch (error) {
+      }
+      try {
+        latestLocationBoundaries = await fetchLocationBoundaries();
+      } catch (error) {
+        latestLocationBoundaries = latestLocationBoundaries || { type: "FeatureCollection", features: [] };
       }
       latestPayload = payload;
       latestConfig = config || latestConfig;

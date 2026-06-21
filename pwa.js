@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-21-03";
+  const APP_VERSION = "pwa-2026-06-21-04";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const STORAGE_KEY = "veille-immo-seen-ids";
@@ -712,12 +712,10 @@
     if (listing && listing.requestedLocation) {
       details.push("<span><strong>Recherche</strong> " + escapeHtml(listing.requestedLocation) + "</span>");
     }
-    if (Number(listing && listing.bedrooms || 0) > 0) {
-      details.push("<span><strong>Ch.</strong> " + escapeHtml(listing.bedrooms) + "</span>");
-    }
-    if (Number(listing && listing.surfaceM2 || 0) > 0) {
-      details.push("<span><strong>Surface</strong> " + escapeHtml(listing.surfaceM2) + " m2</span>");
-    }
+    const bedrooms = Number(listing && listing.bedrooms || 0);
+    const surface = Number(listing && listing.surfaceM2 || 0);
+    details.push("<span><strong>Ch.</strong> " + (bedrooms > 0 ? escapeHtml(listing.bedrooms) : "non publie") + "</span>");
+    details.push("<span><strong>Surface</strong> " + (surface > 0 ? escapeHtml(listing.surfaceM2) + " m2" : "non publiee") + "</span>");
     return details.length ? "<div class='map-popup-details'>" + details.join(" · ") + "</div>" : "";
   }
 
@@ -735,7 +733,7 @@
     if (email) {
       pieces.push("<a href='mailto:" + escapeHtml(email) + "'>" + escapeHtml(email) + "</a>");
     }
-    return pieces.length ? "<div class='map-popup-contact'><strong>Contact</strong> " + pieces.join(" · ") + "</div>" : "";
+    return "<div class='map-popup-contact'><strong>Contact</strong> " + (pieces.length ? pieces.join(" · ") : "non publie") + "</div>";
   }
 
   function mapPopupHtml(listing) {

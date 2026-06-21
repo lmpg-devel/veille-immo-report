@@ -1,20 +1,22 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-21-05";
+  const APP_VERSION = "pwa-2026-06-21-06";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const STORAGE_KEY = "veille-immo-seen-ids";
   const INIT_KEY = "veille-immo-initialized";
   const PRICE_FILTER_KEY = "veille-immo-price-max";
+  const PRICE_FILTER_CONFIG_KEY = "veille-immo-price-config-max";
   const SHOW_OPTION_KEY = "veille-immo-show-option";
   const LOCATION_FILTER_KEY = "veille-immo-selected-locations";
-  const DEFAULT_MAX_PRICE = 285000;
+  const DEFAULT_MAX_PRICE = 350000;
   const USER_PRICE_LIMIT_MAX = 350000;
   let deferredInstallPrompt = null;
   let latestPayload = null;
   let latestConfig = null;
   let currentPriceMax = null;
+  let currentPriceConfigMax = null;
   let showOptionListings = false;
   let selectedLocationKeys = null;
   let locationMarkerLayer = null;
@@ -297,11 +299,27 @@
   }
 
   function storedPriceMax(bounds, config) {
+    const configMax = configuredPriceMax(config);
     try {
-      const stored = Number(localStorage.getItem(PRICE_FILTER_KEY) || 0);
-      return clampPrice(stored || configuredPriceMax(config), bounds.min, bounds.max);
+      const storedRaw = localStorage.getItem(PRICE_FILTER_KEY);
+      const storedConfigMax = Number(localStorage.getItem(PRICE_FILTER_CONFIG_KEY) || 0);
+      if (!storedRaw || storedConfigMax !== configMax) {
+        const migrated = clampPrice(configMax, bounds.min, bounds.max);
+        saveStoredPriceMax(migrated, config);
+        return migrated;
+      }
+      const stored = Number(storedRaw || 0);
+      return clampPrice(stored || configMax, bounds.min, bounds.max);
     } catch (error) {
-      return clampPrice(configuredPriceMax(config), bounds.min, bounds.max);
+      return clampPrice(configMax, bounds.min, bounds.max);
+    }
+  }
+
+  function saveStoredPriceMax(value, config) {
+    try {
+      localStorage.setItem(PRICE_FILTER_KEY, String(value));
+      localStorage.setItem(PRICE_FILTER_CONFIG_KEY, String(configuredPriceMax(config || latestConfig)));
+    } catch (error) {
     }
   }
 
@@ -482,8 +500,10 @@
     latestPayload = payload;
     latestConfig = config || latestConfig;
     const bounds = priceBounds(payload, latestConfig);
-    if (currentPriceMax == null) {
+    const configMax = configuredPriceMax(latestConfig);
+    if (currentPriceMax == null || currentPriceConfigMax !== configMax) {
       currentPriceMax = storedPriceMax(bounds, latestConfig);
+      currentPriceConfigMax = configMax;
     } else {
       currentPriceMax = clampPrice(currentPriceMax, bounds.min, bounds.max);
     }
@@ -532,12 +552,10 @@
 
     function setPrice(value) {
       currentPriceMax = clampPrice(value, bounds.min, bounds.max);
+      currentPriceConfigMax = configuredPriceMax(latestConfig);
       range.value = String(currentPriceMax);
       input.value = String(currentPriceMax);
-      try {
-        localStorage.setItem(PRICE_FILTER_KEY, String(currentPriceMax));
-      } catch (error) {
-      }
+      saveStoredPriceMax(currentPriceMax, latestConfig);
       applyPriceFilter();
     }
 

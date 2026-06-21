@@ -28,6 +28,86 @@
   },
   "locations": [
     {
+      "name": "Drogenbos",
+      "postalCode": "1620",
+      "immowebSlug": "drogenbos",
+      "zimmoSlug": "drogenbos",
+      "immovlanSlug": "drogenbos",
+      "latitude": 50.787,
+      "longitude": 4.316
+    },
+    {
+      "name": "Kraainem",
+      "postalCode": "1950",
+      "immowebSlug": "kraainem",
+      "zimmoSlug": "kraainem",
+      "immovlanSlug": "kraainem",
+      "latitude": 50.861,
+      "longitude": 4.469
+    },
+    {
+      "name": "Auderghem",
+      "postalCode": "1160",
+      "immowebSlug": "auderghem",
+      "zimmoSlug": "auderghem",
+      "immovlanSlug": "auderghem",
+      "latitude": 50.816,
+      "longitude": 4.433,
+      "aliases": [
+        "Oudergem",
+        "Auderghem - Oudergem"
+      ]
+    },
+    {
+      "name": "Linkebeek",
+      "postalCode": "1630",
+      "immowebSlug": "linkebeek",
+      "zimmoSlug": "linkebeek",
+      "immovlanSlug": "linkebeek",
+      "latitude": 50.767,
+      "longitude": 4.335
+    },
+    {
+      "name": "Berchem-Sainte-Agathe",
+      "postalCode": "1082",
+      "immowebSlug": "berchem-sainte-agathe",
+      "zimmoSlug": "berchem-sainte-agathe",
+      "immovlanSlug": "berchem-sainte-agathe",
+      "latitude": 50.865,
+      "longitude": 4.294,
+      "aliases": [
+        "Sint-Agatha-Berchem",
+        "Berchem-Sainte-Agathe - Sint-Agatha-Berchem"
+      ]
+    },
+    {
+      "name": "Ganshoren",
+      "postalCode": "1083",
+      "immowebSlug": "ganshoren",
+      "zimmoSlug": "ganshoren",
+      "immovlanSlug": "ganshoren",
+      "latitude": 50.871,
+      "longitude": 4.315
+    },
+    {
+      "name": "Evere",
+      "postalCode": "1140",
+      "immowebSlug": "evere",
+      "zimmoSlug": "evere",
+      "immovlanSlug": "evere",
+      "latitude": 50.872,
+      "longitude": 4.403
+    },
+    {
+      "name": "Machelen",
+      "postalCode": "1830",
+      "immowebSlug": "machelen",
+      "zimmoSlug": "machelen",
+      "immovlanSlug": "machelen",
+      "latitude": 50.911,
+      "longitude": 4.435
+    },
+    {
       "name": "Anderlecht",
       "postalCode": "1070",
       "immowebSlug": "anderlecht",
@@ -37,22 +117,226 @@
       "longitude": 4.306
     },
     {
-      "name": "Auderghem",
-      "postalCode": "1160",
-      "immowebSlug": "auderghem",
-      "zimmoSlug": "auderghem",
-      "immovlanSlug": "auderghem",
-      "latitude": 50.816,
-      "longitude": 4.433
+      "name": "Woluwe-Saint-Lambert",
+      "postalCode": "1200",
+      "immowebSlug": "woluwe-saint-lambert",
+      "zimmoSlug": "woluwe-saint-lambert",
+      "immovlanSlug": "woluwe-saint-lambert",
+      "latitude": 50.843,
+      "longitude": 4.425,
+      "aliases": [
+        "Sint-Lambrechts-Woluwe",
+        "Woluwe-Saint-Lambert - Sint-Lambrechts-Woluwe"
+      ]
     },
     {
-      "name": "Berchem-Sainte-Agathe",
-      "postalCode": "1082",
-      "immowebSlug": "berchem-sainte-agathe",
-      "zimmoSlug": "berchem-sainte-agathe",
-      "immovlanSlug": "berchem-sainte-agathe",
-      "latitude": 50.865,
-      "longitude": 4.294
+      "name": "Jette",
+      "postalCode": "1090",
+      "immowebSlug": "jette",
+      "zimmoSlug": "jette",
+      "immovlanSlug": "jette",
+      "latitude": 50.877,
+      "longitude": 4.326
+    },
+    {
+      "name": "Forest",
+      "postalCode": "1190",
+      "immowebSlug": "forest",
+      "zimmoSlug": "forest",
+      "immovlanSlug": "forest",
+      "latitude": 50.811,
+      "longitude": 4.318,
+      "aliases": [
+        "Vorst",
+        "Forest - Vorst"
+      ]
+    },
+    {
+      "name": "Wemmel",
+      "postalCode": "1780",
+      "immowebSlug": "wemmel",
+      "zimmoSlug": "wemmel",
+      "immovlanSlug": "wemmel",
+      "latitude": 50.908,
+      "longitude": 4.307
+    },
+    {
+      "name": "Watermael-Boitsfort",
+      "postalCode": "1170",
+      "immowebSlug": "watermael-boitsfort",
+      "zimmoSlug": "watermael-boitsfort",
+      "immovlanSlug": "watermael-boitsfort",
+      "latitude": 50.799,
+      "longitude": 4.416,
+      "aliases": [
+        "Watermaal-Bosvoorde",
+        "Watermael-Boitsfort - Watermaal-Bosvoorde"
+      ]
+    },
+    {
+      "name": "Woluwe-Saint-Pierre",
+      "postalCode": "1150",
+      "immowebSlug": "woluwe-saint-pierre",
+      "zimmoSlug": "woluwe-saint-pierre",
+      "immovlanSlug": "woluwe-saint-pierre",
+      "latitude": 50.83,
+      "longitude": 4.442,
+      "aliases": [
+        "Sint-Pieters-Woluwe",
+        "Woluwe-Saint-Pierre - Sint-Pieters-Woluwe"
+      ]
+    },
+    {
+      "name": "Molenbeek-Saint-Jean",
+      "postalCode": "1080",
+      "immowebSlug": "molenbeek-saint-jean",
+      "zimmoSlug": "molenbeek-saint-jean",
+      "immovlanSlug": "molenbeek-saint-jean",
+      "latitude": 50.854,
+      "longitude": 4.338,
+      "aliases": [
+        "Sint-Jans-Molenbeek",
+        "Molenbeek-Saint-Jean - Sint-Jans-Molenbeek"
+      ]
+    },
+    {
+      "name": "Wezembeek-Oppem",
+      "postalCode": "1970",
+      "immowebSlug": "wezembeek-oppem",
+      "zimmoSlug": "wezembeek-oppem",
+      "immovlanSlug": "wezembeek-oppem",
+      "latitude": 50.84,
+      "longitude": 4.494
+    },
+    {
+      "name": "Uccle",
+      "postalCode": "1180",
+      "immowebSlug": "uccle",
+      "zimmoSlug": "uccle",
+      "immovlanSlug": "uccle",
+      "latitude": 50.803,
+      "longitude": 4.337,
+      "aliases": [
+        "Ukkel",
+        "Uccle - Ukkel"
+      ]
+    },
+    {
+      "name": "Vilvoorde",
+      "postalCode": "1800",
+      "immowebSlug": "vilvoorde",
+      "zimmoSlug": "vilvoorde",
+      "immovlanSlug": "vilvoorde",
+      "latitude": 50.929,
+      "longitude": 4.424,
+      "aliases": [
+        "Vilvorde"
+      ]
+    },
+    {
+      "name": "Zaventem",
+      "postalCode": "1930",
+      "immowebSlug": "zaventem",
+      "zimmoSlug": "zaventem",
+      "immovlanSlug": "zaventem",
+      "latitude": 50.883,
+      "longitude": 4.472
+    },
+    {
+      "name": "Sint-Genesius-Rode",
+      "postalCode": "1640",
+      "immowebSlug": "sint-genesius-rode",
+      "zimmoSlug": "sint-genesius-rode",
+      "immovlanSlug": "sint-genesius-rode",
+      "latitude": 50.746,
+      "longitude": 4.357,
+      "aliases": [
+        "Rhode-Saint-Genese",
+        "Rhode-Saint-Genèse",
+        "Sint-Genesius-Rode - Rhode-Saint-Genèse"
+      ]
+    },
+    {
+      "name": "Koekelberg",
+      "postalCode": "1081",
+      "immowebSlug": "koekelberg",
+      "zimmoSlug": "koekelberg",
+      "immovlanSlug": "koekelberg",
+      "latitude": 50.863,
+      "longitude": 4.326
+    },
+    {
+      "name": "Hoeilaart",
+      "postalCode": "1560",
+      "immowebSlug": "hoeilaart",
+      "zimmoSlug": "hoeilaart",
+      "immovlanSlug": "hoeilaart",
+      "latitude": 50.767,
+      "longitude": 4.468,
+      "aliases": [
+        "Hoeilaert"
+      ]
+    },
+    {
+      "name": "Schaerbeek",
+      "postalCode": "1030",
+      "immowebSlug": "schaerbeek",
+      "zimmoSlug": "schaerbeek",
+      "immovlanSlug": "schaerbeek",
+      "latitude": 50.867,
+      "longitude": 4.373,
+      "aliases": [
+        "Schaarbeek",
+        "Schaerbeek - Schaarbeek"
+      ]
+    },
+    {
+      "name": "Dilbeek",
+      "postalCode": "1700",
+      "immowebSlug": "dilbeek",
+      "zimmoSlug": "dilbeek",
+      "immovlanSlug": "dilbeek",
+      "latitude": 50.847,
+      "longitude": 4.259
+    },
+    {
+      "name": "Sint-Pieters-Leeuw",
+      "postalCode": "1600",
+      "immowebSlug": "sint-pieters-leeuw",
+      "zimmoSlug": "sint-pieters-leeuw",
+      "immovlanSlug": "sint-pieters-leeuw",
+      "latitude": 50.779,
+      "longitude": 4.243,
+      "aliases": [
+        "Ruisbroek",
+        "Vlezenbeek",
+        "Oudenaken",
+        "1601",
+        "1602",
+        "Leeuw-Saint-Pierre"
+      ]
+    },
+    {
+      "name": "Tervuren",
+      "postalCode": "3080",
+      "immowebSlug": "tervuren",
+      "zimmoSlug": "tervuren",
+      "immovlanSlug": "tervuren",
+      "latitude": 50.823,
+      "longitude": 4.514
+    },
+    {
+      "name": "Saint-Gilles",
+      "postalCode": "1060",
+      "immowebSlug": "saint-gilles",
+      "zimmoSlug": "saint-gilles",
+      "immovlanSlug": "saint-gilles",
+      "latitude": 50.827,
+      "longitude": 4.345,
+      "aliases": [
+        "Sint-Gillis",
+        "Saint-Gilles - Sint-Gillis"
+      ]
     },
     {
       "name": "Bruxelles-ville",
@@ -73,152 +357,9 @@
         "Haren",
         "1020",
         "1120",
-        "1130"
+        "1130",
+        "Bruxelles - Brussel"
       ]
-    },
-    {
-      "name": "Etterbeek",
-      "postalCode": "1040",
-      "immowebSlug": "etterbeek",
-      "zimmoSlug": "etterbeek",
-      "immovlanSlug": "etterbeek",
-      "latitude": 50.836,
-      "longitude": 4.389
-    },
-    {
-      "name": "Evere",
-      "postalCode": "1140",
-      "immowebSlug": "evere",
-      "zimmoSlug": "evere",
-      "immovlanSlug": "evere",
-      "latitude": 50.872,
-      "longitude": 4.403
-    },
-    {
-      "name": "Forest",
-      "postalCode": "1190",
-      "immowebSlug": "forest",
-      "zimmoSlug": "forest",
-      "immovlanSlug": "forest",
-      "latitude": 50.811,
-      "longitude": 4.318
-    },
-    {
-      "name": "Ganshoren",
-      "postalCode": "1083",
-      "immowebSlug": "ganshoren",
-      "zimmoSlug": "ganshoren",
-      "immovlanSlug": "ganshoren",
-      "latitude": 50.871,
-      "longitude": 4.315
-    },
-    {
-      "name": "Ixelles",
-      "postalCode": "1050",
-      "immowebSlug": "ixelles",
-      "zimmoSlug": "ixelles",
-      "immovlanSlug": "ixelles",
-      "latitude": 50.833,
-      "longitude": 4.366
-    },
-    {
-      "name": "Jette",
-      "postalCode": "1090",
-      "immowebSlug": "jette",
-      "zimmoSlug": "jette",
-      "immovlanSlug": "jette",
-      "latitude": 50.877,
-      "longitude": 4.326
-    },
-    {
-      "name": "Koekelberg",
-      "postalCode": "1081",
-      "immowebSlug": "koekelberg",
-      "zimmoSlug": "koekelberg",
-      "immovlanSlug": "koekelberg",
-      "latitude": 50.863,
-      "longitude": 4.326
-    },
-    {
-      "name": "Molenbeek-Saint-Jean",
-      "postalCode": "1080",
-      "immowebSlug": "molenbeek-saint-jean",
-      "zimmoSlug": "molenbeek-saint-jean",
-      "immovlanSlug": "molenbeek-saint-jean",
-      "latitude": 50.854,
-      "longitude": 4.338
-    },
-    {
-      "name": "Saint-Gilles",
-      "postalCode": "1060",
-      "immowebSlug": "saint-gilles",
-      "zimmoSlug": "saint-gilles",
-      "immovlanSlug": "saint-gilles",
-      "latitude": 50.827,
-      "longitude": 4.345
-    },
-    {
-      "name": "Saint-Josse-ten-Noode",
-      "postalCode": "1210",
-      "immowebSlug": "saint-josse-ten-noode",
-      "zimmoSlug": "saint-josse-ten-noode",
-      "immovlanSlug": "saint-josse-ten-noode",
-      "latitude": 50.854,
-      "longitude": 4.372
-    },
-    {
-      "name": "Schaerbeek",
-      "postalCode": "1030",
-      "immowebSlug": "schaerbeek",
-      "zimmoSlug": "schaerbeek",
-      "immovlanSlug": "schaerbeek",
-      "latitude": 50.867,
-      "longitude": 4.373
-    },
-    {
-      "name": "Uccle",
-      "postalCode": "1180",
-      "immowebSlug": "uccle",
-      "zimmoSlug": "uccle",
-      "immovlanSlug": "uccle",
-      "latitude": 50.803,
-      "longitude": 4.337
-    },
-    {
-      "name": "Watermael-Boitsfort",
-      "postalCode": "1170",
-      "immowebSlug": "watermael-boitsfort",
-      "zimmoSlug": "watermael-boitsfort",
-      "immovlanSlug": "watermael-boitsfort",
-      "latitude": 50.799,
-      "longitude": 4.416
-    },
-    {
-      "name": "Woluwe-Saint-Lambert",
-      "postalCode": "1200",
-      "immowebSlug": "woluwe-saint-lambert",
-      "zimmoSlug": "woluwe-saint-lambert",
-      "immovlanSlug": "woluwe-saint-lambert",
-      "latitude": 50.843,
-      "longitude": 4.425
-    },
-    {
-      "name": "Woluwe-Saint-Pierre",
-      "postalCode": "1150",
-      "immowebSlug": "woluwe-saint-pierre",
-      "zimmoSlug": "woluwe-saint-pierre",
-      "immovlanSlug": "woluwe-saint-pierre",
-      "latitude": 50.83,
-      "longitude": 4.442
-    },
-    {
-      "name": "Asse",
-      "postalCode": "1730",
-      "immowebSlug": "asse",
-      "zimmoSlug": "asse",
-      "immovlanSlug": "asse",
-      "latitude": 50.91,
-      "longitude": 4.199
     },
     {
       "name": "Beersel",
@@ -240,22 +381,26 @@
       ]
     },
     {
-      "name": "Dilbeek",
-      "postalCode": "1700",
-      "immowebSlug": "dilbeek",
-      "zimmoSlug": "dilbeek",
-      "immovlanSlug": "dilbeek",
-      "latitude": 50.847,
-      "longitude": 4.259
+      "name": "Etterbeek",
+      "postalCode": "1040",
+      "immowebSlug": "etterbeek",
+      "zimmoSlug": "etterbeek",
+      "immovlanSlug": "etterbeek",
+      "latitude": 50.836,
+      "longitude": 4.389
     },
     {
-      "name": "Drogenbos",
-      "postalCode": "1620",
-      "immowebSlug": "drogenbos",
-      "zimmoSlug": "drogenbos",
-      "immovlanSlug": "drogenbos",
-      "latitude": 50.787,
-      "longitude": 4.316
+      "name": "Saint-Josse-ten-Noode",
+      "postalCode": "1210",
+      "immowebSlug": "saint-josse-ten-noode",
+      "zimmoSlug": "saint-josse-ten-noode",
+      "immovlanSlug": "saint-josse-ten-noode",
+      "latitude": 50.854,
+      "longitude": 4.372,
+      "aliases": [
+        "Sint-Joost-ten-Node",
+        "Saint-Josse-ten-Noode - Sint-Joost-ten-Node"
+      ]
     },
     {
       "name": "Grimbergen",
@@ -267,100 +412,37 @@
       "longitude": 4.372
     },
     {
-      "name": "Halle",
-      "postalCode": "1500",
-      "immowebSlug": "halle",
-      "zimmoSlug": "halle",
-      "immovlanSlug": "halle",
-      "latitude": 50.737,
-      "longitude": 4.239
+      "name": "Overijse",
+      "postalCode": "3090",
+      "immowebSlug": "overijse",
+      "zimmoSlug": "overijse",
+      "immovlanSlug": "overijse",
+      "latitude": 50.767675,
+      "longitude": 4.532606
     },
     {
-      "name": "Hoeilaart",
-      "postalCode": "1560",
-      "immowebSlug": "hoeilaart",
-      "zimmoSlug": "hoeilaart",
-      "immovlanSlug": "hoeilaart",
-      "latitude": 50.767,
-      "longitude": 4.468
-    },
-    {
-      "name": "Kraainem",
-      "postalCode": "1950",
-      "immowebSlug": "kraainem",
-      "zimmoSlug": "kraainem",
-      "immovlanSlug": "kraainem",
-      "latitude": 50.861,
-      "longitude": 4.469
-    },
-    {
-      "name": "Lennik",
-      "postalCode": "1750",
-      "immowebSlug": "lennik",
-      "zimmoSlug": "lennik",
-      "immovlanSlug": "lennik",
-      "latitude": 50.809,
-      "longitude": 4.162
-    },
-    {
-      "name": "Linkebeek",
-      "postalCode": "1630",
-      "immowebSlug": "linkebeek",
-      "zimmoSlug": "linkebeek",
-      "immovlanSlug": "linkebeek",
-      "latitude": 50.767,
-      "longitude": 4.335
-    },
-    {
-      "name": "Machelen",
-      "postalCode": "1830",
-      "immowebSlug": "machelen",
-      "zimmoSlug": "machelen",
-      "immovlanSlug": "machelen",
-      "latitude": 50.911,
-      "longitude": 4.435
-    },
-    {
-      "name": "Meise",
-      "postalCode": "1860",
-      "immowebSlug": "meise",
-      "zimmoSlug": "meise",
-      "immovlanSlug": "meise",
-      "latitude": 50.939,
-      "longitude": 4.326
-    },
-    {
-      "name": "Merchtem",
-      "postalCode": "1785",
-      "immowebSlug": "merchtem",
-      "zimmoSlug": "merchtem",
-      "immovlanSlug": "merchtem",
-      "latitude": 50.951,
-      "longitude": 4.231
-    },
-    {
-      "name": "Sint-Genesius-Rode",
-      "postalCode": "1640",
-      "immowebSlug": "sint-genesius-rode",
-      "zimmoSlug": "sint-genesius-rode",
-      "immovlanSlug": "sint-genesius-rode",
-      "latitude": 50.746,
-      "longitude": 4.357
-    },
-    {
-      "name": "Sint-Pieters-Leeuw",
-      "postalCode": "1600",
-      "immowebSlug": "sint-pieters-leeuw",
-      "zimmoSlug": "sint-pieters-leeuw",
-      "immovlanSlug": "sint-pieters-leeuw",
-      "latitude": 50.779,
-      "longitude": 4.243,
+      "name": "Ixelles",
+      "postalCode": "1050",
+      "immowebSlug": "ixelles",
+      "zimmoSlug": "ixelles",
+      "immovlanSlug": "ixelles",
+      "latitude": 50.833,
+      "longitude": 4.366,
       "aliases": [
-        "Ruisbroek",
-        "Vlezenbeek",
-        "Oudenaken",
-        "1601",
-        "1602"
+        "Elsene",
+        "Ixelles - Elsene"
+      ]
+    },
+    {
+      "name": "La Hulpe",
+      "postalCode": "1310",
+      "immowebSlug": "la-hulpe",
+      "zimmoSlug": "la-hulpe",
+      "immovlanSlug": "la-hulpe",
+      "latitude": 50.736376,
+      "longitude": 4.468218,
+      "aliases": [
+        "Terhulpen"
       ]
     },
     {
@@ -373,31 +455,22 @@
       "longitude": 4.51
     },
     {
-      "name": "Ternat",
-      "postalCode": "1740",
-      "immowebSlug": "ternat",
-      "zimmoSlug": "ternat",
-      "immovlanSlug": "ternat",
-      "latitude": 50.866,
-      "longitude": 4.167
+      "name": "Asse",
+      "postalCode": "1730",
+      "immowebSlug": "asse",
+      "zimmoSlug": "asse",
+      "immovlanSlug": "asse",
+      "latitude": 50.91,
+      "longitude": 4.199
     },
     {
-      "name": "Tervuren",
-      "postalCode": "3080",
-      "immowebSlug": "tervuren",
-      "zimmoSlug": "tervuren",
-      "immovlanSlug": "tervuren",
-      "latitude": 50.823,
-      "longitude": 4.514
-    },
-    {
-      "name": "Vilvoorde",
-      "postalCode": "1800",
-      "immowebSlug": "vilvoorde",
-      "zimmoSlug": "vilvoorde",
-      "immovlanSlug": "vilvoorde",
-      "latitude": 50.929,
-      "longitude": 4.424
+      "name": "Lennik",
+      "postalCode": "1750",
+      "immowebSlug": "lennik",
+      "zimmoSlug": "lennik",
+      "immovlanSlug": "lennik",
+      "latitude": 50.809,
+      "longitude": 4.162
     },
     {
       "name": "Waterloo",
@@ -409,75 +482,355 @@
       "longitude": 4.399
     },
     {
-      "name": "Wemmel",
-      "postalCode": "1780",
-      "immowebSlug": "wemmel",
-      "zimmoSlug": "wemmel",
-      "immovlanSlug": "wemmel",
-      "latitude": 50.908,
-      "longitude": 4.307
+      "name": "Meise",
+      "postalCode": "1860",
+      "immowebSlug": "meise",
+      "zimmoSlug": "meise",
+      "immovlanSlug": "meise",
+      "latitude": 50.939,
+      "longitude": 4.326
     },
     {
-      "name": "Wezembeek-Oppem",
-      "postalCode": "1970",
-      "immowebSlug": "wezembeek-oppem",
-      "zimmoSlug": "wezembeek-oppem",
-      "immovlanSlug": "wezembeek-oppem",
-      "latitude": 50.84,
-      "longitude": 4.494
+      "name": "Zemst",
+      "postalCode": "1980",
+      "immowebSlug": "zemst",
+      "zimmoSlug": "zemst",
+      "immovlanSlug": "zemst",
+      "latitude": 50.977921,
+      "longitude": 4.449053
     },
     {
-      "name": "Zaventem",
-      "postalCode": "1930",
-      "immowebSlug": "zaventem",
-      "zimmoSlug": "zaventem",
-      "immovlanSlug": "zaventem",
-      "latitude": 50.883,
-      "longitude": 4.472
+      "name": "Ternat",
+      "postalCode": "1740",
+      "immowebSlug": "ternat",
+      "zimmoSlug": "ternat",
+      "immovlanSlug": "ternat",
+      "latitude": 50.866,
+      "longitude": 4.167
+    },
+    {
+      "name": "Halle",
+      "postalCode": "1500",
+      "immowebSlug": "halle",
+      "zimmoSlug": "halle",
+      "immovlanSlug": "halle",
+      "latitude": 50.737,
+      "longitude": 4.239,
+      "aliases": [
+        "Hal"
+      ]
+    },
+    {
+      "name": "Merchtem",
+      "postalCode": "1785",
+      "immowebSlug": "merchtem",
+      "zimmoSlug": "merchtem",
+      "immovlanSlug": "merchtem",
+      "latitude": 50.951,
+      "longitude": 4.231
+    },
+    {
+      "name": "Rixensart",
+      "postalCode": "1330",
+      "immowebSlug": "rixensart",
+      "zimmoSlug": "rixensart",
+      "immovlanSlug": "rixensart",
+      "latitude": 50.721887,
+      "longitude": 4.521985
+    },
+    {
+      "name": "Huldenberg",
+      "postalCode": "3040",
+      "immowebSlug": "huldenberg",
+      "zimmoSlug": "huldenberg",
+      "immovlanSlug": "huldenberg",
+      "latitude": 50.788074,
+      "longitude": 4.60527
+    },
+    {
+      "name": "Kortenberg",
+      "postalCode": "3070",
+      "immowebSlug": "kortenberg",
+      "zimmoSlug": "kortenberg",
+      "immovlanSlug": "kortenberg",
+      "latitude": 50.895283,
+      "longitude": 4.564864
+    },
+    {
+      "name": "Braine-l'Alleud",
+      "postalCode": "1420",
+      "immowebSlug": "braine-l-alleud",
+      "zimmoSlug": "braine-l-alleud",
+      "immovlanSlug": "braine-l-alleud",
+      "latitude": 50.680111,
+      "longitude": 4.356209,
+      "aliases": [
+        "Eigenbrakel"
+      ]
+    },
+    {
+      "name": "Bertem",
+      "postalCode": "3060",
+      "immowebSlug": "bertem",
+      "zimmoSlug": "bertem",
+      "immovlanSlug": "bertem",
+      "latitude": 50.85468,
+      "longitude": 4.603089
+    },
+    {
+      "name": "Kapelle-op-den-Bos",
+      "postalCode": "1880",
+      "immowebSlug": "kapelle-op-den-bos",
+      "zimmoSlug": "kapelle-op-den-bos",
+      "immovlanSlug": "kapelle-op-den-bos",
+      "latitude": 50.999767,
+      "longitude": 4.354933,
+      "aliases": [
+        "Capelle-au-Bois"
+      ]
+    },
+    {
+      "name": "Lasne",
+      "postalCode": "1380",
+      "immowebSlug": "lasne",
+      "zimmoSlug": "lasne",
+      "immovlanSlug": "lasne",
+      "latitude": 50.684059,
+      "longitude": 4.460612
+    },
+    {
+      "name": "Roosdaal",
+      "postalCode": "1760",
+      "immowebSlug": "roosdaal",
+      "zimmoSlug": "roosdaal",
+      "immovlanSlug": "roosdaal",
+      "latitude": 50.835064,
+      "longitude": 4.095625
+    },
+    {
+      "name": "Kampenhout",
+      "postalCode": "1910",
+      "immowebSlug": "kampenhout",
+      "zimmoSlug": "kampenhout",
+      "immovlanSlug": "kampenhout",
+      "latitude": 50.939954,
+      "longitude": 4.565969,
+      "aliases": [
+        "Campenhout"
+      ]
+    },
+    {
+      "name": "Wavre",
+      "postalCode": "1300",
+      "immowebSlug": "wavre",
+      "zimmoSlug": "wavre",
+      "immovlanSlug": "wavre",
+      "latitude": 50.723189,
+      "longitude": 4.588293,
+      "aliases": [
+        "Waver"
+      ]
+    },
+    {
+      "name": "Pepingen",
+      "postalCode": "1670",
+      "immowebSlug": "pepingen",
+      "zimmoSlug": "pepingen",
+      "immovlanSlug": "pepingen",
+      "latitude": 50.747656,
+      "longitude": 4.137238
+    },
+    {
+      "name": "Opwijk",
+      "postalCode": "1745",
+      "immowebSlug": "opwijk",
+      "zimmoSlug": "opwijk",
+      "immovlanSlug": "opwijk",
+      "latitude": 50.960569,
+      "longitude": 4.184128
+    },
+    {
+      "name": "Braine-le-Chateau",
+      "postalCode": "1440",
+      "immowebSlug": "braine-le-chateau",
+      "zimmoSlug": "braine-le-chateau",
+      "immovlanSlug": "braine-le-chateau",
+      "latitude": 50.679622,
+      "longitude": 4.285604,
+      "aliases": [
+        "Braine-le-Château",
+        "Kasteelbrakel"
+      ]
+    },
+    {
+      "name": "Liedekerke",
+      "postalCode": "1770",
+      "immowebSlug": "liedekerke",
+      "zimmoSlug": "liedekerke",
+      "immovlanSlug": "liedekerke",
+      "latitude": 50.869265,
+      "longitude": 4.092653
+    },
+    {
+      "name": "Londerzeel",
+      "postalCode": "1840",
+      "immowebSlug": "londerzeel",
+      "zimmoSlug": "londerzeel",
+      "immovlanSlug": "londerzeel",
+      "latitude": 51.008551,
+      "longitude": 4.277316
+    },
+    {
+      "name": "Affligem",
+      "postalCode": "1790",
+      "immowebSlug": "affligem",
+      "zimmoSlug": "affligem",
+      "immovlanSlug": "affligem",
+      "latitude": 50.90785,
+      "longitude": 4.112365
+    },
+    {
+      "name": "Boortmeerbeek",
+      "postalCode": "3190",
+      "immowebSlug": "boortmeerbeek",
+      "zimmoSlug": "boortmeerbeek",
+      "immovlanSlug": "boortmeerbeek",
+      "latitude": 50.980841,
+      "longitude": 4.562617
+    },
+    {
+      "name": "Tubize",
+      "postalCode": "1480",
+      "immowebSlug": "tubize",
+      "zimmoSlug": "tubize",
+      "immovlanSlug": "tubize",
+      "latitude": 50.690603,
+      "longitude": 4.188753,
+      "aliases": [
+        "Tubeke"
+      ]
+    },
+    {
+      "name": "Mechelen",
+      "postalCode": "2800",
+      "immowebSlug": "mechelen",
+      "zimmoSlug": "mechelen",
+      "immovlanSlug": "mechelen",
+      "latitude": 51.034767,
+      "longitude": 4.459562,
+      "aliases": [
+        "Malines"
+      ]
+    },
+    {
+      "name": "Ottignies-Louvain-la-Neuve",
+      "postalCode": "1340",
+      "immowebSlug": "ottignies-louvain-la-neuve",
+      "zimmoSlug": "ottignies-louvain-la-neuve",
+      "immovlanSlug": "ottignies-louvain-la-neuve",
+      "latitude": 50.672853,
+      "longitude": 4.569972
+    },
+    {
+      "name": "Oud-Heverlee",
+      "postalCode": "3050",
+      "immowebSlug": "oud-heverlee",
+      "zimmoSlug": "oud-heverlee",
+      "immovlanSlug": "oud-heverlee",
+      "latitude": 50.821549,
+      "longitude": 4.689356,
+      "aliases": [
+        "Vieux-Heverle",
+        "Vieux-Héverlé"
+      ]
+    },
+    {
+      "name": "Herent",
+      "postalCode": "3020",
+      "immowebSlug": "herent",
+      "zimmoSlug": "herent",
+      "immovlanSlug": "herent",
+      "latitude": 50.912484,
+      "longitude": 4.650497
+    },
+    {
+      "name": "Denderleeuw",
+      "postalCode": "9470",
+      "immowebSlug": "denderleeuw",
+      "zimmoSlug": "denderleeuw",
+      "immovlanSlug": "denderleeuw",
+      "latitude": 50.887851,
+      "longitude": 4.059157
     }
   ],
   "localAgencySearches": [
-    "agence immobiliere maison a vendre Anderlecht 350000",
-    "agence immobiliere maison a vendre Auderghem 350000",
-    "agence immobiliere maison a vendre Berchem-Sainte-Agathe 350000",
-    "agence immobiliere maison a vendre Bruxelles-ville 350000",
-    "agence immobiliere maison a vendre Etterbeek 350000",
-    "agence immobiliere maison a vendre Evere 350000",
-    "agence immobiliere maison a vendre Forest 350000",
-    "agence immobiliere maison a vendre Ganshoren 350000",
-    "agence immobiliere maison a vendre Ixelles 350000",
-    "agence immobiliere maison a vendre Jette 350000",
-    "agence immobiliere maison a vendre Koekelberg 350000",
-    "agence immobiliere maison a vendre Molenbeek-Saint-Jean 350000",
-    "agence immobiliere maison a vendre Saint-Gilles 350000",
-    "agence immobiliere maison a vendre Saint-Josse-ten-Noode 350000",
-    "agence immobiliere maison a vendre Schaerbeek 350000",
-    "agence immobiliere maison a vendre Uccle 350000",
-    "agence immobiliere maison a vendre Watermael-Boitsfort 350000",
-    "agence immobiliere maison a vendre Woluwe-Saint-Lambert 350000",
-    "agence immobiliere maison a vendre Woluwe-Saint-Pierre 350000",
-    "agence immobiliere maison a vendre Asse 350000",
-    "agence immobiliere maison a vendre Beersel 350000",
-    "agence immobiliere maison a vendre Dilbeek 350000",
     "agence immobiliere maison a vendre Drogenbos 350000",
-    "agence immobiliere maison a vendre Grimbergen 350000",
-    "agence immobiliere maison a vendre Halle 350000",
-    "agence immobiliere maison a vendre Hoeilaart 350000",
     "agence immobiliere maison a vendre Kraainem 350000",
-    "agence immobiliere maison a vendre Lennik 350000",
+    "agence immobiliere maison a vendre Auderghem 350000",
     "agence immobiliere maison a vendre Linkebeek 350000",
+    "agence immobiliere maison a vendre Berchem-Sainte-Agathe 350000",
+    "agence immobiliere maison a vendre Ganshoren 350000",
+    "agence immobiliere maison a vendre Evere 350000",
     "agence immobiliere maison a vendre Machelen 350000",
-    "agence immobiliere maison a vendre Meise 350000",
-    "agence immobiliere maison a vendre Merchtem 350000",
-    "agence immobiliere maison a vendre Sint-Genesius-Rode 350000",
-    "agence immobiliere maison a vendre Sint-Pieters-Leeuw 350000",
-    "agence immobiliere maison a vendre Steenokkerzeel 350000",
-    "agence immobiliere maison a vendre Ternat 350000",
-    "agence immobiliere maison a vendre Tervuren 350000",
-    "agence immobiliere maison a vendre Vilvoorde 350000",
-    "agence immobiliere maison a vendre Waterloo 350000",
+    "agence immobiliere maison a vendre Anderlecht 350000",
+    "agence immobiliere maison a vendre Woluwe-Saint-Lambert 350000",
+    "agence immobiliere maison a vendre Jette 350000",
+    "agence immobiliere maison a vendre Forest 350000",
     "agence immobiliere maison a vendre Wemmel 350000",
+    "agence immobiliere maison a vendre Watermael-Boitsfort 350000",
+    "agence immobiliere maison a vendre Woluwe-Saint-Pierre 350000",
+    "agence immobiliere maison a vendre Molenbeek-Saint-Jean 350000",
     "agence immobiliere maison a vendre Wezembeek-Oppem 350000",
-    "agence immobiliere maison a vendre Zaventem 350000"
+    "agence immobiliere maison a vendre Uccle 350000",
+    "agence immobiliere maison a vendre Vilvoorde 350000",
+    "agence immobiliere maison a vendre Zaventem 350000",
+    "agence immobiliere maison a vendre Sint-Genesius-Rode 350000",
+    "agence immobiliere maison a vendre Koekelberg 350000",
+    "agence immobiliere maison a vendre Hoeilaart 350000",
+    "agence immobiliere maison a vendre Schaerbeek 350000",
+    "agence immobiliere maison a vendre Dilbeek 350000",
+    "agence immobiliere maison a vendre Sint-Pieters-Leeuw 350000",
+    "agence immobiliere maison a vendre Tervuren 350000",
+    "agence immobiliere maison a vendre Saint-Gilles 350000",
+    "agence immobiliere maison a vendre Bruxelles-ville 350000",
+    "agence immobiliere maison a vendre Beersel 350000",
+    "agence immobiliere maison a vendre Etterbeek 350000",
+    "agence immobiliere maison a vendre Saint-Josse-ten-Noode 350000",
+    "agence immobiliere maison a vendre Grimbergen 350000",
+    "agence immobiliere maison a vendre Overijse 350000",
+    "agence immobiliere maison a vendre Ixelles 350000",
+    "agence immobiliere maison a vendre La Hulpe 350000",
+    "agence immobiliere maison a vendre Steenokkerzeel 350000",
+    "agence immobiliere maison a vendre Asse 350000",
+    "agence immobiliere maison a vendre Lennik 350000",
+    "agence immobiliere maison a vendre Waterloo 350000",
+    "agence immobiliere maison a vendre Meise 350000",
+    "agence immobiliere maison a vendre Zemst 350000",
+    "agence immobiliere maison a vendre Ternat 350000",
+    "agence immobiliere maison a vendre Halle 350000",
+    "agence immobiliere maison a vendre Merchtem 350000",
+    "agence immobiliere maison a vendre Rixensart 350000",
+    "agence immobiliere maison a vendre Huldenberg 350000",
+    "agence immobiliere maison a vendre Kortenberg 350000",
+    "agence immobiliere maison a vendre Braine-l'Alleud 350000",
+    "agence immobiliere maison a vendre Bertem 350000",
+    "agence immobiliere maison a vendre Kapelle-op-den-Bos 350000",
+    "agence immobiliere maison a vendre Lasne 350000",
+    "agence immobiliere maison a vendre Roosdaal 350000",
+    "agence immobiliere maison a vendre Kampenhout 350000",
+    "agence immobiliere maison a vendre Wavre 350000",
+    "agence immobiliere maison a vendre Pepingen 350000",
+    "agence immobiliere maison a vendre Opwijk 350000",
+    "agence immobiliere maison a vendre Braine-le-Chateau 350000",
+    "agence immobiliere maison a vendre Liedekerke 350000",
+    "agence immobiliere maison a vendre Londerzeel 350000",
+    "agence immobiliere maison a vendre Affligem 350000",
+    "agence immobiliere maison a vendre Boortmeerbeek 350000",
+    "agence immobiliere maison a vendre Tubize 350000",
+    "agence immobiliere maison a vendre Mechelen 350000",
+    "agence immobiliere maison a vendre Ottignies-Louvain-la-Neuve 350000",
+    "agence immobiliere maison a vendre Oud-Heverlee 350000",
+    "agence immobiliere maison a vendre Herent 350000",
+    "agence immobiliere maison a vendre Denderleeuw 350000"
   ]
 }

@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-21-11";
+  const APP_VERSION = "pwa-2026-06-21-13";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
@@ -100,7 +100,7 @@
       ".map-popup-route-row label{display:flex;align-items:center;gap:5px}",
       ".map-popup-route-row input{margin:0}",
       ".map-popup-route-note{font-size:11px;color:#66737d;margin-top:5px}",
-      ".route-preview-hide-popups .leaflet-popup{opacity:0;pointer-events:none}",
+      ".route-preview-hide-popups .leaflet-popup,.route-preview-hide-popups .leaflet-popup-pane{opacity:0;pointer-events:none}",
       ".map-popup-actions{margin-top:8px}",
       ".map-popup-actions button{border:0;background:#fff;color:#0b5c86;font:600 12px Arial,sans-serif;padding:0}",
       "@media(max-width:760px){.price-filter-panel{grid-template-columns:1fr}.price-filter-inputs{justify-content:flex-start}.price-filter-inputs input{width:140px}.filter-source-counts{grid-column:auto}}",
@@ -1092,24 +1092,19 @@
       window.veilleImmoRenderMapFromPayload(payload);
       return;
     }
-    if (window.veilleImmoStaticMapIncludesAllListings) {
-      refreshStaticMapPopups(payload);
-      syncMissingMapMarkers(payload);
-      return;
-    }
     if (!window.L || !window.veilleImmoMap) {
       return;
     }
     if (window.veilleImmoExtraSourceMarkers) {
       window.veilleImmoMap.removeLayer(window.veilleImmoExtraSourceMarkers);
     }
+    if (window.veilleImmoListingLayer && typeof window.veilleImmoMap.removeLayer === "function") {
+      window.veilleImmoMap.removeLayer(window.veilleImmoListingLayer);
+    }
+    renderedMapMarkers = [];
     const layer = window.L.layerGroup().addTo(window.veilleImmoMap);
-    const listings = Array.isArray(payload && payload.listings) ? payload.listings : [];
+    const listings = geocodedListings(payload);
     listings.forEach(function (listing) {
-      const kind = sourceKind(listing.source);
-      if (kind === "immoweb") {
-        return;
-      }
       const lat = Number(listing.latitude);
       const lon = Number(listing.longitude);
       if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
@@ -1121,6 +1116,7 @@
       renderedMapMarkers.push({ marker: marker, listing: listing });
     });
     window.veilleImmoExtraSourceMarkers = layer;
+    window.veilleImmoMapDataDriven = true;
     window.veilleImmoRenderedMarkerLayers = renderedMapMarkers.map(function (entry) { return entry.marker; });
     window.veilleImmoRenderedMarkerListings = renderedMapMarkers.map(function (entry) { return entry.listing; });
   }
@@ -1367,6 +1363,10 @@
     return { color: "#d97706", weight: 4, opacity: 0.86, dashArray: "8 7" };
   }
 
+  function routePreviewHitStyle() {
+    return { color: "#000", weight: 22, opacity: 0, interactive: true };
+  }
+
   function routePreviewKey(input) {
     return [
       input.dataset.routeMode || "route",
@@ -1453,6 +1453,9 @@
       input.checked = false;
       return;
     }
+    if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
+      window.veilleImmoMap.getContainer().classList.add("route-preview-hide-popups");
+    }
     let points = [[origin.lat, origin.lon], [dest.lat, dest.lon]];
     let source = "direct";
     if (mode === "bike") {
@@ -1466,11 +1469,15 @@
     if (routePreviewEntries[key]) {
       layer.removeLayer(routePreviewEntries[key]);
     }
-    const line = window.L.polyline(points, routePreviewStyle(mode)).addTo(layer);
-    line.on("click", function () {
+    const group = window.L.layerGroup().addTo(layer);
+    const line = window.L.polyline(points, routePreviewStyle(mode)).addTo(group);
+    const hitLine = window.L.polyline(points, routePreviewHitStyle()).addTo(group);
+    function clearThisRoute() {
       removeRoutePreview(key);
-    });
-    routePreviewEntries[key] = line;
+    }
+    line.on("click", clearThisRoute);
+    hitLine.on("click", clearThisRoute);
+    routePreviewEntries[key] = group;
     if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
       window.veilleImmoMap.getContainer().classList.add("route-preview-hide-popups");
     }
@@ -1682,6 +1689,28 @@
     ].join("");
   }
 
+  function legacyListingHeading() {
+    return Array.from(document.querySelectorAll("h2")).find(function (heading) {
+      return /annonces trouvees automatiquement/i.test(heading.textContent || "");
+    }) || null;
+  }
+
+  function listingInsertionAnchor() {
+    return document.getElementById("allListingsSection") || legacyListingHeading();
+  }
+
+  function removeLegacyListingSection() {
+    const heading = legacyListingHeading();
+    if (!heading) {
+      return;
+    }
+    const next = heading.nextElementSibling;
+    if (next && next.classList && next.classList.contains("cards")) {
+      next.remove();
+    }
+    heading.remove();
+  }
+
   function renderOtherSources(payload, config) {
     const listings = Array.isArray(payload && payload.listings) ? payload.listings : [];
     const others = listings.filter(function (listing) {
@@ -1698,9 +1727,7 @@
       existing.remove();
     }
 
-    const anchor = Array.from(document.querySelectorAll("h2")).find(function (heading) {
-      return /annonces trouvees automatiquement/i.test(heading.textContent || "");
-    });
+    const anchor = listingInsertionAnchor();
     if (!anchor || !anchor.parentNode) {
       return;
     }
@@ -1725,11 +1752,34 @@
       "<div class='source-diagnostic-item'><strong>2ememain</strong>Extraction avancee active via pages publiques et window.__CONFIG__. " + usableSecondHandCount + " annonce(s) exploitable(s) en cartes sur " + secondHandCount + " candidate(s) publiee(s).</div>",
       "<div class='source-diagnostic-item'><strong>Facebook Marketplace</strong>Lien de controle ajoute. Extraction automatique non active sans session utilisateur.</div>",
       "</div>",
-      renderDiagnosticSummary(payload.sourceDiagnostics),
-      properOthers.length ? "<section class='cards' id='otherSourceCards'>" + properOthers.map(renderOtherSourceCard).join("") + "</section>" : "<div class='empty'>Aucune annonce non-Immoweb exploitable dans le dernier jeu de donnees publie.</div>",
-      renderPrivateSourceLinks(config)
+      renderDiagnosticSummary(payload.sourceDiagnostics)
     ].join("");
     anchor.parentNode.insertBefore(section, anchor);
+  }
+
+  function renderUnifiedListings(payload, config) {
+    const listings = (Array.isArray(payload && payload.listings) ? payload.listings : []).filter(function (listing) {
+      return hasUsablePrivateListing(listing);
+    });
+    const existing = document.getElementById("allListingsSection");
+    if (existing) {
+      existing.remove();
+    }
+    const anchor = listingInsertionAnchor();
+    const parent = anchor && anchor.parentNode ? anchor.parentNode : document.querySelector("main") || document.body;
+    const section = document.createElement("section");
+    section.id = "allListingsSection";
+    section.innerHTML = [
+      "<h2>Annonces exploitables</h2>",
+      listings.length ? "<section class='cards' id='dataListingCards'>" + listings.map(renderOtherSourceCard).join("") + "</section>" : "<div class='empty'>Aucune annonce exploitable dans le dernier jeu de donnees publie.</div>",
+      renderPrivateSourceLinks(config)
+    ].join("");
+    if (anchor && anchor.parentNode) {
+      parent.insertBefore(section, anchor);
+    } else {
+      parent.appendChild(section);
+    }
+    removeLegacyListingSection();
   }
 
   function renderOtherSourceCard(listing) {
@@ -1814,6 +1864,7 @@
         injectLocationFilter(latestConfig);
       }
       renderOtherSources(payload, latestConfig);
+      renderUnifiedListings(payload, latestConfig);
       annotateSourceBadges(payload);
       syncSourceMapMarkers(payload);
       installRoutePreviewHandlers();

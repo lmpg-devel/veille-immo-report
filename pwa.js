@@ -1,10 +1,11 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-21-20";
+  const APP_VERSION = "pwa-2026-06-21-21";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
+  const TRANSIT_ROUTES_URL = "data/transit-routes.json";
   const OVERPASS_ENDPOINTS = [
     "https://overpass-api.de/api/interpreter",
     "https://overpass.kumi.systems/api/interpreter",
@@ -29,6 +30,7 @@
   let showOptionListings = false;
   let selectedLocationKeys = null;
   let latestLocationBoundaries = null;
+  let latestTransitRoutes = null;
   let locationBoundaryLayer = null;
   let locationBoundariesByKey = {};
   let routePreviewLayer = null;
@@ -122,6 +124,7 @@
       ".map-popup-route-row input{margin:0}",
       ".map-popup-route-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}",
       ".route-compact-toggle{display:flex;align-items:center;gap:4px;border:1px solid #d8e0e5;border-radius:6px;padding:4px 5px;color:#253540;white-space:nowrap;min-width:0}",
+      ".route-compact-toggle.is-disabled{opacity:.55;background:#f7f9fa}",
       ".route-compact-toggle input{margin:0;flex:0 0 auto}",
       ".route-compact-icon{font-size:13px;line-height:1}",
       ".route-compact-label{font-weight:700;overflow:hidden;text-overflow:ellipsis}",
@@ -299,6 +302,10 @@
     return listingUrlKey(listing && listing.url) || String(listing && listing.id || "").trim().toLowerCase();
   }
 
+  function listingTransitKey(listing) {
+    return listingDedupeKey(listing);
+  }
+
   function listingFavoriteId(listing) {
     return listingDedupeKey(listing);
   }
@@ -371,6 +378,17 @@
       return { type: "FeatureCollection", features: [] };
     }
     return data;
+  }
+
+  async function fetchTransitRoutes() {
+    const response = await fetch(TRANSIT_ROUTES_URL + "?t=" + Date.now(), {
+      cache: "no-store",
+      headers: { "Accept": "application/json" }
+    });
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status);
+    }
+    return response.json();
   }
 
   function listingText(listing) {
@@ -1147,6 +1165,31 @@
     return origin && origin.key === "decoster" ? "Travail" : "Bourse";
   }
 
+  function transitRouteForListing(listing, originKey) {
+    const key = listingTransitKey(listing);
+    const routes = latestTransitRoutes && latestTransitRoutes.routes;
+    const byListing = key && routes ? routes[key] : null;
+    const route = byListing && byListing[originKey];
+    return route && route.available && Array.isArray(route.parts) && route.parts.length ? route : null;
+  }
+
+  function transitRouteForInput(input) {
+    const listingKey = input && input.dataset ? input.dataset.listingKey : "";
+    const originKey = input && input.dataset ? input.dataset.originKey : "";
+    const routes = latestTransitRoutes && latestTransitRoutes.routes;
+    const byListing = listingKey && routes ? routes[listingKey] : null;
+    const route = byListing && byListing[originKey];
+    return route && route.available && Array.isArray(route.parts) && route.parts.length ? route : null;
+  }
+
+  function transitRouteTimeText(route) {
+    const stopCount = Number(route && route.stopCount);
+    if (Number.isFinite(stopCount) && stopCount > 0) {
+      return "~" + Math.round(stopCount) + " arr.";
+    }
+    return "TC";
+  }
+
   function routePopupHtml(listing) {
     const lat = Number(listing && listing.latitude);
     const lon = Number(listing && listing.longitude);
@@ -1154,13 +1197,14 @@
       return "";
     }
     const dest = { lat: lat, lon: lon };
+    const listingKey = listingTransitKey(listing);
     const rows = [];
     ROUTE_REFERENCES.forEach(function (origin) {
       const directKm = haversineKm(origin.lat, origin.lon, dest.lat, dest.lon);
       const bikeKm = directKm * 1.25;
       const bikeMinutes = (bikeKm / 25) * 60;
-      const transitMinutes = 10 + (directKm / 18) * 60;
-      const commonData = " data-origin-lat='" + escapeHtml(origin.lat) + "' data-origin-lon='" + escapeHtml(origin.lon) + "' data-dest-lat='" + escapeHtml(dest.lat) + "' data-dest-lon='" + escapeHtml(dest.lon) + "'";
+      const transitRoute = transitRouteForListing(listing, origin.key);
+      const commonData = " data-origin-lat='" + escapeHtml(origin.lat) + "' data-origin-lon='" + escapeHtml(origin.lon) + "' data-dest-lat='" + escapeHtml(dest.lat) + "' data-dest-lon='" + escapeHtml(dest.lon) + "' data-origin-key='" + escapeHtml(origin.key) + "' data-listing-key='" + escapeHtml(listingKey) + "'";
       const shortLabel = routeOriginShortLabel(origin);
       rows.push(
         "<label class='route-compact-toggle' title='Velo " + escapeHtml(shortLabel) + "'>"
@@ -1171,11 +1215,11 @@
         + "</label>"
       );
       rows.push(
-        "<label class='route-compact-toggle' title='TC " + escapeHtml(shortLabel) + "'>"
-        + "<input type='checkbox' class='route-preview-toggle' data-route-mode='transit' data-route-id='transit-" + escapeHtml(origin.key) + "'" + commonData + ">"
+        "<label class='route-compact-toggle" + (transitRoute ? "" : " is-disabled") + "' title='TC " + escapeHtml(shortLabel) + (transitRoute ? "" : " non calcule") + "'>"
+        + "<input type='checkbox' class='route-preview-toggle' data-route-mode='transit' data-route-id='transit-" + escapeHtml(origin.key) + "'" + commonData + (transitRoute ? "" : " disabled") + ">"
         + "<span class='route-compact-icon' aria-hidden='true'>&#128646;</span>"
         + "<span class='route-compact-label'>" + escapeHtml(shortLabel) + "</span>"
-        + "<span class='route-compact-time'>~" + escapeHtml(routeDurationText(transitMinutes)) + "</span>"
+        + "<span class='route-compact-time'>" + escapeHtml(transitRoute ? transitRouteTimeText(transitRoute) : "n/d") + "</span>"
         + "</label>"
       );
     });
@@ -2182,6 +2226,18 @@
       input.checked = false;
       return;
     }
+    const precomputedTransitRoute = mode === "transit" ? transitRouteForInput(input) : null;
+    if (mode === "transit" && !precomputedTransitRoute) {
+      input.checked = false;
+      window.veilleImmoTransitPreviewState = {
+        segments: 0,
+        source: "gtfs-precomputed",
+        unavailable: true,
+        straightFallback: false,
+        error: "Aucun parcours TC pre-calcule pour cette annonce"
+      };
+      return;
+    }
     const directPoints = [[origin.lat, origin.lon], [dest.lat, dest.lon]];
     let source = "loading";
     if (routePreviewEntries[key]) {
@@ -2196,9 +2252,11 @@
         window.veilleImmoMap.getContainer().classList.add("route-preview-hide-popups");
       }
       window.veilleImmoTransitPreviewState = {
-        segments: 0,
+        segments: precomputedTransitRoute && Array.isArray(precomputedTransitRoute.parts) ? precomputedTransitRoute.parts.length : 0,
         layerOnly: true,
-        status: "loading-real-osm-geometry",
+        status: "loading-gtfs-precomputed-geometry",
+        source: "gtfs-precomputed",
+        stopCount: precomputedTransitRoute ? precomputedTransitRoute.stopCount : null,
         fallback: false,
         straightFallback: false
       };
@@ -2230,28 +2288,27 @@
       }
     } else if (mode === "transit") {
       try {
-        const segments = await fetchTransitRouteSegments(origin, dest);
-        const route = buildTransitRouteFromSegments(origin, dest, segments);
+        const route = precomputedTransitRoute;
         const displayParts = transitDisplayParts(route.parts);
         if (!displayParts.length) {
-          throw new Error("Aucun segment TC reel affichable");
+          throw new Error("Aucun segment TC GTFS affichable");
         }
         if (routePreviewEntries[key] === group && typeof group.clearLayers === "function") {
           group.clearLayers();
           const allPoints = drawTransitParts(group, displayParts, key);
           fitRoutePreview(allPoints.length ? allPoints : directPoints);
-          source = "osm-transit-graph";
+          source = "gtfs-transit-graph";
           if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
             window.veilleImmoMap.getContainer().classList.add("route-preview-hide-popups");
           }
           window.veilleImmoTransitPreviewState = {
             segments: displayParts.length,
             layerOnly: false,
-            minutes: Math.round(route.minutes),
-            graphNodes: route.graphNodes,
-            graphEdges: route.graphEdges,
-            transferEdges: route.transferEdges,
-            networkSegments: route.networkSegments,
+            source: "gtfs-precomputed",
+            stopCount: route.stopCount,
+            transfers: route.transfers,
+            originStop: route.originStop,
+            destinationStop: route.destinationStop,
             operators: displayParts.reduce(function (acc, part) {
               acc[part.kind] = (acc[part.kind] || 0) + 1;
               return acc;
@@ -2261,7 +2318,7 @@
           };
         }
       } catch (error) {
-        source = "osm-transit-unavailable";
+        source = "gtfs-transit-unavailable";
         if (group && typeof group.clearLayers === "function") {
           group.clearLayers();
         }
@@ -2280,7 +2337,8 @@
           fallback: false,
           straightFallback: false,
           unavailable: true,
-          error: error && error.message ? error.message : "Aucune relation TC exploitable"
+          source: "gtfs-precomputed",
+          error: error && error.message ? error.message : "Aucun parcours TC pre-calcule exploitable"
         };
       }
     }
@@ -2687,8 +2745,14 @@
       } catch (error) {
         latestLocationBoundaries = latestLocationBoundaries || { type: "FeatureCollection", features: [] };
       }
+      try {
+        latestTransitRoutes = await fetchTransitRoutes();
+      } catch (error) {
+        latestTransitRoutes = latestTransitRoutes || { schemaVersion: 1, routes: {}, diagnostics: { unavailable: true } };
+      }
       latestPayload = payload;
       latestConfig = config || latestConfig;
+      window.veilleImmoTransitRoutes = latestTransitRoutes;
       updateReportHeader(payload, latestConfig);
       annotateSourceBadges(payload);
       syncSourceMapMarkers(payload);

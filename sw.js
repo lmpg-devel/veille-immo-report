@@ -1,4 +1,4 @@
-const CACHE_NAME = "veille-immo-pwa-2026-06-21-20";
+const CACHE_NAME = "veille-immo-pwa-2026-06-21-21";
 const DB_NAME = "veille-immo-pwa";
 const DB_VERSION = 1;
 const STORE_NAME = "state";
@@ -9,6 +9,7 @@ const STATIC_ASSETS = [
   "manifest.webmanifest",
   "pwa.js",
   "data/location-boundaries.geojson",
+  "data/transit-routes.json",
   "icons/icon.svg",
   "icons/icon-192.png",
   "icons/icon-512.png"

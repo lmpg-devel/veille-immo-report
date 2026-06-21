@@ -1,10 +1,11 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-21-13";
+  const APP_VERSION = "pwa-2026-06-21-14";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
+  const OVERPASS_ENDPOINT = "https://overpass-api.de/api/interpreter";
   const STORAGE_KEY = "veille-immo-seen-ids";
   const INIT_KEY = "veille-immo-initialized";
   const PRICE_FILTER_KEY = "veille-immo-price-max";
@@ -100,9 +101,13 @@
       ".map-popup-route-row label{display:flex;align-items:center;gap:5px}",
       ".map-popup-route-row input{margin:0}",
       ".map-popup-route-note{font-size:11px;color:#66737d;margin-top:5px}",
+      ".map-popup-route-legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;font-size:11px;color:#4b5563}",
+      ".transit-swatch{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:3px;vertical-align:-1px}",
       ".route-preview-hide-popups .leaflet-popup,.route-preview-hide-popups .leaflet-popup-pane{opacity:0;pointer-events:none}",
       ".map-popup-actions{margin-top:8px}",
       ".map-popup-actions button{border:0;background:#fff;color:#0b5c86;font:600 12px Arial,sans-serif;padding:0}",
+      ".listing-contact-details{margin-top:10px;background:#f4f7f8;border-radius:6px;padding:8px 10px;color:#33424d}",
+      ".listing-contact-details summary{cursor:pointer;font-weight:700;color:#0b5c86}",
       "@media(max-width:760px){.price-filter-panel{grid-template-columns:1fr}.price-filter-inputs{justify-content:flex-start}.price-filter-inputs input{width:140px}.filter-source-counts{grid-column:auto}}",
       "@media(max-width:680px){.pwa-controls{left:12px;right:12px}.pwa-controls button{flex:1}}"
     ].join("");
@@ -243,7 +248,36 @@
     if (!response.ok) {
       throw new Error("HTTP " + response.status);
     }
-    return response.json();
+    return normalizeResultsPayload(await response.json());
+  }
+
+  function listingDedupeKey(listing) {
+    return listingUrlKey(listing && listing.url) || String(listing && listing.id || "").trim().toLowerCase();
+  }
+
+  function dedupeListings(listings) {
+    const seen = new Set();
+    return (Array.isArray(listings) ? listings : []).filter(function (listing) {
+      const key = listingDedupeKey(listing);
+      if (!key) {
+        return true;
+      }
+      if (seen.has(key)) {
+        return false;
+      }
+      seen.add(key);
+      return true;
+    });
+  }
+
+  function normalizeResultsPayload(payload) {
+    const raw = Array.isArray(payload && payload.listings) ? payload.listings : [];
+    const listings = dedupeListings(raw);
+    return Object.assign({}, payload || {}, {
+      listings: listings,
+      count: listings.length,
+      duplicateCount: Math.max(0, raw.length - listings.length)
+    });
   }
 
   async function fetchConfig() {
@@ -929,10 +963,62 @@
   }
 
   function transitRouteUrl(origin, dest) {
-    return "https://www.google.com/maps/dir/?api=1&origin="
-      + encodeURIComponent(origin.lat + "," + origin.lon)
-      + "&destination=" + encodeURIComponent(dest.lat + "," + dest.lon)
-      + "&travelmode=transit";
+    return "https://www.openstreetmap.org/directions?route="
+      + encodeURIComponent(origin.lat + "," + origin.lon + ";" + dest.lat + "," + dest.lon);
+  }
+
+  function transitOperatorKind(tags) {
+    const text = [
+      tags && tags.operator,
+      tags && tags.network,
+      tags && tags.route,
+      tags && tags.name,
+      tags && tags.ref
+    ].join(" ").toLowerCase();
+    if (/sncb|nmbs|train|rail/.test(text)) {
+      return "train";
+    }
+    if (/stib|mivb|subway|metro|tram/.test(text)) {
+      return "stib";
+    }
+    if (/de\s*lijn|delijn/.test(text)) {
+      return "delijn";
+    }
+    if (/\btec\b|otw/.test(text)) {
+      return "tec";
+    }
+    return "other";
+  }
+
+  function transitOperatorLabel(kind) {
+    return {
+      train: "Train SNCB",
+      stib: "STIB",
+      delijn: "De Lijn",
+      tec: "TEC",
+      other: "Autre TC"
+    }[kind] || "Autre TC";
+  }
+
+  function transitOperatorColor(kind) {
+    return {
+      train: "#111827",
+      stib: "#2563eb",
+      delijn: "#f59e0b",
+      tec: "#dc2626",
+      other: "#6b7280"
+    }[kind] || "#6b7280";
+  }
+
+  function transitLegendHtml() {
+    return [
+      "<div class='map-popup-route-legend'>",
+      "<span><i class='transit-swatch' style='background:#111827'></i>Train</span>",
+      "<span><i class='transit-swatch' style='background:#2563eb'></i>STIB</span>",
+      "<span><i class='transit-swatch' style='background:#f59e0b'></i>De Lijn</span>",
+      "<span><i class='transit-swatch' style='background:#dc2626'></i>TEC</span>",
+      "</div>"
+    ].join("");
   }
 
   function routePopupHtml(listing) {
@@ -957,8 +1043,8 @@
       );
       rows.push(
         "<div class='map-popup-route-row'>"
-        + "<label><input type='checkbox' class='route-preview-toggle' data-route-mode='transit' data-route-id='transit-" + escapeHtml(origin.key) + "'" + commonData + "> TC " + escapeHtml(origin.label) + " · ~" + escapeHtml(routeDurationText(transitMinutes)) + "</label>"
-        + "<button type='button' class='external-link-button' data-external-url='" + escapeHtml(transitRouteUrl(origin, dest)) + "'>Calcul</button>"
+        + "<label><input type='checkbox' class='route-preview-toggle' data-route-mode='transit' data-route-id='transit-" + escapeHtml(origin.key) + "'" + commonData + "> TC OSM " + escapeHtml(origin.label) + " · ~" + escapeHtml(routeDurationText(transitMinutes)) + "</label>"
+        + "<button type='button' class='external-link-button' data-external-url='" + escapeHtml(transitRouteUrl(origin, dest)) + "'>Carte</button>"
         + "</div>"
       );
     });
@@ -966,7 +1052,8 @@
       "<div class='map-popup-routes'>",
       "<div class='map-popup-route-title'>Trajets indicatifs</div>",
       rows.join(""),
-      "<div class='map-popup-route-note'>Velo: estimation locale a 25 km/h. TC: estimation indicative, calcul horaire via le lien externe.</div>",
+      transitLegendHtml(),
+      "<div class='map-popup-route-note'>Velo: estimation locale a 25 km/h. TC: lignes OSM sans horaires, estimation moyenne indicative.</div>",
       "</div>"
     ].join("");
   }
@@ -1356,9 +1443,12 @@
     return routePreviewLayer;
   }
 
-  function routePreviewStyle(mode) {
+  function routePreviewStyle(mode, kind) {
     if (mode === "bike") {
       return { color: "#0f8f63", weight: 5, opacity: 0.88 };
+    }
+    if (mode === "transit") {
+      return { color: transitOperatorColor(kind || "other"), weight: kind === "train" ? 5 : 4, opacity: 0.9 };
     }
     return { color: "#d97706", weight: 4, opacity: 0.86, dashArray: "8 7" };
   }
@@ -1425,6 +1515,83 @@
     });
   }
 
+  function transitBbox(origin, dest) {
+    const south = Math.min(origin.lat, dest.lat) - 0.025;
+    const north = Math.max(origin.lat, dest.lat) + 0.025;
+    const west = Math.min(origin.lon, dest.lon) - 0.025;
+    const east = Math.max(origin.lon, dest.lon) + 0.025;
+    return [south, west, north, east].map(function (value) {
+      return Number(value).toFixed(6);
+    }).join(",");
+  }
+
+  function transitOverpassQuery(origin, dest) {
+    const bbox = transitBbox(origin, dest);
+    return [
+      "[out:json][timeout:25];",
+      "(",
+      "relation[\"type\"=\"route\"][\"route\"~\"^(train|subway|tram|bus)$\"][\"operator\"~\"SNCB|NMBS|STIB|MIVB|De Lijn|TEC|OTW\",i](" + bbox + ");",
+      ");",
+      "out tags geom;"
+    ].join("");
+  }
+
+  async function fetchTransitRouteSegments(origin, dest) {
+    const response = await fetch(OVERPASS_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+      },
+      body: "data=" + encodeURIComponent(transitOverpassQuery(origin, dest))
+    });
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status);
+    }
+    const data = await response.json();
+    const segments = [];
+    (Array.isArray(data && data.elements) ? data.elements : []).forEach(function (element) {
+      const kind = transitOperatorKind(element.tags || {});
+      (Array.isArray(element.members) ? element.members : []).forEach(function (member) {
+        const geometry = Array.isArray(member.geometry) ? member.geometry : [];
+        if (geometry.length < 2) {
+          return;
+        }
+        const points = geometry.map(function (point) {
+          return [Number(point.lat), Number(point.lon)];
+        }).filter(function (point) {
+          return Number.isFinite(point[0]) && Number.isFinite(point[1]);
+        });
+        if (points.length >= 2) {
+          segments.push({ kind: kind, label: transitOperatorLabel(kind), points: points });
+        }
+      });
+    });
+    if (!segments.length) {
+      throw new Error("Aucune ligne TC OSM");
+    }
+    return segments.slice(0, 90);
+  }
+
+  function addRoutePolyline(group, points, style, key) {
+    const line = window.L.polyline(points, style).addTo(group);
+    const hitLine = window.L.polyline(points, routePreviewHitStyle()).addTo(group);
+    function clearThisRoute() {
+      removeRoutePreview(key);
+    }
+    line.on("click", clearThisRoute);
+    hitLine.on("click", clearThisRoute);
+    return line;
+  }
+
+  function fitRoutePreview(points) {
+    if (!window.veilleImmoMap || !window.L || !Array.isArray(points) || points.length < 2) {
+      return;
+    }
+    const bounds = window.L.latLngBounds(points);
+    window.veilleImmoMap.fitBounds(bounds, { padding: [22, 22], maxZoom: 14 });
+  }
+
   async function drawRoutePreview(input) {
     if (!input) {
       return;
@@ -1456,33 +1623,58 @@
     if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
       window.veilleImmoMap.getContainer().classList.add("route-preview-hide-popups");
     }
-    let points = [[origin.lat, origin.lon], [dest.lat, dest.lon]];
+    const directPoints = [[origin.lat, origin.lon], [dest.lat, dest.lon]];
     let source = "direct";
-    if (mode === "bike") {
-      try {
-        points = await fetchBikeRouteLine(origin, dest);
-        source = "osm-bike";
-      } catch (error) {
-        source = "direct-fallback";
-      }
-    }
     if (routePreviewEntries[key]) {
       layer.removeLayer(routePreviewEntries[key]);
     }
     const group = window.L.layerGroup().addTo(layer);
-    const line = window.L.polyline(points, routePreviewStyle(mode)).addTo(group);
-    const hitLine = window.L.polyline(points, routePreviewHitStyle()).addTo(group);
-    function clearThisRoute() {
-      removeRoutePreview(key);
-    }
-    line.on("click", clearThisRoute);
-    hitLine.on("click", clearThisRoute);
+    addRoutePolyline(group, directPoints, routePreviewStyle(mode, "other"), key);
     routePreviewEntries[key] = group;
+    fitRoutePreview(directPoints);
+    window.veilleImmoRoutePreviewState = { count: Object.keys(routePreviewEntries).length, keys: Object.keys(routePreviewEntries), lastSource: "direct-loading", lastMode: mode };
+
+    if (mode === "bike") {
+      try {
+        const points = await fetchBikeRouteLine(origin, dest);
+        if (routePreviewEntries[key] === group && typeof group.clearLayers === "function") {
+          group.clearLayers();
+          addRoutePolyline(group, points, routePreviewStyle(mode), key);
+          fitRoutePreview(points);
+          source = "osm-bike";
+        }
+      } catch (error) {
+        source = "direct-fallback";
+      }
+    } else if (mode === "transit") {
+      try {
+        const segments = await fetchTransitRouteSegments(origin, dest);
+        if (routePreviewEntries[key] === group && typeof group.clearLayers === "function") {
+          const allPoints = [];
+          group.clearLayers();
+          segments.forEach(function (segment) {
+            addRoutePolyline(group, segment.points, routePreviewStyle(mode, segment.kind), key);
+            segment.points.forEach(function (point) { allPoints.push(point); });
+          });
+          fitRoutePreview(allPoints.length ? allPoints : directPoints);
+          source = "osm-transit";
+          window.veilleImmoTransitPreviewState = {
+            segments: segments.length,
+            operators: segments.reduce(function (acc, segment) {
+              acc[segment.kind] = (acc[segment.kind] || 0) + 1;
+              return acc;
+            }, {})
+          };
+        }
+      } catch (error) {
+        source = "direct-fallback";
+      }
+    }
+    if (routePreviewEntries[key] !== group) {
+      return;
+    }
     if (window.veilleImmoMap && window.veilleImmoMap.getContainer) {
       window.veilleImmoMap.getContainer().classList.add("route-preview-hide-popups");
-    }
-    if (window.veilleImmoMap && typeof line.getBounds === "function") {
-      window.veilleImmoMap.fitBounds(line.getBounds(), { padding: [22, 22], maxZoom: 14 });
     }
     window.veilleImmoRoutePreviewState = { count: Object.keys(routePreviewEntries).length, keys: Object.keys(routePreviewEntries), lastSource: source, lastMode: mode };
   }
@@ -1727,7 +1919,8 @@
       existing.remove();
     }
 
-    const anchor = listingInsertionAnchor();
+    const listingsSection = document.getElementById("allListingsSection");
+    const anchor = listingsSection || listingInsertionAnchor();
     if (!anchor || !anchor.parentNode) {
       return;
     }
@@ -1754,7 +1947,11 @@
       "</div>",
       renderDiagnosticSummary(payload.sourceDiagnostics)
     ].join("");
-    anchor.parentNode.insertBefore(section, anchor);
+    if (listingsSection) {
+      listingsSection.parentNode.insertBefore(section, listingsSection.nextSibling);
+    } else {
+      anchor.parentNode.insertBefore(section, anchor);
+    }
   }
 
   function renderUnifiedListings(payload, config) {
@@ -1813,9 +2010,9 @@
       renderSourceBadge(listing.source, listing),
       "<div class='listing-title'>" + escapeHtml(listing.title || "Annonce autre source") + "</div>",
       "<div class='facts'><div><span class='fact-label'>Prix</span> <span class='price'>" + escapeHtml(formatPrice(listing.price)) + "</span></div>" + details.join("") + "</div>",
-      listing.address ? "<div class='small'>" + escapeHtml(listing.address) + "</div>" : "",
-      "<div class='contact'><strong>" + escapeHtml(listing.agentName || listing.source || "Source") + "</strong>" + (contactParts.length ? "<br>" + contactParts.join(" · ") : "") + "</div>",
       "<div class='links'><button type='button' class='external-link-button' data-external-url='" + escapeHtml(listing.url || "#") + "'>Ouvrir l'annonce</button></div>",
+      listing.address ? "<div class='small'>" + escapeHtml(listing.address) + "</div>" : "",
+      "<details class='contact listing-contact-details'><summary>Contact / agence</summary><strong>" + escapeHtml(listing.agentName || listing.source || "Source") + "</strong>" + (contactParts.length ? "<br>" + contactParts.join(" · ") : "") + "</details>",
       "</div>",
       "</article>"
     ].join("");
@@ -1863,8 +2060,8 @@
       if (latestConfig) {
         injectLocationFilter(latestConfig);
       }
-      renderOtherSources(payload, latestConfig);
       renderUnifiedListings(payload, latestConfig);
+      renderOtherSources(payload, latestConfig);
       annotateSourceBadges(payload);
       syncSourceMapMarkers(payload);
       installRoutePreviewHandlers();

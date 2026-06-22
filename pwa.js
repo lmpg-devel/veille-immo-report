@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-21-24";
+  const APP_VERSION = "pwa-2026-06-22-01";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
@@ -46,6 +46,8 @@
   let transitTileLayer = null;
   let renderedMapMarkers = [];
   let favoriteListingIds = new Set();
+  let pendingMapEnhancementTimer = null;
+  let pendingMapEnhancementAttempts = 0;
   const ROUTE_REFERENCES = [
     { key: "bourse", label: "Bourse de Bruxelles", lat: 50.8478282, lon: 4.3491201 },
     { key: "decoster", label: "110 rue Pierre Decoster, Forest", lat: 50.8230517, lon: 4.3297564 }
@@ -1520,9 +1522,63 @@
     }
     const pane = window.veilleImmoMap.getPane("locationBoundaryPane");
     if (pane) {
-      pane.style.zIndex = "350";
+      pane.style.zIndex = "420";
       pane.style.pointerEvents = "auto";
     }
+  }
+
+  function eventTargetIsInteractiveMapUi(target) {
+    if (!target || typeof target.closest !== "function") {
+      return false;
+    }
+    return Boolean(target.closest(".leaflet-marker-icon,.leaflet-popup,.leaflet-control,.route-preview-line,.route-preview-halo,.route-stop-connector,.route-stop-tooltip,button,a,input,label"));
+  }
+
+  function locationKeyAtLatLng(latlng) {
+    if (!latlng) {
+      return "";
+    }
+    const lon = Number(latlng.lng);
+    const lat = Number(latlng.lat);
+    if (!Number.isFinite(lon) || !Number.isFinite(lat)) {
+      return "";
+    }
+    const allowedKeys = configuredLocationKeySet(latestConfig);
+    const features = latestLocationBoundaries && Array.isArray(latestLocationBoundaries.features)
+      ? latestLocationBoundaries.features
+      : [];
+    for (let index = 0; index < features.length; index += 1) {
+      const key = locationBoundaryKey(features[index]);
+      if (key && allowedKeys.has(key) && pointInFeature(lon, lat, features[index])) {
+        return key;
+      }
+    }
+    return "";
+  }
+
+  function bindLocationMapClickFallback() {
+    if (!window.veilleImmoMap || window.veilleImmoLocationMapClickFallbackBound) {
+      return;
+    }
+    window.veilleImmoLocationMapClickFallbackBound = true;
+    window.veilleImmoMap.on("click", function (event) {
+      if (event && event.originalEvent && event.originalEvent.veilleImmoBoundaryHandled) {
+        return;
+      }
+      if (eventTargetIsInteractiveMapUi(event && event.originalEvent && event.originalEvent.target)) {
+        return;
+      }
+      const key = locationKeyAtLatLng(event && event.latlng);
+      if (!key) {
+        return;
+      }
+      toggleSelectedLocation(key);
+      window.veilleImmoLastLocationMapFallback = {
+        key: key,
+        selected: selectedLocationKeys ? selectedLocationKeys.has(key) : false,
+        at: Date.now()
+      };
+    });
   }
 
   function locationBoundaryKey(feature) {
@@ -1710,6 +1766,7 @@
         const key = locationBoundaryKey(feature);
         return locationBoundaryStyle(!selectedLocationKeys || selectedLocationKeys.has(key), false);
       },
+      bubblingMouseEvents: false,
       onEachFeature: function (feature, layer) {
         const key = locationBoundaryKey(feature);
         const props = feature && feature.properties ? feature.properties : {};
@@ -1732,6 +1789,7 @@
         });
         layer.on("click", function (event) {
           if (window.L && window.L.DomEvent && event && event.originalEvent) {
+            event.originalEvent.veilleImmoBoundaryHandled = true;
             window.L.DomEvent.stopPropagation(event.originalEvent);
           }
           if (layer.closeTooltip) {
@@ -1744,9 +1802,66 @@
     if (typeof locationBoundaryLayer.bringToBack === "function") {
       locationBoundaryLayer.bringToBack();
     }
+    bindLocationMapClickFallback();
     window.veilleImmoLocationBoundaryLayer = locationBoundaryLayer;
     window.veilleImmoLocationBoundariesByKey = locationBoundariesByKey;
     window.veilleImmoLocationBoundaryKeys = Object.keys(locationBoundariesByKey);
+  }
+
+  function mapEnhancementsReady() {
+    return Boolean(window.L && window.veilleImmoMap && latestPayload && latestConfig);
+  }
+
+  function applyMapEnhancements(reason) {
+    if (!mapEnhancementsReady()) {
+      return false;
+    }
+    if (window.veilleImmoMap && typeof window.veilleImmoMap.invalidateSize === "function") {
+      window.veilleImmoMap.invalidateSize();
+    }
+    if (!renderedMapMarkers.length) {
+      syncSourceMapMarkers(latestPayload);
+    }
+    syncLocationMapBoundaries(latestConfig);
+    bindLocationMapClickFallback();
+    installRoutePreviewHandlers();
+    applyPriceFilter();
+    window.veilleImmoMapEnhancementState = {
+      ready: true,
+      reason: reason || "direct",
+      boundaries: window.veilleImmoLocationBoundaryKeys ? window.veilleImmoLocationBoundaryKeys.length : 0,
+      markers: window.veilleImmoRenderedMarkerLayers ? window.veilleImmoRenderedMarkerLayers.length : 0,
+      at: Date.now()
+    };
+    return true;
+  }
+
+  function scheduleMapEnhancements(reason) {
+    if (applyMapEnhancements(reason)) {
+      pendingMapEnhancementAttempts = 0;
+      return;
+    }
+    if (pendingMapEnhancementTimer) {
+      return;
+    }
+    pendingMapEnhancementTimer = window.setTimeout(function retryMapEnhancements() {
+      pendingMapEnhancementTimer = null;
+      pendingMapEnhancementAttempts += 1;
+      if (applyMapEnhancements(reason || "retry")) {
+        pendingMapEnhancementAttempts = 0;
+        return;
+      }
+      if (pendingMapEnhancementAttempts < 40) {
+        pendingMapEnhancementTimer = window.setTimeout(retryMapEnhancements, 250);
+      } else {
+        window.veilleImmoMapEnhancementState = {
+          ready: false,
+          reason: reason || "retry-timeout",
+          attempts: pendingMapEnhancementAttempts,
+          at: Date.now()
+        };
+      }
+    }, 250);
   }
 
   function ensureRoutePreviewLayer() {
@@ -3049,6 +3164,7 @@
       annotateSourceBadges(payload);
       syncSourceMapMarkers(payload);
       installRoutePreviewHandlers();
+      scheduleMapEnhancements("refresh");
       applyPriceFilter();
       if (manual) {
         setRebuildFeedback("Recalcul termine: carte et liste mises a jour.", false);

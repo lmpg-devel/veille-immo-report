@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-07-01-03";
+  const APP_VERSION = "pwa-2026-07-02-01";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
@@ -24,6 +24,8 @@
   const FAVORITES_KEY = "veille-immo-favorites";
   const NEW_ONLY_KEY = "veille-immo-new-only";
   const LAST_LAUNCH_KEY = "veille-immo-last-launch-ids";
+  const OPENING_BASELINE_KEY = "veille-immo-opening-baseline";
+  const NEW_LISTING_MAX_AGE_MS = 72 * 60 * 60 * 1000;
   const DEFAULT_MAX_PRICE = 350000;
   const USER_PRICE_LIMIT_MAX = 350000;
   const DEFAULT_LOCATION_DISTANCE_KM = 15;
@@ -51,6 +53,7 @@
   let newListingIds = new Set();
   let newListingPreviousSource = "none";
   let newListingPreviousCount = 0;
+  let openingBaselineCache = null;
   let showNewListingsOnly = false;
   let pendingMapEnhancementTimer = null;
   let pendingMapEnhancementAttempts = 0;
@@ -338,6 +341,64 @@
     return ids;
   }
 
+  function parseListingDateValue(value) {
+    if (value == null || value === "") {
+      return null;
+    }
+    if (typeof value === "number" && Number.isFinite(value)) {
+      return value < 100000000000 ? value * 1000 : value;
+    }
+    const raw = String(value).trim();
+    if (!raw) {
+      return null;
+    }
+    if (/^\d{10,13}$/.test(raw)) {
+      const numeric = Number(raw);
+      return numeric < 100000000000 ? numeric * 1000 : numeric;
+    }
+    const parsed = Date.parse(raw);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  function listingPublicationTime(listing) {
+    if (!listing || typeof listing !== "object") {
+      return null;
+    }
+    const fields = [
+      "publicationDate",
+      "publishedAt",
+      "publishedDate",
+      "datePublished",
+      "createdAt",
+      "creationDate",
+      "firstSeenAt",
+      "firstSeen",
+      "listedAt",
+      "listingDate",
+      "date"
+    ];
+    for (const field of fields) {
+      const parsed = parseListingDateValue(listing[field]);
+      if (parsed) {
+        return parsed;
+      }
+    }
+    return null;
+  }
+
+  function listingPassesRecentPublicationGate(listing, now) {
+    const publishedAt = listingPublicationTime(listing);
+    if (!publishedAt) {
+      return true;
+    }
+    return publishedAt <= now && now - publishedAt <= NEW_LISTING_MAX_AGE_MS;
+  }
+
+  function listingIsRecentByPublicationOnly(listing, now) {
+    const publishedAt = listingPublicationTime(listing);
+    return Boolean(publishedAt && publishedAt <= now && now - publishedAt <= NEW_LISTING_MAX_AGE_MS);
+  }
+
   function currentLaunchIdSet(payload) {
     const ids = new Set();
     (Array.isArray(payload && payload.listings) ? payload.listings : []).forEach(function (listing) {
@@ -359,6 +420,53 @@
       ids: migrated.ids,
       source: "seen-ids-migration"
     };
+  }
+
+  function openingBaselineFromSession() {
+    try {
+      const raw = sessionStorage.getItem(OPENING_BASELINE_KEY);
+      if (!raw) {
+        return null;
+      }
+      const parsed = JSON.parse(raw);
+      return {
+        available: Boolean(parsed && parsed.available),
+        ids: new Set(Array.isArray(parsed && parsed.ids) ? parsed.ids.filter(Boolean).map(String) : []),
+        source: String(parsed && parsed.source || "opening-session")
+      };
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function saveOpeningBaselineToSession(baseline) {
+    try {
+      sessionStorage.setItem(OPENING_BASELINE_KEY, JSON.stringify({
+        available: Boolean(baseline && baseline.available),
+        source: baseline && baseline.source || "none",
+        ids: Array.from(baseline && baseline.ids ? baseline.ids : [])
+      }));
+    } catch (error) {
+    }
+  }
+
+  function openingBaselineIds() {
+    const sessionBaseline = openingBaselineFromSession();
+    if (sessionBaseline) {
+      openingBaselineCache = sessionBaseline;
+      return openingBaselineCache;
+    }
+    if (openingBaselineCache) {
+      return openingBaselineCache;
+    }
+    const previous = previousLaunchIdsFromStorage();
+    openingBaselineCache = {
+      available: previous.available,
+      ids: previous.ids,
+      source: previous.available ? previous.source : "no-previous-opening"
+    };
+    saveOpeningBaselineToSession(openingBaselineCache);
+    return openingBaselineCache;
   }
 
   function saveCurrentLaunchSnapshot(payload) {
@@ -389,8 +497,9 @@
 
   function updateNewListingState(payload) {
     const listings = Array.isArray(payload && payload.listings) ? payload.listings : [];
-    const previous = previousLaunchIdsFromStorage();
+    const previous = openingBaselineIds();
     const nextNewIds = new Set();
+    const now = Date.now();
 
     if (previous.available) {
       listings.forEach(function (listing) {
@@ -398,7 +507,14 @@
         const presentBefore = listingLaunchIds(listing).some(function (candidate) {
           return previous.ids.has(candidate);
         });
-        if (id && !presentBefore) {
+        if (id && !presentBefore && listingPassesRecentPublicationGate(listing, now)) {
+          nextNewIds.add(id);
+        }
+      });
+    } else {
+      listings.forEach(function (listing) {
+        const id = listingNewId(listing);
+        if (id && listingIsRecentByPublicationOnly(listing, now)) {
           nextNewIds.add(id);
         }
       });
@@ -417,7 +533,7 @@
       count: newListingIds.size,
       only: showNewListingsOnly,
       ids: Array.from(newListingIds),
-      criterion: "absent-du-lancement-precedent",
+      criterion: "absent-ouverture-precedente-ou-publication-72h",
       previousSource: newListingPreviousSource,
       previousCount: newListingPreviousCount
     };
@@ -450,7 +566,7 @@
       count: newListingIds.size,
       only: showNewListingsOnly,
       ids: Array.from(newListingIds),
-      criterion: "absent-du-lancement-precedent",
+      criterion: "absent-ouverture-precedente-ou-publication-72h",
       previousSource: newListingPreviousSource,
       previousCount: newListingPreviousCount
     };

@@ -326,9 +326,15 @@ async function main() {
       }
       const candidateIds = new Set(candidates.map((item) => item.id));
       const candidateLaunchIds = new Set(markerListings.filter((listing) => candidateIds.has(String(listing && listing.id || '').trim())).flatMap(listingLaunchIds));
+      const baselineIds = all.filter((id) => !candidateLaunchIds.has(id));
       localStorage.setItem('veille-immo-initialized', '1');
       localStorage.setItem('veille-immo-new-only', '0');
-      localStorage.setItem('veille-immo-last-launch-ids', JSON.stringify(all.filter((id) => !candidateLaunchIds.has(id))));
+      localStorage.setItem('veille-immo-last-launch-ids', JSON.stringify(baselineIds));
+      sessionStorage.setItem('veille-immo-opening-baseline', JSON.stringify({
+        available: true,
+        source: 'previous-launch',
+        ids: baselineIds
+      }));
       await window.VeilleImmoPwa.refreshReportData(false);
       const initialState = window.veilleImmoNewListingState || {};
       const storedAfterRefresh = JSON.parse(localStorage.getItem('veille-immo-last-launch-ids') || '[]');
@@ -358,7 +364,7 @@ async function main() {
       toggle.dispatchEvent(new Event('change', { bubbles: true }));
       return {
         ok: initialState.count === 2
-          && initialState.criterion === 'absent-du-lancement-precedent'
+          && initialState.criterion === 'absent-ouverture-precedente-ou-publication-72h'
           && initialState.previousSource === 'previous-launch'
           && storedAfterRefresh.length >= all.length
           && Boolean(newPanel)

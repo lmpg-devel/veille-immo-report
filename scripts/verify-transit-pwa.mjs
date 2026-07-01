@@ -285,6 +285,83 @@ async function main() {
       };
     })()`);
 
+    await waitFor(chrome.page, `(() => {
+      try {
+        const seen = JSON.parse(localStorage.getItem('veille-immo-seen-ids') || '[]');
+        const rendered = (window.veilleImmoRenderedMarkerListings || []).length;
+        return { ok: Array.isArray(seen) && rendered > 0 && seen.length >= Math.max(100, Math.floor(rendered * 0.8)), seenCount: seen.length, rendered };
+      } catch {
+        return { ok: false, seenCount: 0 };
+      }
+    })()`);
+
+    const newListingsCheck = await chrome.page.evaluate(`(async () => {
+      const all = (window.veilleImmoRenderedMarkerListings || []).map((listing) => String(listing && listing.id || '').trim()).filter(Boolean);
+      const visibleCardIds = Array.from(document.querySelectorAll('.listing-card')).filter((card) => !card.hidden).map((card) => {
+        return String(card.id || '').replace(/^listing-other-/, '').replace(/^listing-/, '').trim();
+      }).filter((id) => id && all.includes(id));
+      const candidates = visibleCardIds.slice(0, 2).map((id) => ({ id }));
+      if (candidates.length < 2 || typeof window.VeilleImmoPwa.refreshReportData !== 'function') {
+        return { ok: false, reason: 'candidates missing', candidates: candidates.length };
+      }
+      const candidateIds = new Set(candidates.map((item) => item.id));
+      localStorage.setItem('veille-immo-initialized', '1');
+      localStorage.setItem('veille-immo-new-only', '0');
+      localStorage.setItem('veille-immo-seen-ids', JSON.stringify(Array.from(new Set(all.filter((id) => !candidateIds.has(id))))));
+      await window.VeilleImmoPwa.refreshReportData(false);
+      const initialState = window.veilleImmoNewListingState || {};
+      const starsBeforeFilter = Array.from(document.querySelectorAll('.source-map-star')).length;
+      const badgesBeforeFilter = Array.from(document.querySelectorAll('.new-badge')).length;
+      const newPanel = document.querySelector('#newListingFilterPanel');
+      const toggle = document.querySelector('#newListingsOnlyToggle');
+      const count = document.querySelector('#newListingsCount');
+      const markerListings = window.veilleImmoRenderedMarkerListings || [];
+      const markerLayers = window.veilleImmoRenderedMarkerLayers || [];
+      const firstMarkerIndex = markerListings.findIndex((listing) => candidateIds.has(String(listing && listing.id || '').trim()));
+      if (firstMarkerIndex >= 0 && markerLayers[firstMarkerIndex] && markerLayers[firstMarkerIndex].openPopup) {
+        markerLayers[firstMarkerIndex].openPopup();
+      }
+      const popupHasNewBadge = Boolean(document.querySelector('.leaflet-popup .map-popup-new'));
+      if (!toggle) {
+        return { ok: false, reason: 'toggle missing', initialState };
+      }
+      toggle.checked = true;
+      toggle.dispatchEvent(new Event('change', { bubbles: true }));
+      const filteredState = window.veilleImmoPriceFilterState || {};
+      const visibleCardsAfterFilter = Array.from(document.querySelectorAll('.listing-card')).filter((card) => !card.hidden).length;
+      const visibleStarsAfterFilter = Array.from(document.querySelectorAll('.source-map-star')).filter((star) => {
+        const marker = star.closest('.leaflet-marker-icon');
+        return marker && marker.style.display !== 'none';
+      }).length;
+      toggle.checked = false;
+      toggle.dispatchEvent(new Event('change', { bubbles: true }));
+      return {
+        ok: initialState.count === 2
+          && Boolean(newPanel)
+          && !toggle.disabled
+          && /2 nouvelle/.test(count ? count.textContent : '')
+          && starsBeforeFilter >= 2
+          && badgesBeforeFilter >= 2
+          && popupHasNewBadge
+          && filteredState.showNewListingsOnly === true
+          && filteredState.visibleCount === 2
+          && visibleCardsAfterFilter === 2
+          && visibleStarsAfterFilter >= 2,
+        initialState,
+        countText: count ? count.textContent.trim() : '',
+        starsBeforeFilter,
+        badgesBeforeFilter,
+        popupHasNewBadge,
+        filteredState,
+        visibleCardsAfterFilter,
+        visibleStarsAfterFilter,
+        candidateIds: candidates.map((item) => item.id)
+      };
+    })()`);
+    if (!newListingsCheck.ok) {
+      throw new Error(`Nouveautes invalides: ${JSON.stringify(newListingsCheck)}`);
+    }
+
     const opened = await chrome.page.evaluate(`(() => {
       function listingUrlKey(url) {
         const raw = String(url || '').trim();
@@ -393,6 +470,7 @@ async function main() {
       distanceMax,
       opened,
       checked,
+      newListingsCheck,
       drawn,
       screenshotPath
     }, null, 2));

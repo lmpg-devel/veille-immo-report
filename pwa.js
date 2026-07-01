@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-06-22-01";
+  const APP_VERSION = "pwa-2026-07-01-01";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
@@ -22,6 +22,7 @@
   const LOCATION_FILTER_KEY = "veille-immo-selected-locations";
   const LOCATION_DISTANCE_KEY = "veille-immo-location-distance-km";
   const FAVORITES_KEY = "veille-immo-favorites";
+  const NEW_ONLY_KEY = "veille-immo-new-only";
   const DEFAULT_MAX_PRICE = 350000;
   const USER_PRICE_LIMIT_MAX = 350000;
   const DEFAULT_LOCATION_DISTANCE_KM = 15;
@@ -46,6 +47,8 @@
   let transitTileLayer = null;
   let renderedMapMarkers = [];
   let favoriteListingIds = new Set();
+  let newListingIds = new Set();
+  let showNewListingsOnly = false;
   let pendingMapEnhancementTimer = null;
   let pendingMapEnhancementAttempts = 0;
   const ROUTE_REFERENCES = [
@@ -94,7 +97,13 @@
       ".location-boundary-path{cursor:pointer;transition:fill-opacity .12s ease,stroke-opacity .12s ease;outline:none}",
       ".location-boundary-path:focus,.leaflet-interactive:focus,.leaflet-container path:focus{outline:none}",
       ".listing-card.is-under-option{border-color:#d97706;box-shadow:inset 0 0 0 1px rgba(217,119,6,.28)}",
+      ".listing-card.is-new-listing{border-color:#f59e0b;box-shadow:0 0 0 2px rgba(245,158,11,.18)}",
       ".option-badge{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;background:#d97706;color:#fff;font:700 11px/1 Arial,sans-serif;text-transform:uppercase;letter-spacing:.02em}",
+      ".new-listing-panel{background:#fff;border:1px solid #d8dee3;border-radius:7px;margin:-8px 0 14px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}",
+      ".new-listing-toggle{display:inline-flex;align-items:center;gap:8px;font:700 13px Arial,sans-serif;color:#17202a;white-space:nowrap}",
+      ".new-listing-count{font:600 13px Arial,sans-serif;color:#5c6670}",
+      ".new-badge-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}",
+      ".new-badge{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;background:#f59e0b;color:#111827;font:800 11px/1 Arial,sans-serif;text-transform:uppercase;letter-spacing:.02em}",
       ".other-source-note{background:#eef7fb;border:1px solid #b8d9e8;border-radius:6px;padding:12px 14px;margin:18px 0;color:#253540}",
       ".source-diagnostic-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0 20px}",
       ".source-diagnostic-item{background:#fff;border:1px solid #d9e0e4;border-radius:6px;padding:10px}",
@@ -120,11 +129,19 @@
       ".source-map-heart-zimmo{color:#7c3aed}",
       ".source-map-heart-agency{color:#2f6f3e}",
       ".source-map-heart-p2p{color:#d97706}",
+      ".source-map-star{display:flex;align-items:center;justify-content:center;width:25px;height:25px;background:transparent;border:0;font:800 25px/1 Arial,sans-serif;text-shadow:0 1px 0 #fff,0 -1px 0 #fff,1px 0 0 #fff,-1px 0 0 #fff,0 3px 8px rgba(0,0,0,.35)}",
+      ".source-map-star-immoweb{color:#0b5c86}",
+      ".source-map-star-immovlan{color:#e11d48}",
+      ".source-map-star-zimmo{color:#7c3aed}",
+      ".source-map-star-agency{color:#2f6f3e}",
+      ".source-map-star-p2p{color:#d97706}",
       ".map-popup{min-width:245px;max-width:320px}",
       ".map-popup-head{display:grid;grid-template-columns:54px minmax(0,1fr) 30px;gap:7px;align-items:start;margin-bottom:6px}",
       ".map-popup-title-wrap{min-width:0}",
       ".map-popup-thumb{display:block;width:54px;height:42px;border-radius:5px;object-fit:cover;background:#eef3f6;color:#70808b;font:700 10px/42px Arial,sans-serif;text-align:center;overflow:hidden}",
-      ".map-popup-source{display:inline-flex;border-radius:999px;padding:3px 7px;background:#eef3f6;color:#253540;font:700 11px Arial,sans-serif;text-transform:uppercase;margin-bottom:6px}",
+      ".map-popup-source-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px}",
+      ".map-popup-source{display:inline-flex;border-radius:999px;padding:3px 7px;background:#eef3f6;color:#253540;font:700 11px Arial,sans-serif;text-transform:uppercase}",
+      ".map-popup-new{display:inline-flex;border-radius:999px;padding:3px 7px;background:#f59e0b;color:#111827;font:800 11px Arial,sans-serif;text-transform:uppercase}",
       ".map-popup-title{font:700 14px/1.3 Arial,sans-serif;color:#17202a;margin-bottom:5px}",
       ".map-popup-price{font:700 14px Arial,sans-serif;color:#0b513c;margin-bottom:6px}",
       ".favorite-toggle-button{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid #cfd8de;background:#fff;color:#64748b;border-radius:999px;font:700 17px/1 Arial,sans-serif;cursor:pointer;padding:0}",
@@ -287,6 +304,134 @@
   function saveSeenIds(ids) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(ids)));
     localStorage.setItem(INIT_KEY, "1");
+  }
+
+  function listingNewId(listing) {
+    return listingDedupeKey(listing) || String(listing && listing.id || "").trim();
+  }
+
+  function loadNewOnlyPreference() {
+    try {
+      showNewListingsOnly = localStorage.getItem(NEW_ONLY_KEY) === "1";
+    } catch (error) {
+      showNewListingsOnly = false;
+    }
+  }
+
+  function saveNewOnlyPreference() {
+    try {
+      localStorage.setItem(NEW_ONLY_KEY, showNewListingsOnly ? "1" : "0");
+    } catch (error) {
+    }
+  }
+
+  function updateNewListingState(payload) {
+    const initialized = localStorage.getItem(INIT_KEY) === "1";
+    const listings = Array.isArray(payload && payload.listings) ? payload.listings : [];
+    const seenIds = seenIdsFromStorage();
+    const nextNewIds = new Set();
+
+    if (initialized) {
+      listings.forEach(function (listing) {
+        const id = listingNewId(listing);
+        if (id && !seenIds.has(id) && !seenIds.has(String(listing && listing.id || ""))) {
+          nextNewIds.add(id);
+        }
+      });
+    }
+
+    newListingIds = nextNewIds;
+    if (newListingIds.size === 0 && showNewListingsOnly) {
+      showNewListingsOnly = false;
+      saveNewOnlyPreference();
+    }
+    window.veilleImmoNewListings = Array.from(newListingIds);
+    window.veilleImmoNewListingState = {
+      count: newListingIds.size,
+      only: showNewListingsOnly,
+      ids: Array.from(newListingIds)
+    };
+  }
+
+  function listingIsNew(listing) {
+    const id = listingNewId(listing);
+    return Boolean(id && newListingIds.has(id));
+  }
+
+  function listingPassesNewFilter(listing) {
+    return !showNewListingsOnly || listingIsNew(listing);
+  }
+
+  function renderNewListingBadge(listing) {
+    return listingIsNew(listing) ? "<div class='new-badge-row'><span class='new-badge'>Nouveau</span></div>" : "";
+  }
+
+  function updateNewListingControls() {
+    const toggle = document.getElementById("newListingsOnlyToggle");
+    const count = document.getElementById("newListingsCount");
+    if (toggle) {
+      toggle.checked = showNewListingsOnly;
+      toggle.disabled = newListingIds.size === 0;
+    }
+    if (count) {
+      count.textContent = newListingIds.size ? newListingIds.size + " nouvelle(s) detectee(s)" : "Aucune nouveaute detectee";
+    }
+    window.veilleImmoNewListingState = {
+      count: newListingIds.size,
+      only: showNewListingsOnly,
+      ids: Array.from(newListingIds)
+    };
+  }
+
+  function refreshNewListingUi(payload) {
+    const byCardKey = listingByCardKey(payload || latestPayload || {});
+    document.querySelectorAll(".listing-card").forEach(function (card) {
+      const id = String(card.id || "");
+      const bare = id.replace(/^listing-other-/, "").replace(/^listing-/, "");
+      const listing = byCardKey[id] || byCardKey[bare] || byCardKey["listing-" + bare] || byCardKey["listing-other-" + bare] || null;
+      const active = Boolean(listing && listingIsNew(listing));
+      const body = card.querySelector(".listing-body");
+      const badge = card.querySelector(".new-badge-row");
+      card.classList.toggle("is-new-listing", active);
+      if (active && body && !badge) {
+        body.insertAdjacentHTML("afterbegin", renderNewListingBadge(listing));
+      } else if (!active && badge) {
+        badge.remove();
+      }
+    });
+  }
+
+  function injectNewListingFilter() {
+    let panel = document.getElementById("newListingFilterPanel");
+    if (!panel) {
+      panel = document.createElement("section");
+      panel.id = "newListingFilterPanel";
+      panel.className = "new-listing-panel";
+      panel.innerHTML = [
+        "<label class='new-listing-toggle'><input id='newListingsOnlyToggle' type='checkbox'> Nouveautes uniquement</label>",
+        "<span id='newListingsCount' class='new-listing-count' aria-live='polite'></span>"
+      ].join("");
+      const map = document.getElementById("map");
+      let anchor = map;
+      while (anchor && !(anchor.tagName && /^H[1-6]$/i.test(anchor.tagName) && /Carte/i.test(anchor.textContent || ""))) {
+        anchor = anchor.previousElementSibling;
+      }
+      anchor = anchor || map;
+      if (anchor && anchor.parentNode) {
+        anchor.parentNode.insertBefore(panel, anchor);
+      }
+    }
+
+    const toggle = document.getElementById("newListingsOnlyToggle");
+    if (toggle && !toggle.dataset.newListingFilterBound) {
+      toggle.dataset.newListingFilterBound = "1";
+      toggle.addEventListener("change", function () {
+        showNewListingsOnly = toggle.checked;
+        saveNewOnlyPreference();
+        applyPriceFilter();
+      });
+    }
+    updateNewListingControls();
   }
 
   function loadFavoriteListingIds() {
@@ -811,7 +956,8 @@
   function listingPassesFilters(listing, maxPrice) {
     return listingIsWithinPrice(listing, maxPrice)
       && listingPassesOptionFilter(listing)
-      && listingPassesLocationFilter(listing);
+      && listingPassesLocationFilter(listing)
+      && listingPassesNewFilter(listing);
   }
 
   function listingByUrl(payload) {
@@ -960,7 +1106,7 @@
 
     listings.forEach(function (listing) {
       if (!listingPassesFilters(listing, maxPrice)) {
-        if (!showOptionListings && listingIsUnderOption(listing) && listingIsWithinPrice(listing, maxPrice) && listingPassesLocationFilter(listing)) {
+        if (!showOptionListings && listingIsUnderOption(listing) && listingIsWithinPrice(listing, maxPrice) && listingPassesLocationFilter(listing) && listingPassesNewFilter(listing)) {
           optionHiddenCount += 1;
         }
         return;
@@ -980,6 +1126,7 @@
       card.hidden = !visible;
       if (listing) {
         card.classList.toggle("is-under-option", listingIsUnderOption(listing));
+        card.classList.toggle("is-new-listing", listingIsNew(listing));
       }
     });
 
@@ -1014,10 +1161,14 @@
       sourceCount.textContent = "Visibles: " + sourceCountSummary(visibleSources) + (optionHiddenCount ? " · sous option masquees: " + optionHiddenCount : "");
     }
     updateLocationFilterUi();
+    updateNewListingControls();
+    refreshNewListingUi(payload);
     updatePrivateSourceLinks();
     window.veilleImmoPriceFilterState = {
       maxPrice: maxPrice,
       showOptionListings: showOptionListings,
+      showNewListingsOnly: showNewListingsOnly,
+      newListingCount: newListingIds.size,
       selectedLocations: Array.from(selectedLocationKeys || []),
       visibleCount: visibleCount,
       totalCount: listings.length,
@@ -1105,13 +1256,14 @@
     const source = input && input.source ? input.source : input;
     const kind = sourceKind(source);
     const favorite = input && typeof input === "object" && listingIsFavorite(input);
+    const isNew = input && typeof input === "object" && listingIsNew(input);
     return window.L.divIcon({
-      className: "source-map-icon-wrap source-map-marker",
+      className: "source-map-icon-wrap source-map-marker" + (isNew ? " source-map-marker-new" : ""),
       html: favorite
         ? "<span class='source-map-heart source-map-heart-" + kind + "' aria-hidden='true'>&#9829;</span>"
-        : "<span class='source-map-pin source-map-pin-" + kind + "'></span>",
-      iconSize: favorite ? [26, 26] : [24, 24],
-      iconAnchor: favorite ? [13, 21] : [12, 24],
+        : (isNew ? "<span class='source-map-star source-map-star-" + kind + "' aria-hidden='true'>&#9733;</span>" : "<span class='source-map-pin source-map-pin-" + kind + "'></span>"),
+      iconSize: favorite || isNew ? [26, 26] : [24, 24],
+      iconAnchor: favorite ? [13, 21] : (isNew ? [13, 24] : [12, 24]),
       popupAnchor: [0, -22]
     });
   }
@@ -1348,7 +1500,7 @@
       "<div class='map-popup-head'>",
       listingThumbnailHtml(listing),
       "<div class='map-popup-title-wrap'>",
-      "<div class='map-popup-source'>" + escapeHtml(sourceLabel(source)) + "</div>",
+      "<div class='map-popup-source-row'><span class='map-popup-source'>" + escapeHtml(sourceLabel(source)) + "</span>" + (listingIsNew(listing) ? "<span class='map-popup-new'>Nouveau</span>" : "") + "</div>",
       "<div class='map-popup-title'>" + escapeHtml(title) + "</div>",
       "<div class='map-popup-price'>" + escapeHtml(formatPrice(listing && listing.price)) + "</div>",
       "</div>",
@@ -1451,9 +1603,6 @@
       return acc;
     }, {});
     document.querySelectorAll(".listing-card[id^='listing-']").forEach(function (card) {
-      if (card.querySelector(".source-badge-row")) {
-        return;
-      }
       const id = String(card.id || "").replace(/^listing-other-/, "").replace(/^listing-/, "");
       const listing = byId[id];
       if (!listing) {
@@ -1462,7 +1611,13 @@
       const body = card.querySelector(".listing-body");
       if (body) {
         card.classList.toggle("is-under-option", listingIsUnderOption(listing));
-        body.insertAdjacentHTML("afterbegin", renderSourceBadge(listing.source, listing));
+        card.classList.toggle("is-new-listing", listingIsNew(listing));
+        if (!card.querySelector(".source-badge-row")) {
+          body.insertAdjacentHTML("afterbegin", renderSourceBadge(listing.source, listing));
+        }
+        if (listingIsNew(listing) && !card.querySelector(".new-badge-row")) {
+          body.insertAdjacentHTML("afterbegin", renderNewListingBadge(listing));
+        }
       }
     });
   }
@@ -3091,9 +3246,10 @@
       contactParts.push("<button type='button' class='external-link-button' data-external-url='" + escapeHtml(listing.agentWebsite) + "'>Site agence</button>");
     }
     return [
-      "<article class='listing-card" + (listingIsUnderOption(listing) ? " is-under-option" : "") + "' id='listing-other-" + escapeHtml(listing.id || listing.url || "") + "'>",
+      "<article class='listing-card" + (listingIsUnderOption(listing) ? " is-under-option" : "") + (listingIsNew(listing) ? " is-new-listing" : "") + "' id='listing-other-" + escapeHtml(listing.id || listing.url || "") + "'>",
       renderPhotoStrip(listing),
       "<div class='listing-body'>",
+      renderNewListingBadge(listing),
       renderSourceBadge(listing.source, listing),
       "<div class='listing-title'>" + escapeHtml(listing.title || "Annonce autre source") + "</div>",
       "<div class='facts'><div><span class='fact-label'>Prix</span> <span class='price'>" + escapeHtml(formatPrice(listing.price)) + "</span></div>" + details.join("") + "</div>",
@@ -3151,11 +3307,13 @@
       latestConfig = config || latestConfig;
       window.veilleImmoLocationDistances = latestLocationDistances;
       window.veilleImmoTransitRoutes = latestTransitRoutes;
+      updateNewListingState(payload);
       updateReportHeader(payload, latestConfig);
       annotateSourceBadges(payload);
       syncSourceMapMarkers(payload);
       installRoutePreviewHandlers();
       injectPriceFilter(payload, latestConfig);
+      injectNewListingFilter();
       if (latestConfig) {
         injectLocationFilter(latestConfig);
       }
@@ -3163,6 +3321,7 @@
       renderOtherSources(payload, latestConfig);
       annotateSourceBadges(payload);
       syncSourceMapMarkers(payload);
+      refreshNewListingUi(payload);
       installRoutePreviewHandlers();
       scheduleMapEnhancements("refresh");
       applyPriceFilter();
@@ -3220,6 +3379,12 @@
 
       saveSeenIds(nextSeenIds);
       await notifyNewListings(newListings);
+
+      if (manual && newListings.length > 0) {
+        newListingIds = new Set(newListings.map(listingNewId).filter(Boolean));
+        updateNewListingControls();
+        applyPriceFilter();
+      }
 
       if (manual && newListings.length === 0) {
         alert("Aucune nouvelle annonce detectee.");
@@ -3289,6 +3454,7 @@
 
   window.addEventListener("load", async function () {
     loadFavoriteListingIds();
+    loadNewOnlyPreference();
     injectControls();
     installRoutePreviewHandlers();
     installFavoriteHandlers();
@@ -3301,8 +3467,11 @@
     } catch (error) {
     }
     updateInstallButtons();
-    refreshReportData(false).catch(function () {});
-    checkForNewListings(false);
+    refreshReportData(false).then(function () {
+      return checkForNewListings(false);
+    }).catch(function () {
+      checkForNewListings(false);
+    });
   });
 
   window.VeilleImmoPwa = {

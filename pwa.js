@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-07-01-02";
+  const APP_VERSION = "pwa-2026-07-01-03";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
@@ -1206,6 +1206,12 @@
     if (renderedMapMarkers.length) {
       renderedMapMarkers.forEach(function (entry) {
         const visible = listingPassesFilters(entry.listing, maxPrice);
+        if (entry.marker && typeof entry.marker.setIcon === "function") {
+          const updatedIcon = sourceMarkerIcon(entry.listing);
+          if (updatedIcon) {
+            entry.marker.setIcon(updatedIcon);
+          }
+        }
         if (entry.marker && typeof entry.marker.getElement === "function") {
           const icon = entry.marker.getElement();
           if (icon) {
@@ -1696,11 +1702,10 @@
   }
 
   function syncSourceMapMarkers(payload) {
-    if (typeof window.veilleImmoRenderMapFromPayload === "function") {
-      window.veilleImmoRenderMapFromPayload(payload);
-      return;
-    }
     if (!window.L || !window.veilleImmoMap) {
+      if (typeof window.veilleImmoRenderMapFromPayload === "function") {
+        window.veilleImmoRenderMapFromPayload(payload);
+      }
       return;
     }
     if (window.veilleImmoExtraSourceMarkers) {

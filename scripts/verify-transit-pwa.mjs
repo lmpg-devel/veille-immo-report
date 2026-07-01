@@ -287,7 +287,7 @@ async function main() {
 
     await waitFor(chrome.page, `(() => {
       try {
-        const seen = JSON.parse(localStorage.getItem('veille-immo-seen-ids') || '[]');
+        const seen = JSON.parse(localStorage.getItem('veille-immo-last-launch-ids') || '[]');
         const rendered = (window.veilleImmoRenderedMarkerListings || []).length;
         return { ok: Array.isArray(seen) && rendered > 0 && seen.length >= Math.max(100, Math.floor(rendered * 0.8)), seenCount: seen.length, rendered };
       } catch {
@@ -296,26 +296,47 @@ async function main() {
     })()`);
 
     const newListingsCheck = await chrome.page.evaluate(`(async () => {
-      const all = (window.veilleImmoRenderedMarkerListings || []).map((listing) => String(listing && listing.id || '').trim()).filter(Boolean);
+      function listingUrlKey(url) {
+        const raw = String(url || '').trim();
+        if (!raw) return '';
+        try {
+          const parsed = new URL(raw, location.href);
+          return (parsed.origin + parsed.pathname).toLowerCase();
+        } catch {
+          return raw.split(/[?#]/)[0].toLowerCase();
+        }
+      }
+      function listingKey(listing) {
+        return listingUrlKey(listing && listing.url) || String(listing && listing.id || '').trim().toLowerCase();
+      }
+      function listingLaunchIds(listing) {
+        const stable = listingKey(listing);
+        const raw = String(listing && listing.id || '').trim();
+        return Array.from(new Set([stable, raw].filter(Boolean)));
+      }
+      const markerListings = window.veilleImmoRenderedMarkerListings || [];
+      const all = Array.from(new Set(markerListings.flatMap(listingLaunchIds)));
+      const markerIds = new Set(markerListings.map((listing) => String(listing && listing.id || '').trim()).filter(Boolean));
       const visibleCardIds = Array.from(document.querySelectorAll('.listing-card')).filter((card) => !card.hidden).map((card) => {
         return String(card.id || '').replace(/^listing-other-/, '').replace(/^listing-/, '').trim();
-      }).filter((id) => id && all.includes(id));
+      }).filter((id) => id && markerIds.has(id));
       const candidates = visibleCardIds.slice(0, 2).map((id) => ({ id }));
       if (candidates.length < 2 || typeof window.VeilleImmoPwa.refreshReportData !== 'function') {
         return { ok: false, reason: 'candidates missing', candidates: candidates.length };
       }
       const candidateIds = new Set(candidates.map((item) => item.id));
+      const candidateLaunchIds = new Set(markerListings.filter((listing) => candidateIds.has(String(listing && listing.id || '').trim())).flatMap(listingLaunchIds));
       localStorage.setItem('veille-immo-initialized', '1');
       localStorage.setItem('veille-immo-new-only', '0');
-      localStorage.setItem('veille-immo-seen-ids', JSON.stringify(Array.from(new Set(all.filter((id) => !candidateIds.has(id))))));
+      localStorage.setItem('veille-immo-last-launch-ids', JSON.stringify(all.filter((id) => !candidateLaunchIds.has(id))));
       await window.VeilleImmoPwa.refreshReportData(false);
       const initialState = window.veilleImmoNewListingState || {};
+      const storedAfterRefresh = JSON.parse(localStorage.getItem('veille-immo-last-launch-ids') || '[]');
       const starsBeforeFilter = Array.from(document.querySelectorAll('.source-map-star')).length;
       const badgesBeforeFilter = Array.from(document.querySelectorAll('.new-badge')).length;
       const newPanel = document.querySelector('#newListingFilterPanel');
       const toggle = document.querySelector('#newListingsOnlyToggle');
       const count = document.querySelector('#newListingsCount');
-      const markerListings = window.veilleImmoRenderedMarkerListings || [];
       const markerLayers = window.veilleImmoRenderedMarkerLayers || [];
       const firstMarkerIndex = markerListings.findIndex((listing) => candidateIds.has(String(listing && listing.id || '').trim()));
       if (firstMarkerIndex >= 0 && markerLayers[firstMarkerIndex] && markerLayers[firstMarkerIndex].openPopup) {
@@ -337,6 +358,9 @@ async function main() {
       toggle.dispatchEvent(new Event('change', { bubbles: true }));
       return {
         ok: initialState.count === 2
+          && initialState.criterion === 'absent-du-lancement-precedent'
+          && initialState.previousSource === 'previous-launch'
+          && storedAfterRefresh.length >= all.length
           && Boolean(newPanel)
           && !toggle.disabled
           && /2 nouvelle/.test(count ? count.textContent : '')
@@ -355,7 +379,9 @@ async function main() {
         filteredState,
         visibleCardsAfterFilter,
         visibleStarsAfterFilter,
-        candidateIds: candidates.map((item) => item.id)
+        candidateIds: candidates.map((item) => item.id),
+        candidateLaunchIds: Array.from(candidateLaunchIds),
+        storedAfterRefreshCount: storedAfterRefresh.length
       };
     })()`);
     if (!newListingsCheck.ok) {

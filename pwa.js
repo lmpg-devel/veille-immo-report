@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-07-01-01";
+  const APP_VERSION = "pwa-2026-07-01-02";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
@@ -23,6 +23,7 @@
   const LOCATION_DISTANCE_KEY = "veille-immo-location-distance-km";
   const FAVORITES_KEY = "veille-immo-favorites";
   const NEW_ONLY_KEY = "veille-immo-new-only";
+  const LAST_LAUNCH_KEY = "veille-immo-last-launch-ids";
   const DEFAULT_MAX_PRICE = 350000;
   const USER_PRICE_LIMIT_MAX = 350000;
   const DEFAULT_LOCATION_DISTANCE_KM = 15;
@@ -48,6 +49,8 @@
   let renderedMapMarkers = [];
   let favoriteListingIds = new Set();
   let newListingIds = new Set();
+  let newListingPreviousSource = "none";
+  let newListingPreviousCount = 0;
   let showNewListingsOnly = false;
   let pendingMapEnhancementTimer = null;
   let pendingMapEnhancementAttempts = 0;
@@ -310,6 +313,65 @@
     return listingDedupeKey(listing) || String(listing && listing.id || "").trim();
   }
 
+  function storedIdSet(key) {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(key) || "[]");
+      return {
+        available: Array.isArray(parsed),
+        ids: new Set(Array.isArray(parsed) ? parsed.filter(Boolean).map(String) : [])
+      };
+    } catch (error) {
+      return { available: false, ids: new Set() };
+    }
+  }
+
+  function listingLaunchIds(listing) {
+    const ids = [];
+    const stable = listingNewId(listing);
+    const raw = String(listing && listing.id || "").trim();
+    if (stable) {
+      ids.push(stable);
+    }
+    if (raw && raw !== stable) {
+      ids.push(raw);
+    }
+    return ids;
+  }
+
+  function currentLaunchIdSet(payload) {
+    const ids = new Set();
+    (Array.isArray(payload && payload.listings) ? payload.listings : []).forEach(function (listing) {
+      listingLaunchIds(listing).forEach(function (id) {
+        ids.add(id);
+      });
+    });
+    return ids;
+  }
+
+  function previousLaunchIdsFromStorage() {
+    const explicit = storedIdSet(LAST_LAUNCH_KEY);
+    if (explicit.available) {
+      return { available: explicit.ids.size > 0, ids: explicit.ids, source: "previous-launch" };
+    }
+    const migrated = storedIdSet(STORAGE_KEY);
+    return {
+      available: localStorage.getItem(INIT_KEY) === "1" && migrated.ids.size > 0,
+      ids: migrated.ids,
+      source: "seen-ids-migration"
+    };
+  }
+
+  function saveCurrentLaunchSnapshot(payload) {
+    const ids = currentLaunchIdSet(payload);
+    if (!ids.size) {
+      return;
+    }
+    try {
+      localStorage.setItem(LAST_LAUNCH_KEY, JSON.stringify(Array.from(ids)));
+    } catch (error) {
+    }
+  }
+
   function loadNewOnlyPreference() {
     try {
       showNewListingsOnly = localStorage.getItem(NEW_ONLY_KEY) === "1";
@@ -326,21 +388,26 @@
   }
 
   function updateNewListingState(payload) {
-    const initialized = localStorage.getItem(INIT_KEY) === "1";
     const listings = Array.isArray(payload && payload.listings) ? payload.listings : [];
-    const seenIds = seenIdsFromStorage();
+    const previous = previousLaunchIdsFromStorage();
     const nextNewIds = new Set();
 
-    if (initialized) {
+    if (previous.available) {
       listings.forEach(function (listing) {
         const id = listingNewId(listing);
-        if (id && !seenIds.has(id) && !seenIds.has(String(listing && listing.id || ""))) {
+        const presentBefore = listingLaunchIds(listing).some(function (candidate) {
+          return previous.ids.has(candidate);
+        });
+        if (id && !presentBefore) {
           nextNewIds.add(id);
         }
       });
     }
 
     newListingIds = nextNewIds;
+    newListingPreviousSource = previous.source;
+    newListingPreviousCount = previous.ids.size;
+    saveCurrentLaunchSnapshot(payload);
     if (newListingIds.size === 0 && showNewListingsOnly) {
       showNewListingsOnly = false;
       saveNewOnlyPreference();
@@ -349,7 +416,10 @@
     window.veilleImmoNewListingState = {
       count: newListingIds.size,
       only: showNewListingsOnly,
-      ids: Array.from(newListingIds)
+      ids: Array.from(newListingIds),
+      criterion: "absent-du-lancement-precedent",
+      previousSource: newListingPreviousSource,
+      previousCount: newListingPreviousCount
     };
   }
 
@@ -379,7 +449,10 @@
     window.veilleImmoNewListingState = {
       count: newListingIds.size,
       only: showNewListingsOnly,
-      ids: Array.from(newListingIds)
+      ids: Array.from(newListingIds),
+      criterion: "absent-du-lancement-precedent",
+      previousSource: newListingPreviousSource,
+      previousCount: newListingPreviousCount
     };
   }
 
@@ -3380,13 +3453,13 @@
       saveSeenIds(nextSeenIds);
       await notifyNewListings(newListings);
 
-      if (manual && newListings.length > 0) {
-        newListingIds = new Set(newListings.map(listingNewId).filter(Boolean));
+      if (manual) {
+        updateNewListingState(payload);
         updateNewListingControls();
         applyPriceFilter();
       }
 
-      if (manual && newListings.length === 0) {
+      if (manual && newListingIds.size === 0) {
         alert("Aucune nouvelle annonce detectee.");
       }
     } catch (error) {

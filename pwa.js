@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-07-02-01";
+  const APP_VERSION = "pwa-2026-07-02-03";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
@@ -386,12 +386,8 @@
     return null;
   }
 
-  function listingPassesRecentPublicationGate(listing, now) {
-    const publishedAt = listingPublicationTime(listing);
-    if (!publishedAt) {
-      return true;
-    }
-    return publishedAt <= now && now - publishedAt <= NEW_LISTING_MAX_AGE_MS;
+  function listingMatchesNewListingRule(listing, presentBefore, now) {
+    return !presentBefore || listingIsRecentByPublicationOnly(listing, now);
   }
 
   function listingIsRecentByPublicationOnly(listing, now) {
@@ -507,7 +503,7 @@
         const presentBefore = listingLaunchIds(listing).some(function (candidate) {
           return previous.ids.has(candidate);
         });
-        if (id && !presentBefore && listingPassesRecentPublicationGate(listing, now)) {
+        if (id && listingMatchesNewListingRule(listing, presentBefore, now)) {
           nextNewIds.add(id);
         }
       });
@@ -533,7 +529,7 @@
       count: newListingIds.size,
       only: showNewListingsOnly,
       ids: Array.from(newListingIds),
-      criterion: "absent-ouverture-precedente-ou-publication-72h",
+      criterion: "absent-ouverture-precedente-ou-publication-fiable-72h",
       previousSource: newListingPreviousSource,
       previousCount: newListingPreviousCount
     };
@@ -566,7 +562,7 @@
       count: newListingIds.size,
       only: showNewListingsOnly,
       ids: Array.from(newListingIds),
-      criterion: "absent-ouverture-precedente-ou-publication-72h",
+      criterion: "absent-ouverture-precedente-ou-publication-fiable-72h",
       previousSource: newListingPreviousSource,
       previousCount: newListingPreviousCount
     };
@@ -1410,12 +1406,51 @@
 
   function sourceCountSummary(counts) {
     return [
-      "Immoweb " + (counts.immoweb || 0),
-      "Immovlan " + (counts.immovlan || 0),
-      "Zimmo " + (counts.zimmo || 0),
-      "Agences " + (counts.agency || 0),
-      "Particulier " + (counts.p2p || 0)
+      sourceCountDisplay(counts, "immoweb", "Immoweb"),
+      sourceCountDisplay(counts, "immovlan", "Immovlan"),
+      sourceCountDisplay(counts, "zimmo", "Zimmo"),
+      sourceCountDisplay(counts, "agency", "Agences"),
+      sourceCountDisplay(counts, "p2p", "Particulier")
     ].join(" · ");
+  }
+
+  function sourceCountDisplay(counts, kind, label) {
+    const count = counts[kind] || 0;
+    if (count > 0) {
+      return label + " " + count;
+    }
+    const reason = sourceZeroReason(kind);
+    return label + (reason ? " " + reason : " 0");
+  }
+
+  function sourceZeroReason(kind) {
+    const diagnostics = Array.isArray(latestPayload && latestPayload.sourceDiagnostics)
+      ? latestPayload.sourceDiagnostics
+      : [];
+    const related = diagnostics.filter(function (item) {
+      const source = String(item && item.source || "").toLowerCase();
+      if (kind === "zimmo") return source.indexOf("zimmo") !== -1;
+      if (kind === "p2p") return source.indexOf("2ememain") !== -1 || source.indexOf("particulier") !== -1;
+      if (kind === "immovlan") return source.indexOf("immovlan") !== -1 || source.indexOf("vlan") !== -1;
+      if (kind === "agency") return source.indexOf("agence") !== -1 || source.indexOf("agency") !== -1;
+      return false;
+    });
+    if (!related.length) {
+      return "";
+    }
+    const text = related.map(function (item) {
+      return [item.status, item.message].join(" ");
+    }).join(" ").toLowerCase();
+    if (/blocage|bloque|un instant|captcha|challenge|apify|token/.test(text)) {
+      return "bloque";
+    }
+    if (/candidat|filtre|ignore|superieur|prix absent|commune cible/.test(text)) {
+      return "candidats filtres";
+    }
+    if (/recherche.*ok|recherche navigateur ok/.test(text)) {
+      return "recherche OK";
+    }
+    return "diagnostic";
   }
 
   function renderOptionBadge(listing) {
@@ -3369,16 +3404,25 @@
     const zimmoMessage = zimmoCount > 0
       ? "Import Apify actif: " + zimmoCount + " annonce(s) integree(s)."
       : "Connecteur Apify pret: acteur dz_omar/zimmo-scraper identifie. Definir APIFY_TOKEN cote pipeline pour integrer les annonces Zimmo.";
+    const localAgencyMessage = localAgencyCount > 0
+      ? localAgencyCount + " annonce(s) integree(s) depuis les sites directs."
+      : "Aucune annonce agence locale integree dans results.json; voir le diagnostic technique.";
+    const immovlanMessage = immovlanCount > 0
+      ? "Extraction avancee integree: HTML public, donnees structurees JSON-LD et endpoint telephone public. " + immovlanCount + " annonce(s) integree(s)."
+      : "Aucune annonce Immovlan integree dans results.json; extraction ou fusion indisponible, voir le diagnostic technique.";
+    const secondHandMessage = usableSecondHandCount > 0
+      ? "Extraction avancee active via pages publiques et window.__CONFIG__. " + usableSecondHandCount + " annonce(s) exploitable(s) en cartes sur " + secondHandCount + " candidate(s) publiee(s)."
+      : "Aucune annonce 2ememain exploitable en cartes; candidats absents, bloques ou filtres, voir le diagnostic technique.";
     const section = document.createElement("section");
     section.id = "otherSourcesSection";
     section.innerHTML = [
       "<h2>Autres sources</h2>",
       "<div class='other-source-note'>Sources publiees dans cette PWA: Immoweb " + (counts.Immoweb || 0) + ", Immovlan " + immovlanCount + ", Zimmo " + zimmoCount + ", agences locales " + localAgencyCount + ", 2ememain " + secondHandCount + ".</div>",
       "<div class='source-diagnostic-list'>",
-      "<div class='source-diagnostic-item'><strong>Agences locales</strong>" + localAgencyCount + " annonce(s) integree(s) depuis les sites directs.</div>",
+      "<div class='source-diagnostic-item'><strong>Agences locales</strong>" + localAgencyMessage + "</div>",
       "<div class='source-diagnostic-item'><strong>Zimmo</strong>" + zimmoMessage + "</div>",
-      "<div class='source-diagnostic-item'><strong>Immovlan</strong>Extraction avancee active: HTML public, donnees structurees JSON-LD et endpoint telephone public. " + immovlanCount + " annonce(s) integree(s).</div>",
-      "<div class='source-diagnostic-item'><strong>2ememain</strong>Extraction avancee active via pages publiques et window.__CONFIG__. " + usableSecondHandCount + " annonce(s) exploitable(s) en cartes sur " + secondHandCount + " candidate(s) publiee(s).</div>",
+      "<div class='source-diagnostic-item'><strong>Immovlan</strong>" + immovlanMessage + "</div>",
+      "<div class='source-diagnostic-item'><strong>2ememain</strong>" + secondHandMessage + "</div>",
       "<div class='source-diagnostic-item'><strong>Facebook Marketplace</strong>Lien de controle ajoute. Extraction automatique non active sans session utilisateur.</div>",
       "</div>",
       renderDiagnosticSummary(payload.sourceDiagnostics)
@@ -3554,6 +3598,7 @@
   async function checkForNewListings(manual) {
     try {
       const payload = await fetchResults();
+      const openingBaseline = openingBaselineIds();
       const listings = Array.isArray(payload.listings) ? payload.listings : [];
       const initialized = localStorage.getItem(INIT_KEY) === "1";
       const seenIds = seenIdsFromStorage();
@@ -3561,14 +3606,20 @@
       const newListings = [];
 
       listings.forEach(function (listing) {
-        const id = String(listing.id || "");
-        if (!id) {
+        const id = listingNewId(listing);
+        const launchIds = listingLaunchIds(listing);
+        if (!id || !launchIds.length) {
           return;
         }
-        if (initialized && !seenIds.has(id)) {
+        const knownBefore = openingBaseline.available
+          ? launchIds.some(function (candidate) { return openingBaseline.ids.has(candidate); })
+          : launchIds.some(function (candidate) { return seenIds.has(candidate); });
+        if ((openingBaseline.available || initialized) && !knownBefore) {
           newListings.push(listing);
         }
-        nextSeenIds.add(id);
+        launchIds.forEach(function (candidate) {
+          nextSeenIds.add(candidate);
+        });
       });
 
       saveSeenIds(nextSeenIds);

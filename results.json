@@ -1,9 +1,38 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-02T10:03:43.999Z",
+  "generatedAt": "2026-07-02T12:29:32.566Z",
   "reportUrl": "https://lmpg-devel.github.io/veille-immo-report/",
-  "count": 578,
+  "count": 585,
   "listings": [
+    {
+      "source": "Immovlan",
+      "id": "immovlan-vwd17129",
+      "title": "Villa à vendre avec terrasse et jardin , Dilbeek  (VWD17129)",
+      "price": 75000,
+      "bedrooms": 2,
+      "surfaceM2": 140,
+      "locality": "Dilbeek",
+      "requestedLocation": "Dilbeek",
+      "postalCode": "1700",
+      "address": "1700 Dilbeek",
+      "latitude": 50.8464512,
+      "longitude": 4.2620632,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "Viagerim srl",
+      "agentPhone": "+32 475 89 44 09",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/viagerim-srl/27537",
+      "photoCount": 5,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/VWD17129/thumbnail-webp/Small",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/VWD17129/thumbnail-webp/Small",
+        "https://api-image.immovlan.be/v1/property/VWD17129/gallery-like-image/Facebook/Landscape?w=1200",
+        "https://api-image.immovlan.be/v1/property/VWD17129/images/file-0.10946098190482123.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/VWD17129/images/file-0.045895870207547595.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/VWD17129/images/file-0.8584366111173107.jpg/webp/Medium?mode=pad&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/villa/a-vendre/1700/dilbeek/vwd17129"
+    },
     {
       "source": "Immoweb",
       "id": "21410333",
@@ -950,6 +979,35 @@
       "url": "https://www.immoweb.be/fr/annonce/maison/a-vendre/halle/1502/21682339"
     },
     {
+      "source": "Immovlan",
+      "id": "immovlan-rbv86858",
+      "title": "Maison à vendre à Brusselsesteenweg 27 Alsemberg (RBV86858)",
+      "price": 185000,
+      "bedrooms": 2,
+      "surfaceM2": 83,
+      "locality": "Alsemberg",
+      "requestedLocation": "Alsemberg",
+      "postalCode": "1652",
+      "address": "Brusselsesteenweg 27 1652 Alsemberg",
+      "latitude": 50.7415284,
+      "longitude": 4.3362415,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "Era Visie",
+      "agentPhone": "+32 2 523 55 52",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/era-visie/42924",
+      "photoCount": 5,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBV86858/thumbnail-webp/Small",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/RBV86858/thumbnail-webp/Small",
+        "https://api-image.immovlan.be/v1/property/RBV86858/gallery-like-image/Facebook/Landscape?w=1200",
+        "https://api-image.immovlan.be/v1/property/RBV86858/images/00pts00000zkkhsma3.jpeg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBV86858/images/00pts00000zc1lxmaz.jpeg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBV86858/images/00pts00000zcmxmmaz.jpeg/webp/Medium?mode=pad&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1652/alsemberg/rbv86858"
+    },
+    {
       "source": "Immoweb",
       "id": "21455798",
       "title": "Maison à vendre à Denderleeuw - 189 000 € - 3 chambres - 233m² - Immoweb",
@@ -1703,6 +1761,28 @@
         "https://media-resize.immowebstatic.be/classifieds/fa6cb29d-5f7b-415f-bdf7-cc70d3b2a6c4/736x736/a7e39bdbe69ef23fa7dc9a9c02d2e973.jpg"
       ],
       "url": "https://www.immoweb.be/fr/annonce/maison/a-vendre/linkebeek/1630/21469286"
+    },
+    {
+      "source": "Agence locale (site direct)",
+      "id": "d0bd8cda",
+      "title": "Maison à vendre à Sint-Gillis | Berth Immo",
+      "price": 200000,
+      "bedrooms": 4,
+      "surfaceM2": null,
+      "locality": "Saint-Gilles",
+      "requestedLocation": "Saint-Gilles",
+      "postalCode": "1060",
+      "address": "",
+      "latitude": 50.827,
+      "longitude": 4.345,
+      "geoPrecision": "centre commune - agence experimental",
+      "agentName": "Berth Immobiliën",
+      "agentPhone": "+32 2 356 04 34",
+      "agentEmail": "",
+      "agentWebsite": "https://www.berth.be",
+      "photoCount": 0,
+      "photoUrl": null,
+      "url": "https://www.berth.be/fr/l/a-vendre/maison/1060-sint-gillis/lis_ozzinurgkwsjsw2e5nhi70uq/"
     },
     {
       "source": "Immoweb",
@@ -6684,6 +6764,35 @@
       "url": "https://www.immoweb.be/fr/annonce/maison/a-vendre/vilvoorde/1800/21609639"
     },
     {
+      "source": "Immovlan",
+      "id": "immovlan-rbv90643",
+      "title": "Maison à vendre à Ninoofsesteenweg 408 Dilbeek (RBV90643)",
+      "price": 269000,
+      "bedrooms": 3,
+      "surfaceM2": 116,
+      "locality": "Dilbeek",
+      "requestedLocation": "Dilbeek",
+      "postalCode": "1700",
+      "address": "Ninoofsesteenweg 408 602 1700 Dilbeek",
+      "latitude": 50.842938,
+      "longitude": 4.256585,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "Era Visie",
+      "agentPhone": "+32 2 523 55 52",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/era-visie/42924",
+      "photoCount": 5,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBV90643/thumbnail-webp/Small",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/RBV90643/thumbnail-webp/Small",
+        "https://api-image.immovlan.be/v1/property/RBV90643/gallery-like-image/Facebook/Landscape?w=1200",
+        "https://api-image.immovlan.be/v1/property/RBV90643/images/00pts00000yav2bmax.jpeg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBV90643/images/00pts00000yawhomax.jpeg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBV90643/images/00pts00000y9ootmar.jpeg/webp/Medium?mode=pad&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1700/dilbeek/rbv90643"
+    },
+    {
       "source": "Immoweb",
       "id": "21632627",
       "title": "Maison à vendre à Boortmeerbeek - 270 000 € - 2 chambres - 121m² - Immoweb",
@@ -7990,6 +8099,64 @@
       "url": "https://www.immoweb.be/fr/annonce/maison/a-vendre/wemmel/1780/21588373"
     },
     {
+      "source": "Immovlan",
+      "id": "immovlan-rbv96723",
+      "title": "Maison à vendre à Guido Gezellestraat 20 Wemmel (RBV96723)",
+      "price": 275000,
+      "bedrooms": 2,
+      "surfaceM2": 105,
+      "locality": "Wemmel",
+      "requestedLocation": "Wemmel",
+      "postalCode": "1780",
+      "address": "Guido Gezellestraat 20 1780 Wemmel",
+      "latitude": 50.90717,
+      "longitude": 4.300431,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "Vmv-vastgoed",
+      "agentPhone": "+32 52 50 35 03",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/vmv-vastgoed/43022",
+      "photoCount": 5,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBV96723/thumbnail-webp/Small",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/RBV96723/thumbnail-webp/Small",
+        "https://api-image.immovlan.be/v1/property/RBV96723/gallery-like-image/Facebook/Landscape?w=1200",
+        "https://api-image.immovlan.be/v1/property/RBV96723/images/55059293134e45b2b63ff2e711f6df22.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBV96723/images/a6055309c0274c99b7dc0f0b55f6ed4b.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBV96723/images/336bb71291174281a01c090be97d3150.jpg/webp/Medium?mode=pad&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1780/wemmel/rbv96723"
+    },
+    {
+      "source": "Immovlan",
+      "id": "immovlan-rbv80374",
+      "title": "Maison à vendre à Kasteelstraat 57 Hoeilaart (RBV80374)",
+      "price": 275000,
+      "bedrooms": 3,
+      "surfaceM2": 153,
+      "locality": "Hoeilaart",
+      "requestedLocation": "Hoeilaart",
+      "postalCode": "1560",
+      "address": "Kasteelstraat 57 1560 Hoeilaart",
+      "latitude": 50.76622,
+      "longitude": 4.463967,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "Century 21 ImmoNero",
+      "agentPhone": "+32 2 657 36 99",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/century-21-immonero/43417",
+      "photoCount": 5,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBV80374/thumbnail-webp/Small",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/RBV80374/thumbnail-webp/Small",
+        "https://api-image.immovlan.be/v1/property/RBV80374/gallery-like-image/Facebook/Landscape?w=1200",
+        "https://api-image.immovlan.be/v1/property/RBV80374/images/e68daac2b83841a39d36a73090820237.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBV80374/images/8a3ccd74749144fd8b16fdee9cc20181.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBV80374/images/9aa31293c7c34ac3a40ead5d2f2bff74.jpg/webp/Medium?mode=pad&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1560/hoeilaart/rbv80374"
+    },
+    {
       "source": "Immoweb",
       "id": "21662046",
       "title": "Maison à vendre à Londerzeel - 277 000 € - 3 chambres - 175m² - Immoweb",
@@ -8958,6 +9125,35 @@
         "https://media-resize.immowebstatic.be/classifieds/210cd357-741c-4ef2-9c20-1cef6c3095b2/736x736/dfb782ee93e548382113067c58a366cf.jpg"
       ],
       "url": "https://www.immoweb.be/fr/annonce/maison/a-vendre/wavre/1300/21569758"
+    },
+    {
+      "source": "Immovlan",
+      "id": "immovlan-rbv96575",
+      "title": "Maison à vendre à Petrus Basteleusstraat 89 Sint-Pieters-Leeuw (RBV96575)",
+      "price": 280000,
+      "bedrooms": 1,
+      "surfaceM2": 119,
+      "locality": "Sint-Pieters-Leeuw",
+      "requestedLocation": "Sint-Pieters-Leeuw",
+      "postalCode": "1600",
+      "address": "Petrus Basteleusstraat 89 1600 Sint-Pieters-Leeuw",
+      "latitude": 50.7866274,
+      "longitude": 4.2711033,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "De Immobiliers",
+      "agentPhone": "+32 2 356 00 00",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/de-immobiliers/45647",
+      "photoCount": 5,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBV96575/thumbnail-webp/Small",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/RBV96575/thumbnail-webp/Small",
+        "https://api-image.immovlan.be/v1/property/RBV96575/gallery-like-image/Facebook/Landscape?w=1200",
+        "https://api-image.immovlan.be/v1/property/RBV96575/images/5b4124edea9543798424e49e6890e7ed.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBV96575/images/7e8b75aff99b4c9590cd0916670217d8.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBV96575/images/486d1872ffa546bdb4e1f8fb7eb68736.jpg/webp/Medium?mode=pad&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbv96575"
     },
     {
       "source": "Immoweb",
@@ -26686,2202 +26882,935 @@
   ],
   "sourceDiagnostics": [
     {
-      "source": "Immovlan",
-      "location": "Drogenbos",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/drogenbos?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Kraainem",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/kraainem?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Auderghem",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/auderghem?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Linkebeek",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/linkebeek?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Berchem-Sainte-Agathe",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/berchem-sainte-agathe?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Ganshoren",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/ganshoren?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Evere",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/evere?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Machelen",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/machelen?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Anderlecht",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/anderlecht?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Woluwe-Saint-Lambert",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/woluwe-saint-lambert?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Jette",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/jette?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Forest",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/forest?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Wemmel",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/wemmel?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Watermael-Boitsfort",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/watermael-boitsfort?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Woluwe-Saint-Pierre",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/woluwe-saint-pierre?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Molenbeek-Saint-Jean",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/molenbeek-saint-jean?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Wezembeek-Oppem",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/wezembeek-oppem?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Uccle",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/uccle?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Vilvoorde",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/vilvoorde?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Zaventem",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/zaventem?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Sint-Genesius-Rode",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/sint-genesius-rode?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Koekelberg",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/koekelberg?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Hoeilaart",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/hoeilaart?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Schaerbeek",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/schaerbeek?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Dilbeek",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/dilbeek?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Sint-Pieters-Leeuw",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/sint-pieters-leeuw?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Tervuren",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/tervuren?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Saint-Gilles",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/saint-gilles?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Bruxelles-ville",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/bruxelles?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Beersel",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/beersel?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Etterbeek",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/etterbeek?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Saint-Josse-ten-Noode",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/saint-josse-ten-noode?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Grimbergen",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/grimbergen?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Overijse",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/overijse?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Ixelles",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/ixelles?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "La Hulpe",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/la-hulpe?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Steenokkerzeel",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/steenokkerzeel?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Asse",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/asse?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Lennik",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/lennik?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Waterloo",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/waterloo?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Meise",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/meise?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Zemst",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/zemst?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Ternat",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/ternat?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Halle",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/halle?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Merchtem",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/merchtem?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Rixensart",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/rixensart?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Huldenberg",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/huldenberg?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Kortenberg",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/kortenberg?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Braine-l'Alleud",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/braine-l-alleud?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Bertem",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/bertem?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Kapelle-op-den-Bos",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/kapelle-op-den-bos?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Lasne",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/lasne?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Roosdaal",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/roosdaal?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Kampenhout",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/kampenhout?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Wavre",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/wavre?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Pepingen",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/pepingen?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Opwijk",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/opwijk?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Braine-le-Chateau",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/braine-le-chateau?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Liedekerke",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/liedekerke?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Londerzeel",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/londerzeel?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Affligem",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/affligem?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Boortmeerbeek",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/boortmeerbeek?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Tubize",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/tubize?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Mechelen",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/mechelen?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Ottignies-Louvain-la-Neuve",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/ottignies-louvain-la-neuve?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Oud-Heverlee",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/oud-heverlee?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Herent",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/herent?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Denderleeuw",
-      "status": "Recherche indisponible",
-      "message": "fetch failed",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/denderleeuw?maxprice=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Drogenbos",
-      "status": "Recherche OK",
-      "message": "1 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/drogenbos/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Drogenbos",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2401469120-appartement-1ch-cinquantenaire-etterbeek"
-    },
-    {
-      "source": "2ememain",
-      "location": "Kraainem",
-      "status": "Recherche OK",
-      "message": "1 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/kraainem/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Kraainem",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2415873717-mettewie-studio-avec-terrasse-garage-et-annexes"
-    },
-    {
-      "source": "2ememain",
-      "location": "Auderghem",
-      "status": "Recherche OK",
-      "message": "1 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/auderghem/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Auderghem",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2388959556-appartement-1-chambre-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Linkebeek",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/linkebeek/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Berchem-Sainte-Agathe",
-      "status": "Recherche OK",
-      "message": "4 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/berchem-sainte-agathe/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Berchem-Sainte-Agathe",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2411836716-grand-studio-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Berchem-Sainte-Agathe",
-      "status": "Candidat ignore",
-      "message": "prix 535000 hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2408275000-maison-de-rapport-4chambres-appartement-duplex-garage-cave"
-    },
-    {
-      "source": "2ememain",
-      "location": "Berchem-Sainte-Agathe",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2370674337-maison-a-vendre-avec-jardin-oriente-sud-et-panneaux-solaires"
-    },
-    {
-      "source": "2ememain",
-      "location": "Berchem-Sainte-Agathe",
-      "status": "Candidat ignore",
-      "message": "prix 375000 hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2377462388-vente-maison-unifamiliale-3-chambres-quartier-calme"
-    },
-    {
-      "source": "2ememain",
-      "location": "Ganshoren",
-      "status": "Recherche OK",
-      "message": "1 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/ganshoren/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Ganshoren",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2400901534-apparemment-a-proximite-de-la-basilique-et-place-du-miroir"
-    },
-    {
-      "source": "2ememain",
-      "location": "Evere",
-      "status": "Recherche OK",
-      "message": "6 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/evere/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Evere",
-      "status": "Candidat ignore",
-      "message": "prix 1075000 hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2405639589-immeuble-de-rapport-de-4-unites-a-vendre-a-jette"
-    },
-    {
-      "source": "2ememain",
-      "location": "Evere",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2413368036-appartement-a-vendre-te-koop-evere-bruxelles"
-    },
-    {
-      "source": "2ememain",
-      "location": "Evere",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2401299801-appartement-2-chambres-74-m2-evere"
-    },
-    {
-      "source": "2ememain",
-      "location": "Evere",
-      "status": "Candidat ignore",
-      "message": "prix 1075000 hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2405264623-immeuble-de-rapport-de-4-unites-a-vendre-a-jette-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Evere",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2396030350-appartement-3-chambres-evere-peb-b"
-    },
-    {
-      "source": "2ememain",
-      "location": "Evere",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2381732023-certificat-peb-et-controles-electriques"
-    },
-    {
-      "source": "2ememain",
-      "location": "Machelen",
-      "status": "Recherche OK",
-      "message": "3 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/machelen/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Machelen",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2398593769-appartement-avec-garage-et-rangement-supplementaire"
-    },
-    {
-      "source": "2ememain",
-      "location": "Machelen",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m1957022778-gezellig-gelijkvloers-appartement-kelderparking-2-slpk-centr"
-    },
-    {
-      "source": "2ememain",
-      "location": "Machelen",
-      "status": "Candidat ignore",
-      "message": "surface/chambres absentes - annonce particulier non exploitable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2397745630-huis-in-diegem-gemeente-machelen"
-    },
-    {
-      "source": "2ememain",
-      "location": "Anderlecht",
-      "status": "Recherche OK",
-      "message": "17 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/anderlecht/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Anderlecht",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2405708568-appartement-2-chambres-a-anderlecht"
-    },
-    {
-      "source": "2ememain",
-      "location": "Anderlecht",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2411020371-bel-appartement-105-m2-prince-de-liege"
-    },
-    {
-      "source": "2ememain",
-      "location": "Anderlecht",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2402752082-appartement-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Anderlecht",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2386616913-appartement-2ch-a-vendre-bruxelles-anderlecht"
-    },
-    {
-      "source": "2ememain",
-      "location": "Anderlecht",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2415945426-appartement-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Anderlecht",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2393050071-appartement-60mq-1-chambre-anderlecht"
-    },
-    {
-      "source": "2ememain",
-      "location": "Anderlecht",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2403804433-appartement-a-vendre-a-anderlecht"
-    },
-    {
-      "source": "2ememain",
-      "location": "Anderlecht",
-      "status": "Candidat ignore",
-      "message": "prix 530000 hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2360387930-maison-jusqu-a-5-chambres-amenageables-grand-garage-jardin"
-    },
-    {
-      "source": "2ememain",
-      "location": "Anderlecht",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2403120780-appartement-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Anderlecht",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2403410603-appartement-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Anderlecht",
-      "status": "Candidat ignore",
-      "message": "prix 451617 hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2387222787-maison-a-vendre-a-petit-enghien"
-    },
-    {
-      "source": "2ememain",
-      "location": "Anderlecht",
-      "status": "Candidat ignore",
-      "message": "prix 1200 sous seuil coherent",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2377259708-maison-a-charleroi-nord"
-    },
-    {
-      "source": "2ememain",
-      "location": "Woluwe-Saint-Lambert",
-      "status": "Recherche OK",
-      "message": "1 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/woluwe-saint-lambert/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Woluwe-Saint-Lambert",
-      "status": "Candidat ignore",
-      "message": "commune absente du titre/url; vendeur Woluwe-Saint-Lambert",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m1580703257-villa-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Jette",
-      "status": "Recherche OK",
-      "message": "7 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/jette/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Jette",
-      "status": "Candidat ignore",
-      "message": "prix 19000 sous seuil coherent",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2409773387-garage-securise-a-jette-426-av-exposition"
-    },
-    {
-      "source": "2ememain",
-      "location": "Jette",
-      "status": "Candidat ignore",
-      "message": "prix 795000 hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2396830755-excellente-propriete-avec-2-appartements-en-duplex-a-jette"
-    },
-    {
-      "source": "2ememain",
-      "location": "Jette",
-      "status": "Candidat ignore",
-      "message": "commune absente du titre/url; vendeur Jette",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2386564016-entreprise-residence"
-    },
-    {
-      "source": "2ememain",
-      "location": "Jette",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2343978887-appartement"
-    },
-    {
-      "source": "2ememain",
-      "location": "Jette",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2381715525-lift-elevateur-monte-charges-pour-demenagement"
-    },
-    {
-      "source": "2ememain",
-      "location": "Jette",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2392814510-maison-avec-terrain-a-vendre-roumanie-dambovita"
-    },
-    {
-      "source": "2ememain",
-      "location": "Jette",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2358382987-entreprise-avec-appartement"
-    },
-    {
-      "source": "2ememain",
-      "location": "Forest",
-      "status": "Recherche OK",
-      "message": "3 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/forest/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Forest",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2393725018-appartement"
-    },
-    {
-      "source": "2ememain",
-      "location": "Forest",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2364151611-appartement-a-vendre-saint-gilles-bruxelles"
-    },
-    {
-      "source": "2ememain",
-      "location": "Forest",
-      "status": "Candidat ignore",
-      "message": "prix 6800 sous seuil coherent",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2378718837-cheap-bulgarian-house-close-to-danube-river"
-    },
-    {
-      "source": "2ememain",
-      "location": "Wemmel",
-      "status": "Recherche OK",
-      "message": "2 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/wemmel/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Wemmel",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2404274806-appartement-2-chambres-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Wemmel",
-      "status": "Candidat ignore",
-      "message": "prix 365000 hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2396073783-lichtrijk-appartement-met-3-garages-te-wemmel-te-koop"
-    },
-    {
-      "source": "2ememain",
-      "location": "Watermael-Boitsfort",
-      "status": "Recherche OK",
-      "message": "1 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/watermael-boitsfort/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Watermael-Boitsfort",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2396699084-recherche-d-un-bien-rural-mixte-agricole-et-residentiel"
-    },
-    {
-      "source": "2ememain",
-      "location": "Woluwe-Saint-Pierre",
-      "status": "Recherche OK",
-      "message": "2 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/woluwe-saint-pierre/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Woluwe-Saint-Pierre",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2413003138-travaux-de-renovation-0492363428"
-    },
-    {
-      "source": "2ememain",
-      "location": "Woluwe-Saint-Pierre",
-      "status": "Candidat ignore",
-      "message": "prix 36000 sous seuil coherent",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2363695532-garage-ferme-a-1150-woluwe-saint-pierre-porte-electrique"
-    },
-    {
-      "source": "2ememain",
-      "location": "Molenbeek-Saint-Jean",
-      "status": "Recherche OK",
-      "message": "6 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/molenbeek-saint-jean/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Molenbeek-Saint-Jean",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2411547176-maison-avec-2-garages-et-grand-jardin"
-    },
-    {
-      "source": "2ememain",
-      "location": "Molenbeek-Saint-Jean",
-      "status": "Candidat ignore",
-      "message": "prix 45000 sous seuil coherent",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2382441909-a-vendre-a-molenbeek-quartier-machtens-grand-box-de-40-m2"
-    },
-    {
-      "source": "2ememain",
-      "location": "Molenbeek-Saint-Jean",
-      "status": "Candidat ignore",
-      "message": "prix 875000 hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2379698245-immobilier-d-investissement-3-appartements-avec-jardin"
-    },
-    {
-      "source": "2ememain",
-      "location": "Molenbeek-Saint-Jean",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2396165151-rdc-commercial-arr-maison-casco-220-m2-1080-bxl"
-    },
-    {
-      "source": "2ememain",
-      "location": "Molenbeek-Saint-Jean",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2394280879-appartement-1-ch-electricite-conforme-idealement-situe"
-    },
-    {
-      "source": "2ememain",
-      "location": "Molenbeek-Saint-Jean",
-      "status": "Candidat ignore",
-      "message": "prix 35000 sous seuil coherent",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2387021361-garage"
-    },
-    {
-      "source": "2ememain",
-      "location": "Wezembeek-Oppem",
-      "status": "Recherche OK",
-      "message": "2 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/wezembeek-oppem/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Wezembeek-Oppem",
-      "status": "Candidat ignore",
-      "message": "prix 610000 hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2411153765-maison"
-    },
-    {
-      "source": "2ememain",
-      "location": "Wezembeek-Oppem",
-      "status": "Candidat ignore",
-      "message": "prix 369000 hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2308671800-villa-4-ch-a-vendre-a-menin-8930"
-    },
-    {
-      "source": "2ememain",
-      "location": "Uccle",
-      "status": "Recherche OK",
-      "message": "5 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/uccle/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Uccle",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2415947128-appartement-3-chambres-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Uccle",
-      "status": "Candidat ignore",
-      "message": "prix 599500 hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2405181350-maison-unifamilale-a-vendre-uccle-eur-599-500"
-    },
-    {
-      "source": "2ememain",
-      "location": "Uccle",
-      "status": "Candidat ignore",
-      "message": "prix 440000 hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2400332100-appartement-2-chambres-av-de-free-256-uccle-peb-b"
-    },
-    {
-      "source": "2ememain",
-      "location": "Uccle",
-      "status": "Candidat ignore",
-      "message": "prix 3000 sous seuil coherent",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2410046783-scrl-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Uccle",
-      "status": "Candidat ignore",
-      "message": "prix 360000 hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2409547428-maison-a-barvaux-sur-ourthe"
-    },
-    {
-      "source": "2ememain",
-      "location": "Vilvoorde",
-      "status": "Recherche OK",
-      "message": "7 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/vilvoorde/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Vilvoorde",
-      "status": "Candidat ignore",
-      "message": "prix 385000 hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2400498074-vilvoorde-grimbergen-maison-prete-a-emmenager-3-4-ch"
-    },
-    {
-      "source": "2ememain",
-      "location": "Vilvoorde",
-      "status": "Candidat ignore",
-      "message": "commune absente du titre/url; vendeur Vilvoorde",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2324893023-lot-2-maisons-a-vendre-a-doukala-sidi-benour"
-    },
-    {
-      "source": "2ememain",
-      "location": "Vilvoorde",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2407424077-maison-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Vilvoorde",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2412109880-sous-option-duplex-130-m2-avec-terrasse-plein-sud-koningslo"
-    },
-    {
-      "source": "2ememain",
-      "location": "Vilvoorde",
-      "status": "Candidat ignore",
-      "message": "prix 530000 hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2406555876-maison-3-facades"
-    },
-    {
-      "source": "2ememain",
-      "location": "Vilvoorde",
-      "status": "Candidat ignore",
-      "message": "prix 395000 hors filtre",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2376886810-manoir-a-vendre-a-vilvorde"
-    },
-    {
-      "source": "2ememain",
-      "location": "Vilvoorde",
-      "status": "Candidat ignore",
-      "message": "prix 22000 sous seuil coherent",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2413556202-autostaanplaats"
-    },
-    {
-      "source": "2ememain",
-      "location": "Zaventem",
-      "status": "Recherche OK",
-      "message": "7 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/zaventem/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Zaventem",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2399027982-appartement-a-zaventem"
-    },
-    {
-      "source": "2ememain",
-      "location": "Zaventem",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2409148692-maison-bel-etage-a-vendre-a-zaventem"
-    },
-    {
-      "source": "2ememain",
-      "location": "Zaventem",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2414844623-appartement-zaventem-centrum-te-huur"
-    },
-    {
-      "source": "2ememain",
-      "location": "Zaventem",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2385183549-appartement-2-chambres-zellik-asse-250-000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Zaventem",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2281186345-appartement-1-ch-a-vendre-zaventem"
-    },
-    {
-      "source": "2ememain",
-      "location": "Zaventem",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2387465524-recherche-viager-libre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Zaventem",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2378072633-studio-a-vendre-zaventem-woluwe-proche-du-campus-ucl-alma"
-    },
-    {
-      "source": "2ememain",
-      "location": "Sint-Genesius-Rode",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/sint-genesius-rode/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Koekelberg",
-      "status": "Recherche OK",
-      "message": "6 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/koekelberg/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Koekelberg",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2406043877-rdc-commerciale-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Koekelberg",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2411335224-superbe-appartement-quartier-basilique-koekelberg"
-    },
-    {
-      "source": "2ememain",
-      "location": "Koekelberg",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2380682645-immeuble-de-rapport-3-unite-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Koekelberg",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2346508417-immob"
-    },
-    {
-      "source": "2ememain",
-      "location": "Koekelberg",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2386962786-maison-a-vendre-a-aourir-agadir"
-    },
-    {
-      "source": "2ememain",
-      "location": "Koekelberg",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2339845131-appartement-en-nu-propriete"
-    },
-    {
-      "source": "2ememain",
-      "location": "Hoeilaart",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/hoeilaart/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Schaerbeek",
-      "status": "Recherche OK",
-      "message": "11 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/schaerbeek/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2415522322-immeuble-de-rapport-a-vendre-a-schaerbeek"
-    },
-    {
-      "source": "2ememain",
-      "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2410227001-appartement-30m2-schaerbeek"
-    },
-    {
-      "source": "2ememain",
-      "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2398769321-immeuble-de-rapport-a-vendre-a-schaerbeek"
-    },
-    {
-      "source": "2ememain",
-      "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2382144348-immeuble-de-rapport-a-schaerbeek"
-    },
-    {
-      "source": "2ememain",
-      "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2385444154-appartement-a-vendre-1er-etage-80m2-a-schaerbeek"
-    },
-    {
-      "source": "2ememain",
-      "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2385445026-appartement-a-vendre-2eme-etage2chambres-80m2-a-schaerbeek"
-    },
-    {
-      "source": "2ememain",
-      "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2385446080-appartement-a-vendre-3eme-etage-80m2-a-schaerbeek"
-    },
-    {
-      "source": "2ememain",
-      "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2390140470-immeuble-de-rapport-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2385441940-appartement-a-vendre-rez-de-chaussee-avec-jardin-aschaerbeek"
-    },
-    {
-      "source": "2ememain",
-      "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2166534711-appartement-de-98m2-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2325405835-espace-mansarde-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Dilbeek",
-      "status": "Recherche OK",
-      "message": "11 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/dilbeek/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2414858054-te-koop-assistentiewoning-te-asse"
-    },
-    {
-      "source": "2ememain",
-      "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2407360003-maison-basse-a-aire-ouverte-a-21a-piscine-panneaux-solaires"
-    },
-    {
-      "source": "2ememain",
-      "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2406065687-vente-appart-dilbeek"
-    },
-    {
-      "source": "2ememain",
-      "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2408873214-appart-a-dilbeek-de-1-chambre-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2415697434-commerce-a-vendre-chaussee-de-gand"
-    },
-    {
-      "source": "2ememain",
-      "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2376730750-rez-commercial-habitation-jardin-au-centre-de-dilbeek"
-    },
-    {
-      "source": "2ememain",
-      "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2380748362-eengezinswoning-aanhorigheden-te-dilbeek"
-    },
-    {
-      "source": "2ememain",
-      "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2286776493-woning-geerfd-wij-kopen-snel-en-zonder-gedoe"
-    },
-    {
-      "source": "2ememain",
-      "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2238250296-maison-individuelle-avec-jardin-et-terrasse"
-    },
-    {
-      "source": "2ememain",
-      "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2238250301-maison-individuelle-avec-jardin-et-terrasse"
-    },
-    {
-      "source": "2ememain",
-      "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m1671568660-te-gek-cd"
-    },
-    {
-      "source": "2ememain",
-      "location": "Sint-Pieters-Leeuw",
-      "status": "Recherche OK",
-      "message": "3 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/sint-pieters-leeuw/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Sint-Pieters-Leeuw",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2411512915-spacieuse-maison-de-3-chambres-avec-garage-et-jardin"
-    },
-    {
-      "source": "2ememain",
-      "location": "Sint-Pieters-Leeuw",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2413433643-maison-2ch-entierement-renovee-a-frameries-mons"
-    },
-    {
-      "source": "2ememain",
-      "location": "Sint-Pieters-Leeuw",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2401165995-belle-maison-a-vendre-code-postale-1600"
-    },
-    {
-      "source": "2ememain",
-      "location": "Tervuren",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/tervuren/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Saint-Gilles",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/saint-gilles/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Bruxelles-ville",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/bruxelles-ville/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Beersel",
-      "status": "Recherche OK",
-      "message": "1 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/beersel/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Beersel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2412084830-grand-loft"
-    },
-    {
-      "source": "2ememain",
-      "location": "Etterbeek",
-      "status": "Recherche OK",
-      "message": "3 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/etterbeek/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Etterbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2410618339-maison-en-pierres-du-pays-a-marchin"
-    },
-    {
-      "source": "2ememain",
-      "location": "Etterbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2403183773-rez-de-chaussee-75m2-jardin-155m2-etterbeek-315-000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Etterbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2377126725-appartement-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Saint-Josse-ten-Noode",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/saint-josse-ten-noode/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Grimbergen",
-      "status": "Recherche OK",
-      "message": "2 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/grimbergen/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Grimbergen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2346075320-maison-a-vendre-a-grimbergen"
-    },
-    {
-      "source": "2ememain",
-      "location": "Grimbergen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2331791118-appartement-2-chambres-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Overijse",
-      "status": "Recherche OK",
-      "message": "2 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/overijse/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Overijse",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2393363626-villa-a-vendre-sur-24-ares-pres-de-bruxelles-a-overijse"
-    },
-    {
-      "source": "2ememain",
-      "location": "Overijse",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2415581656-villa-sud-france-langudoc-roussillon"
-    },
-    {
-      "source": "2ememain",
-      "location": "Ixelles",
-      "status": "Recherche OK",
-      "message": "3 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/ixelles/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Ixelles",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2379421732-appartement-duplex-lumineux-3-chambres-avec-jardin-d-hiver"
-    },
-    {
-      "source": "2ememain",
-      "location": "Ixelles",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2396028566-appartement-150m2-a-proximite-de-la-place-flagey-a-ixelles"
-    },
-    {
-      "source": "2ememain",
-      "location": "Ixelles",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2366106141-ixelles-2-studios-flambants-neufs"
-    },
-    {
-      "source": "2ememain",
-      "location": "La Hulpe",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/la-hulpe/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Steenokkerzeel",
-      "status": "Recherche OK",
-      "message": "1 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/steenokkerzeel/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Steenokkerzeel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2376924395-appartement-spacieux-et-ensoleille-a-vendre-a-wenduine"
-    },
-    {
-      "source": "2ememain",
-      "location": "Asse",
-      "status": "Recherche OK",
-      "message": "1 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/asse/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Asse",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2381738773-vendre-votre-maison"
-    },
-    {
-      "source": "2ememain",
-      "location": "Lennik",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/lennik/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Waterloo",
-      "status": "Recherche OK",
-      "message": "1 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/waterloo/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Waterloo",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2383766253-magnifique-villa-4-ch-et-grand-jardin-a-namur"
-    },
-    {
-      "source": "2ememain",
-      "location": "Meise",
-      "status": "Recherche OK",
-      "message": "1 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/meise/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Meise",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2412570200-rijhuis-te-deurne-dicht-bij-schoten"
-    },
-    {
-      "source": "2ememain",
-      "location": "Zemst",
-      "status": "Recherche OK",
-      "message": "3 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/zemst/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Zemst",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2404634892-villa-moderne-de-5-chambres-beaucoup-de-lumiere-et-epc-prat"
-    },
-    {
-      "source": "2ememain",
-      "location": "Zemst",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2404687933-studio-te-koop-in-antwerpen"
-    },
-    {
-      "source": "2ememain",
-      "location": "Zemst",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2326604599-vakantie-woning-of-vastverblijfplaats-te-koop"
-    },
-    {
-      "source": "2ememain",
-      "location": "Ternat",
-      "status": "Recherche OK",
-      "message": "2 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/ternat/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Ternat",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2310202306-maison-casco-entrepot-atelier-atelier-beaucoup-de-potentiel"
-    },
-    {
-      "source": "2ememain",
-      "location": "Ternat",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2414846479-instapklare-open-bebouwing-in-wambeek"
-    },
-    {
-      "source": "2ememain",
-      "location": "Halle",
-      "status": "Recherche OK",
-      "message": "6 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/halle/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Halle",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2354475540-maison-a-vendre-4-chambres"
-    },
-    {
-      "source": "2ememain",
-      "location": "Halle",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2403552997-huis-te-koop"
-    },
-    {
-      "source": "2ememain",
-      "location": "Halle",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2413423122-maison-d-habitation-avec-veranda-cour-et-jardin"
-    },
-    {
-      "source": "2ememain",
-      "location": "Halle",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2405192982-ruime-halfopen-bebouwing-met-grote-tuin-en-garage"
-    },
-    {
-      "source": "2ememain",
-      "location": "Halle",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2393194530-huis-totaal-te-renoveren"
-    },
-    {
-      "source": "2ememain",
-      "location": "Halle",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2403544850-maison-bel-etage-3-ch"
-    },
-    {
-      "source": "2ememain",
-      "location": "Merchtem",
-      "status": "Recherche OK",
-      "message": "2 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/merchtem/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Merchtem",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2415738285-maison-ob-4-chambres"
-    },
-    {
-      "source": "2ememain",
-      "location": "Merchtem",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2366241561-merchtem-te-renoveren-woning-handelshuis-in-het-centrum"
-    },
-    {
-      "source": "2ememain",
-      "location": "Rixensart",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/rixensart/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Huldenberg",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/huldenberg/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Kortenberg",
-      "status": "Recherche OK",
-      "message": "2 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/kortenberg/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Kortenberg",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2411989057-kortenberg-centrum-te-koop"
-    },
-    {
-      "source": "2ememain",
-      "location": "Kortenberg",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2402876182-11-pieces-dispo-a-bxl-0487872661"
-    },
-    {
-      "source": "2ememain",
-      "location": "Braine-l'Alleud",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/braine-l-alleud/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Bertem",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/bertem/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Kapelle-op-den-Bos",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/kapelle-op-den-bos/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Lasne",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/lasne/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Roosdaal",
-      "status": "Recherche OK",
-      "message": "4 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/roosdaal/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Roosdaal",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2391425138-maison-a-terminer-avec-de-nombreuses-options"
-    },
-    {
-      "source": "2ememain",
-      "location": "Roosdaal",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2373179003-maison-a-vendre-ninove"
-    },
-    {
-      "source": "2ememain",
-      "location": "Roosdaal",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2378457282-cafe-resto-t-lof-mamma-mia-overname-activiteiten"
-    },
-    {
-      "source": "2ememain",
-      "location": "Roosdaal",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2396693635-renovation-totale-batiment-mitoyen-234-m2-construits-park"
-    },
-    {
-      "source": "2ememain",
-      "location": "Kampenhout",
-      "status": "Recherche OK",
-      "message": "2 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/kampenhout/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Kampenhout",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2414887940-1spk-appartement-te-koop-wilrijk"
-    },
-    {
-      "source": "2ememain",
-      "location": "Kampenhout",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m1731860922-appartement-rez-a-vendre-xl"
-    },
-    {
-      "source": "2ememain",
-      "location": "Wavre",
-      "status": "Recherche OK",
-      "message": "5 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/wavre/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Wavre",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2378709038-villa-en-bretagne-face-a-brehat"
-    },
-    {
-      "source": "2ememain",
-      "location": "Wavre",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2391986295-opportunite-rare-a-jodoigne"
-    },
-    {
-      "source": "2ememain",
-      "location": "Wavre",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2404390079-batiment-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Wavre",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2391169422-tiny-house-d-exception-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Wavre",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m1870475178-appartement-a-vendre-en-italie-pescara-mer-adriatic"
-    },
-    {
-      "source": "2ememain",
-      "location": "Pepingen",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/pepingen/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Opwijk",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/opwijk/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Braine-le-Chateau",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/braine-le-chateau/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Liedekerke",
-      "status": "Recherche OK",
-      "message": "1 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/liedekerke/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Liedekerke",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2390060891-appartementsblok-of-bouwgronden-te-liedekerke"
-    },
-    {
-      "source": "2ememain",
-      "location": "Londerzeel",
-      "status": "Recherche OK",
-      "message": "8 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/londerzeel/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Londerzeel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2415794049-maison-a-vendre-4-chambres-6a29-sud-prete-a-emmenager"
-    },
-    {
-      "source": "2ememain",
-      "location": "Londerzeel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2376229153-prachtige-villa-in-londerzeel-te-koop"
-    },
-    {
-      "source": "2ememain",
-      "location": "Londerzeel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2313770543-appartement-a-louer-au-centre-ville-de-tanger-plage-250m"
-    },
-    {
-      "source": "2ememain",
-      "location": "Londerzeel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2379295890-vrijstaande-woning-met-4-slaapkamers"
-    },
-    {
-      "source": "2ememain",
-      "location": "Londerzeel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2408366938-ruime-duplex"
-    },
-    {
-      "source": "2ememain",
-      "location": "Londerzeel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2280704833-gerenoveerde-woning-met-4-slaapkamers-in-malderen"
-    },
-    {
-      "source": "2ememain",
-      "location": "Londerzeel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2331011513-puurs-kalfort-te-renoveren-woning-hob-op-grond-van-6a"
-    },
-    {
-      "source": "2ememain",
-      "location": "Londerzeel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2415090655-maison-neuve-a-londerzeel"
-    },
-    {
-      "source": "2ememain",
-      "location": "Affligem",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/affligem/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Boortmeerbeek",
-      "status": "Recherche OK",
-      "message": "3 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/boortmeerbeek/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Boortmeerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2392038214-te-koop-handelsruimte-kantoor-showroom-app-en-opslagr"
-    },
-    {
-      "source": "2ememain",
-      "location": "Boortmeerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2392039719-te-koop-handelsruimte-kantoor-showr-app-lift-opslag"
-    },
-    {
-      "source": "2ememain",
-      "location": "Boortmeerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2392035151-te-koop-appartementen-gelijkvloerse-opslagplaats"
-    },
-    {
-      "source": "2ememain",
-      "location": "Tubize",
-      "status": "Recherche OK",
-      "message": "3 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/tubize/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Tubize",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2259149642-9-maisons-neuves-a-vendre"
-    },
-    {
-      "source": "2ememain",
-      "location": "Tubize",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2400733172-mobilhome-caravane"
-    },
-    {
-      "source": "2ememain",
-      "location": "Tubize",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2412979040-entrepot-a-vendre-lembeek"
-    },
-    {
-      "source": "2ememain",
-      "location": "Mechelen",
-      "status": "Recherche OK",
-      "message": "23 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/mechelen/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2413234100-chalet-robuste-a-renover-a-rijmenam"
-    },
-    {
-      "source": "2ememain",
-      "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2410647746-exclusieve-werk-of-ontvangstruimte-nabij-centrum-mechelen"
-    },
-    {
-      "source": "2ememain",
-      "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2388005717-instapklare-rijwoning-met-epc-b-centrum-mechelen"
-    },
-    {
-      "source": "2ememain",
-      "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2411202097-investeringsproject"
-    },
-    {
-      "source": "2ememain",
-      "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2380848024-studio-met-terras-in-mechelen"
-    },
-    {
-      "source": "2ememain",
-      "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2385396508-lichtrijke-studio-te-koop-met-open-zicht-op-de-dijle"
-    },
-    {
-      "source": "2ememain",
-      "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2397669965-gezocht-woning-via-huurkoop-overeenkomst-mechelen-hombeek"
-    },
-    {
-      "source": "2ememain",
-      "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2400275994-huis-te-koop"
-    },
-    {
-      "source": "2ememain",
-      "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2270414166-woning-verkopen-zonder-makelaar"
-    },
-    {
-      "source": "2ememain",
-      "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2385728149-appartement-kalverenstraat-mechelen"
-    },
-    {
-      "source": "2ememain",
-      "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2296718236-charmante-rijwoning-hartje-duffel"
-    },
-    {
-      "source": "2ememain",
-      "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2260600263-charmante-rijwoning-centrum-duffel"
-    },
-    {
-      "source": "2ememain",
-      "location": "Ottignies-Louvain-la-Neuve",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/ottignies-louvain-la-neuve/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Oud-Heverlee",
-      "status": "Recherche OK",
-      "message": "2 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/oud-heverlee/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Oud-Heverlee",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2412538641-maison-individuelle-avec-espace-commercial-a-oud-heverlee"
-    },
-    {
-      "source": "2ememain",
-      "location": "Oud-Heverlee",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2410979328-vrijstaande-woning-met-handelsruimte-in-oud-heverlee"
-    },
-    {
-      "source": "2ememain",
-      "location": "Herent",
-      "status": "Recherche OK",
-      "message": "2 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/herent/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Herent",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2352824688-bordje-huis-te-koop"
-    },
-    {
-      "source": "2ememain",
-      "location": "Herent",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2401593116-woonhuis-te-koop-via-biddit-te-aarschot"
-    },
-    {
-      "source": "2ememain",
-      "location": "Denderleeuw",
-      "status": "Recherche OK",
-      "message": "2 URL candidates",
-      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/denderleeuw/?priceTo=350000"
-    },
-    {
-      "source": "2ememain",
-      "location": "Denderleeuw",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2400511066-woning"
-    },
-    {
-      "source": "2ememain",
-      "location": "Denderleeuw",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2385528014-maison-familiale-prix-d-achat"
-    },
-    {
-      "source": "Zimmo (Apify)",
-      "location": "Configuration",
+      "source": "Zimmo",
+      "location": "Toutes communes",
       "status": "Connecteur pret",
-      "message": "Acteur dz_omar~zimmo-scraper identifie. Definir APIFY_TOKEN pour activer l'import Zimmo via Apify.",
-      "url": "https://apify.com/dz_omar/zimmo-scraper"
+      "message": "Acteur Apify dz_omar/zimmo-scraper identifie; extraction navigateur directe bloquee par page Un instant.",
+      "url": "https://apify.com/dz_omar/zimmo-scraper",
+      "extractedAt": "2026-07-02T12:27:33.9582141Z"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Wemmel",
+      "status": "Recherche OK",
+      "message": "18 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/wemmel?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Wemmel",
+      "status": "Fiche exploitable",
+      "message": "275000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1780/wemmel/rbv96723"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Wemmel",
+      "status": "Candidat ignore",
+      "message": "code postal 1850 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1850/grimbergen/vbe34429"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Wemmel",
+      "status": "Candidat ignore",
+      "message": "code postal 1730 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1730/asse/rbw24631"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Wemmel",
+      "status": "Candidat ignore",
+      "message": "code postal 1080 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1080/molenbeek-saint-jean/vbe28995"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Wemmel",
+      "status": "Candidat ignore",
+      "message": "code postal 1080 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1080/molenbeek-saint-jean/vbe14855"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Wemmel",
+      "status": "Candidat ignore",
+      "message": "code postal 1080 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1080/molenbeek-saint-jean/rbr71336"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Wemmel",
+      "status": "Candidat ignore",
+      "message": "code postal 1850 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1850/grimbergen/rbv54088"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Wemmel",
+      "status": "Candidat ignore",
+      "message": "code postal 1000 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1000/bruxelles/vbe35701"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Wemmel",
+      "status": "Candidat ignore",
+      "message": "code postal 1030 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1030/schaerbeek/vbd47073"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Wemmel",
+      "status": "Candidat ignore",
+      "message": "code postal 1080 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1080/molenbeek-saint-jean/vbd07704"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Wemmel",
+      "status": "Candidat ignore",
+      "message": "code postal 1851 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1851/humbeek/rbw24752"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Wemmel",
+      "status": "Candidat ignore",
+      "message": "code postal 1785 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1785/merchtem/rwc42469"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Dilbeek",
+      "status": "Recherche OK",
+      "message": "11 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/dilbeek?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Dilbeek",
+      "status": "Fiche exploitable",
+      "message": "269000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1700/dilbeek/rbv90643"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Dilbeek",
+      "status": "Candidat ignore",
+      "message": "code postal 1703 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1703/schepdaal/rbt77530"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Dilbeek",
+      "status": "Fiche exploitable",
+      "message": "75000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/villa/a-vendre/1700/dilbeek/vwd17129"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Dilbeek",
+      "status": "Candidat ignore",
+      "message": "code postal 1070 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe29339"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Dilbeek",
+      "status": "Candidat ignore",
+      "message": "code postal 1070 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe25333"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Dilbeek",
+      "status": "Candidat ignore",
+      "message": "code postal 1070 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/rbu78598"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Dilbeek",
+      "status": "Candidat ignore",
+      "message": "code postal 1070 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbd35953"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Dilbeek",
+      "status": "Candidat ignore",
+      "message": "code postal 1602 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1602/vlezenbeek/rbw13630"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Dilbeek",
+      "status": "Candidat ignore",
+      "message": "code postal 1600 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbw24733"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Dilbeek",
+      "status": "Candidat ignore",
+      "message": "code postal 1180 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1180/uccle/vbe35723"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Dilbeek",
+      "status": "Candidat ignore",
+      "message": "code postal 1060 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1060/saint-gilles/vbd49886"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Recherche OK",
+      "message": "16 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/sint-pieters-leeuw?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Fiche exploitable",
+      "message": "280000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbv96575"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Candidat ignore",
+      "message": "code postal 1500 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw25343"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Candidat ignore",
+      "message": "code postal 1654 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1654/huizingen/rbv64950"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Candidat ignore",
+      "message": "code postal 1650 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1650/beersel/vbe30318"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1650/beersel/rbv56564"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Candidat ignore",
+      "message": "code postal 1500 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw13623"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Candidat ignore",
+      "message": "code postal 1500 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw12582"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Candidat ignore",
+      "message": "code postal 1500 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw08809"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Candidat ignore",
+      "message": "code postal 1500 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbv79335"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Candidat ignore",
+      "message": "code postal 1500 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbv59890"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Candidat ignore",
+      "message": "code postal 1500 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbv24585"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Candidat ignore",
+      "message": "code postal 1500 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbu41480"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Alsemberg",
+      "status": "Recherche OK",
+      "message": "6 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/alsemberg?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Alsemberg",
+      "status": "Fiche exploitable",
+      "message": "185000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1652/alsemberg/rbv86858"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Alsemberg",
+      "status": "Candidat ignore",
+      "message": "code postal 1420 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1420/braine-l-alleud/vbe34202"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Alsemberg",
+      "status": "Candidat ignore",
+      "message": "code postal 1420 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1420/braine-l-alleud/vbe23031"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Alsemberg",
+      "status": "Candidat ignore",
+      "message": "code postal 1420 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1420/braine-l-alleud/vbe08953"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Alsemberg",
+      "status": "Candidat ignore",
+      "message": "code postal 1180 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1180/uccle/vbd21625"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Alsemberg",
+      "status": "Candidat ignore",
+      "message": "code postal 1180 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1180/uccle/vbd58555"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Huizingen",
+      "status": "Recherche OK",
+      "message": "5 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/huizingen?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Huizingen",
+      "status": "Candidat ignore",
+      "message": "code postal 1502 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1502/lembeek/rbw12365"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Huizingen",
+      "status": "Candidat ignore",
+      "message": "code postal 1502 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1502/lembeek/rbv70376"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Huizingen",
+      "status": "Candidat ignore",
+      "message": "code postal 1502 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1502/lembeek/rbv66426"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Huizingen",
+      "status": "Candidat ignore",
+      "message": "code postal 1502 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1502/lembeek/rbw11598"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Huizingen",
+      "status": "Candidat ignore",
+      "message": "code postal 1502 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1502/lembeek/rbv62393"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ruisbroek",
+      "status": "Recherche OK",
+      "message": "20 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/ruisbroek?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ruisbroek",
+      "status": "Candidat ignore",
+      "message": "code postal 2870 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2870/puurs-sint-amands/rbv95530"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ruisbroek",
+      "status": "Candidat ignore",
+      "message": "code postal 2845 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2845/niel/rbw26683"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ruisbroek",
+      "status": "Candidat ignore",
+      "message": "code postal 2850 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2850/boom/rbw26779"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ruisbroek",
+      "status": "Candidat ignore",
+      "message": "code postal 2850 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2850/boom/rbw26727"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ruisbroek",
+      "status": "Candidat ignore",
+      "message": "code postal 2850 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2850/boom/rbw26623"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ruisbroek",
+      "status": "Candidat ignore",
+      "message": "code postal 2850 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2850/boom/rbw24807"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ruisbroek",
+      "status": "Candidat ignore",
+      "message": "code postal 2830 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2830/willebroek/rbw19630"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ruisbroek",
+      "status": "Candidat ignore",
+      "message": "code postal 2845 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2845/niel/rbw13364"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ruisbroek",
+      "status": "Candidat ignore",
+      "message": "code postal 2845 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2845/niel/rbv95045"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ruisbroek",
+      "status": "Candidat ignore",
+      "message": "code postal 2845 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2845/niel/rbv17271"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ruisbroek",
+      "status": "Candidat ignore",
+      "message": "code postal 2850 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2850/boom/rbv62322"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ruisbroek",
+      "status": "Candidat ignore",
+      "message": "code postal 2830 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2830/willebroek/rbw12769"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Genesius-Rode",
+      "status": "Recherche indisponible",
+      "message": "HTTP 404",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/sint-genesius-rode?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Hoeilaart",
+      "status": "Recherche OK",
+      "message": "13 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/hoeilaart?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Hoeilaart",
+      "status": "Fiche exploitable",
+      "message": "275000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1560/hoeilaart/rbv80374"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Hoeilaart",
+      "status": "Candidat ignore",
+      "message": "code postal 1160 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1160/auderghem/vbe37458"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Hoeilaart",
+      "status": "Candidat ignore",
+      "message": "code postal 1332 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1332/genval/vbe28381"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Hoeilaart",
+      "status": "Candidat ignore",
+      "message": "code postal 1330 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1330/rixensart/vbe27582"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Hoeilaart",
+      "status": "Candidat ignore",
+      "message": "code postal 3080 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/3080/tervuren/rbw01274"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Hoeilaart",
+      "status": "Candidat ignore",
+      "message": "code postal 1380 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1380/lasne/vbd04633"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Hoeilaart",
+      "status": "Candidat ignore",
+      "message": "code postal 1301 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1301/bierges/vbe34209"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Hoeilaart",
+      "status": "Candidat ignore",
+      "message": "code postal 1200 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1200/woluwe-saint-lambert/vbd89822"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Hoeilaart",
+      "status": "Candidat ignore",
+      "message": "code postal 1933 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1933/sterrebeek/vbe28338"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Hoeilaart",
+      "status": "Candidat ignore",
+      "message": "code postal 1950 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1950/kraainem/rbv29673"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Hoeilaart",
+      "status": "Candidat ignore",
+      "message": "code postal 1950 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1950/kraainem/rbv29672"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Hoeilaart",
+      "status": "Candidat ignore",
+      "message": "code postal 1300 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1300/wavre/vbe22704"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Linkebeek",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/linkebeek?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Anderlecht",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/anderlecht?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Auderghem",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/auderghem?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Berchem-Sainte-Agathe",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/berchem-sainte-agathe?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Bruxelles-ville",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/bruxelles?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Bruxelles-ville - Laeken",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/laeken?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Bruxelles-ville - Neder-over-Heembeek",
+      "status": "Recherche OK",
+      "message": "3 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/neder-over-heembeek?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Bruxelles-ville - Neder-over-Heembeek",
+      "status": "Candidat ignore",
+      "message": "code postal 1800 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1800/vilvorde/rbw16220"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Bruxelles-ville - Neder-over-Heembeek",
+      "status": "Candidat ignore",
+      "message": "code postal 1800 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1800/vilvorde/rbv73738"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Bruxelles-ville - Neder-over-Heembeek",
+      "status": "Candidat ignore",
+      "message": "code postal 1800 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1800/vilvorde/rbw02318"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Bruxelles-ville - Haren",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/haren?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Etterbeek",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/etterbeek?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Evere",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/evere?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Forest",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/forest?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ganshoren",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/ganshoren?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ixelles",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/ixelles?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Jette",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/jette?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Koekelberg",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/koekelberg?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Molenbeek-Saint-Jean",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/molenbeek-saint-jean?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Saint-Gilles",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/saint-gilles?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Saint-Josse-ten-Noode",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/saint-josse-ten-noode?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Schaerbeek",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/schaerbeek?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Uccle",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/uccle?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Watermael-Boitsfort",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/watermael-boitsfort?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Woluwe-Saint-Lambert",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/woluwe-saint-lambert?maxprice=285000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Woluwe-Saint-Pierre",
+      "status": "Recherche OK",
+      "message": "0 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/woluwe-saint-pierre?maxprice=285000"
+    },
+    {
+      "source": "Zimmo",
+      "location": "Wemmel",
+      "status": "Blocage navigateur",
+      "message": "0 lien(s) candidat(s), 2 reponse(s) reseau capturee(s), titre: Un instant…",
+      "url": "https://www.zimmo.be/fr/wemmel-1780/a-vendre/maison/?priceIncludeUnknown=0&priceMax=285000",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "Zimmo",
+      "location": "Dilbeek",
+      "status": "Blocage navigateur",
+      "message": "0 lien(s) candidat(s), 2 reponse(s) reseau capturee(s), titre: Un instant…",
+      "url": "https://www.zimmo.be/fr/dilbeek-1700/a-vendre/maison/?priceIncludeUnknown=0&priceMax=285000",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "Zimmo",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Blocage navigateur",
+      "message": "0 lien(s) candidat(s), 2 reponse(s) reseau capturee(s), titre: Un instant…",
+      "url": "https://www.zimmo.be/fr/sint-pieters-leeuw-1600/a-vendre/maison/?priceIncludeUnknown=0&priceMax=285000",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "Zimmo",
+      "location": "Alsemberg",
+      "status": "Blocage navigateur",
+      "message": "0 lien(s) candidat(s), 2 reponse(s) reseau capturee(s), titre: Un instant…",
+      "url": "https://www.zimmo.be/fr/alsemberg-1652/a-vendre/maison/?priceIncludeUnknown=0&priceMax=285000",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "Zimmo",
+      "location": "Huizingen",
+      "status": "Blocage navigateur",
+      "message": "0 lien(s) candidat(s), 2 reponse(s) reseau capturee(s), titre: Un instant…",
+      "url": "https://www.zimmo.be/fr/huizingen-1654/a-vendre/maison/?priceIncludeUnknown=0&priceMax=285000",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "Zimmo",
+      "location": "Ruisbroek",
+      "status": "Blocage navigateur",
+      "message": "0 lien(s) candidat(s), 2 reponse(s) reseau capturee(s), titre: Un instant…",
+      "url": "https://www.zimmo.be/fr/ruisbroek-1601/a-vendre/maison/?priceIncludeUnknown=0&priceMax=285000",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "2ememain",
+      "location": "Wemmel",
+      "status": "Recherche navigateur OK",
+      "message": "2 lien(s) candidat(s), 18 reponse(s) reseau capturee(s), titre: wemmel - Maisons à vendre | 2ememain",
+      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/wemmel/?priceTo=285000",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "2ememain",
+      "location": "Wemmel",
+      "status": "Candidat ignore",
+      "message": "Prix absent dans le DOM navigateur",
+      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2404274806-appartement-2-chambres-a-vendre",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "2ememain",
+      "location": "Wemmel",
+      "status": "Candidat ignore",
+      "message": "Prix absent dans le DOM navigateur",
+      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2396073783-lichtrijk-appartement-met-3-garages-te-wemmel-te-koop",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "2ememain",
+      "location": "Dilbeek",
+      "status": "Recherche navigateur OK",
+      "message": "10 lien(s) candidat(s), 26 reponse(s) reseau capturee(s), titre: dilbeek - Maisons à vendre | 2ememain",
+      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/dilbeek/?priceTo=285000",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "2ememain",
+      "location": "Dilbeek",
+      "status": "Candidat ignore",
+      "message": "Prix absent dans le DOM navigateur",
+      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2414858054-te-koop-assistentiewoning-te-asse",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "2ememain",
+      "location": "Dilbeek",
+      "status": "Candidat ignore",
+      "message": "Prix 469000 superieur au plafond",
+      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2407360003-maison-basse-a-aire-ouverte-a-21a-piscine-panneaux-solaires",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "2ememain",
+      "location": "Dilbeek",
+      "status": "Candidat ignore",
+      "message": "Prix 289000 superieur au plafond",
+      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2406065687-vente-appart-dilbeek",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "2ememain",
+      "location": "Dilbeek",
+      "status": "Candidat ignore",
+      "message": "Prix 20000 sous le seuil coherent pour une vente",
+      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2408873214-appart-a-dilbeek-de-1-chambre-a-vendre",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "2ememain",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Recherche navigateur OK",
+      "message": "3 lien(s) candidat(s), 19 reponse(s) reseau capturee(s), titre: sint-pieters-leeuw - Maisons à vendre | 2ememain",
+      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/sint-pieters-leeuw/?priceTo=285000",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "2ememain",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Candidat ignore",
+      "message": "Prix absent dans le DOM navigateur",
+      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2411512915-spacieuse-maison-de-3-chambres-avec-garage-et-jardin",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "2ememain",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Candidat ignore",
+      "message": "Commune cible absente de la fiche",
+      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2413433643-maison-2ch-entierement-renovee-a-frameries-mons",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "2ememain",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Candidat ignore",
+      "message": "Prix 460000 superieur au plafond",
+      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2401165995-belle-maison-a-vendre-code-postale-1600",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "2ememain",
+      "location": "Alsemberg",
+      "status": "Recherche navigateur OK",
+      "message": "1 lien(s) candidat(s), 15 reponse(s) reseau capturee(s), titre: alsemberg - Maisons à vendre | 2ememain",
+      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/alsemberg/?priceTo=285000",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "2ememain",
+      "location": "Alsemberg",
+      "status": "Candidat ignore",
+      "message": "Prix absent dans le DOM navigateur",
+      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2405181350-maison-unifamilale-a-vendre-uccle-eur-599-500",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "2ememain",
+      "location": "Huizingen",
+      "status": "Recherche navigateur OK",
+      "message": "0 lien(s) candidat(s), 12 reponse(s) reseau capturee(s), titre: huizingen - Maisons à vendre | 2ememain",
+      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/huizingen/?priceTo=285000",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
+    },
+    {
+      "source": "2ememain",
+      "location": "Ruisbroek",
+      "status": "Recherche navigateur OK",
+      "message": "0 lien(s) candidat(s), 12 reponse(s) reseau capturee(s), titre: ruisbroek - Maisons à vendre | 2ememain",
+      "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/ruisbroek/?priceTo=285000",
+      "extractedAt": "2026-07-02T12:23:39.58Z"
     }
-  ]
+  ],
+  "sourceAuditSummary": {
+    "generatedAt": "2026-07-02T12:29:32.567Z",
+    "note": "Base GitHub Pages 2026-07-02 10:03 + sources non-Immoweb exploitables; aucune annonce Zimmo/2ememain inventee.",
+    "listingsBySource": {
+      "Immovlan": 6,
+      "Immoweb": 578,
+      "Agence locale (site direct)": 1
+    },
+    "zimmo": {
+      "listings": 0,
+      "status": "connecteur pret, extraction navigateur bloquee",
+      "diagnostics": 7
+    },
+    "particulier2ememain": {
+      "listings": 0,
+      "status": "recherche OK, candidats filtres ou prix absent/superieur",
+      "diagnostics": 16
+    }
+  }
 }

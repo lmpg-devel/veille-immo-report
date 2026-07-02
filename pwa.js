@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-07-01-03";
+  const APP_VERSION = "pwa-2026-07-02-04";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
@@ -24,6 +24,8 @@
   const FAVORITES_KEY = "veille-immo-favorites";
   const NEW_ONLY_KEY = "veille-immo-new-only";
   const LAST_LAUNCH_KEY = "veille-immo-last-launch-ids";
+  const OPENING_BASELINE_KEY = "veille-immo-opening-baseline";
+  const NEW_LISTING_MAX_AGE_MS = 72 * 60 * 60 * 1000;
   const DEFAULT_MAX_PRICE = 350000;
   const USER_PRICE_LIMIT_MAX = 350000;
   const DEFAULT_LOCATION_DISTANCE_KM = 15;
@@ -49,8 +51,10 @@
   let renderedMapMarkers = [];
   let favoriteListingIds = new Set();
   let newListingIds = new Set();
+  let newListingDetails = {};
   let newListingPreviousSource = "none";
   let newListingPreviousCount = 0;
+  let openingBaselineCache = null;
   let showNewListingsOnly = false;
   let pendingMapEnhancementTimer = null;
   let pendingMapEnhancementAttempts = 0;
@@ -338,6 +342,88 @@
     return ids;
   }
 
+  function parseListingDateValue(value) {
+    if (value == null || value === "") {
+      return null;
+    }
+    if (typeof value === "number" && Number.isFinite(value)) {
+      return value < 100000000000 ? value * 1000 : value;
+    }
+    const raw = String(value).trim();
+    if (!raw) {
+      return null;
+    }
+    if (/^\d{10,13}$/.test(raw)) {
+      const numeric = Number(raw);
+      return numeric < 100000000000 ? numeric * 1000 : numeric;
+    }
+    const parsed = Date.parse(raw);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  function listingPublicationInfo(listing) {
+    if (!listing || typeof listing !== "object") {
+      return null;
+    }
+    const fields = [
+      "publicationDate",
+      "publishedAt",
+      "publishedDate",
+      "datePublished",
+      "createdAt",
+      "creationDate",
+      "firstSeenAt",
+      "firstSeen",
+      "listedAt",
+      "listingDate",
+      "date"
+    ];
+    for (const field of fields) {
+      const parsed = parseListingDateValue(listing[field]);
+      if (parsed) {
+        return {
+          field: field,
+          rawValue: listing[field],
+          time: parsed,
+          iso: new Date(parsed).toISOString()
+        };
+      }
+    }
+    return null;
+  }
+
+  function listingPublicationTime(listing) {
+    const info = listingPublicationInfo(listing);
+    return info ? info.time : null;
+  }
+
+  function listingIsRecentByPublicationOnly(listing, now) {
+    const publishedAt = listingPublicationTime(listing);
+    return Boolean(publishedAt && publishedAt <= now && now - publishedAt <= NEW_LISTING_MAX_AGE_MS);
+  }
+
+  function listingNewRuleMatch(listing, presentBefore, now) {
+    const publication = listingPublicationInfo(listing);
+    const recentByPublication = Boolean(publication && publication.time <= now && now - publication.time <= NEW_LISTING_MAX_AGE_MS);
+    if (presentBefore && !recentByPublication) {
+      return null;
+    }
+    return {
+      reason: presentBefore ? "publication-fiable-72h" : (recentByPublication ? "absent-ouverture-precedente-et-publication-fiable-72h" : "absent-ouverture-precedente"),
+      publication: publication ? {
+        field: publication.field,
+        rawValue: publication.rawValue,
+        iso: publication.iso,
+        ageHours: Math.round(((now - publication.time) / (60 * 60 * 1000)) * 10) / 10,
+        within72h: recentByPublication
+      } : null
+    };
+  }
+
+  function listingMatchesNewListingRule(listing, presentBefore, now) {
+    return Boolean(listingNewRuleMatch(listing, presentBefore, now));
+  }
+
   function currentLaunchIdSet(payload) {
     const ids = new Set();
     (Array.isArray(payload && payload.listings) ? payload.listings : []).forEach(function (listing) {
@@ -359,6 +445,53 @@
       ids: migrated.ids,
       source: "seen-ids-migration"
     };
+  }
+
+  function openingBaselineFromSession() {
+    try {
+      const raw = sessionStorage.getItem(OPENING_BASELINE_KEY);
+      if (!raw) {
+        return null;
+      }
+      const parsed = JSON.parse(raw);
+      return {
+        available: Boolean(parsed && parsed.available),
+        ids: new Set(Array.isArray(parsed && parsed.ids) ? parsed.ids.filter(Boolean).map(String) : []),
+        source: String(parsed && parsed.source || "opening-session")
+      };
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function saveOpeningBaselineToSession(baseline) {
+    try {
+      sessionStorage.setItem(OPENING_BASELINE_KEY, JSON.stringify({
+        available: Boolean(baseline && baseline.available),
+        source: baseline && baseline.source || "none",
+        ids: Array.from(baseline && baseline.ids ? baseline.ids : [])
+      }));
+    } catch (error) {
+    }
+  }
+
+  function openingBaselineIds() {
+    const sessionBaseline = openingBaselineFromSession();
+    if (sessionBaseline) {
+      openingBaselineCache = sessionBaseline;
+      return openingBaselineCache;
+    }
+    if (openingBaselineCache) {
+      return openingBaselineCache;
+    }
+    const previous = previousLaunchIdsFromStorage();
+    openingBaselineCache = {
+      available: previous.available,
+      ids: previous.ids,
+      source: previous.available ? previous.source : "no-previous-opening"
+    };
+    saveOpeningBaselineToSession(openingBaselineCache);
+    return openingBaselineCache;
   }
 
   function saveCurrentLaunchSnapshot(payload) {
@@ -389,8 +522,10 @@
 
   function updateNewListingState(payload) {
     const listings = Array.isArray(payload && payload.listings) ? payload.listings : [];
-    const previous = previousLaunchIdsFromStorage();
+    const previous = openingBaselineIds();
     const nextNewIds = new Set();
+    const nextNewDetails = {};
+    const now = Date.now();
 
     if (previous.available) {
       listings.forEach(function (listing) {
@@ -398,13 +533,25 @@
         const presentBefore = listingLaunchIds(listing).some(function (candidate) {
           return previous.ids.has(candidate);
         });
-        if (id && !presentBefore) {
+        const match = listingNewRuleMatch(listing, presentBefore, now);
+        if (id && match) {
           nextNewIds.add(id);
+          nextNewDetails[id] = match;
+        }
+      });
+    } else {
+      listings.forEach(function (listing) {
+        const id = listingNewId(listing);
+        const match = listingNewRuleMatch(listing, true, now);
+        if (id && match) {
+          nextNewIds.add(id);
+          nextNewDetails[id] = match;
         }
       });
     }
 
     newListingIds = nextNewIds;
+    newListingDetails = nextNewDetails;
     newListingPreviousSource = previous.source;
     newListingPreviousCount = previous.ids.size;
     saveCurrentLaunchSnapshot(payload);
@@ -417,7 +564,8 @@
       count: newListingIds.size,
       only: showNewListingsOnly,
       ids: Array.from(newListingIds),
-      criterion: "absent-du-lancement-precedent",
+      criterion: "absent-ouverture-precedente-ou-publication-fiable-72h",
+      details: newListingDetails,
       previousSource: newListingPreviousSource,
       previousCount: newListingPreviousCount
     };
@@ -450,7 +598,8 @@
       count: newListingIds.size,
       only: showNewListingsOnly,
       ids: Array.from(newListingIds),
-      criterion: "absent-du-lancement-precedent",
+      criterion: "absent-ouverture-precedente-ou-publication-fiable-72h",
+      details: newListingDetails,
       previousSource: newListingPreviousSource,
       previousCount: newListingPreviousCount
     };
@@ -1294,12 +1443,51 @@
 
   function sourceCountSummary(counts) {
     return [
-      "Immoweb " + (counts.immoweb || 0),
-      "Immovlan " + (counts.immovlan || 0),
-      "Zimmo " + (counts.zimmo || 0),
-      "Agences " + (counts.agency || 0),
-      "Particulier " + (counts.p2p || 0)
+      sourceCountDisplay(counts, "immoweb", "Immoweb"),
+      sourceCountDisplay(counts, "immovlan", "Immovlan"),
+      sourceCountDisplay(counts, "zimmo", "Zimmo"),
+      sourceCountDisplay(counts, "agency", "Agences"),
+      sourceCountDisplay(counts, "p2p", "Particulier")
     ].join(" · ");
+  }
+
+  function sourceCountDisplay(counts, kind, label) {
+    const count = counts[kind] || 0;
+    if (count > 0) {
+      return label + " " + count;
+    }
+    const reason = sourceZeroReason(kind);
+    return label + (reason ? " " + reason : " 0");
+  }
+
+  function sourceZeroReason(kind) {
+    const diagnostics = Array.isArray(latestPayload && latestPayload.sourceDiagnostics)
+      ? latestPayload.sourceDiagnostics
+      : [];
+    const related = diagnostics.filter(function (item) {
+      const source = String(item && item.source || "").toLowerCase();
+      if (kind === "zimmo") return source.indexOf("zimmo") !== -1;
+      if (kind === "p2p") return source.indexOf("2ememain") !== -1 || source.indexOf("particulier") !== -1;
+      if (kind === "immovlan") return source.indexOf("immovlan") !== -1 || source.indexOf("vlan") !== -1;
+      if (kind === "agency") return source.indexOf("agence") !== -1 || source.indexOf("agency") !== -1;
+      return false;
+    });
+    if (!related.length) {
+      return "";
+    }
+    const text = related.map(function (item) {
+      return [item.status, item.message].join(" ");
+    }).join(" ").toLowerCase();
+    if (/blocage|bloque|un instant|captcha|challenge|apify|token/.test(text)) {
+      return "bloque";
+    }
+    if (/candidat|filtre|ignore|superieur|prix absent|commune cible/.test(text)) {
+      return "candidats filtres";
+    }
+    if (/recherche.*ok|recherche navigateur ok/.test(text)) {
+      return "recherche OK";
+    }
+    return "diagnostic";
   }
 
   function renderOptionBadge(listing) {
@@ -3438,21 +3626,30 @@
   async function checkForNewListings(manual) {
     try {
       const payload = await fetchResults();
+      const openingBaseline = openingBaselineIds();
       const listings = Array.isArray(payload.listings) ? payload.listings : [];
       const initialized = localStorage.getItem(INIT_KEY) === "1";
       const seenIds = seenIdsFromStorage();
       const nextSeenIds = new Set(seenIds);
       const newListings = [];
+      const now = Date.now();
 
       listings.forEach(function (listing) {
-        const id = String(listing.id || "");
-        if (!id) {
+        const id = listingNewId(listing);
+        const launchIds = listingLaunchIds(listing);
+        if (!id || !launchIds.length) {
           return;
         }
-        if (initialized && !seenIds.has(id)) {
+        const knownBefore = openingBaseline.available
+          ? launchIds.some(function (candidate) { return openingBaseline.ids.has(candidate); })
+          : launchIds.some(function (candidate) { return seenIds.has(candidate); });
+        if ((openingBaseline.available || initialized || listingIsRecentByPublicationOnly(listing, now))
+            && listingMatchesNewListingRule(listing, knownBefore, now)) {
           newListings.push(listing);
         }
-        nextSeenIds.add(id);
+        launchIds.forEach(function (candidate) {
+          nextSeenIds.add(candidate);
+        });
       });
 
       saveSeenIds(nextSeenIds);

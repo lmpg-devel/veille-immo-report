@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-07-02-04";
+  const APP_VERSION = "pwa-2026-07-27-01";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
@@ -526,12 +526,27 @@
 
   function updateNewListingState(payload) {
     const listings = Array.isArray(payload && payload.listings) ? payload.listings : [];
+    const publishedSnapshot = payload && payload.newListings;
+    const publishedIds = publishedSnapshot && Array.isArray(publishedSnapshot.ids)
+      ? new Set(publishedSnapshot.ids.filter(Boolean).map(String))
+      : null;
     const previous = openingBaselineIds();
     const nextNewIds = new Set();
     const nextNewDetails = {};
     const now = Date.now();
 
-    if (previous.available) {
+    if (publishedIds) {
+      listings.forEach(function (listing) {
+        const id = listingNewId(listing);
+        if (id && publishedIds.has(id)) {
+          nextNewIds.add(id);
+          nextNewDetails[id] = {
+            reason: "absent-rapport-quotidien-precedent",
+            publication: null
+          };
+        }
+      });
+    } else if (previous.available) {
       listings.forEach(function (listing) {
         const id = listingNewId(listing);
         const presentBefore = listingLaunchIds(listing).some(function (candidate) {
@@ -556,8 +571,10 @@
 
     newListingIds = nextNewIds;
     newListingDetails = nextNewDetails;
-    newListingPreviousSource = previous.source;
-    newListingPreviousCount = previous.ids.size;
+    newListingPreviousSource = publishedIds ? "previous-daily-report" : previous.source;
+    newListingPreviousCount = publishedIds
+      ? Number(publishedSnapshot.baselineCount || Math.max(0, listings.length - nextNewIds.size))
+      : previous.ids.size;
     saveCurrentLaunchSnapshot(payload);
     if (newListingIds.size === 0 && showNewListingsOnly) {
       showNewListingsOnly = false;
@@ -568,7 +585,7 @@
       count: newListingIds.size,
       only: showNewListingsOnly,
       ids: Array.from(newListingIds),
-      criterion: "absent-ouverture-precedente-ou-publication-fiable-72h",
+      criterion: publishedIds ? "absent-rapport-quotidien-precedent" : "absent-ouverture-precedente-ou-publication-fiable-72h",
       details: newListingDetails,
       previousSource: newListingPreviousSource,
       previousCount: newListingPreviousCount
@@ -602,7 +619,7 @@
       count: newListingIds.size,
       only: showNewListingsOnly,
       ids: Array.from(newListingIds),
-      criterion: "absent-ouverture-precedente-ou-publication-fiable-72h",
+      criterion: newListingPreviousSource === "previous-daily-report" ? "absent-rapport-quotidien-precedent" : "absent-ouverture-precedente-ou-publication-fiable-72h",
       details: newListingDetails,
       previousSource: newListingPreviousSource,
       previousCount: newListingPreviousCount
@@ -1530,11 +1547,11 @@
     const isNew = input && typeof input === "object" && listingIsNew(input);
     return window.L.divIcon({
       className: "source-map-icon-wrap source-map-marker" + (isNew ? " source-map-marker-new" : ""),
-      html: favorite
-        ? "<span class='source-map-heart source-map-heart-" + kind + "' aria-hidden='true'>&#9829;</span>"
-        : (isNew ? "<span class='source-map-star source-map-star-" + kind + "' aria-hidden='true'>&#9733;</span>" : "<span class='source-map-pin source-map-pin-" + kind + "'></span>"),
+      html: isNew
+        ? "<span class='source-map-star source-map-star-" + kind + "' aria-hidden='true'>&#9733;</span>"
+        : (favorite ? "<span class='source-map-heart source-map-heart-" + kind + "' aria-hidden='true'>&#9829;</span>" : "<span class='source-map-pin source-map-pin-" + kind + "'></span>"),
       iconSize: favorite || isNew ? [26, 26] : [24, 24],
-      iconAnchor: favorite ? [13, 21] : (isNew ? [13, 24] : [12, 24]),
+      iconAnchor: isNew ? [13, 24] : (favorite ? [13, 21] : [12, 24]),
       popupAnchor: [0, -22]
     });
   }

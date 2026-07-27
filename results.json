@@ -34538,5 +34538,22 @@
       "message": "Acteur dz_omar~zimmo-scraper identifie. Definir APIFY_TOKEN pour activer l'import Zimmo via Apify.",
       "url": "https://apify.com/dz_omar/zimmo-scraper"
     }
-  ]
+  ],
+  "newListings": {
+    "criterion": "absent-rapport-quotidien-precedent",
+    "baselineGeneratedAt": "2026-07-25T09:04:26.695Z",
+    "baselineCount": 678,
+    "count": 5,
+    "ids": [
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1740/ternat/rbw42761",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1850/grimbergen/vbe46879",
+      "https://www.immoweb.be/fr/annonce/maison/a-vendre/halle/1502/21730281",
+      "https://www.immoweb.be/fr/annonce/maison/a-vendre/halle/1500/21730279",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw53745"
+    ],
+    "bySource": {
+      "Immovlan": 3,
+      "Immoweb": 2
+    }
+  }
 }

@@ -28,6 +28,9 @@ jobs:
       - name: Build browser report and JSON feed
         shell: pwsh
         run: |
+          $previousResults = Join-Path $env:RUNNER_TEMP "veille-immo-previous-results.json"
+          Copy-Item -LiteralPath results.json -Destination $previousResults
+
           ./scripts/make-browser-report.ps1 `
             -SourceHtml reports/index.html `
             -OutputHtml index.html
@@ -52,6 +55,11 @@ jobs:
             --sources immovlan,2ememain,zimmo-apify `
             --maxPerLocation 12 `
             --delayMs 350
+
+          node ./scripts/mark-new-listings.mjs `
+            --current results.json `
+            --previous $previousResults `
+            --out results.json
 
       - name: Commit updates
         shell: pwsh

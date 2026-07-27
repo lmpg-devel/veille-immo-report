@@ -296,56 +296,57 @@ async function main() {
     })()`);
 
     const newListingsCheck = await chrome.page.evaluate(`(async () => {
-      function listingUrlKey(url) {
-        const raw = String(url || '').trim();
-        if (!raw) return '';
-        try {
-          const parsed = new URL(raw, location.href);
-          return (parsed.origin + parsed.pathname).toLowerCase();
-        } catch {
-          return raw.split(/[?#]/)[0].toLowerCase();
-        }
-      }
-      function listingKey(listing) {
-        return listingUrlKey(listing && listing.url) || String(listing && listing.id || '').trim().toLowerCase();
-      }
-      function listingLaunchIds(listing) {
-        const stable = listingKey(listing);
-        const raw = String(listing && listing.id || '').trim();
-        return Array.from(new Set([stable, raw].filter(Boolean)));
-      }
-      const markerListings = window.veilleImmoRenderedMarkerListings || [];
-      const all = Array.from(new Set(markerListings.flatMap(listingLaunchIds)));
-      const markerIds = new Set(markerListings.map((listing) => String(listing && listing.id || '').trim()).filter(Boolean));
-      const visibleCardIds = Array.from(document.querySelectorAll('.listing-card')).filter((card) => !card.hidden).map((card) => {
-        return String(card.id || '').replace(/^listing-other-/, '').replace(/^listing-/, '').trim();
-      }).filter((id) => id && markerIds.has(id));
-      const candidates = visibleCardIds.slice(0, 2).map((id) => ({ id }));
-      if (candidates.length < 2 || typeof window.VeilleImmoPwa.refreshReportData !== 'function') {
-        return { ok: false, reason: 'candidates missing', candidates: candidates.length };
-      }
-      const candidateIds = new Set(candidates.map((item) => item.id));
-      const candidateLaunchIds = new Set(markerListings.filter((listing) => candidateIds.has(String(listing && listing.id || '').trim())).flatMap(listingLaunchIds));
-      localStorage.setItem('veille-immo-initialized', '1');
-      localStorage.setItem('veille-immo-new-only', '0');
-      localStorage.setItem('veille-immo-last-launch-ids', JSON.stringify(all.filter((id) => !candidateLaunchIds.has(id))));
-      await window.VeilleImmoPwa.refreshReportData(false);
+      const payload = await fetch('results.json?t=' + Date.now(), { cache: 'no-store' }).then((response) => response.json());
+      const expectedIds = new Set(payload && payload.newListings && Array.isArray(payload.newListings.ids) ? payload.newListings.ids : []);
       const initialState = window.veilleImmoNewListingState || {};
-      const storedAfterRefresh = JSON.parse(localStorage.getItem('veille-immo-last-launch-ids') || '[]');
-      const starsBeforeFilter = Array.from(document.querySelectorAll('.source-map-star')).length;
-      const badgesBeforeFilter = Array.from(document.querySelectorAll('.new-badge')).length;
+      const markerListings = window.veilleImmoRenderedMarkerListings || [];
+      const markerLayers = window.veilleImmoRenderedMarkerLayers || [];
       const newPanel = document.querySelector('#newListingFilterPanel');
       const toggle = document.querySelector('#newListingsOnlyToggle');
       const count = document.querySelector('#newListingsCount');
-      const markerLayers = window.veilleImmoRenderedMarkerLayers || [];
-      const firstMarkerIndex = markerListings.findIndex((listing) => candidateIds.has(String(listing && listing.id || '').trim()));
+      if (!toggle || expectedIds.size === 0) {
+        return { ok: false, reason: 'published snapshot or toggle missing', expectedCount: expectedIds.size, initialState };
+      }
+
+      const markerChecks = markerListings.map((listing, index) => {
+        let key = '';
+        try {
+          const parsed = new URL(String(listing && listing.url || ''), location.href);
+          key = (parsed.origin + parsed.pathname).toLowerCase();
+        } catch {
+          key = String(listing && listing.id || '').trim().toLowerCase();
+        }
+        if (!expectedIds.has(key)) return null;
+        const source = String(listing && listing.source || '').toLowerCase();
+        const expectedColor = source.includes('immoweb')
+          ? 'rgb(11, 92, 134)'
+          : (source.includes('immovlan') ? 'rgb(225, 29, 72)' : '');
+        const icon = markerLayers[index] && markerLayers[index]._icon;
+        const star = icon && icon.querySelector('.source-map-star');
+        return {
+          key,
+          source,
+          hasStar: Boolean(star),
+          color: star ? getComputedStyle(star).color : '',
+          expectedColor
+        };
+      }).filter(Boolean);
+
+      const firstMarkerIndex = markerListings.findIndex((listing) => {
+        try {
+          const parsed = new URL(String(listing && listing.url || ''), location.href);
+          return expectedIds.has((parsed.origin + parsed.pathname).toLowerCase());
+        } catch {
+          return expectedIds.has(String(listing && listing.id || '').trim().toLowerCase());
+        }
+      });
       if (firstMarkerIndex >= 0 && markerLayers[firstMarkerIndex] && markerLayers[firstMarkerIndex].openPopup) {
         markerLayers[firstMarkerIndex].openPopup();
       }
       const popupHasNewBadge = Boolean(document.querySelector('.leaflet-popup .map-popup-new'));
-      if (!toggle) {
-        return { ok: false, reason: 'toggle missing', initialState };
-      }
+      const starsBeforeFilter = Array.from(document.querySelectorAll('.source-map-star')).length;
+      const badgesBeforeFilter = Array.from(document.querySelectorAll('.new-badge')).length;
+
       toggle.checked = true;
       toggle.dispatchEvent(new Event('change', { bubbles: true }));
       const filteredState = window.veilleImmoPriceFilterState || {};
@@ -356,32 +357,33 @@ async function main() {
       }).length;
       toggle.checked = false;
       toggle.dispatchEvent(new Event('change', { bubbles: true }));
+
       return {
-        ok: initialState.count === 2
-          && initialState.criterion === 'absent-du-lancement-precedent'
-          && initialState.previousSource === 'previous-launch'
-          && storedAfterRefresh.length >= all.length
+        ok: initialState.count === expectedIds.size
+          && initialState.criterion === 'absent-rapport-quotidien-precedent'
+          && initialState.previousSource === 'previous-daily-report'
           && Boolean(newPanel)
           && !toggle.disabled
-          && /2 nouvelle/.test(count ? count.textContent : '')
-          && starsBeforeFilter >= 2
-          && badgesBeforeFilter >= 2
+          && count && count.textContent.includes(String(expectedIds.size))
+          && starsBeforeFilter >= expectedIds.size
+          && badgesBeforeFilter >= expectedIds.size
           && popupHasNewBadge
+          && markerChecks.length === expectedIds.size
+          && markerChecks.every((item) => item.hasStar && item.expectedColor && item.color === item.expectedColor)
           && filteredState.showNewListingsOnly === true
-          && filteredState.visibleCount === 2
-          && visibleCardsAfterFilter === 2
-          && visibleStarsAfterFilter >= 2,
+          && filteredState.visibleCount === expectedIds.size
+          && visibleCardsAfterFilter === expectedIds.size
+          && visibleStarsAfterFilter >= expectedIds.size,
+        expectedCount: expectedIds.size,
         initialState,
         countText: count ? count.textContent.trim() : '',
         starsBeforeFilter,
         badgesBeforeFilter,
         popupHasNewBadge,
+        markerChecks,
         filteredState,
         visibleCardsAfterFilter,
-        visibleStarsAfterFilter,
-        candidateIds: candidates.map((item) => item.id),
-        candidateLaunchIds: Array.from(candidateLaunchIds),
-        storedAfterRefreshCount: storedAfterRefresh.length
+        visibleStarsAfterFilter
       };
     })()`);
     if (!newListingsCheck.ok) {

@@ -77,24 +77,26 @@
       ".pwa-controls button{border:1px solid #c8d1d8;background:#fff;color:#17202a;border-radius:6px;padding:9px 11px;font:600 13px Arial,sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.14)}",
       ".pwa-controls button.primary{background:#0b5c86;border-color:#0b5c86;color:#fff}",
       ".pwa-status{position:fixed;left:14px;bottom:62px;z-index:10001;max-width:420px;background:#17202a;color:#fff;border-radius:8px;padding:10px 12px;font:13px Arial,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.25)}",
-      ".price-filter-panel{background:#fff;border:1px solid #d8dee3;border-radius:7px;margin:16px 0 22px;padding:14px;display:grid;grid-template-columns:minmax(190px,1fr) minmax(220px,2fr) auto;gap:12px;align-items:center}",
-      ".price-filter-title{font-weight:700;color:#182026}",
-      ".price-filter-count{font-size:13px;color:#5c6670;margin-top:4px}",
+      ".price-filter-panel{background:#fff;border:1px solid #d8dee3;border-radius:7px;margin:12px 0;padding:9px 12px;display:grid;grid-template-columns:auto minmax(100px,1fr) auto auto auto;gap:8px;align-items:center}",
+      ".price-filter-panel>div:first-child{display:flex;align-items:center;white-space:nowrap}",
+      ".price-filter-title{font-weight:700;color:#182026;display:inline}",
+      ".price-filter-count{font-size:13px;color:#5c6670;margin-left:8px;display:inline}",
       ".price-filter-range{width:100%;accent-color:#0b5c86}",
       ".price-filter-inputs{display:flex;align-items:center;gap:8px;justify-content:flex-end}",
-      ".price-filter-inputs input{width:122px;border:1px solid #c8d1d8;border-radius:6px;padding:8px 9px;font:600 14px Arial,sans-serif;color:#182026}",
-      ".price-filter-inputs button{border:1px solid #c8d1d8;background:#fff;border-radius:6px;padding:8px 10px;font:600 13px Arial,sans-serif;color:#17202a}",
+      ".price-filter-inputs input{width:105px;border:1px solid #c8d1d8;border-radius:6px;padding:8px 7px;font:600 14px Arial,sans-serif;color:#182026}",
+      ".price-filter-inputs button{border:1px solid #c8d1d8;background:#fff;border-radius:6px;padding:8px 7px;font:600 13px Arial,sans-serif;color:#17202a}",
       ".price-filter-inputs button:disabled{opacity:.65;cursor:wait}",
       ".filter-toggle{display:inline-flex;align-items:center;gap:8px;font:600 13px Arial,sans-serif;color:#253540;white-space:nowrap}",
-      ".filter-source-counts{grid-column:1/-1;font-size:13px;color:#41515d;border-top:1px solid #e5eaee;padding-top:10px}",
+      ".filter-source-counts{font-size:10px;color:#41515d;white-space:nowrap}",
       ".filter-refresh-status{grid-column:1/-1;font-size:13px;color:#0b5c86;font-weight:700;min-height:18px}",
-      ".location-filter-panel{background:#fff;border:1px solid #d8dee3;border-radius:7px;margin:-8px 0 24px;padding:12px 14px}",
-      ".location-filter-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}",
+      ".filter-refresh-status:empty{display:none}",
+      ".location-filter-panel{background:#fff;border:1px solid #d8dee3;border-radius:7px;margin:0 0 14px;padding:9px 12px}",
+      ".location-filter-head{display:flex;align-items:center;gap:12px;flex-wrap:nowrap;margin-bottom:9px}",
       ".location-filter-title{font-weight:700;color:#182026}",
       ".location-filter-count{font-size:13px;color:#5c6670;margin-left:8px}",
-      ".location-filter-actions{display:flex;gap:8px;flex-wrap:wrap}",
+      ".location-filter-actions{display:flex;gap:8px;flex-wrap:nowrap}",
       ".location-filter-actions button,.location-chip{border:1px solid #c8d1d8;background:#fff;border-radius:999px;padding:7px 10px;font:600 13px Arial,sans-serif;color:#17202a;cursor:pointer}",
-      ".location-distance-filter{display:grid;grid-template-columns:minmax(210px,auto) minmax(180px,1fr) auto;gap:10px;align-items:center;margin:0 0 12px;padding:10px 12px;background:#f7fafc;border:1px solid #d8e2e8;border-radius:7px}",
+      ".location-distance-filter{display:grid;grid-template-columns:auto minmax(140px,1fr) auto;gap:8px;align-items:center;margin:0;min-width:360px;flex:1}",
       ".location-distance-filter label{font:700 13px Arial,sans-serif;color:#182026}",
       ".location-distance-filter input{width:100%;accent-color:#0b5c86}",
       ".location-distance-value{font:700 13px Arial,sans-serif;color:#0b5c86;white-space:nowrap}",
@@ -106,7 +108,7 @@
       ".listing-card.is-under-option{border-color:#d97706;box-shadow:inset 0 0 0 1px rgba(217,119,6,.28)}",
       ".listing-card.is-new-listing{border-color:#f59e0b;box-shadow:0 0 0 2px rgba(245,158,11,.18)}",
       ".option-badge{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;background:#d97706;color:#fff;font:700 11px/1 Arial,sans-serif;text-transform:uppercase;letter-spacing:.02em}",
-      ".new-listing-panel{background:#fff;border:1px solid #d8dee3;border-radius:7px;margin:-8px 0 14px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}",
+      ".new-listing-panel{display:flex;align-items:center;gap:8px;white-space:nowrap}",
       ".new-listing-toggle{display:inline-flex;align-items:center;gap:8px;font:700 13px Arial,sans-serif;color:#17202a;white-space:nowrap}",
       ".new-listing-count{font:600 13px Arial,sans-serif;color:#5c6670}",
       ".new-badge-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}",
@@ -181,7 +183,8 @@
       ".map-popup-actions button{border:0;background:#fff;color:#0b5c86;font:600 12px Arial,sans-serif;padding:0}",
       ".listing-contact-details{margin-top:10px;background:#f4f7f8;border-radius:6px;padding:8px 10px;color:#33424d}",
       ".listing-contact-details summary{cursor:pointer;font-weight:700;color:#0b5c86}",
-      "@media(max-width:760px){.price-filter-panel{grid-template-columns:1fr}.price-filter-inputs{justify-content:flex-start}.price-filter-inputs input{width:140px}.filter-source-counts{grid-column:auto}.location-distance-filter{grid-template-columns:1fr;align-items:start}.location-distance-value{justify-self:start}}",
+      "@media(max-width:1100px){.price-filter-panel{grid-template-columns:auto minmax(150px,1fr) auto}.filter-toggle,.filter-source-counts{grid-column:auto}.location-filter-head{flex-wrap:wrap}.location-distance-filter{min-width:300px}}",
+      "@media(max-width:760px){.price-filter-panel{grid-template-columns:1fr}.price-filter-panel>div:first-child{display:block;white-space:normal}.price-filter-count{display:block;margin:4px 0 0}.price-filter-inputs{justify-content:flex-start}.price-filter-inputs input{width:140px}.filter-source-counts{white-space:normal}.location-distance-filter{grid-template-columns:1fr;align-items:start;min-width:100%}.location-distance-value{justify-self:start}}",
       "@media(max-width:680px){.pwa-controls{left:12px;right:12px}.pwa-controls button{flex:1}}"
     ].join("");
     document.head.appendChild(style);
@@ -2078,12 +2081,12 @@
       panel.innerHTML = [
         "<div class='location-filter-head'>",
         "<div><span class='location-filter-title'>Communes incluses</span><span id='locationFilterCount' class='location-filter-count'></span></div>",
-        "<div class='location-filter-actions'><button id='locationSelectAll' type='button'>Tout cocher</button><button id='locationSelectNone' type='button'>Tout décocher</button></div>",
-        "</div>",
         "<div class='location-distance-filter'>",
         "<label for='locationDistanceSlider'>Distance max depuis Bruxelles-Capitale</label>",
         "<input id='locationDistanceSlider' type='range' min='0' max='" + MAX_LOCATION_DISTANCE_KM + "' step='1' value='" + DEFAULT_LOCATION_DISTANCE_KM + "'>",
         "<span id='locationDistanceValue' class='location-distance-value'>" + DEFAULT_LOCATION_DISTANCE_KM + " km</span>",
+        "</div>",
+        "<div class='location-filter-actions'><button id='locationSelectAll' type='button'>Tout cocher</button><button id='locationSelectNone' type='button'>Tout décocher</button></div>",
         "</div>",
         "<div id='locationChipList' class='location-chip-list'></div>"
       ].join("");
@@ -2129,6 +2132,11 @@
     syncLocationMapBoundaries(latestConfig);
     updateLocationFilterUi();
     updateLocationDistanceUi();
+    const newListingPanel = document.getElementById("newListingFilterPanel");
+    const locationFilterHead = panel.querySelector(".location-filter-head");
+    if (newListingPanel && locationFilterHead && newListingPanel.parentNode !== locationFilterHead) {
+      locationFilterHead.appendChild(newListingPanel);
+    }
   }
 
   function updateLocationFilterUi() {

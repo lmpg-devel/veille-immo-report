@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-07-27-01";
+  const APP_VERSION = "pwa-2026-07-27-02";
   const RESULTS_URL = "results.json";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
@@ -183,7 +183,6 @@
       ".map-popup-actions button{border:0;background:#fff;color:#0b5c86;font:600 12px Arial,sans-serif;padding:0}",
       ".listing-contact-details{margin-top:10px;background:#f4f7f8;border-radius:6px;padding:8px 10px;color:#33424d}",
       ".listing-contact-details summary{cursor:pointer;font-weight:700;color:#0b5c86}",
-      "@media(min-width:681px){#map{height:650px}}",
       "@media(max-width:1100px){.price-filter-panel{grid-template-columns:auto minmax(150px,1fr) auto}.filter-toggle,.filter-source-counts{grid-column:auto}.location-filter-head{flex-wrap:wrap}.location-distance-filter{min-width:300px}}",
       "@media(max-width:760px){.price-filter-panel{grid-template-columns:1fr}.price-filter-panel>div:first-child{display:block;white-space:normal}.price-filter-count{display:block;margin:4px 0 0}.price-filter-inputs{justify-content:flex-start}.price-filter-inputs input{width:140px}.filter-source-counts{white-space:normal}.location-distance-filter{grid-template-columns:1fr;align-items:start;min-width:100%}.location-distance-value{justify-self:start}}",
       "@media(max-width:680px){.pwa-controls{left:12px;right:12px}.pwa-controls button{flex:1}}"

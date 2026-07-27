@@ -513,7 +513,7 @@ h1 { margin: 0 0 6px; font-size: 28px; }
 h2 { margin: 34px 0 12px; font-size: 20px; }
 .meta { color: #5c6670; margin-bottom: 20px; }
 .note { background: #fff8df; border: 1px solid #eed074; padding: 12px 14px; border-radius: 6px; margin: 16px 0 22px; }
-#map { height: 430px; border: 1px solid #d8dee3; border-radius: 6px; background: #e8ecef; margin-bottom: 24px; }
+#map { height: 650px; border: 1px solid #d8dee3; border-radius: 6px; background: #e8ecef; margin-bottom: 24px; }
 .map-fallback { display: flex; align-items: center; justify-content: center; height: 100%; color: #4d5963; padding: 16px; text-align: center; }
 .map-tools { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: -4px 0 10px; color: #4d5963; }
 .map-toggle { display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #d8dee3; border-radius: 5px; padding: 8px 10px; }

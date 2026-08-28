@@ -14,6 +14,8 @@ function parseArgs(argv) {
     baseResults: DEFAULT_RESULTS,
     outJson: DEFAULT_OUT,
     sources: "immovlan,2ememain,zimmo-apify",
+    propertyType: "",
+    maxPrice: 0,
     maxPerLocation: 12,
     delayMs: 350,
     apifyToken: process.env.APIFY_TOKEN || "",
@@ -41,6 +43,7 @@ function parseArgs(argv) {
   }
   args.maxPerLocation = Number(args.maxPerLocation || 12);
   args.delayMs = Number(args.delayMs || 350);
+  args.maxPrice = Number(args.maxPrice || 0);
   args.apifyWaitSecs = Number(args.apifyWaitSecs || 60);
   args.apifyPollSecs = Number(args.apifyPollSecs || 20);
   args.apifyRunTimeoutMs = Number(args.apifyRunTimeoutMs || 600000);
@@ -163,6 +166,20 @@ function badHouseText(text) {
   return /\b(appartement|apparemment|appartementen|apartment|flat|studio|studios|garage|garages|garagebox|parking|staanplaats|box|terrain|terrein|grond|bouwgrond|kot|kamer|chambre|room|commercial|commerce|handelsruimte|bureau|kantoor|entrepot|magazijn|hangar|loft|duplex|mur uniquement)\b/i.test(haystack);
 }
 
+function isLandSearch(config) {
+  return String(config?.propertyType || "").trim().toLowerCase() === "terrain";
+}
+
+function hasBuildingLandSignal(text) {
+  const haystack = normalizedWords(text);
+  return /\b(terrain a batir|terrain constructible|building land|building plot|bouwgrond|bouwperceel|bouwterrein|grond voor woningbouw|parcelle a batir|lot a batir)\b/i.test(haystack);
+}
+
+function badBuildingLandText(text) {
+  const haystack = normalizedWords(text);
+  return /\b(terrain agricole|terre agricole|prairie|pature|champ|bois|foret|terrain forestier|terrain de loisirs|non batissable|non constructible|agricultural land|farmland|meadow|forest land|recreational land|landbouwgrond|weiland|bosgrond|recreatiegrond|niet bebouwbaar)\b/i.test(haystack);
+}
+
 function isNotarial(text) {
   const haystack = normalizedWords(text);
   return /\b(biddit|notaire|notaires|notaris|notarissen|vente publique|openbare verkoop)\b/i.test(haystack);
@@ -213,12 +230,17 @@ function sourceQualityRejectionReason(source, fields, location, config) {
   ].filter(Boolean).join(" ");
 
   if (!price || price > maxPrice) return `prix ${price || "absent"} hors filtre`;
-  if (price < 50000) return `prix ${price} sous seuil coherent`;
+  if (!isLandSearch(config) && price < 50000) return `prix ${price} sous seuil coherent`;
   if (config.excludeNotarialSales !== false && isNotarial(haystack)) return "vente notariale exclue";
   if (isRentalText(haystack)) return "location exclue";
   if (hasMonthlySupplementText(haystack)) return "viager/rente/mensualite exclu";
-  if (badHouseText(identityText)) return "type non maison probable";
-  if (!hasHouseSignal(identityText)) return "signal maison absent";
+  if (isLandSearch(config)) {
+    if (badBuildingLandText(haystack)) return "terrain non constructible probable";
+    if (!hasBuildingLandSignal(haystack)) return "signal terrain a batir absent";
+  } else {
+    if (badHouseText(identityText)) return "type non maison probable";
+    if (!hasHouseSignal(identityText)) return "signal maison absent";
+  }
   if (location && source === "2ememain" && !locationMatches(location, [fields.url, fields.title])) {
     return `commune absente du titre/url; vendeur ${fields.locality || "sans localite"}`;
   }
@@ -333,8 +355,9 @@ function findJsonLd(objects, type) {
   return objects.find((item) => String(item && item["@type"] || "").trim().toLowerCase() === type.toLowerCase()) || null;
 }
 
-function immovlanSearchUrl(location, maxPrice) {
-  return `https://www.immovlan.be/fr/immobilier/maison/a-vendre/${location.immovlanSlug}?maxprice=${maxPrice}`;
+function immovlanSearchUrl(location, maxPrice, config) {
+  const type = isLandSearch(config) ? "terrain" : "maison";
+  return `https://www.immovlan.be/fr/immobilier/${type}/a-vendre/${location.immovlanSlug}?maxprice=${maxPrice}`;
 }
 
 function immovlanAbsolute(url) {
@@ -358,26 +381,31 @@ async function parseImmovlanDetail(url, location, config) {
   const text = textFromHtml(html);
   const objects = parseJsonLdObjects(html);
   const house = findJsonLd(objects, "House");
+  const land = findJsonLd(objects, "Land");
+  const property = isLandSearch(config) ? (land || house || {}) : (house || {});
   const sell = findJsonLd(objects, "SellAction");
   const geo = findJsonLd(objects, "GeoCoordinates");
-  const address = findJsonLd(objects, "PostalAddress") || house?.address || sell?.location || {};
+  const address = findJsonLd(objects, "PostalAddress") || property?.address || sell?.location || {};
   const agent = findJsonLd(objects, "RealEstateAgent") || {};
   const title = decodeHtml(getFirstMatch(html, /<title>([\s\S]*?)<\/title>/i)).trim();
   const price = Number(sell?.price || sell?.priceSpecification?.price || getFirstMatch(html, /name="cXenseParse:rbf-immovlan-prix"\s+content="([\d,.]+)/i).replace(",", "."));
-  const surface = Number(house?.floorSize?.value || getFirstMatch(text, /Surface habitable\s+(\d{2,4})m/i));
-  const bedrooms = Number(house?.numberOfRooms || getFirstMatch(text, /(\d+)\s*Chambres?/i));
+  const surface = Number(
+    (isLandSearch(config) ? (property?.floorSize?.value || property?.area?.value) : property?.floorSize?.value)
+    || getFirstMatch(text, isLandSearch(config) ? /(?:Surface du terrain|Superficie du terrain|Terrain)\s+(\d{2,6})\s*m/i : /Surface habitable\s+(\d{2,4})m/i)
+  );
+  const bedrooms = isLandSearch(config) ? 0 : Number(property?.numberOfRooms || getFirstMatch(text, /(\d+)\s*Chambres?/i));
   const postalCode = String(address?.postalCode || "");
   const locality = decodeHtml(address?.addressLocality || "");
   const street = decodeHtml(address?.streetAddress || "");
   const vlanCode = (url.match(/\/([^/]+)$/) || [])[1] || "";
-  const description = `${house?.description || ""} ${sell?.description || ""}`;
+  const description = `${property?.description || ""} ${sell?.description || ""}`;
   const isUnderOption = isUnderOptionText([title, description, text].filter(Boolean).join(" "));
 
   if (postalCode && String(location.postalCode) !== postalCode) return { listing: null, message: `code postal ${postalCode} hors commune` };
   const rejection = sourceQualityRejectionReason("Immovlan", {
     title,
     description,
-    category: "maison villa",
+    category: isLandSearch(config) ? "terrain a batir building land bouwgrond" : "maison villa",
     locality,
     postalCode,
     street,
@@ -388,7 +416,7 @@ async function parseImmovlanDetail(url, location, config) {
 
   const imageMatches = [...html.matchAll(/data-src=["']([^"']*api-image\.immovlan\.be\/v1\/property\/[^"']+)["']/gi)].map((match) => decodeHtml(match[1]));
   const images = dedupeImageUrls([
-    house?.image,
+    property?.image,
     sell?.image,
     getFirstMatch(html, /<meta property="og:image" content="([^"]+)"/i),
     ...imageMatches
@@ -399,7 +427,8 @@ async function parseImmovlanDetail(url, location, config) {
     listing: {
       source: "Immovlan",
       id: `immovlan-${vlanCode.toLowerCase() || shortId(url)}`,
-      title: title || `Maison a vendre - ${locality || location.name} - Immovlan`,
+      propertyType: isLandSearch(config) ? "terrain" : "maison",
+      title: title || `${isLandSearch(config) ? "Terrain a batir" : "Maison"} a vendre - ${locality || location.name} - Immovlan`,
       price,
       bedrooms: bedrooms || null,
       surfaceM2: surface || null,
@@ -430,10 +459,13 @@ async function extractImmovlan(config, locations, diagnostics) {
   const listings = [];
   const seen = new Set();
   for (const location of locations) {
-    const searchUrl = immovlanSearchUrl(location, config.maxPrice);
+    const searchUrl = immovlanSearchUrl(location, config.maxPrice, config);
     try {
       const html = await fetchText(searchUrl);
-      const links = [...new Map([...html.matchAll(/(?:https:\/\/www\.immovlan\.be)?\/fr\/detail\/(?:maison|villa|immeuble-de-rapport|bien-exceptionnel)\/a-vendre\/[^"'<> \n]+/gi)]
+      const detailPattern = isLandSearch(config)
+        ? /(?:https:\/\/www\.immovlan\.be)?\/fr\/detail\/terrain\/a-vendre\/[^"'<> \n]+/gi
+        : /(?:https:\/\/www\.immovlan\.be)?\/fr\/detail\/(?:maison|villa|immeuble-de-rapport|bien-exceptionnel)\/a-vendre\/[^"'<> \n]+/gi;
+      const links = [...new Map([...html.matchAll(detailPattern)]
         .map((match) => immovlanAbsolute(match[0]))
         .map((url) => [canonicalUrl(url), url])).values()]
         .filter((url) => !seen.has(canonicalUrl(url)));
@@ -456,8 +488,9 @@ async function extractImmovlan(config, locations, diagnostics) {
   return listings;
 }
 
-function secondHandSearchUrl(location, maxPrice) {
-  return `https://www.2ememain.be/l/immo/maisons-a-vendre/q/${encodeURIComponent(slug(location.name))}/?priceTo=${encodeURIComponent(maxPrice)}`;
+function secondHandSearchUrl(location, maxPrice, config) {
+  const category = isLandSearch(config) ? "terrains-terrains-a-batir" : "maisons-a-vendre";
+  return `https://www.2ememain.be/l/immo/${category}/q/${encodeURIComponent(slug(location.name))}/?priceTo=${encodeURIComponent(maxPrice)}`;
 }
 
 function parseSecondHandConfig(html) {
@@ -505,7 +538,11 @@ async function parseSecondHandDetail(url, location, config) {
     price
   }, location, config);
   if (rejection) return { listing: null, message: rejection };
-  if (!/maisons?/i.test(normalizedWords(category))) return { listing: null, message: "categorie non maison" };
+  if (isLandSearch(config)) {
+    if (!/terrains?|bouwgrond|grond/i.test(normalizedWords(category))) return { listing: null, message: "categorie non terrain" };
+  } else if (!/maisons?/i.test(normalizedWords(category))) {
+    return { listing: null, message: "categorie non maison" };
+  }
   if (seller.sellerType && seller.sellerType !== "CONSUMER") return { listing: null, message: `vendeur ${seller.sellerType} non particulier` };
 
   const images = [...new Set((listing.gallery?.imageUrls || listing.gallery?.media?.images?.map((image) => image.base) || [])
@@ -538,6 +575,7 @@ async function parseSecondHandDetail(url, location, config) {
     listing: {
       source: "2ememain",
       id: `2ememain-${listing.itemId || shortId(url)}`,
+      propertyType: isLandSearch(config) ? "terrain" : "maison",
       title: `${title} - 2ememain`,
       price,
       bedrooms: bedrooms || null,
@@ -566,10 +604,13 @@ async function extractSecondHand(config, locations, diagnostics) {
   const listings = [];
   const seen = new Set();
   for (const location of locations) {
-    const searchUrl = secondHandSearchUrl(location, config.maxPrice);
+    const searchUrl = secondHandSearchUrl(location, config.maxPrice, config);
     try {
       const html = await fetchText(searchUrl);
-      const links = [...new Map([...html.matchAll(/(?:https:\/\/www\.2ememain\.be)?\/v\/immo\/maisons-a-vendre\/m\d+[^"'<> \n]*/gi)]
+      const detailPattern = isLandSearch(config)
+        ? /(?:https:\/\/www\.2ememain\.be)?\/v\/immo\/terrains-terrains-a-batir\/m\d+[^"'<> \n]*/gi
+        : /(?:https:\/\/www\.2ememain\.be)?\/v\/immo\/maisons-a-vendre\/m\d+[^"'<> \n]*/gi;
+      const links = [...new Map([...html.matchAll(detailPattern)]
         .map((match) => new URL(match[0], "https://www.2ememain.be").href)
         .map((url) => [canonicalUrl(url), url])).values()]
         .filter((url) => !seen.has(canonicalUrl(url)));
@@ -592,18 +633,19 @@ async function extractSecondHand(config, locations, diagnostics) {
   return listings;
 }
 
-function zimmoSearchUrl(location, maxPrice) {
-  return `https://www.zimmo.be/fr/${location.zimmoSlug}-${location.postalCode}/a-vendre/maison/?priceIncludeUnknown=0&priceMax=${maxPrice}`;
+function zimmoSearchUrl(location, maxPrice, config) {
+  const type = isLandSearch(config) ? "terrain" : "maison";
+  return `https://www.zimmo.be/fr/${location.zimmoSlug}-${location.postalCode}/a-vendre/${type}/?priceIncludeUnknown=0&priceMax=${maxPrice}`;
 }
 
-function zimmoEncodedSearchUrl(location, maxPrice) {
+function zimmoEncodedSearchUrl(location, maxPrice, config) {
   if (!location.zimmoPlaceId) return "";
   const search = {
     filter: {
       status: { in: ["FOR_SALE", "TAKE_OVER"] },
       placeId: { in: [Number(location.zimmoPlaceId)] },
       price: { unknown: false, range: { min: 0, max: Number(maxPrice || 285000) } },
-      category: { in: ["HOUSE"] }
+      category: { in: [isLandSearch(config) ? "LAND" : "HOUSE"] }
     },
     paging: { from: 0, size: 17 },
     sorting: [{ type: "PRICE", order: "ASC" }]
@@ -641,7 +683,7 @@ function buildZimmoApifyInput(config, args) {
   ].map((item) => typeof item === "string" ? item : item?.url).map((url) => String(url || "").trim()).filter(Boolean);
   const generatedUrls = configuredUrls.length
     ? configuredUrls
-    : (config.locations || []).map((location) => zimmoEncodedSearchUrl(location, config.maxPrice) || zimmoSearchUrl(location, config.maxPrice));
+    : (config.locations || []).map((location) => zimmoEncodedSearchUrl(location, config.maxPrice, config) || zimmoSearchUrl(location, config.maxPrice, config));
   return {
     startUrls: generatedUrls.map((url) => ({ url })),
     maxResults: Number(config.apify?.zimmo?.maxResultsPerUrl || args.apifyMaxResultsPerUrl || 10),
@@ -778,7 +820,7 @@ function normalizeZimmoApifyItem(item, config) {
     "propertyTitle",
     "summary",
     "description"
-  ])) || `Maison a vendre - ${locality || postalCode || "Zimmo"}`;
+  ])) || `${isLandSearch(config) ? "Terrain a batir" : "Maison"} a vendre - ${locality || postalCode || "Zimmo"}`;
   const title = /zimmo/i.test(titleBase) ? titleBase : `${titleBase} - Zimmo`;
   const description = cleanText(firstField(item, ["description", "summary", "property.description", "details.description"]));
   const statusText = cleanText(firstField(item, [
@@ -888,10 +930,13 @@ function normalizeZimmoApifyItem(item, config) {
     listing: {
       source: "Zimmo",
       id: `zimmo-${cleanText(firstField(item, ["id", "listingId", "propertyId", "zimmoId", "reference", "referenceId"])) || shortId(url)}`,
+      propertyType: isLandSearch(config) ? "terrain" : "maison",
       title,
       price,
-      bedrooms: numberFromAny(firstField(item, ["bedrooms", "numberOfBedrooms", "rooms.bedrooms", "details.bedrooms"])) || null,
-      surfaceM2: numberFromAny(firstField(item, ["surface", "surfaceM2", "livingArea", "area", "habitableSurface", "details.surface"])) || null,
+      bedrooms: isLandSearch(config) ? null : (numberFromAny(firstField(item, ["bedrooms", "numberOfBedrooms", "rooms.bedrooms", "details.bedrooms"])) || null),
+      surfaceM2: numberFromAny(firstField(item, isLandSearch(config)
+        ? ["landSurface", "plotArea", "parcelArea", "surface", "surfaceM2", "area", "details.landSurface", "details.surface"]
+        : ["surface", "surfaceM2", "livingArea", "area", "habitableSurface", "details.surface"])) || null,
       locality: locality || matchedLocation?.name || "",
       requestedLocation: matchedLocation?.name || locality || "",
       postalCode: postalCode || matchedLocation?.postalCode || "",
@@ -1012,6 +1057,8 @@ function mergeResults(base, additions, replacementSources = []) {
 async function run() {
   const args = parseArgs(process.argv);
   const config = JSON.parse(fs.readFileSync(args.config, "utf8"));
+  if (args.propertyType) config.propertyType = String(args.propertyType);
+  if (args.maxPrice > 0) config.maxPrice = args.maxPrice;
   config.maxPerLocation = args.maxPerLocation;
   config.delayMs = args.delayMs;
   const base = JSON.parse(fs.readFileSync(args.baseResults, "utf8"));
@@ -1028,6 +1075,8 @@ async function run() {
     additions.push(...await extractZimmoApify(config, args, diagnostics));
   }
   const merged = mergeResults(base, additions, sources);
+  merged.propertyType = isLandSearch(config) ? "terrain" : "maison";
+  merged.maxPrice = Number(config.maxPrice || 0);
   merged.sourceDiagnostics = diagnostics;
   fs.mkdirSync(path.dirname(args.outJson), { recursive: true });
   fs.writeFileSync(args.outJson, JSON.stringify(merged, null, 2), "utf8");

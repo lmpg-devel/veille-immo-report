@@ -1,0 +1,42 @@
+apply plugin: "com.android.application"
+
+def signingFile = System.getenv("VEILLE_IMMO_ANDROID_KEYSTORE")
+def signingPassword = System.getenv("VEILLE_IMMO_ANDROID_KEYSTORE_PASSWORD")
+def signingAlias = System.getenv("VEILLE_IMMO_ANDROID_KEY_ALIAS")
+def signingKeyPassword = System.getenv("VEILLE_IMMO_ANDROID_KEY_PASSWORD")
+def fallbackDebugKey = new File(System.getProperty("user.home"), ".android/debug.keystore")
+
+android {
+    namespace "be.veilleimmo.mobile.v2"
+    compileSdk 36
+
+    signingConfigs {
+        release {
+            storeFile signingFile ? file(signingFile) : fallbackDebugKey
+            storePassword signingPassword ?: "android"
+            keyAlias signingAlias ?: "androiddebugkey"
+            keyPassword signingKeyPassword ?: "android"
+        }
+    }
+
+    defaultConfig {
+        applicationId "be.veilleimmo.mobile.v2"
+        minSdk 23
+        targetSdk 36
+        versionCode 210
+        versionName "2.1.0"
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            shrinkResources false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}

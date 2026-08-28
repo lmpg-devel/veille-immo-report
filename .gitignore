@@ -1,2 +1,12 @@
 .cache/
 reports/validation-*.png
+outputs/
+preflight/
+results-base.json
+web-report-site/
+desktop-installer/node_modules/
+desktop-installer/release/
+desktop-installer/qa/
+android-app/build/
+results-diagnostics.json
+results-terrain-diagnostics.json

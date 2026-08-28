@@ -1,0 +1,13 @@
+{
+  "name": "veille-immo-desktop",
+  "version": "2.1.0",
+  "private": true,
+  "description": "Application Windows Veille Immo",
+  "main": "electron/main.cjs",
+  "author": "UNA/A",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "electron": "43.1.0",
+    "electron-builder": "26.15.3"
+  }
+}

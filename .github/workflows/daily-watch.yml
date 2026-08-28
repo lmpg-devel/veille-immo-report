@@ -8,70 +8,25 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: daily-real-estate-watch-${{ github.event.repository.default_branch }}
+  cancel-in-progress: false
+
 jobs:
   update-report:
     runs-on: windows-latest
+    timeout-minutes: 120
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
 
-      - name: Run scraper
+      - name: Generate and publish daily watch
         shell: pwsh
         run: |
-          ./scripts/run-veille-immo.ps1 `
-            -ConfigPath config/veille-immo.json `
-            -OutputDir reports `
-            -PagesPerLocation 2 `
-            -RequestDelayMs 700
-
-      - name: Build browser report and JSON feed
-        shell: pwsh
-        run: |
-          $previousResults = Join-Path $env:RUNNER_TEMP "veille-immo-previous-results.json"
-          Copy-Item -LiteralPath results.json -Destination $previousResults
-
-          ./scripts/make-browser-report.ps1 `
-            -SourceHtml reports/index.html `
-            -OutputHtml index.html
-
-          $csv = Get-ChildItem -LiteralPath reports -Filter "veille-immo-*.csv" |
-            Sort-Object LastWriteTime -Descending |
-            Select-Object -First 1
-
-          if (-not $csv) {
-            throw "No veille-immo CSV produced"
-          }
-
-          ./scripts/make-results-json.ps1 `
-            -CsvPath $csv.FullName `
-            -OutputPath results-base.json `
-            -ReportUrl "https://lmpg-devel.github.io/veille-immo-report/"
-
-          node ./scripts/advanced-source-extract.mjs `
-            --config config/veille-immo.json `
-            --baseResults results-base.json `
-            --outJson results.json `
-            --sources immovlan,2ememain,zimmo-apify `
-            --maxPerLocation 12 `
-            --delayMs 350
-
-          node ./scripts/mark-new-listings.mjs `
-            --current results.json `
-            --previous $previousResults `
-            --out results.json
-
-      - name: Commit updates
-        shell: pwsh
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html results.json reports mobile-index.html config/veille-immo.json
-          git diff --cached --quiet
-          if ($LASTEXITCODE -eq 0) {
-            Write-Host "No changes to commit"
-            exit 0
-          }
-          $stamp = Get-Date -Format "yyyy-MM-dd HH:mm"
-          git commit -m "Update real estate watch $stamp"
-          git push
+          ./scripts/run-daily-watch-ci.ps1 `
+            -Branch "${{ github.event.repository.default_branch }}" `
+            -MaxAttempts 2

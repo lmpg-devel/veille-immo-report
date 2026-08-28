@@ -1,7 +1,10 @@
 param(
   [string]$CsvPath = "reports/veille-immo-2026-06-18.csv",
   [string]$OutputPath = "publish/veille-immo-report/results.json",
-  [string]$ReportUrl = "https://lmpg-devel.github.io/veille-immo-report/"
+  [string]$ReportUrl = "https://lmpg-devel.github.io/veille-immo-report/",
+  [ValidateSet("maison", "terrain")]
+  [string]$PropertyType = "maison",
+  [int]$MaxPrice = 350000
 )
 
 $ErrorActionPreference = "Stop"
@@ -64,6 +67,7 @@ $listings = foreach ($row in $rows) {
   [ordered]@{
     source = $row.Source
     id = if ([string]::IsNullOrWhiteSpace($row.Id)) { $row.Url } else { $row.Id }
+    propertyType = if ($row.PSObject.Properties.Name -contains "PropertyType" -and -not [string]::IsNullOrWhiteSpace($row.PropertyType)) { $row.PropertyType } else { $PropertyType }
     title = $row.Title
     price = ConvertTo-NullableInt $row.Price
     bedrooms = ConvertTo-NullableInt $row.Bedrooms
@@ -93,6 +97,8 @@ $payload = [ordered]@{
   schemaVersion = 1
   generatedAt = (Get-Date).ToUniversalTime().ToString("o")
   reportUrl = $ReportUrl
+  propertyType = $PropertyType
+  maxPrice = $MaxPrice
   count = @($listings).Count
   listings = @($listings)
 }

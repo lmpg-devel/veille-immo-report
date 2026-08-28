@@ -2,7 +2,11 @@ param(
   [string]$ConfigPath = "config/veille-immo.json",
   [string]$OutputDir = "reports",
   [int]$PagesPerLocation = 2,
-  [int]$RequestDelayMs = 300
+  [int]$RequestDelayMs = 300,
+  [ValidateSet("", "maison", "terrain")]
+  [string]$PropertyType = "",
+  [int]$MaxPrice = 0,
+  [switch]$SkipMobileIndex
 )
 
 $ErrorActionPreference = "Stop"
@@ -155,14 +159,45 @@ function Invoke-Page {
   return Invoke-WebRequest -Uri $Url -Headers $headers -UseBasicParsing -TimeoutSec 30
 }
 
+function Get-PropertySearchProfile {
+  param([object]$Config)
+
+  $isTerrain = ([string]$Config.propertyType).ToLowerInvariant() -eq "terrain"
+  if ($isTerrain) {
+    return [pscustomobject]@{
+      IsTerrain = $true
+      LabelSingular = "terrain a batir"
+      LabelPlural = "terrains a batir"
+      ImmowebSearchType = "terrain"
+      ImmowebDetailPattern = "terrain(?:-a-batir)?"
+      ZimmoType = "terrain"
+      ImmovlanType = "terrain"
+      SecondHandType = "terrains-terrains-a-batir"
+    }
+  }
+
+  return [pscustomobject]@{
+    IsTerrain = $false
+    LabelSingular = "maison"
+    LabelPlural = "maisons"
+    ImmowebSearchType = "maison"
+    ImmowebDetailPattern = "maison"
+    ZimmoType = "maison"
+    ImmovlanType = "maison"
+    SecondHandType = "maisons-a-vendre"
+  }
+}
+
 function Get-ImmowebSearchUrl {
   param(
+    [object]$Config,
     [object]$Location,
     [int]$MaxPrice,
     [int]$Page
   )
 
-  return "https://www.immoweb.be/fr/recherche/maison/a-vendre/$($Location.immowebSlug)/$($Location.postalCode)?countries=BE&maxPrice=$MaxPrice&orderBy=newest&page=$Page"
+  $profile = Get-PropertySearchProfile -Config $Config
+  return "https://www.immoweb.be/fr/recherche/$($profile.ImmowebSearchType)/a-vendre/$($Location.immowebSlug)/$($Location.postalCode)?countries=BE&maxPrice=$MaxPrice&orderBy=newest&page=$Page"
 }
 
 function Get-PortalLinks {
@@ -172,15 +207,16 @@ function Get-PortalLinks {
   )
 
   $maxPrice = [int]$Config.maxPrice
+  $profile = Get-PropertySearchProfile -Config $Config
   $zimmoSlug = $Location.zimmoSlug
   $immovlanSlug = $Location.immovlanSlug
-  $encodedLocalAgencyQuery = [uri]::EscapeDataString("maison a vendre $($Location.name) $maxPrice agence immobiliere")
+  $encodedLocalAgencyQuery = [uri]::EscapeDataString("$($profile.LabelSingular) a vendre $($Location.name) $maxPrice agence immobiliere")
 
   return [pscustomobject]@{
     Location = $Location.name
-    Immoweb = Get-ImmowebSearchUrl -Location $Location -MaxPrice $maxPrice -Page 1
-    Zimmo = "https://www.zimmo.be/fr/$zimmoSlug-$($Location.postalCode)/a-vendre/maison/?priceIncludeUnknown=0&priceMax=$maxPrice"
-    Immovlan = "https://immo.vlan.be/fr/immobilier/maison/a-vendre/${immovlanSlug}?maxprice=$maxPrice"
+    Immoweb = Get-ImmowebSearchUrl -Config $Config -Location $Location -MaxPrice $maxPrice -Page 1
+    Zimmo = "https://www.zimmo.be/fr/$zimmoSlug-$($Location.postalCode)/a-vendre/$($profile.ZimmoType)/?priceIncludeUnknown=0&priceMax=$maxPrice"
+    Immovlan = "https://immovlan.be/fr/immobilier/$($profile.ImmovlanType)/a-vendre/${immovlanSlug}?maxprice=$maxPrice"
     LocalAgencies = "https://www.bing.com/search?q=$encodedLocalAgencyQuery"
   }
 }
@@ -193,9 +229,16 @@ function Read-ImmowebListing {
   )
 
   try {
+    $profile = Get-PropertySearchProfile -Config $config
     if ($config.strictExactLocation -ne $false) {
-      $expectedPath = "/a-vendre/$($Location.immowebSlug)/"
-      if ($Url -notmatch [regex]::Escape($expectedPath)) {
+      $locationMatches = if ($profile.IsTerrain) {
+        $Url -match "/a-vendre/[^/]+/$([regex]::Escape([string]$Location.postalCode))/"
+      }
+      else {
+        $expectedPath = "/a-vendre/$($Location.immowebSlug)/"
+        $Url -match [regex]::Escape($expectedPath)
+      }
+      if (-not $locationMatches) {
         return $null
       }
     }
@@ -207,7 +250,7 @@ function Read-ImmowebListing {
     $classified = Get-JsonObjectAfterMarker -Text $html -Marker "window.classified = "
     $customer = if ($classified -and $classified.customers) { @($classified.customers)[0] } else { $null }
 
-    if ($config.excludeMonthlySupplement -ne $false -and $title -match '\+\s*\d[\d\s\.\u00A0\u202F]*\s*(?:EUR|€)\s*/\s*mois') {
+    if ($config.excludeMonthlySupplement -ne $false -and $title -match '\+\s*\d[\d\s\.\u00A0\u202F]*\s*(?:EUR|\u20ac)\s*/\s*mois') {
       return $null
     }
 
@@ -225,7 +268,7 @@ function Read-ImmowebListing {
     if (-not $priceJson) {
       $priceJson = Get-FirstRegexGroup -Text $html -Pattern '"price"\s*:\s*\{[^}]*"mainValue"\s*:\s*(\d+)'
     }
-    $priceFromTitle = Get-FirstRegexGroup -Text $title -Pattern '(\d[\d\s\.\u00A0\u202F]*)(?:\s*)(?:EUR|€)'
+    $priceFromTitle = Get-FirstRegexGroup -Text $title -Pattern '(\d[\d\s\.\u00A0\u202F]*)(?:\s*)(?:EUR|\u20ac)'
     $price = if ($priceJson) { [int]$priceJson } else { ConvertFrom-PriceText -Value $priceFromTitle }
 
     if ($null -eq $price -or $price -gt $MaxPrice) {
@@ -235,9 +278,18 @@ function Read-ImmowebListing {
     $property = if ($classified) { $classified.property } else { $null }
     $propertyLocation = if ($property) { $property.location } else { $null }
 
-    $bedrooms = if ($property -and $property.bedroomCount) { $property.bedroomCount } else { Get-FirstRegexGroup -Text $title -Pattern '-\s*(\d+)\s*chambre' }
-    $surface = if ($property -and $property.netHabitableSurface) { $property.netHabitableSurface } else { Get-FirstRegexGroup -Text $title -Pattern '-\s*(\d+)\s*m.' }
-    $locality = if ($propertyLocation -and $propertyLocation.locality) { $propertyLocation.locality } else { Get-FirstRegexGroup -Text $title -Pattern 'Maison\s+[àa]\s+vendre\s+[àa]\s+(.+?)\s+-' }
+    if ($profile.IsTerrain) {
+      $propertySubtype = Get-ObjectPropertyValue -Object $property -Name "subtype"
+      $propertyIdentity = Join-NonEmpty @($title, $Url, $propertySubtype)
+      if ($propertyIdentity -notmatch '(?i)terrain-a-batir|terrain\s+[àa]\s+b[aâ]tir|bouwgrond|bouwperceel|building[_ -]?land') {
+        return $null
+      }
+    }
+
+    $bedrooms = if ($profile.IsTerrain) { $null } elseif ($property -and $property.bedroomCount) { $property.bedroomCount } else { Get-FirstRegexGroup -Text $title -Pattern '-\s*(\d+)\s*chambre' }
+    $land = if ($profile.IsTerrain -and $property) { Get-ObjectPropertyValue -Object $property -Name "land" } else { $null }
+    $surface = if ($land -and (Get-ObjectPropertyValue -Object $land -Name "surface")) { Get-ObjectPropertyValue -Object $land -Name "surface" } elseif ($property -and $property.netHabitableSurface) { $property.netHabitableSurface } else { Get-FirstRegexGroup -Text $title -Pattern '-\s*(\d+)\s*m.' }
+    $locality = if ($propertyLocation -and $propertyLocation.locality) { $propertyLocation.locality } else { Get-FirstRegexGroup -Text $title -Pattern '(?:Maison|Terrain(?:\s+[àa]\s+b[aâ]tir)?)\s+[àa]\s+vendre\s+[àa]\s+(.+?)\s+-' }
     if (-not $locality) {
       $locality = $Location.name
     }
@@ -281,6 +333,7 @@ function Read-ImmowebListing {
     return [pscustomobject]@{
       Source = "Immoweb"
       Id = $id
+      PropertyType = [string]$config.propertyType
       RequestedLocation = $Location.name
       Locality = $locality
       PostalCode = $postalCode
@@ -320,14 +373,19 @@ function Get-ImmowebListings {
   )
 
   $urls = New-Object System.Collections.Generic.List[string]
+  $profile = Get-PropertySearchProfile -Config $Config
 
   for ($page = 1; $page -le $PagesPerLocation; $page++) {
-    $searchUrl = Get-ImmowebSearchUrl -Location $Location -MaxPrice ([int]$Config.maxPrice) -Page $page
+    $searchUrl = Get-ImmowebSearchUrl -Config $Config -Location $Location -MaxPrice ([int]$Config.maxPrice) -Page $page
     try {
       $response = Invoke-Page -Url $searchUrl
-      $matches = [regex]::Matches($response.Content, 'https://www\.immoweb\.be/fr/annonce/maison/a-vendre/[^"<> ]+')
+      $pattern = '(?:https:\/\/www\.immoweb\.be)?\/fr\/annonce\/' + $profile.ImmowebDetailPattern + '\/a-vendre\/[^"<> \\]+'
+      $matches = [regex]::Matches($response.Content, $pattern, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
       foreach ($match in $matches) {
         $cleanUrl = [System.Net.WebUtility]::HtmlDecode($match.Value)
+        if ($cleanUrl.StartsWith("/")) {
+          $cleanUrl = "https://www.immoweb.be$cleanUrl"
+        }
         if (-not $urls.Contains($cleanUrl)) {
           $urls.Add($cleanUrl)
         }
@@ -506,6 +564,9 @@ function New-HtmlReport {
     [datetime]$RunAt
   )
 
+  $profile = Get-PropertySearchProfile -Config $Config
+  $propertyHeading = if ($profile.IsTerrain) { "Terrains a batir" } else { "Maisons" }
+
   $style = @"
 body { font-family: Segoe UI, Arial, sans-serif; margin: 0; color: #182026; background: #f6f7f8; }
 main { max-width: 1440px; margin: 0 auto; padding: 28px; }
@@ -660,7 +721,7 @@ a:hover { text-decoration: underline; }
       }) -join "`n"
   }
   else {
-    "<div class='empty'>Aucune maison Immoweb trouvee automatiquement sous $($Config.maxPrice) EUR pour les communes configurees.</div>"
+    "<div class='empty'>Aucun $($profile.LabelSingular) Immoweb trouve automatiquement sous $($Config.maxPrice) EUR pour les communes configurees.</div>"
   }
 
   $detectedAgencyRows = if ($Listings.Count -gt 0) {
@@ -762,7 +823,7 @@ a:hover { text-decoration: underline; }
 <body>
 <main>
   <h1>Veille immobiliere quotidienne</h1>
-  <div class="meta">Maisons a vendre jusqu'a $($Config.maxPrice) EUR - rapport du $($RunAt.ToString("yyyy-MM-dd HH:mm")) - $($Listings.Count) annonce(s) retenue(s), $($LocalAgencies.Count) agence(s) locale(s) OSM.</div>
+  <div class="meta">$propertyHeading a vendre jusqu'a $($Config.maxPrice) EUR - rapport du $($RunAt.ToString("yyyy-MM-dd HH:mm")) - $($Listings.Count) annonce(s) retenue(s), $($LocalAgencies.Count) agence(s) locale(s) OSM.</div>
   <div class="note">Extraction automatique detaillee: Immoweb. Les coordonnees, contacts et photos proviennent des donnees publiques de l'annonce quand elles sont publiees. Zimmo, Immovlan et certains sites d'agences peuvent bloquer l'extraction automatique; les liens de controle restent inclus.</div>
 
   <h2>Carte des biens</h2>
@@ -1051,6 +1112,12 @@ document.addEventListener("keydown", (event) => {
 $resolvedConfigPath = Resolve-FromWorkspace -Path $ConfigPath
 $resolvedOutputDir = Resolve-FromWorkspace -Path $OutputDir
 $config = Get-Content -Raw -LiteralPath $resolvedConfigPath | ConvertFrom-Json
+if (-not [string]::IsNullOrWhiteSpace($PropertyType)) {
+  $config.propertyType = $PropertyType
+}
+if ($MaxPrice -gt 0) {
+  $config.maxPrice = $MaxPrice
+}
 
 New-Item -ItemType Directory -Path $resolvedOutputDir -Force | Out-Null
 
@@ -1115,13 +1182,19 @@ Set-Content -LiteralPath $htmlPath -Value $html -Encoding UTF8
 Set-Content -LiteralPath $latestPath -Value $html -Encoding UTF8
 Set-Content -LiteralPath $indexPath -Value $html -Encoding UTF8
 $mobileIndexPath = Join-Path (Split-Path -Parent $PSScriptRoot) "mobile-index.html"
-Set-Content -LiteralPath $mobileIndexPath -Value $html -Encoding UTF8
+if (-not $SkipMobileIndex) {
+  Set-Content -LiteralPath $mobileIndexPath -Value $html -Encoding UTF8
+}
 
 Write-Host ""
 Write-Host "Rapport HTML: $htmlPath"
 Write-Host "Index HTML: $indexPath"
-Write-Host "Index mobile: $mobileIndexPath"
+if (-not $SkipMobileIndex) {
+  Write-Host "Index mobile: $mobileIndexPath"
+}
 Write-Host "CSV: $csvPath"
 Write-Host "CSV agences locales: $agenciesCsvPath"
+Write-Host "Type de bien: $($config.propertyType)"
+Write-Host "Prix maximum: $($config.maxPrice) EUR"
 Write-Host "Annonces Immoweb retenues: $($allListings.Count)"
 Write-Host "Agences locales OSM: $($localAgenciesArray.Count)"

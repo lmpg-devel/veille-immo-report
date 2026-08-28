@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Veille Immo</string>
+    <string name="no_browser">Aucun navigateur disponible.</string>
+</resources>

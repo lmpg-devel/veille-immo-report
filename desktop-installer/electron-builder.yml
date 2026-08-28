@@ -1,0 +1,32 @@
+appId: be.unaa.veilleimmo
+productName: Veille Immo
+artifactName: Veille-Immo-Windows-${version}.${ext}
+directories:
+  output: release
+  buildResources: assets
+files:
+  - electron/**/*
+  - web/**/*
+  - package.json
+asar: true
+compression: maximum
+npmRebuild: false
+publish: null
+electronVersion: 43.1.0
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: assets/veille-immo.ico
+  verifyUpdateCodeSignature: false
+nsis:
+  oneClick: false
+  perMachine: false
+  allowElevation: true
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Veille Immo
+  uninstallDisplayName: Veille Immo
+  deleteAppDataOnUninstall: false

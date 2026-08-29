@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-28T19:29:28.182Z",
+  "generatedAt": "2026-08-29T13:29:42.424Z",
   "reportUrl": "https://lmpg-devel.github.io/veille-immo-report/",
   "propertyType": "terrain",
   "maxPrice": 100000,
@@ -242,15 +242,15 @@
       "source": "Immovlan",
       "location": "Hoeilaart",
       "status": "Candidat ignore",
-      "message": "code postal 1980 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/1980/zemst/rbv40363"
+      "message": "code postal 1390 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/1390/grez-doiceau/vbe01298"
     },
     {
       "source": "Immovlan",
       "location": "Hoeilaart",
       "status": "Candidat ignore",
-      "message": "code postal 1480 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/1480/tubize/vbd67998"
+      "message": "code postal 1980 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/1980/zemst/rbv40363"
     },
     {
       "source": "Immovlan",
@@ -270,8 +270,15 @@
       "source": "Immovlan",
       "location": "Sint-Pieters-Leeuw",
       "status": "Recherche OK",
-      "message": "0 URL candidates",
+      "message": "1 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/terrain/a-vendre/sint-pieters-leeuw?maxprice=100000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Candidat ignore",
+      "message": "code postal 1480 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/1480/tubize/vbd67998"
     },
     {
       "source": "Immovlan",
@@ -459,7 +466,7 @@
       "source": "Immovlan",
       "location": "Braine-l'Alleud",
       "status": "Recherche OK",
-      "message": "6 URL candidates",
+      "message": "4 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/terrain/a-vendre/braine-l-alleud?maxprice=100000"
     },
     {
@@ -489,20 +496,6 @@
       "status": "Candidat ignore",
       "message": "code postal 6181 hors commune",
       "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/6181/gouy-lez-pieton/vbe12064"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Braine-l'Alleud",
-      "status": "Candidat ignore",
-      "message": "code postal 7090 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/7090/braine-le-comte/vbe05224"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Braine-l'Alleud",
-      "status": "Candidat ignore",
-      "message": "code postal 7090 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/7090/braine-le-comte/vbe05223"
     },
     {
       "source": "Immovlan",
@@ -669,8 +662,22 @@
       "source": "Immovlan",
       "location": "Tubize",
       "status": "Recherche OK",
-      "message": "0 URL candidates",
+      "message": "2 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/terrain/a-vendre/tubize?maxprice=100000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Tubize",
+      "status": "Candidat ignore",
+      "message": "code postal 7090 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/7090/braine-le-comte/vbe05224"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Tubize",
+      "status": "Candidat ignore",
+      "message": "code postal 7090 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/7090/braine-le-comte/vbe05223"
     },
     {
       "source": "Immovlan",
@@ -683,7 +690,7 @@
       "source": "Immovlan",
       "location": "Ottignies-Louvain-la-Neuve",
       "status": "Recherche OK",
-      "message": "11 URL candidates",
+      "message": "10 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/terrain/a-vendre/ottignies-louvain-la-neuve?maxprice=100000"
     },
     {
@@ -725,13 +732,6 @@
       "source": "Immovlan",
       "location": "Ottignies-Louvain-la-Neuve",
       "status": "Candidat ignore",
-      "message": "code postal 6043 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/6043/ransart/vbe42159"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Ottignies-Louvain-la-Neuve",
-      "status": "Candidat ignore",
       "message": "code postal 5060 hors commune",
       "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/5060/sambreville/vbe39320"
     },
@@ -760,8 +760,8 @@
       "source": "Immovlan",
       "location": "Ottignies-Louvain-la-Neuve",
       "status": "Candidat ignore",
-      "message": "code postal 1390 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/1390/grez-doiceau/vbe01298"
+      "message": "code postal 5060 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/5060/moignelee/vbd95696"
     },
     {
       "source": "Immovlan",
@@ -1195,7 +1195,7 @@
       "location": "Grimbergen",
       "status": "Candidat ignore",
       "message": "prix absent hors filtre",
-      "url": "https://www.2ememain.be/v/immo/terrains-terrains-a-batir/m2428681817-weidegrond-aan-de-verbrande-brug-te-grimbergen-2000-m2"
+      "url": "https://www.2ememain.be/v/immo/terrains-terrains-a-batir/m2436441122-weidegrond-aan-de-verbrande-brug-te-grimbergen"
     },
     {
       "source": "2ememain",
@@ -1418,8 +1418,15 @@
       "source": "2ememain",
       "location": "Roosdaal",
       "status": "Recherche OK",
-      "message": "0 URL candidates",
+      "message": "1 URL candidates",
       "url": "https://www.2ememain.be/l/immo/terrains-terrains-a-batir/q/roosdaal/?priceTo=100000"
+    },
+    {
+      "source": "2ememain",
+      "location": "Roosdaal",
+      "status": "Candidat ignore",
+      "message": "signal terrain a batir absent",
+      "url": "https://www.2ememain.be/v/immo/terrains-terrains-a-batir/m2436484701-omheinde-weide-16a70-roosdaal-strijtem"
     },
     {
       "source": "2ememain",
@@ -1641,8 +1648,8 @@
   ],
   "newListings": {
     "criterion": "absent-rapport-quotidien-precedent",
-    "baselineGeneratedAt": "2026-08-28T10:11:26.942Z",
-    "baselineCount": 34,
+    "baselineGeneratedAt": "2026-08-28T19:29:28.182Z",
+    "baselineCount": 0,
     "count": 0,
     "ids": [],
     "bySource": {}

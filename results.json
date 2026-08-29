@@ -1,42 +1,11 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-28T19:20:01.501Z",
+  "generatedAt": "2026-08-29T13:19:21.330Z",
   "reportUrl": "https://lmpg-devel.github.io/veille-immo-report/",
   "propertyType": "maison",
   "maxPrice": 350000,
-  "count": 51,
+  "count": 55,
   "listings": [
-    {
-      "source": "Immovlan",
-      "id": "immovlan-vbe43895",
-      "propertyType": "maison",
-      "title": "Maison à vendre avec terrasse et jardin , Braine-le-Château  (VBE43895)",
-      "price": 150000,
-      "bedrooms": 3,
-      "surfaceM2": 130,
-      "locality": "Braine-le-Château",
-      "requestedLocation": "Braine-le-Chateau",
-      "postalCode": "1440",
-      "address": "1440 Braine-le-Château",
-      "latitude": 50.6802986,
-      "longitude": 4.2689347,
-      "geoPrecision": "adresse publiee - Immovlan",
-      "agentName": "Immobilière SPAGNOLO&MANOUVRIER",
-      "agentPhone": "+32 67 21 99 08",
-      "agentEmail": "",
-      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/immobiliere-spagnolo-manouvrier/40670",
-      "isUnderOption": false,
-      "underOption": false,
-      "saleStatus": "",
-      "photoCount": 3,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE43895/images/8dacaf8092db4d0a83dcd8e5167a0e45.png/webp/Medium?mode=pad&format=webp&quality=75",
-      "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/VBE43895/images/8dacaf8092db4d0a83dcd8e5167a0e45.png/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/VBE43895/images/aa91fe8791e04554b363a279be0f7cbb.png/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/VBE43895/images/b0cd016334a14b52b1798ae5b7c734c1.png/webp/Medium?mode=pad&format=webp&quality=75"
-      ],
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1440/braine-le-chateau/vbe43895"
-    },
     {
       "source": "Immovlan",
       "id": "immovlan-vbe43894",
@@ -66,6 +35,159 @@
         "https://api-image.immovlan.be/v1/property/VBE43894/images/8dacaf8092db4d0a83dcd8e5167a0e45.png/webp/Medium?mode=crop&format=webp&quality=75"
       ],
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1480/tubize/vbe43894"
+    },
+    {
+      "source": "Immovlan",
+      "id": "immovlan-rwc42931",
+      "propertyType": "maison",
+      "title": "Maison à vendre à Gentsesteenweg 78 Asse (RWC42931)",
+      "price": 175000,
+      "bedrooms": 3,
+      "surfaceM2": 92,
+      "locality": "Asse",
+      "requestedLocation": "Asse",
+      "postalCode": "1730",
+      "address": "Gentsesteenweg 78 1730 Asse",
+      "latitude": 50.9201044,
+      "longitude": 4.1812733,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "Schoukens bvba",
+      "agentPhone": "+32 474 26 29 56",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/schoukens-bvba/31177",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RWC42931/images/file-0.4225528874358494.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/RWC42931/images/file-0.4225528874358494.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RWC42931/images/file-0.5751993720240247.jpg/webp/Medium?mode=crop&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1730/asse/rwc42931"
+    },
+    {
+      "source": "Immovlan",
+      "id": "immovlan-rbw73393",
+      "propertyType": "maison",
+      "title": "Maison à vendre à Bergensesteenweg 23 Hal (RBW73393)",
+      "price": 190000,
+      "bedrooms": 2,
+      "surfaceM2": 110,
+      "locality": "Hal",
+      "requestedLocation": "Halle",
+      "postalCode": "1500",
+      "address": "Bergensesteenweg 23 1500 Hal",
+      "latitude": 50.73419,
+      "longitude": 4.23474,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "Berth Immobiliën",
+      "agentPhone": "+32 2 356 04 34",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/berth-immobilien/30556",
+      "isUnderOption": false,
+      "underOption": false,
+      "saleStatus": "",
+      "photoCount": 3,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW73393/images/b4eebc306ed94ccf9e853882e01ec029.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/RBW73393/images/b4eebc306ed94ccf9e853882e01ec029.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW73393/images/bdd78ece75c64750a1c0801777e9925b.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW73393/images/e832d31e339941dfb591ac77f295160b.jpg/webp/Medium?mode=pad&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw73393"
+    },
+    {
+      "source": "Immovlan",
+      "id": "immovlan-rbw41091",
+      "propertyType": "maison",
+      "title": "Maison à vendre à Bergensesteenweg 741 Sint-Pieters-Leeuw (RBW41091)",
+      "price": 200000,
+      "bedrooms": 2,
+      "surfaceM2": 104,
+      "locality": "Sint-Pieters-Leeuw",
+      "requestedLocation": "Sint-Pieters-Leeuw",
+      "postalCode": "1600",
+      "address": "Bergensesteenweg 741 1600 Sint-Pieters-Leeuw",
+      "latitude": 50.7631792,
+      "longitude": 4.251915,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "De Immobiliers",
+      "agentPhone": "+32 2 356 00 00",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/de-immobiliers/45647",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW41091/images/1ee87b5509f344679435c2e008079962.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/RBW41091/images/1ee87b5509f344679435c2e008079962.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW41091/images/aa9d33ddcde74b2bb4ea5b6bcea4720c.jpg/webp/Medium?mode=crop&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbw41091"
+    },
+    {
+      "source": "Immovlan",
+      "id": "immovlan-rbw61577",
+      "propertyType": "maison",
+      "title": "Maison à vendre à Petrus Basteleusstraat 64 Sint-Pieters-Leeuw (RBW61577)",
+      "price": 215000,
+      "bedrooms": 2,
+      "surfaceM2": 62,
+      "locality": "Sint-Pieters-Leeuw",
+      "requestedLocation": "Sint-Pieters-Leeuw",
+      "postalCode": "1600",
+      "address": "Petrus Basteleusstraat 64 1600 Sint-Pieters-Leeuw",
+      "latitude": 50.7869764,
+      "longitude": 4.2738758,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "Pické Immo",
+      "agentPhone": "+32 479 20 70 16",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/picke-immo/40373",
+      "isUnderOption": false,
+      "underOption": false,
+      "saleStatus": "",
+      "photoCount": 3,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW61577/images/eafaee75e0d747d4ae723ee4343b1981.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/RBW61577/images/eafaee75e0d747d4ae723ee4343b1981.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW61577/images/fd2345735b76486183c8bffd6add4154.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW61577/images/c87349eccf164070b7aa8000fb0279f3.jpg/webp/Medium?mode=pad&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbw61577"
+    },
+    {
+      "source": "Immovlan",
+      "id": "immovlan-rbw24631",
+      "propertyType": "maison",
+      "title": "Maison à vendre à Koningin Astridstraat 14 Asse (RBW24631)",
+      "price": 215000,
+      "bedrooms": 2,
+      "surfaceM2": 120,
+      "locality": "Asse",
+      "requestedLocation": "Asse",
+      "postalCode": "1730",
+      "address": "Koningin Astridstraat 14 1730 Asse",
+      "latitude": 50.9133482,
+      "longitude": 4.1931516,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "Accenta Affligem",
+      "agentPhone": "+32 53 41 57 92",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/accenta-affligem/31323",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 3,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW24631/images/869ecb6d60d84880826d9de9daa68b9d.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/RBW24631/images/869ecb6d60d84880826d9de9daa68b9d.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW24631/images/97d1132994bb41b4969efbc9a66cdded.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW24631/images/72dc86ba18cc4914b26c267650adc7a8.jpg/webp/Medium?mode=pad&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1730/asse/rbw24631"
     },
     {
       "source": "Immovlan",
@@ -99,6 +221,36 @@
     },
     {
       "source": "Immovlan",
+      "id": "immovlan-rbw77511",
+      "propertyType": "maison",
+      "title": "Maison à vendre à Brouwerijstraat 11 Hal (RBW77511)",
+      "price": 219000,
+      "bedrooms": 2,
+      "surfaceM2": 97,
+      "locality": "Hal",
+      "requestedLocation": "Halle",
+      "postalCode": "1500",
+      "address": "Brouwerijstraat 11 1500 Hal",
+      "latitude": 50.725365,
+      "longitude": 4.2401475,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "Pické Immo",
+      "agentPhone": "+32 479 20 70 16",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/picke-immo/40373",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW77511/images/b0144c458d7a422086856d8fbc98b31e.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/RBW77511/images/b0144c458d7a422086856d8fbc98b31e.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW77511/images/ee7d5a58546545a5b4f96b05a6dce5d0.jpg/webp/Medium?mode=crop&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw77511"
+    },
+    {
+      "source": "Immovlan",
       "id": "immovlan-rbw55114",
       "propertyType": "maison",
       "title": "Maison à vendre à Hoogstraat R1 Asse (RBW55114)",
@@ -119,44 +271,13 @@
       "isUnderOption": true,
       "underOption": true,
       "saleStatus": "sous option",
-      "photoCount": 3,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW55114/images/006353725274491aa21ac3959f09123c.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW55114/images/3119f7a9bdcc4f109a69e726c6f1f77b.jpg/webp/Medium?mode=crop&format=webp&quality=75",
       "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RBW55114/images/006353725274491aa21ac3959f09123c.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBW55114/images/3119f7a9bdcc4f109a69e726c6f1f77b.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBW55114/images/cd1d413f0f03478abcc5e5fd2aa6e2ab.jpg/webp/Medium?mode=pad&format=webp&quality=75"
+        "https://api-image.immovlan.be/v1/property/RBW55114/images/3119f7a9bdcc4f109a69e726c6f1f77b.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW55114/images/cd1d413f0f03478abcc5e5fd2aa6e2ab.jpg/webp/Medium?mode=crop&format=webp&quality=75"
       ],
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1730/asse/rbw55114"
-    },
-    {
-      "source": "Immovlan",
-      "id": "immovlan-rbw45477",
-      "propertyType": "maison",
-      "title": "Maison à vendre à Basiliekstraat 10 Hal (RBW45477)",
-      "price": 240000,
-      "bedrooms": 4,
-      "surfaceM2": 158,
-      "locality": "Hal",
-      "requestedLocation": "Halle",
-      "postalCode": "1500",
-      "address": "Basiliekstraat 10 1500 Hal",
-      "latitude": 50.735518,
-      "longitude": 4.236697,
-      "geoPrecision": "adresse publiee - Immovlan",
-      "agentName": "De Immobiliers",
-      "agentPhone": "+32 2 356 00 00",
-      "agentEmail": "",
-      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/de-immobiliers/45647",
-      "isUnderOption": true,
-      "underOption": true,
-      "saleStatus": "sous option",
-      "photoCount": 2,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW45477/images/51b6e5f7c7e9463d98072cd5f3f7ab4b.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-      "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RBW45477/images/51b6e5f7c7e9463d98072cd5f3f7ab4b.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBW45477/images/47ac82b013cc4e5c8b8e071be4f0a59a.jpg/webp/Medium?mode=crop&format=webp&quality=75"
-      ],
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw45477"
     },
     {
       "source": "Immovlan",
@@ -177,108 +298,16 @@
       "agentPhone": "+32 2 366 45 27",
       "agentEmail": "",
       "agentWebsite": "https://www.immovlan.be",
-      "isUnderOption": false,
-      "underOption": false,
-      "saleStatus": "",
-      "photoCount": 3,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE39427/images/f2860f002ec24332aec02608d329c58f.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE39427/images/f4ae62cb7c274e1eb4628f8bd7bc462d.jpg/webp/Medium?mode=crop&format=webp&quality=75",
       "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/VBE39427/images/f2860f002ec24332aec02608d329c58f.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/VBE39427/images/f4ae62cb7c274e1eb4628f8bd7bc462d.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/VBE39427/images/9eafef6170064f84887611b6e0d7470e.jpg/webp/Medium?mode=pad&format=webp&quality=75"
+        "https://api-image.immovlan.be/v1/property/VBE39427/images/f4ae62cb7c274e1eb4628f8bd7bc462d.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/VBE39427/images/9eafef6170064f84887611b6e0d7470e.jpg/webp/Medium?mode=crop&format=webp&quality=75"
       ],
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1480/tubize/vbe39427"
-    },
-    {
-      "source": "Immovlan",
-      "id": "immovlan-vbe50965",
-      "propertyType": "maison",
-      "title": "Maison à vendre à Rue des Jambes 25 Braine-l'Alleud (VBE50965)",
-      "price": 250000,
-      "bedrooms": 3,
-      "surfaceM2": 100,
-      "locality": "Braine-l'Alleud",
-      "requestedLocation": "Braine-l'Alleud",
-      "postalCode": "1420",
-      "address": "Rue des Jambes 25 1420 Braine-l'Alleud",
-      "latitude": 50.6829919,
-      "longitude": 4.3680452,
-      "geoPrecision": "adresse publiee - Immovlan",
-      "agentName": "EasyHome Marche-en-Famenne",
-      "agentPhone": "+32 84 77 00 43",
-      "agentEmail": "",
-      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/easyhome-marche-en-famenne/43302",
-      "isUnderOption": false,
-      "underOption": false,
-      "saleStatus": "",
-      "photoCount": 3,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE50965/images/67917ef994334455aa1cf16e35e229e0.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-      "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/VBE50965/images/67917ef994334455aa1cf16e35e229e0.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/VBE50965/images/d5cccae982fe4e0cab17a500120e1c6a.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/VBE50965/images/7bc7865bb65144a18907f29e14e0555b.jpg/webp/Medium?mode=pad&format=webp&quality=75"
-      ],
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1420/braine-l-alleud/vbe50965"
-    },
-    {
-      "source": "Immovlan",
-      "id": "immovlan-vbe46886",
-      "propertyType": "maison",
-      "title": "Maison à vendre à Avenue Alphonse Allard 110 Braine-l'Alleud (VBE46886)",
-      "price": 250000,
-      "bedrooms": 2,
-      "surfaceM2": 108,
-      "locality": "Braine-l'Alleud",
-      "requestedLocation": "Braine-l'Alleud",
-      "postalCode": "1420",
-      "address": "Avenue Alphonse Allard 110 1420 Braine-l'Alleud",
-      "latitude": 50.6789934,
-      "longitude": 4.3788762,
-      "geoPrecision": "adresse publiee - Immovlan",
-      "agentName": "Cap Sud Braine-Waterloo",
-      "agentPhone": "+32 2 387 42 42",
-      "agentEmail": "",
-      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/cap-sud-braine-waterloo/30867",
-      "isUnderOption": true,
-      "underOption": true,
-      "saleStatus": "sous option",
-      "photoCount": 2,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE46886/images/77efde3813b549e1a87f9bbc4f83ede5.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-      "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/VBE46886/images/77efde3813b549e1a87f9bbc4f83ede5.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/VBE46886/images/eec503ab4a9a44258b0500b15fb781f3.jpg/webp/Medium?mode=crop&format=webp&quality=75"
-      ],
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1420/braine-l-alleud/vbe46886"
-    },
-    {
-      "source": "Immovlan",
-      "id": "immovlan-vbe23715",
-      "propertyType": "maison",
-      "title": "Maison à vendre avec terrasse et jardin , Braine-le-Château  (VBE23715)",
-      "price": 250000,
-      "bedrooms": 2,
-      "surfaceM2": 80,
-      "locality": "Braine-le-Château",
-      "requestedLocation": "Braine-le-Chateau",
-      "postalCode": "1440",
-      "address": "1440 Braine-le-Château",
-      "latitude": 50.6802986,
-      "longitude": 4.2689347,
-      "geoPrecision": "adresse publiee - Immovlan",
-      "agentName": "TRIOR Nivelles",
-      "agentPhone": "+32 67 49 04 88",
-      "agentEmail": "",
-      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/trior-nivelles/39233",
-      "isUnderOption": true,
-      "underOption": true,
-      "saleStatus": "sous option",
-      "photoCount": 2,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE23715/images/eac279b269f8445d9287e28a8d048427.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-      "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/VBE23715/images/eac279b269f8445d9287e28a8d048427.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/VBE23715/images/1cd854b7881d4e9182c97035524631c2.jpg/webp/Medium?mode=crop&format=webp&quality=75"
-      ],
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1440/braine-le-chateau/vbe23715"
     },
     {
       "source": "Immovlan",
@@ -312,63 +341,34 @@
     },
     {
       "source": "Immovlan",
-      "id": "immovlan-vbd89822",
+      "id": "immovlan-vbe46624",
       "propertyType": "maison",
-      "title": "Maison à vendre à Avenue du Péage 53 Woluwe-Saint-Lambert (VBD89822)",
-      "price": 265000,
-      "bedrooms": 2,
-      "surfaceM2": 75,
-      "locality": "Woluwe-Saint-Lambert",
-      "requestedLocation": "Woluwe-Saint-Lambert",
-      "postalCode": "1200",
-      "address": "Avenue du Péage 53 1200 Woluwe-Saint-Lambert",
-      "latitude": 50.8614185,
-      "longitude": 4.4296111,
-      "geoPrecision": "adresse publiee - Immovlan",
-      "agentName": "EasyHome Marche-en-Famenne",
-      "agentPhone": "+32 84 77 00 43",
-      "agentEmail": "",
-      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/easyhome-marche-en-famenne/43302",
-      "isUnderOption": true,
-      "underOption": true,
-      "saleStatus": "sous option",
-      "photoCount": 2,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/VBD89822/images/07b5ab52220447e9bc4a7b4742682511.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-      "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/VBD89822/images/07b5ab52220447e9bc4a7b4742682511.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/VBD89822/images/ed99fe796438486dad552f5b70591783.jpg/webp/Medium?mode=crop&format=webp&quality=75"
-      ],
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1200/woluwe-saint-lambert/vbd89822"
-    },
-    {
-      "source": "Immovlan",
-      "id": "immovlan-vbe23031",
-      "propertyType": "maison",
-      "title": "Maison à vendre avec terrasse et jardin , Braine-l'Alleud  (VBE23031)",
-      "price": 265000,
+      "title": "Maison à vendre à Rue Eloy 4 Anderlecht (VBE46624)",
+      "price": 269000,
       "bedrooms": 3,
-      "surfaceM2": 140,
-      "locality": "Braine-l'Alleud",
-      "requestedLocation": "Braine-l'Alleud",
-      "postalCode": "1420",
-      "address": "1420 Braine-l'Alleud",
-      "latitude": 50.6969022,
-      "longitude": 4.3538379,
+      "surfaceM2": 120,
+      "locality": "Anderlecht",
+      "requestedLocation": "Anderlecht",
+      "postalCode": "1070",
+      "address": "Rue Eloy 4 1070 Anderlecht",
+      "latitude": 50.8361877,
+      "longitude": 4.3315847,
       "geoPrecision": "adresse publiee - Immovlan",
-      "agentName": "TRIOR Waterloo",
-      "agentPhone": "+32 2 354 49 11",
+      "agentName": "SKYIMMO",
+      "agentPhone": "+32 4 250 02 61",
       "agentEmail": "",
-      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/trior-waterloo/39178",
-      "isUnderOption": true,
-      "underOption": true,
-      "saleStatus": "sous option",
-      "photoCount": 2,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE23031/images/5fb1898a6ea04e6091e1c1fa2706c8d2.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/skyimmo/44853",
+      "isUnderOption": false,
+      "underOption": false,
+      "saleStatus": "",
+      "photoCount": 3,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE46624/images/53a99aefa5514da7bd0fc4e5f61acc90.jpg/webp/Medium?mode=pad&format=webp&quality=75",
       "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/VBE23031/images/5fb1898a6ea04e6091e1c1fa2706c8d2.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/VBE23031/images/d8124da9b41745d4905c26c4f66d4260.jpg/webp/Medium?mode=crop&format=webp&quality=75"
+        "https://api-image.immovlan.be/v1/property/VBE46624/images/53a99aefa5514da7bd0fc4e5f61acc90.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/VBE46624/images/dfe8bb29d0a64ecd8341a441b1317479.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/VBE46624/images/9a968af10fac428a9aa7aadeefe2629c.jpg/webp/Medium?mode=pad&format=webp&quality=75"
       ],
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1420/braine-l-alleud/vbe23031"
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe46624"
     },
     {
       "source": "Immovlan",
@@ -402,33 +402,33 @@
     },
     {
       "source": "Immovlan",
-      "id": "immovlan-rbw58426",
+      "id": "immovlan-vbe50293",
       "propertyType": "maison",
-      "title": "Maison à vendre à Minderbroedersstraat 2 Hal (RBW58426)",
+      "title": "Maison à vendre avec 3 chambres , Anderlecht  (VBE50293)",
       "price": 275000,
-      "bedrooms": 2,
-      "surfaceM2": 190,
-      "locality": "Hal",
-      "requestedLocation": "Halle",
-      "postalCode": "1500",
-      "address": "Minderbroedersstraat 2 1500 Hal",
-      "latitude": 50.7353817,
-      "longitude": 4.23372,
+      "bedrooms": 3,
+      "surfaceM2": 161,
+      "locality": "Anderlecht",
+      "requestedLocation": "Anderlecht",
+      "postalCode": "1070",
+      "address": "1070 Anderlecht",
+      "latitude": 50.8365808,
+      "longitude": 4.308187,
       "geoPrecision": "adresse publiee - Immovlan",
-      "agentName": "De Immobiliers",
-      "agentPhone": "+32 2 356 00 00",
+      "agentName": "Jam Properties",
+      "agentPhone": "+32 2 534 21 87",
       "agentEmail": "",
-      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/de-immobiliers/45647",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/jam-properties/39265",
       "isUnderOption": true,
       "underOption": true,
       "saleStatus": "sous option",
       "photoCount": 2,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW58426/images/5ec8ca1f5a0447bd93f5d2b343a32256.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE50293/images/ebb3ab0ef98849b6ac0c7ab5b4f193ff.jpg/webp/Medium?mode=crop&format=webp&quality=75",
       "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RBW58426/images/5ec8ca1f5a0447bd93f5d2b343a32256.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBW58426/images/e0604b90fd88406d9b4bee3312319a21.jpg/webp/Medium?mode=crop&format=webp&quality=75"
+        "https://api-image.immovlan.be/v1/property/VBE50293/images/ebb3ab0ef98849b6ac0c7ab5b4f193ff.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/VBE50293/images/901d42f028d647a683bb9edda768b3fe.jpg/webp/Medium?mode=crop&format=webp&quality=75"
       ],
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw58426"
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe50293"
     },
     {
       "source": "Immovlan",
@@ -480,15 +480,14 @@
       "agentPhone": "+32 2 253 34 44",
       "agentEmail": "",
       "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/ring-consult/39354",
-      "isUnderOption": false,
-      "underOption": false,
-      "saleStatus": "",
-      "photoCount": 3,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RBV48524/images/baf3c42695d2496588f31b2977bf55f6.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBV48524/images/84e807b4f3d94a22a5648e575743ea34.jpg/webp/Medium?mode=crop&format=webp&quality=75",
       "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RBV48524/images/baf3c42695d2496588f31b2977bf55f6.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBV48524/images/84e807b4f3d94a22a5648e575743ea34.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBV48524/images/210ffac5ceac4dddb4bfbae595a95b0a.jpg/webp/Medium?mode=pad&format=webp&quality=75"
+        "https://api-image.immovlan.be/v1/property/RBV48524/images/84e807b4f3d94a22a5648e575743ea34.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBV48524/images/210ffac5ceac4dddb4bfbae595a95b0a.jpg/webp/Medium?mode=crop&format=webp&quality=75"
       ],
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1850/grimbergen/rbv48524"
     },
@@ -511,14 +510,15 @@
       "agentPhone": "+32 53 41 57 92",
       "agentEmail": "",
       "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/accenta-affligem/31323",
-      "isUnderOption": true,
-      "underOption": true,
-      "saleStatus": "sous option",
-      "photoCount": 2,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW16025/images/3e35a621adf04ed88d4a9d9d34cdf4aa.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+      "isUnderOption": false,
+      "underOption": false,
+      "saleStatus": "",
+      "photoCount": 3,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW16025/images/cc875bc6533841718c212ca1b8b049c4.jpg/webp/Medium?mode=pad&format=webp&quality=75",
       "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RBW16025/images/3e35a621adf04ed88d4a9d9d34cdf4aa.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBW16025/images/47a73034dbba4220abd7f63e2968c491.jpg/webp/Medium?mode=crop&format=webp&quality=75"
+        "https://api-image.immovlan.be/v1/property/RBW16025/images/cc875bc6533841718c212ca1b8b049c4.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW16025/images/3e35a621adf04ed88d4a9d9d34cdf4aa.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW16025/images/47a73034dbba4220abd7f63e2968c491.jpg/webp/Medium?mode=pad&format=webp&quality=75"
       ],
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1790/affligem/rbw16025"
     },
@@ -554,33 +554,33 @@
     },
     {
       "source": "Immovlan",
-      "id": "immovlan-vbe25820",
+      "id": "immovlan-vbe17644",
       "propertyType": "maison",
-      "title": "Maison à vendre avec jardin et 2 chambres , Braine-le-Château  (VBE25820)",
-      "price": 285000,
-      "bedrooms": 2,
-      "surfaceM2": 157,
-      "locality": "Braine-le-Château",
-      "requestedLocation": "Braine-le-Chateau",
-      "postalCode": "1440",
-      "address": "1440 Braine-le-Château",
-      "latitude": 50.6802986,
-      "longitude": 4.2689347,
+      "title": "Maison à vendre à Chaussée de Mons 526 Anderlecht (VBE17644)",
+      "price": 289000,
+      "bedrooms": 6,
+      "surfaceM2": 192,
+      "locality": "Anderlecht",
+      "requestedLocation": "Anderlecht",
+      "postalCode": "1070",
+      "address": "Chaussée de Mons 526 1070 Anderlecht",
+      "latitude": 50.8334219,
+      "longitude": 4.3137518,
       "geoPrecision": "adresse publiee - Immovlan",
-      "agentName": "CENTURY 21 PERFORMANCE - TUBIZE",
-      "agentPhone": "+32 2 355 21 21",
+      "agentName": "IMMO ONE",
+      "agentPhone": "+32 2 522 51 22",
       "agentEmail": "",
-      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/century-21-performance---tubize/47636",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/immo-one/43710",
       "isUnderOption": true,
       "underOption": true,
       "saleStatus": "sous option",
       "photoCount": 2,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE25820/images/8538cfed8dfb422390c69849407bb3ac.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE17644/images/d4586044d8b1495c861b079f28124a9e.jpg/webp/Medium?mode=crop&format=webp&quality=75",
       "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/VBE25820/images/8538cfed8dfb422390c69849407bb3ac.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/VBE25820/images/0482c9bf6c344bf7ad48a8e9b14b341e.jpg/webp/Medium?mode=crop&format=webp&quality=75"
+        "https://api-image.immovlan.be/v1/property/VBE17644/images/d4586044d8b1495c861b079f28124a9e.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/VBE17644/images/ee4ece2055a2470a8637558804dc2751.jpg/webp/Medium?mode=crop&format=webp&quality=75"
       ],
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1440/braine-le-chateau/vbe25820"
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe17644"
     },
     {
       "source": "Immovlan",
@@ -604,14 +604,43 @@
       "isUnderOption": true,
       "underOption": true,
       "saleStatus": "sous option",
-      "photoCount": 3,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE56741/images/2eb7f22d03874439b9360086c003ee47.png/webp/Medium?mode=pad&format=webp&quality=75",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE56741/images/0b4fe793097849e89244cf5fc81454d3.jpg/webp/Medium?mode=crop&format=webp&quality=75",
       "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/VBE56741/images/2eb7f22d03874439b9360086c003ee47.png/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/VBE56741/images/0b4fe793097849e89244cf5fc81454d3.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/VBE56741/images/c181c62459354041a50313d050c4f637.jpg/webp/Medium?mode=pad&format=webp&quality=75"
+        "https://api-image.immovlan.be/v1/property/VBE56741/images/0b4fe793097849e89244cf5fc81454d3.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/VBE56741/images/c181c62459354041a50313d050c4f637.jpg/webp/Medium?mode=crop&format=webp&quality=75"
       ],
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/vbe56741"
+    },
+    {
+      "source": "Immovlan",
+      "id": "immovlan-rbv81083",
+      "propertyType": "maison",
+      "title": "Maison à vendre à Oudstrijdersstraat 11 Sint-Pieters-Leeuw (RBV81083)",
+      "price": 295000,
+      "bedrooms": 3,
+      "surfaceM2": 161,
+      "locality": "Sint-Pieters-Leeuw",
+      "requestedLocation": "Sint-Pieters-Leeuw",
+      "postalCode": "1600",
+      "address": "Oudstrijdersstraat 11 1600 Sint-Pieters-Leeuw",
+      "latitude": 50.8082401,
+      "longitude": 4.2896204,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "WSB Group",
+      "agentPhone": "+32 479 09 09 09",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/wsb-group/33651",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBV81083/images/ef1773e87870403685180281e1b0d2b9.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/RBV81083/images/ef1773e87870403685180281e1b0d2b9.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBV81083/images/aaf98ad893164477bc21f5fd66aac273.jpg/webp/Medium?mode=crop&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbv81083"
     },
     {
       "source": "Immovlan",
@@ -645,6 +674,37 @@
     },
     {
       "source": "Immovlan",
+      "id": "immovlan-rbw40784",
+      "propertyType": "maison",
+      "title": "Maison à vendre à Vlindersstraat 301 Anderlecht (RBW40784)",
+      "price": 297000,
+      "bedrooms": 2,
+      "surfaceM2": 125,
+      "locality": "Anderlecht",
+      "requestedLocation": "Anderlecht",
+      "postalCode": "1070",
+      "address": "Vlindersstraat 301 1070 Anderlecht",
+      "latitude": 50.8353651,
+      "longitude": 4.2646089,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "Living Stone Dilbeek",
+      "agentPhone": "+32 483 09 94 71",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/living-stone-dilbeek/30847",
+      "isUnderOption": false,
+      "underOption": false,
+      "saleStatus": "",
+      "photoCount": 3,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW40784/images/c468dc2abaa44044a0583e11acb3c56d.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/RBW40784/images/c468dc2abaa44044a0583e11acb3c56d.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW40784/images/d6c77b3b336d4c8a9d78ff66970ccac6.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW40784/images/fc36bda09c3142dba6720bd70bf03997.jpg/webp/Medium?mode=pad&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/rbw40784"
+    },
+    {
+      "source": "Immovlan",
       "id": "immovlan-rbv94944",
       "propertyType": "maison",
       "title": "Maison à vendre à Gentsesteenweg 177 Asse (RBV94944)",
@@ -675,6 +735,67 @@
     },
     {
       "source": "Immovlan",
+      "id": "immovlan-rbw75178",
+      "propertyType": "maison",
+      "title": "Maison à vendre à Alsembergsesteenweg 115 Hal (RBW75178)",
+      "price": 299000,
+      "bedrooms": 4,
+      "surfaceM2": 116,
+      "locality": "Hal",
+      "requestedLocation": "Halle",
+      "postalCode": "1500",
+      "address": "Alsembergsesteenweg 115 1500 Hal",
+      "latitude": 50.7480655,
+      "longitude": 4.2625104,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "De Immobiliers",
+      "agentPhone": "+32 2 356 00 00",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/de-immobiliers/45647",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW75178/images/723c8c7a39634bc2ac99054b4fd578c4.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/RBW75178/images/723c8c7a39634bc2ac99054b4fd578c4.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW75178/images/6feeafef1e9e4b5e8edc0be3c1590e49.jpg/webp/Medium?mode=crop&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw75178"
+    },
+    {
+      "source": "Immovlan",
+      "id": "immovlan-rbv45455",
+      "propertyType": "maison",
+      "title": "Maison à vendre à Koning Albertstraat 65 Merchtem (RBV45455)",
+      "price": 299000,
+      "bedrooms": 4,
+      "surfaceM2": 246,
+      "locality": "Merchtem",
+      "requestedLocation": "Merchtem",
+      "postalCode": "1785",
+      "address": "Koning Albertstraat 65 1785 Merchtem",
+      "latitude": 50.9560829,
+      "longitude": 4.2287382,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "Vmv-vastgoed",
+      "agentPhone": "+32 52 50 35 03",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/vmv-vastgoed/43022",
+      "isUnderOption": false,
+      "underOption": false,
+      "saleStatus": "",
+      "photoCount": 3,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBV45455/images/2ac43fadb5e54f4e8e7c66cedaf2dfd2.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/RBV45455/images/2ac43fadb5e54f4e8e7c66cedaf2dfd2.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBV45455/images/52d6c12a464842019a94e310cd787cdd.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBV45455/images/697c6a07ec6d4537b0b37310d6c17f55.jpg/webp/Medium?mode=pad&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1785/merchtem/rbv45455"
+    },
+    {
+      "source": "Immovlan",
       "id": "immovlan-vbe33286",
       "propertyType": "maison",
       "title": "Maison à vendre avec 2 chambres , Tubize  (VBE33286)",
@@ -702,37 +823,6 @@
         "https://api-image.immovlan.be/v1/property/VBE33286/images/02be94ff609c4856b2c8d5822190bd53.jpg/webp/Medium?mode=crop&format=webp&quality=75"
       ],
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1480/tubize/vbe33286"
-    },
-    {
-      "source": "Immovlan",
-      "id": "immovlan-rbw71595",
-      "propertyType": "maison",
-      "title": "Maison à vendre à Lindeboomstraat 111 Tervuren (RBW71595)",
-      "price": 320000,
-      "bedrooms": 2,
-      "surfaceM2": 134,
-      "locality": "Tervuren",
-      "requestedLocation": "Tervuren",
-      "postalCode": "3080",
-      "address": "Lindeboomstraat 111 3080 Tervuren",
-      "latitude": 50.81765,
-      "longitude": 4.509289,
-      "geoPrecision": "adresse publiee - Immovlan",
-      "agentName": "Heylen Vastgoed Leuven",
-      "agentPhone": "+32 16 15 32 10",
-      "agentEmail": "",
-      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/heylen-vastgoed-leuven/47460",
-      "isUnderOption": false,
-      "underOption": false,
-      "saleStatus": "",
-      "photoCount": 3,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW71595/images/e0d0c5f2b36b4eaaba1ce7e46fca529d.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-      "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RBW71595/images/e0d0c5f2b36b4eaaba1ce7e46fca529d.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBW71595/images/18e810ba11314a6caf261b9041c963eb.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBW71595/images/226bc681d5cb42c994d84d3307f92906.jpg/webp/Medium?mode=pad&format=webp&quality=75"
-      ],
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/3080/tervuren/rbw71595"
     },
     {
       "source": "Immovlan",
@@ -783,48 +873,137 @@
       "agentPhone": "+32 2 306 90 00",
       "agentEmail": "",
       "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/dries-leemans/38423",
-      "isUnderOption": false,
-      "underOption": false,
-      "saleStatus": "",
-      "photoCount": 3,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW58195/images/b6ddf783219f4c7195c79e6bc51bbf3a.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW58195/images/2c8bd4198ac943dda24abc69af15c6bd.jpg/webp/Medium?mode=crop&format=webp&quality=75",
       "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RBW58195/images/b6ddf783219f4c7195c79e6bc51bbf3a.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBW58195/images/2c8bd4198ac943dda24abc69af15c6bd.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBW58195/images/b42cca8a989842999ff967bc2bc09056.jpg/webp/Medium?mode=pad&format=webp&quality=75"
+        "https://api-image.immovlan.be/v1/property/RBW58195/images/2c8bd4198ac943dda24abc69af15c6bd.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW58195/images/b42cca8a989842999ff967bc2bc09056.jpg/webp/Medium?mode=crop&format=webp&quality=75"
       ],
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1730/asse/rbw58195"
     },
     {
       "source": "Immovlan",
-      "id": "immovlan-rwc42779",
+      "id": "immovlan-vbe48044",
       "propertyType": "maison",
-      "title": "Maison à vendre à Mieregemstraat 111 Merchtem (RWC42779)",
+      "title": "Maison à vendre avec jardin et 3 chambres , Anderlecht  (VBE48044)",
       "price": 325000,
-      "bedrooms": 4,
-      "surfaceM2": 210,
-      "locality": "Merchtem",
-      "requestedLocation": "Merchtem",
-      "postalCode": "1785",
-      "address": "Mieregemstraat 111 1785 Merchtem",
-      "latitude": 50.951122,
-      "longitude": 4.2307858,
+      "bedrooms": 3,
+      "surfaceM2": 130,
+      "locality": "Anderlecht",
+      "requestedLocation": "Anderlecht",
+      "postalCode": "1070",
+      "address": "1070 Anderlecht",
+      "latitude": 50.8365808,
+      "longitude": 4.308187,
       "geoPrecision": "adresse publiee - Immovlan",
-      "agentName": "Schoukens bvba",
-      "agentPhone": "+32 474 26 29 56",
+      "agentName": "DV IMMO",
+      "agentPhone": "+32 476 53 72 53",
       "agentEmail": "",
-      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/schoukens-bvba/31177",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/dv-immo/42476",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE48044/images/92a3977208884d64bd2b454854929f1b.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/VBE48044/images/92a3977208884d64bd2b454854929f1b.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/VBE48044/images/483072b1f32c4b5ba5a0b29232328b65.jpg/webp/Medium?mode=crop&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe48044"
+    },
+    {
+      "source": "Immovlan",
+      "id": "immovlan-vbe41147",
+      "propertyType": "maison",
+      "title": "Maison à vendre à Rue Martin Van Lier 11 Anderlecht (VBE41147)",
+      "price": 325000,
+      "bedrooms": 3,
+      "surfaceM2": 115,
+      "locality": "Anderlecht",
+      "requestedLocation": "Anderlecht",
+      "postalCode": "1070",
+      "address": "Rue Martin Van Lier 11 1070 Anderlecht",
+      "latitude": 50.83863985,
+      "longitude": 4.30221708,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "IMMO ONE",
+      "agentPhone": "+32 2 522 51 22",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/immo-one/43710",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE41147/images/398b4dc1e8d84c2d882cee7fd2d51bda.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/VBE41147/images/398b4dc1e8d84c2d882cee7fd2d51bda.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/VBE41147/images/2554bdab246f4c5b8adfd78b698fb179.jpg/webp/Medium?mode=crop&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe41147"
+    },
+    {
+      "source": "Immovlan",
+      "id": "immovlan-rbw09055",
+      "propertyType": "maison",
+      "title": "Maison à vendre à Drogenbosstraat 40 Sint-Pieters-Leeuw (RBW09055)",
+      "price": 325000,
+      "bedrooms": 3,
+      "surfaceM2": 137,
+      "locality": "Sint-Pieters-Leeuw",
+      "requestedLocation": "Sint-Pieters-Leeuw",
+      "postalCode": "1600",
+      "address": "Drogenbosstraat 40 1600 Sint-Pieters-Leeuw",
+      "latitude": 50.7996466,
+      "longitude": 4.2918329,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "Pické Immo",
+      "agentPhone": "+32 479 20 70 16",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/picke-immo/40373",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW09055/images/98b4909c27ab41178884f6b390d087e7.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/RBW09055/images/98b4909c27ab41178884f6b390d087e7.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW09055/images/08b1bbdae8d3443c86d2e039eaf54828.jpg/webp/Medium?mode=crop&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbw09055"
+    },
+    {
+      "source": "Immovlan",
+      "id": "immovlan-vbe47624",
+      "propertyType": "maison",
+      "title": "Maison à vendre à RUE EDMOND DELCOURT 42 Anderlecht (VBE47624)",
+      "price": 329000,
+      "bedrooms": 4,
+      "surfaceM2": 115,
+      "locality": "Anderlecht",
+      "requestedLocation": "Anderlecht",
+      "postalCode": "1070",
+      "address": "RUE EDMOND DELCOURT 42 1070 Anderlecht",
+      "latitude": 50.83842,
+      "longitude": 4.30701,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "PRESTIGE CONSULTOR ANDERLECHT",
+      "agentPhone": "+32 2 537 60 01",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/prestige-consultor-anderlecht/39723",
       "isUnderOption": false,
       "underOption": false,
       "saleStatus": "",
       "photoCount": 3,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RWC42779/images/file-0.15139143307851732.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE47624/images/f43e2be26ec54d7299424e6a2207cbeb.jpg/webp/Medium?mode=pad&format=webp&quality=75",
       "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RWC42779/images/file-0.15139143307851732.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RWC42779/images/file-0.7715715327273116.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RWC42779/images/file-0.428616692476266.jpg/webp/Medium?mode=pad&format=webp&quality=75"
+        "https://api-image.immovlan.be/v1/property/VBE47624/images/f43e2be26ec54d7299424e6a2207cbeb.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/VBE47624/images/9517512a90b144a18e2eb7b59d488534.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/VBE47624/images/e751409831644aab873fd2a913c49c1b.jpg/webp/Medium?mode=pad&format=webp&quality=75"
       ],
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1785/merchtem/rwc42779"
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe47624"
     },
     {
       "source": "Immovlan",
@@ -858,18 +1037,48 @@
     },
     {
       "source": "Immovlan",
-      "id": "immovlan-rbw67668",
+      "id": "immovlan-vbe48701",
       "propertyType": "maison",
-      "title": "Maison à vendre à Edingensesteenweg 78 Hal (RBW67668)",
-      "price": 330000,
+      "title": "Maison à vendre à Rue Pierre Schlosser 13 Anderlecht (VBE48701)",
+      "price": 335000,
       "bedrooms": 3,
-      "surfaceM2": 158,
-      "locality": "Hal",
-      "requestedLocation": "Halle",
-      "postalCode": "1500",
-      "address": "Edingensesteenweg 78 1500 Hal",
-      "latitude": 50.730331,
-      "longitude": 4.2276205,
+      "surfaceM2": 146,
+      "locality": "Anderlecht",
+      "requestedLocation": "Anderlecht",
+      "postalCode": "1070",
+      "address": "Rue Pierre Schlosser 13 1070 Anderlecht",
+      "latitude": 50.82326733,
+      "longitude": 4.29278746,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "Immo BPC",
+      "agentPhone": "+32 2 420 00 28",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/immo-bpc/27812",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE48701/images/4e679134515c48cd9e19f3c3596f3046.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/VBE48701/images/4e679134515c48cd9e19f3c3596f3046.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/VBE48701/images/17f5c1451825445397df5f10110e1f59.jpg/webp/Medium?mode=crop&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe48701"
+    },
+    {
+      "source": "Immovlan",
+      "id": "immovlan-rbw33957",
+      "propertyType": "maison",
+      "title": "Maison à vendre à José Mehaudensstraat 32 Sint-Pieters-Leeuw (RBW33957)",
+      "price": 335000,
+      "bedrooms": 4,
+      "surfaceM2": 133,
+      "locality": "Sint-Pieters-Leeuw",
+      "requestedLocation": "Sint-Pieters-Leeuw",
+      "postalCode": "1600",
+      "address": "José Mehaudensstraat 32 1600 Sint-Pieters-Leeuw",
+      "latitude": 50.7962674,
+      "longitude": 4.280035,
       "geoPrecision": "adresse publiee - Immovlan",
       "agentName": "Pické Immo",
       "agentPhone": "+32 479 20 70 16",
@@ -879,12 +1088,12 @@
       "underOption": true,
       "saleStatus": "sous option",
       "photoCount": 2,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW67668/images/9c0019678df141fa829ac57c5fab461c.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW33957/images/b0db907ab75b45ec94585b3dadf1f6e7.jpg/webp/Medium?mode=crop&format=webp&quality=75",
       "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RBW67668/images/9c0019678df141fa829ac57c5fab461c.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBW67668/images/9c20cdf13bfc44a09e8e17d2d9d70fa5.jpg/webp/Medium?mode=crop&format=webp&quality=75"
+        "https://api-image.immovlan.be/v1/property/RBW33957/images/b0db907ab75b45ec94585b3dadf1f6e7.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW33957/images/57362ac2d2554e5b98336bf999b83acc.jpg/webp/Medium?mode=crop&format=webp&quality=75"
       ],
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw67668"
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbw33957"
     },
     {
       "source": "Immovlan",
@@ -905,15 +1114,14 @@
       "agentPhone": "+32 474 26 29 56",
       "agentEmail": "",
       "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/schoukens-bvba/31177",
-      "isUnderOption": false,
-      "underOption": false,
-      "saleStatus": "",
-      "photoCount": 3,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RWC43165/images/schoukens 1.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RWC43165/images/schoukens 2.jpg/webp/Medium?mode=crop&format=webp&quality=75",
       "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RWC43165/images/schoukens 1.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RWC43165/images/schoukens 2.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RWC43165/images/schoukens 3.jpg/webp/Medium?mode=pad&format=webp&quality=75"
+        "https://api-image.immovlan.be/v1/property/RWC43165/images/schoukens 2.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RWC43165/images/schoukens 3.jpg/webp/Medium?mode=crop&format=webp&quality=75"
       ],
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1730/asse/rwc43165"
     },
@@ -936,15 +1144,14 @@
       "agentPhone": "+32 485 59 57 60",
       "agentEmail": "",
       "agentWebsite": "https://www.immovlan.be",
-      "isUnderOption": false,
-      "underOption": false,
-      "saleStatus": "",
-      "photoCount": 3,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RWC42796/images/file-0.3840286611962851.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RWC42796/images/file-0.9876890125347374.jpg/webp/Medium?mode=crop&format=webp&quality=75",
       "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RWC42796/images/file-0.3840286611962851.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RWC42796/images/file-0.9876890125347374.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RWC42796/images/file-0.9444582071499098.jpg/webp/Medium?mode=pad&format=webp&quality=75"
+        "https://api-image.immovlan.be/v1/property/RWC42796/images/file-0.9876890125347374.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RWC42796/images/file-0.9444582071499098.jpg/webp/Medium?mode=crop&format=webp&quality=75"
       ],
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rwc42796"
     },
@@ -967,14 +1174,15 @@
       "agentPhone": "+32 53 41 57 92",
       "agentEmail": "",
       "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/accenta-affligem/31323",
-      "isUnderOption": true,
-      "underOption": true,
-      "saleStatus": "sous option",
-      "photoCount": 2,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW34634/images/1f34ac4217f34f328cab459d95866add.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+      "isUnderOption": false,
+      "underOption": false,
+      "saleStatus": "",
+      "photoCount": 3,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW34634/images/01702fe1b6764028be4aa2249e70c3ac.jpg/webp/Medium?mode=pad&format=webp&quality=75",
       "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RBW34634/images/1f34ac4217f34f328cab459d95866add.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBW34634/images/bd05eda095594d79b1466865453a53e3.jpg/webp/Medium?mode=crop&format=webp&quality=75"
+        "https://api-image.immovlan.be/v1/property/RBW34634/images/01702fe1b6764028be4aa2249e70c3ac.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW34634/images/1f34ac4217f34f328cab459d95866add.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW34634/images/bd05eda095594d79b1466865453a53e3.jpg/webp/Medium?mode=pad&format=webp&quality=75"
       ],
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1790/affligem/rbw34634"
     },
@@ -1057,13 +1265,14 @@
       "agentPhone": "+32 15 73 02 18",
       "agentEmail": "",
       "agentWebsite": "https://www.immovlan.be",
-      "isUnderOption": true,
-      "underOption": true,
-      "saleStatus": "sous option",
-      "photoCount": 1,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RBU87030/images/89872df4826c416d9ff1f4f5322c9f37.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+      "isUnderOption": false,
+      "underOption": false,
+      "saleStatus": "",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBU87030/images/352d990270cb432a8fa771d2a8743246.jpg/webp/Medium?mode=pad&format=webp&quality=75",
       "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RBU87030/images/89872df4826c416d9ff1f4f5322c9f37.jpg/webp/Medium?mode=crop&format=webp&quality=75"
+        "https://api-image.immovlan.be/v1/property/RBU87030/images/352d990270cb432a8fa771d2a8743246.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBU87030/images/89872df4826c416d9ff1f4f5322c9f37.jpg/webp/Medium?mode=pad&format=webp&quality=75"
       ],
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbu87030"
     },
@@ -1086,14 +1295,15 @@
       "agentPhone": "+32 2 306 90 00",
       "agentEmail": "",
       "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/dries-leemans/38423",
-      "isUnderOption": true,
-      "underOption": true,
-      "saleStatus": "sous option",
-      "photoCount": 2,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW54946/images/d951e316865d4c34949d317664716b98.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+      "isUnderOption": false,
+      "underOption": false,
+      "saleStatus": "",
+      "photoCount": 3,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW54946/images/c04cde25f1ba463db3a3d271cd53874a.jpg/webp/Medium?mode=pad&format=webp&quality=75",
       "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RBW54946/images/d951e316865d4c34949d317664716b98.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBW54946/images/6418fa4248c54684ac586aafc78d909c.jpg/webp/Medium?mode=crop&format=webp&quality=75"
+        "https://api-image.immovlan.be/v1/property/RBW54946/images/c04cde25f1ba463db3a3d271cd53874a.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW54946/images/d951e316865d4c34949d317664716b98.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW54946/images/6418fa4248c54684ac586aafc78d909c.jpg/webp/Medium?mode=pad&format=webp&quality=75"
       ],
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1730/asse/rbw54946"
     },
@@ -1116,15 +1326,14 @@
       "agentPhone": "+32 2 390 05 90",
       "agentEmail": "",
       "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/impactimma/27721",
-      "isUnderOption": false,
-      "underOption": false,
-      "saleStatus": "",
-      "photoCount": 3,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE43414/images/6561787607874ad09d9665196910f098.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE43414/images/53863da6f7a34d6bac4f6e5f68deddf8.jpg/webp/Medium?mode=crop&format=webp&quality=75",
       "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/VBE43414/images/6561787607874ad09d9665196910f098.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/VBE43414/images/53863da6f7a34d6bac4f6e5f68deddf8.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/VBE43414/images/d26b5c0cdff748fcb3a9d3a1860f5d73.jpg/webp/Medium?mode=pad&format=webp&quality=75"
+        "https://api-image.immovlan.be/v1/property/VBE43414/images/53863da6f7a34d6bac4f6e5f68deddf8.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/VBE43414/images/d26b5c0cdff748fcb3a9d3a1860f5d73.jpg/webp/Medium?mode=crop&format=webp&quality=75"
       ],
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1480/tubize/vbe43414"
     },
@@ -1147,14 +1356,13 @@
       "agentPhone": "+32 15 73 02 18",
       "agentEmail": "",
       "agentWebsite": "https://www.immovlan.be",
-      "isUnderOption": false,
-      "underOption": false,
-      "saleStatus": "",
-      "photoCount": 2,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW38862/images/d58aa46e42fe45ce84839ada2f1f0664.jpg/webp/Medium?mode=pad&format=webp&quality=75",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 1,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW38862/images/8fb5408f8cea460aad201394e0d08186.jpg/webp/Medium?mode=crop&format=webp&quality=75",
       "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RBW38862/images/d58aa46e42fe45ce84839ada2f1f0664.jpg/webp/Medium?mode=pad&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBW38862/images/8fb5408f8cea460aad201394e0d08186.jpg/webp/Medium?mode=pad&format=webp&quality=75"
+        "https://api-image.immovlan.be/v1/property/RBW38862/images/8fb5408f8cea460aad201394e0d08186.jpg/webp/Medium?mode=crop&format=webp&quality=75"
       ],
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1790/affligem/rbw38862"
     },
@@ -1190,6 +1398,96 @@
     },
     {
       "source": "Immovlan",
+      "id": "immovlan-rbw55117",
+      "propertyType": "maison",
+      "title": "Maison à vendre avec terrasse et 4 chambres , Anderlecht  (RBW55117)",
+      "price": 349000,
+      "bedrooms": 4,
+      "surfaceM2": 132,
+      "locality": "Anderlecht",
+      "requestedLocation": "Anderlecht",
+      "postalCode": "1070",
+      "address": "1070 Anderlecht",
+      "latitude": 50.8365808,
+      "longitude": 4.308187,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "CENTURY 21 ATG",
+      "agentPhone": "+32 54 34 34 34",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/century-21-atg/40123",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW55117/images/1c704cf765884f92b63e5e83a61d9485.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/RBW55117/images/1c704cf765884f92b63e5e83a61d9485.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW55117/images/1dff14c4a5274e89993c4d3010946c7c.jpg/webp/Medium?mode=crop&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/rbw55117"
+    },
+    {
+      "source": "Immovlan",
+      "id": "immovlan-vbe50218",
+      "propertyType": "maison",
+      "title": "Maison à vendre avec terrasse et 4 chambres , Anderlecht  (VBE50218)",
+      "price": 349000,
+      "bedrooms": 4,
+      "surfaceM2": 156,
+      "locality": "Anderlecht",
+      "requestedLocation": "Anderlecht",
+      "postalCode": "1070",
+      "address": "1070 Anderlecht",
+      "latitude": 50.8365808,
+      "longitude": 4.308187,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "PERCEPTION IMMOBILIERE",
+      "agentPhone": "+32 496 70 83 70",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/perception-immobiliere/40405",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE50218/images/d48f0e50a54f400f9dd4446da9763361.png/webp/Medium?mode=crop&format=webp&quality=75",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/VBE50218/images/d48f0e50a54f400f9dd4446da9763361.png/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/VBE50218/images/e745abe9afa04599b3c86761ffedc127.png/webp/Medium?mode=crop&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe50218"
+    },
+    {
+      "source": "Immovlan",
+      "id": "immovlan-rbw33372",
+      "propertyType": "maison",
+      "title": "Maison à vendre à Rue du Serment / Eedstraat 70 Anderlecht (RBW33372)",
+      "price": 349000,
+      "bedrooms": 4,
+      "surfaceM2": 160,
+      "locality": "Anderlecht",
+      "requestedLocation": "Anderlecht",
+      "postalCode": "1070",
+      "address": "Rue du Serment / Eedstraat 70 1070 Anderlecht",
+      "latitude": 50.8384528,
+      "longitude": 4.3073696,
+      "geoPrecision": "adresse publiee - Immovlan",
+      "agentName": "Era Visie Dilbeek",
+      "agentPhone": "+32 2 582 17 35",
+      "agentEmail": "",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/era-visie-dilbeek/29095",
+      "isUnderOption": true,
+      "underOption": true,
+      "saleStatus": "sous option",
+      "photoCount": 2,
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW33372/images/00pts00000nemyqmam.jpeg/webp/Medium?mode=crop&format=webp&quality=75",
+      "photoUrls": [
+        "https://api-image.immovlan.be/v1/property/RBW33372/images/00pts00000nemyqmam.jpeg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW33372/images/00pts00000ngcydmau.jpeg/webp/Medium?mode=crop&format=webp&quality=75"
+      ],
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/rbw33372"
+    },
+    {
+      "source": "Immovlan",
       "id": "immovlan-vbe37872",
       "propertyType": "maison",
       "title": "Maison à vendre avec terrasse et 3 chambres , Anderlecht  (VBE37872)",
@@ -1217,36 +1515,6 @@
         "https://api-image.immovlan.be/v1/property/VBE37872/images/b27fff067b60423ca90e55f9098fefcb.jpg/webp/Medium?mode=crop&format=webp&quality=75"
       ],
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe37872"
-    },
-    {
-      "source": "Immovlan",
-      "id": "immovlan-vbc83742",
-      "propertyType": "maison",
-      "title": "Maison à vendre à Rue Bonaventure 66 Jette (VBC83742)",
-      "price": 349000,
-      "bedrooms": 4,
-      "surfaceM2": 162,
-      "locality": "Jette",
-      "requestedLocation": "Jette",
-      "postalCode": "1090",
-      "address": "Rue Bonaventure 66 1090 Jette",
-      "latitude": 50.8851365,
-      "longitude": 4.3217061,
-      "geoPrecision": "adresse publiee - Immovlan",
-      "agentName": "EasyHome Marche-en-Famenne",
-      "agentPhone": "+32 84 77 00 43",
-      "agentEmail": "",
-      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/easyhome-marche-en-famenne/43302",
-      "isUnderOption": true,
-      "underOption": true,
-      "saleStatus": "sous option",
-      "photoCount": 2,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/VBC83742/images/a4ee886abd484cd48577a97f533e0cdd.png/webp/Medium?mode=crop&format=webp&quality=75",
-      "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/VBC83742/images/a4ee886abd484cd48577a97f533e0cdd.png/webp/Medium?mode=crop&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/VBC83742/images/8fa44efda41e4d569e12245c0c3511c1.jpg/webp/Medium?mode=crop&format=webp&quality=75"
-      ],
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1090/jette/vbc83742"
     },
     {
       "source": "Immovlan",
@@ -1340,93 +1608,33 @@
     },
     {
       "source": "Immovlan",
-      "id": "immovlan-rbw62429",
+      "id": "immovlan-rbw30998",
       "propertyType": "maison",
-      "title": "Maison à vendre à Boekhoutstraat 4 Affligem (RBW62429)",
+      "title": "Maison à vendre à Nijvelsesteenweg 73 Hal (RBW30998)",
       "price": 349000,
-      "bedrooms": 3,
-      "surfaceM2": 159,
-      "locality": "Affligem",
-      "requestedLocation": "Affligem",
-      "postalCode": "1790",
-      "address": "Boekhoutstraat 4 1790 Affligem",
-      "latitude": 50.9140666,
-      "longitude": 4.1044679,
+      "bedrooms": 2,
+      "surfaceM2": 211,
+      "locality": "Hal",
+      "requestedLocation": "Halle",
+      "postalCode": "1500",
+      "address": "Nijvelsesteenweg 73 1500 Hal",
+      "latitude": 50.7277354,
+      "longitude": 4.2440793,
       "geoPrecision": "adresse publiee - Immovlan",
-      "agentName": "Accenta Affligem",
-      "agentPhone": "+32 53 41 57 92",
+      "agentName": "Pické Immo",
+      "agentPhone": "+32 479 20 70 16",
       "agentEmail": "",
-      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/accenta-affligem/31323",
+      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/picke-immo/40373",
       "isUnderOption": true,
       "underOption": true,
       "saleStatus": "sous option",
       "photoCount": 2,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW62429/images/f297894e56dd45d28458f35bd3ae586b.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW30998/images/02a3eebc7108440f9e4686779e57a10a.jpg/webp/Medium?mode=crop&format=webp&quality=75",
       "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RBW62429/images/f297894e56dd45d28458f35bd3ae586b.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBW62429/images/6ad7f36b317e4b4cb636684ac869c316.jpg/webp/Medium?mode=crop&format=webp&quality=75"
+        "https://api-image.immovlan.be/v1/property/RBW30998/images/02a3eebc7108440f9e4686779e57a10a.jpg/webp/Medium?mode=crop&format=webp&quality=75",
+        "https://api-image.immovlan.be/v1/property/RBW30998/images/d4d12d79798a47c39ca24dba4df83163.png/webp/Medium?mode=crop&format=webp&quality=75"
       ],
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1790/affligem/rbw62429"
-    },
-    {
-      "source": "Immovlan",
-      "id": "immovlan-rbv88722",
-      "propertyType": "maison",
-      "title": "Maison à vendre à Guchtweg 13 Affligem (RBV88722)",
-      "price": 349000,
-      "bedrooms": 3,
-      "surfaceM2": null,
-      "locality": "Affligem",
-      "requestedLocation": "Affligem",
-      "postalCode": "1790",
-      "address": "Guchtweg 13 1790 Affligem",
-      "latitude": 50.91355,
-      "longitude": 4.11122,
-      "geoPrecision": "adresse publiee - Immovlan",
-      "agentName": "Lierman Vastgoed",
-      "agentPhone": "+32 470 54 20 15",
-      "agentEmail": "",
-      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/lierman-vastgoed/45754",
-      "isUnderOption": true,
-      "underOption": true,
-      "saleStatus": "sous option",
-      "photoCount": 2,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RBV88722/images/8c31f3219a8a48339d6e6dc7cbd6ed06.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-      "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RBV88722/images/8c31f3219a8a48339d6e6dc7cbd6ed06.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBV88722/images/d262a555530a49beb9ba0acfbf7240b5.jpg/webp/Medium?mode=crop&format=webp&quality=75"
-      ],
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1790/affligem/rbv88722"
-    },
-    {
-      "source": "Immovlan",
-      "id": "immovlan-rbv71164",
-      "propertyType": "maison",
-      "title": "Maison à vendre à Groeneweg 7 Affligem (RBV71164)",
-      "price": 349000,
-      "bedrooms": 4,
-      "surfaceM2": 212,
-      "locality": "Affligem",
-      "requestedLocation": "Affligem",
-      "postalCode": "1790",
-      "address": "Groeneweg 7 1790 Affligem",
-      "latitude": 50.8915762,
-      "longitude": 4.1040751,
-      "geoPrecision": "adresse publiee - Immovlan",
-      "agentName": "Accenta Affligem",
-      "agentPhone": "+32 53 41 57 92",
-      "agentEmail": "",
-      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/accenta-affligem/31323",
-      "isUnderOption": true,
-      "underOption": true,
-      "saleStatus": "sous option",
-      "photoCount": 2,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RBV71164/images/d96d62d6b07741d4894863f2d200e8cd.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-      "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RBV71164/images/d96d62d6b07741d4894863f2d200e8cd.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBV71164/images/b0433db83b9746ceba63ca4a390fb534.jpg/webp/Medium?mode=crop&format=webp&quality=75"
-      ],
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1790/affligem/rbv71164"
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw30998"
     },
     {
       "source": "Immovlan",
@@ -1457,96 +1665,6 @@
         "https://api-image.immovlan.be/v1/property/RBW23980/images/03b590e8ce794432b31819654c12b15e.jpg/webp/Medium?mode=crop&format=webp&quality=75"
       ],
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1950/kraainem/rbw23980"
-    },
-    {
-      "source": "Immovlan",
-      "id": "immovlan-vbe52701",
-      "propertyType": "maison",
-      "title": "Maison à vendre à Rue des Wallons 47 Jette (VBE52701)",
-      "price": 350000,
-      "bedrooms": 3,
-      "surfaceM2": 136,
-      "locality": "Jette",
-      "requestedLocation": "Jette",
-      "postalCode": "1090",
-      "address": "Rue des Wallons 47 1090 Jette",
-      "latitude": 50.8744853,
-      "longitude": 4.32359985,
-      "geoPrecision": "adresse publiee - Immovlan",
-      "agentName": "Immo BPC",
-      "agentPhone": "+32 2 420 00 28",
-      "agentEmail": "",
-      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/immo-bpc/27812",
-      "isUnderOption": true,
-      "underOption": true,
-      "saleStatus": "sous option",
-      "photoCount": 2,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/VBE52701/images/ceee32a84b9a46bd985f9d05c904322f.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-      "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/VBE52701/images/ceee32a84b9a46bd985f9d05c904322f.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/VBE52701/images/40725d564a42419f8f35cebe13d26434.jpg/webp/Medium?mode=crop&format=webp&quality=75"
-      ],
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1090/jette/vbe52701"
-    },
-    {
-      "source": "Immovlan",
-      "id": "immovlan-rbv88568",
-      "propertyType": "maison",
-      "title": "Maison à vendre à Rue Pannenhuis 63 Jette (RBV88568)",
-      "price": 350000,
-      "bedrooms": 5,
-      "surfaceM2": 200,
-      "locality": "Jette",
-      "requestedLocation": "Jette",
-      "postalCode": "1090",
-      "address": "Rue Pannenhuis 63 1090 Jette",
-      "latitude": 50.8742264,
-      "longitude": 4.3391803,
-      "geoPrecision": "adresse publiee - Immovlan",
-      "agentName": "Living Stone Dilbeek",
-      "agentPhone": "+32 489 88 36 57",
-      "agentEmail": "",
-      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/living-stone-dilbeek/30847",
-      "isUnderOption": true,
-      "underOption": true,
-      "saleStatus": "sous option",
-      "photoCount": 2,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RBV88568/images/e5bb01876d2b4ca09d585492c164346b.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-      "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RBV88568/images/e5bb01876d2b4ca09d585492c164346b.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBV88568/images/1f125b84ddce4d02b8452dcbaebd98d4.jpg/webp/Medium?mode=crop&format=webp&quality=75"
-      ],
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1090/jette/rbv88568"
-    },
-    {
-      "source": "Immovlan",
-      "id": "immovlan-rbw58803",
-      "propertyType": "maison",
-      "title": "Maison à vendre à Brouwerijstraat 65 Hal (RBW58803)",
-      "price": 350000,
-      "bedrooms": 3,
-      "surfaceM2": null,
-      "locality": "Hal",
-      "requestedLocation": "Halle",
-      "postalCode": "1500",
-      "address": "Brouwerijstraat 65 1500 Hal",
-      "latitude": 50.7237738,
-      "longitude": 4.2402635,
-      "geoPrecision": "adresse publiee - Immovlan",
-      "agentName": "De Immobiliers",
-      "agentPhone": "+32 2 356 00 00",
-      "agentEmail": "",
-      "agentWebsite": "https://immovlan.be/fr/guideimmobilier/detail/de-immobiliers/45647",
-      "isUnderOption": true,
-      "underOption": true,
-      "saleStatus": "sous option",
-      "photoCount": 2,
-      "photoUrl": "https://api-image.immovlan.be/v1/property/RBW58803/images/2d8ace5fb86e48cb9835df9780b314d8.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-      "photoUrls": [
-        "https://api-image.immovlan.be/v1/property/RBW58803/images/2d8ace5fb86e48cb9835df9780b314d8.jpg/webp/Medium?mode=crop&format=webp&quality=75",
-        "https://api-image.immovlan.be/v1/property/RBW58803/images/da06ae2c891048b0afadfbafac02d4a3.jpg/webp/Medium?mode=crop&format=webp&quality=75"
-      ],
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw58803"
     }
   ],
   "sourceDiagnostics": [
@@ -1554,7 +1672,7 @@
       "source": "Immovlan",
       "location": "Drogenbos",
       "status": "Recherche OK",
-      "message": "18 URL candidates",
+      "message": "19 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/drogenbos?maxprice=350000"
     },
     {
@@ -1597,7 +1715,28 @@
       "location": "Drogenbos",
       "status": "Candidat ignore",
       "message": "code postal 1601 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1601/ruisbroek/rbw57861"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Drogenbos",
+      "status": "Candidat ignore",
+      "message": "code postal 1601 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1601/ruisbroek/rbv36816"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Drogenbos",
+      "status": "Candidat ignore",
+      "message": "code postal 1650 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1650/beersel/vwd18104"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Drogenbos",
+      "status": "Candidat ignore",
+      "message": "code postal 1650 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1650/beersel/rbw36971"
     },
     {
       "source": "Immovlan",
@@ -1610,36 +1749,15 @@
       "source": "Immovlan",
       "location": "Drogenbos",
       "status": "Candidat ignore",
-      "message": "code postal 1190 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1190/forest/vbe52296"
+      "message": "code postal 1650 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1650/beersel/vbe30318"
     },
     {
       "source": "Immovlan",
       "location": "Drogenbos",
       "status": "Candidat ignore",
-      "message": "code postal 1600 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbw74763"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Drogenbos",
-      "status": "Candidat ignore",
-      "message": "code postal 1180 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1180/uccle/vbe46017"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Drogenbos",
-      "status": "Candidat ignore",
-      "message": "code postal 1180 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1180/uccle/vbe42212"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Drogenbos",
-      "status": "Candidat ignore",
-      "message": "code postal 1180 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1180/uccle/vbe35723"
+      "message": "code postal 1650 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1650/beersel/rbv90005"
     },
     {
       "source": "Immovlan",
@@ -1659,13 +1777,6 @@
       "source": "Immovlan",
       "location": "Kraainem",
       "status": "Candidat ignore",
-      "message": "code postal 1933 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1933/sterrebeek/vbe57468"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Kraainem",
-      "status": "Candidat ignore",
       "message": "code postal 1831 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1831/diegem/vbe54848"
     },
@@ -1680,8 +1791,8 @@
       "source": "Immovlan",
       "location": "Kraainem",
       "status": "Candidat ignore",
-      "message": "code postal 1030 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1030/schaerbeek/vbe00090"
+      "message": "code postal 1933 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1933/sterrebeek/vbe57468"
     },
     {
       "source": "Immovlan",
@@ -1689,6 +1800,13 @@
       "status": "Candidat ignore",
       "message": "code postal 1030 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1030/schaerbeek/vbd99326"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Kraainem",
+      "status": "Candidat ignore",
+      "message": "code postal 1030 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1030/schaerbeek/vbe00090"
     },
     {
       "source": "Immovlan",
@@ -1806,7 +1924,7 @@
       "source": "Immovlan",
       "location": "Linkebeek",
       "status": "Recherche OK",
-      "message": "7 URL candidates",
+      "message": "11 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/linkebeek?maxprice=350000"
     },
     {
@@ -1849,7 +1967,35 @@
       "location": "Linkebeek",
       "status": "Candidat ignore",
       "message": "code postal 1180 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1180/uccle/vbe46017"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Linkebeek",
+      "status": "Candidat ignore",
+      "message": "code postal 1180 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1180/uccle/vbe42212"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Linkebeek",
+      "status": "Candidat ignore",
+      "message": "code postal 1180 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1180/uccle/vbe35723"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Linkebeek",
+      "status": "Candidat ignore",
+      "message": "code postal 1180 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1180/uccle/vbd21625"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Linkebeek",
+      "status": "Candidat ignore",
+      "message": "code postal 1190 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1190/forest/vbe52296"
     },
     {
       "source": "Immovlan",
@@ -1884,21 +2030,14 @@
       "location": "Berchem-Sainte-Agathe",
       "status": "Candidat ignore",
       "message": "code postal 1070 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe58542"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Berchem-Sainte-Agathe",
-      "status": "Candidat ignore",
-      "message": "code postal 1700 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1700/dilbeek/rbw71387"
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/rbw77906"
     },
     {
       "source": "Immovlan",
       "location": "Berchem-Sainte-Agathe",
       "status": "Candidat ignore",
       "message": "code postal 1070 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe57175"
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe58542"
     },
     {
       "source": "Immovlan",
@@ -1918,7 +2057,7 @@
       "source": "Immovlan",
       "location": "Berchem-Sainte-Agathe",
       "status": "Candidat ignore",
-      "message": "code postal 1080 hors commune",
+      "message": "prix absent hors filtre",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1080/molenbeek-saint-jean/rbr71336"
     },
     {
@@ -1927,6 +2066,13 @@
       "status": "Candidat ignore",
       "message": "code postal 1090 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1090/jette/rbw39118"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Berchem-Sainte-Agathe",
+      "status": "Candidat ignore",
+      "message": "code postal 1700 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1700/dilbeek/rbw71387"
     },
     {
       "source": "Immovlan",
@@ -1947,42 +2093,63 @@
       "location": "Berchem-Sainte-Agathe",
       "status": "Candidat ignore",
       "message": "code postal 1070 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe50293"
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe57175"
     },
     {
       "source": "Immovlan",
       "location": "Ganshoren",
       "status": "Recherche OK",
-      "message": "4 URL candidates",
+      "message": "7 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/ganshoren?maxprice=350000"
     },
     {
       "source": "Immovlan",
       "location": "Ganshoren",
       "status": "Candidat ignore",
-      "message": "code postal 1070 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe50218"
+      "message": "code postal 1082 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1082/berchem-sainte-agathe/vbd04687"
     },
     {
       "source": "Immovlan",
       "location": "Ganshoren",
       "status": "Candidat ignore",
-      "message": "code postal 1070 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe47624"
+      "message": "code postal 1090 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1090/jette/vbe52701"
     },
     {
       "source": "Immovlan",
       "location": "Ganshoren",
       "status": "Candidat ignore",
-      "message": "code postal 1070 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe41147"
+      "message": "code postal 1090 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1090/jette/rbv88568"
     },
     {
       "source": "Immovlan",
       "location": "Ganshoren",
       "status": "Candidat ignore",
-      "message": "code postal 1070 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/rbw33372"
+      "message": "code postal 1090 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1090/jette/vbc83742"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ganshoren",
+      "status": "Candidat ignore",
+      "message": "code postal 1080 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1080/molenbeek-saint-jean/vbe19764"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ganshoren",
+      "status": "Candidat ignore",
+      "message": "code postal 1080 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1080/molenbeek-saint-jean/vbe14855"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ganshoren",
+      "status": "Candidat ignore",
+      "message": "code postal 1731 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1731/zellik/rbv66241"
     },
     {
       "source": "Immovlan",
@@ -2058,6 +2225,13 @@
       "source": "Immovlan",
       "location": "Machelen",
       "status": "Candidat ignore",
+      "message": "code postal 9870 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/9870/zulte/rbw12351"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Machelen",
+      "status": "Candidat ignore",
       "message": "code postal 8720 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/8720/dentergem/rbw77396"
     },
@@ -2126,17 +2300,87 @@
     },
     {
       "source": "Immovlan",
-      "location": "Machelen",
-      "status": "Candidat ignore",
-      "message": "code postal 8720 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/8720/dentergem/rbw49029"
+      "location": "Anderlecht",
+      "status": "Recherche OK",
+      "message": "15 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/anderlecht?maxprice=350000"
     },
     {
       "source": "Immovlan",
       "location": "Anderlecht",
-      "status": "Recherche OK",
-      "message": "1 URL candidates",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/anderlecht?maxprice=350000"
+      "status": "Fiche exploitable",
+      "message": "289000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe17644"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Anderlecht",
+      "status": "Fiche exploitable",
+      "message": "275000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe50293"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Anderlecht",
+      "status": "Fiche exploitable",
+      "message": "349000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/rbw55117"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Anderlecht",
+      "status": "Fiche exploitable",
+      "message": "349000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe50218"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Anderlecht",
+      "status": "Fiche exploitable",
+      "message": "335000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe48701"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Anderlecht",
+      "status": "Fiche exploitable",
+      "message": "325000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe48044"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Anderlecht",
+      "status": "Fiche exploitable",
+      "message": "329000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe47624"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Anderlecht",
+      "status": "Fiche exploitable",
+      "message": "269000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe46624"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Anderlecht",
+      "status": "Fiche exploitable",
+      "message": "325000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe41147"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Anderlecht",
+      "status": "Fiche exploitable",
+      "message": "297000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/rbw40784"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Anderlecht",
+      "status": "Fiche exploitable",
+      "message": "349000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/rbw33372"
     },
     {
       "source": "Immovlan",
@@ -2149,78 +2393,15 @@
       "source": "Immovlan",
       "location": "Woluwe-Saint-Lambert",
       "status": "Recherche OK",
-      "message": "3 URL candidates",
+      "message": "0 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/woluwe-saint-lambert?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Woluwe-Saint-Lambert",
-      "status": "Fiche exploitable",
-      "message": "265000 EUR",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1200/woluwe-saint-lambert/vbd89822"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Woluwe-Saint-Lambert",
-      "status": "Candidat ignore",
-      "message": "code postal 1950 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1950/kraainem/rbv29673"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Woluwe-Saint-Lambert",
-      "status": "Candidat ignore",
-      "message": "code postal 3080 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/3080/tervuren/rbw67010"
     },
     {
       "source": "Immovlan",
       "location": "Jette",
       "status": "Recherche OK",
-      "message": "7 URL candidates",
+      "message": "1 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/jette?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Jette",
-      "status": "Fiche exploitable",
-      "message": "350000 EUR",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1090/jette/vbe52701"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Jette",
-      "status": "Fiche exploitable",
-      "message": "350000 EUR",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1090/jette/rbv88568"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Jette",
-      "status": "Fiche exploitable",
-      "message": "349000 EUR",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1090/jette/vbc83742"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Jette",
-      "status": "Candidat ignore",
-      "message": "code postal 1082 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1082/berchem-sainte-agathe/vbd04687"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Jette",
-      "status": "Candidat ignore",
-      "message": "code postal 1080 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1080/molenbeek-saint-jean/vbe19764"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Jette",
-      "status": "Candidat ignore",
-      "message": "code postal 1080 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1080/molenbeek-saint-jean/vbe14855"
     },
     {
       "source": "Immovlan",
@@ -2233,22 +2414,22 @@
       "source": "Immovlan",
       "location": "Forest",
       "status": "Recherche OK",
-      "message": "0 URL candidates",
+      "message": "1 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/forest?maxprice=350000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Forest",
+      "status": "Candidat ignore",
+      "message": "code postal 1600 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbw74763"
     },
     {
       "source": "Immovlan",
       "location": "Wemmel",
       "status": "Recherche OK",
-      "message": "5 URL candidates",
+      "message": "4 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/wemmel?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Wemmel",
-      "status": "Candidat ignore",
-      "message": "code postal 1731 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1731/zellik/rbv66241"
     },
     {
       "source": "Immovlan",
@@ -2282,8 +2463,43 @@
       "source": "Immovlan",
       "location": "Watermael-Boitsfort",
       "status": "Recherche OK",
-      "message": "0 URL candidates",
+      "message": "5 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/watermael-boitsfort?maxprice=350000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Watermael-Boitsfort",
+      "status": "Candidat ignore",
+      "message": "code postal 1200 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1200/woluwe-saint-lambert/vbd89822"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Watermael-Boitsfort",
+      "status": "Candidat ignore",
+      "message": "code postal 1560 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1560/hoeilaart/rbv88641"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Watermael-Boitsfort",
+      "status": "Candidat ignore",
+      "message": "code postal 1560 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1560/hoeilaart/rbv80374"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Watermael-Boitsfort",
+      "status": "Candidat ignore",
+      "message": "code postal 1560 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1560/hoeilaart/rbv09792"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Watermael-Boitsfort",
+      "status": "Candidat ignore",
+      "message": "code postal 3080 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/3080/tervuren/rbw67010"
     },
     {
       "source": "Immovlan",
@@ -2422,7 +2638,7 @@
       "source": "Immovlan",
       "location": "Dilbeek",
       "status": "Recherche OK",
-      "message": "5 URL candidates",
+      "message": "4 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/dilbeek?maxprice=350000"
     },
     {
@@ -2455,16 +2671,9 @@
     },
     {
       "source": "Immovlan",
-      "location": "Dilbeek",
-      "status": "Candidat ignore",
-      "message": "code postal 1740 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1740/ternat/rbw76244"
-    },
-    {
-      "source": "Immovlan",
       "location": "Sint-Pieters-Leeuw",
       "status": "Recherche OK",
-      "message": "11 URL candidates",
+      "message": "13 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/sint-pieters-leeuw?maxprice=350000"
     },
     {
@@ -2484,9 +2693,23 @@
     {
       "source": "Immovlan",
       "location": "Sint-Pieters-Leeuw",
+      "status": "Candidat ignore",
+      "message": "code postal 1602 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1602/vlezenbeek/rbw63065"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
       "status": "Fiche exploitable",
       "message": "349000 EUR",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/oudenaken/rbw61878"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Fiche exploitable",
+      "message": "215000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbw61577"
     },
     {
       "source": "Immovlan",
@@ -2506,99 +2729,43 @@
       "source": "Immovlan",
       "location": "Sint-Pieters-Leeuw",
       "status": "Fiche exploitable",
+      "message": "200000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbw41091"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Fiche exploitable",
+      "message": "335000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbw33957"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Fiche exploitable",
+      "message": "325000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbw09055"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Fiche exploitable",
+      "message": "295000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbv81083"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Fiche exploitable",
       "message": "346590 EUR",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbu87030"
     },
     {
       "source": "Immovlan",
-      "location": "Sint-Pieters-Leeuw",
-      "status": "Candidat ignore",
-      "message": "code postal 1651 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1651/lot/rbw29721"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Sint-Pieters-Leeuw",
-      "status": "Candidat ignore",
-      "message": "code postal 1500 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw77511"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Sint-Pieters-Leeuw",
-      "status": "Candidat ignore",
-      "message": "code postal 1500 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw75178"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Sint-Pieters-Leeuw",
-      "status": "Candidat ignore",
-      "message": "code postal 1500 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw73393"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Sint-Pieters-Leeuw",
-      "status": "Candidat ignore",
-      "message": "code postal 1500 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw30998"
-    },
-    {
-      "source": "Immovlan",
       "location": "Tervuren",
       "status": "Recherche OK",
-      "message": "7 URL candidates",
+      "message": "0 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/tervuren?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Tervuren",
-      "status": "Fiche exploitable",
-      "message": "320000 EUR",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/3080/tervuren/rbw71595"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Tervuren",
-      "status": "Candidat ignore",
-      "message": "code postal 1560 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1560/hoeilaart/rbv88641"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Tervuren",
-      "status": "Candidat ignore",
-      "message": "code postal 1560 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1560/hoeilaart/rbv80374"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Tervuren",
-      "status": "Candidat ignore",
-      "message": "code postal 1560 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1560/hoeilaart/rbv09792"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Tervuren",
-      "status": "Candidat ignore",
-      "message": "code postal 3040 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/3040/huldenberg/rbw51445"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Tervuren",
-      "status": "Candidat ignore",
-      "message": "code postal 3040 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/3040/huldenberg/rbw41147"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Tervuren",
-      "status": "Candidat ignore",
-      "message": "code postal 3078 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/3078/everberg/rbw48531"
     },
     {
       "source": "Immovlan",
@@ -2618,8 +2785,15 @@
       "source": "Immovlan",
       "location": "Beersel",
       "status": "Recherche OK",
-      "message": "0 URL candidates",
+      "message": "1 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/beersel?maxprice=350000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Beersel",
+      "status": "Candidat ignore",
+      "message": "code postal 1651 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1651/lot/rbw29721"
     },
     {
       "source": "Immovlan",
@@ -2632,15 +2806,8 @@
       "source": "Immovlan",
       "location": "Saint-Josse-ten-Noode",
       "status": "Recherche OK",
-      "message": "1 URL candidates",
+      "message": "0 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/saint-josse-ten-noode?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Saint-Josse-ten-Noode",
-      "status": "Candidat ignore",
-      "message": "code postal 1000 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1000/bruxelles/vbd88901"
     },
     {
       "source": "Immovlan",
@@ -2730,8 +2897,43 @@
       "source": "Immovlan",
       "location": "Overijse",
       "status": "Recherche OK",
-      "message": "7 URL candidates",
+      "message": "9 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/overijse?maxprice=350000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Overijse",
+      "status": "Candidat ignore",
+      "message": "code postal 3040 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/3040/huldenberg/rbw51445"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Overijse",
+      "status": "Candidat ignore",
+      "message": "code postal 3040 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/3040/huldenberg/rbw41147"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Overijse",
+      "status": "Candidat ignore",
+      "message": "code postal 3080 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/3080/tervuren/rbw71595"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Overijse",
+      "status": "Candidat ignore",
+      "message": "code postal 1330 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1330/rixensart/vbd77107"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Overijse",
+      "status": "Candidat ignore",
+      "message": "code postal 1330 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1330/rixensart/vbc42739"
     },
     {
       "source": "Immovlan",
@@ -2744,57 +2946,64 @@
       "source": "Immovlan",
       "location": "Overijse",
       "status": "Candidat ignore",
-      "message": "code postal 1342 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1342/limelette/vbe41902"
+      "message": "code postal 1301 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1301/bierges/vbe34209"
     },
     {
       "source": "Immovlan",
       "location": "Overijse",
       "status": "Candidat ignore",
-      "message": "code postal 1390 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1390/grez-doiceau/vbe60619"
+      "message": "code postal 1300 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1300/wavre/vbe46182"
     },
     {
       "source": "Immovlan",
       "location": "Overijse",
+      "status": "Candidat ignore",
+      "message": "code postal 1300 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1300/wavre/vbe34638"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ixelles",
+      "status": "Recherche OK",
+      "message": "1 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/ixelles?maxprice=350000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ixelles",
+      "status": "Candidat ignore",
+      "message": "code postal 1000 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1000/bruxelles/vbd88901"
+    },
+    {
+      "source": "Immovlan",
+      "location": "La Hulpe",
+      "status": "Recherche OK",
+      "message": "5 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/la-hulpe?maxprice=350000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "La Hulpe",
+      "status": "Candidat ignore",
+      "message": "code postal 1342 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1342/limelette/vbe41902"
+    },
+    {
+      "source": "Immovlan",
+      "location": "La Hulpe",
       "status": "Candidat ignore",
       "message": "code postal 1340 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1340/ottignies-louvain-la-neuve/vbe61153"
     },
     {
       "source": "Immovlan",
-      "location": "Overijse",
+      "location": "La Hulpe",
       "status": "Candidat ignore",
       "message": "code postal 1340 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1340/ottignies/vbe43955"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Overijse",
-      "status": "Candidat ignore",
-      "message": "code postal 1502 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1502/lembeek/vbe61250"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Overijse",
-      "status": "Candidat ignore",
-      "message": "code postal 3000 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/3000/louvain/rbw77388"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Ixelles",
-      "status": "Recherche OK",
-      "message": "0 URL candidates",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/ixelles?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "La Hulpe",
-      "status": "Recherche OK",
-      "message": "2 URL candidates",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/la-hulpe?maxprice=350000"
     },
     {
       "source": "Immovlan",
@@ -2870,8 +3079,29 @@
       "source": "Immovlan",
       "location": "Asse",
       "status": "Fiche exploitable",
+      "message": "175000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1730/asse/rwc42931"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Asse",
+      "status": "Fiche exploitable",
+      "message": "215000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1730/asse/rbw24631"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Asse",
+      "status": "Fiche exploitable",
       "message": "299000 EUR",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1730/asse/rbv94944"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Asse",
+      "status": "Candidat ignore",
+      "message": "code postal 1740 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1740/ternat/rbw76244"
     },
     {
       "source": "Immovlan",
@@ -2896,30 +3126,9 @@
     },
     {
       "source": "Immovlan",
-      "location": "Asse",
-      "status": "Candidat ignore",
-      "message": "code postal 1742 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1742/sint-katherina-lombeek/rbv73573"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Asse",
-      "status": "Candidat ignore",
-      "message": "code postal 1785 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1785/merchtem/rbw67795"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Asse",
-      "status": "Candidat ignore",
-      "message": "code postal 1785 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1785/merchtem/rbv76193"
-    },
-    {
-      "source": "Immovlan",
       "location": "Lennik",
       "status": "Recherche OK",
-      "message": "4 URL candidates",
+      "message": "5 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/lennik?maxprice=350000"
     },
     {
@@ -2947,6 +3156,13 @@
       "source": "Immovlan",
       "location": "Lennik",
       "status": "Candidat ignore",
+      "message": "code postal 1742 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1742/sint-katherina-lombeek/rbv73573"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Lennik",
+      "status": "Candidat ignore",
       "message": "code postal 1770 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1770/liedekerke/rbw76197"
     },
@@ -2954,7 +3170,7 @@
       "source": "Immovlan",
       "location": "Waterloo",
       "status": "Recherche OK",
-      "message": "2 URL candidates",
+      "message": "3 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/waterloo?maxprice=350000"
     },
     {
@@ -2973,9 +3189,16 @@
     },
     {
       "source": "Immovlan",
+      "location": "Waterloo",
+      "status": "Candidat ignore",
+      "message": "code postal 1440 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1440/braine-le-chateau/vbe43895"
+    },
+    {
+      "source": "Immovlan",
       "location": "Meise",
       "status": "Recherche OK",
-      "message": "8 URL candidates",
+      "message": "10 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/meise?maxprice=350000"
     },
     {
@@ -3032,6 +3255,20 @@
       "location": "Meise",
       "status": "Candidat ignore",
       "message": "code postal 1785 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1785/merchtem/rbw67795"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Meise",
+      "status": "Candidat ignore",
+      "message": "code postal 1785 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1785/merchtem/rbv76193"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Meise",
+      "status": "Candidat ignore",
+      "message": "code postal 1785 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1785/merchtem/rbv83052"
     },
     {
@@ -3061,6 +3298,13 @@
       "status": "Fiche exploitable",
       "message": "349000 EUR",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1980/zemst/rbv23989"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Zemst",
+      "status": "Candidat ignore",
+      "message": "code postal 2800 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2800/malines/rbw77928"
     },
     {
       "source": "Immovlan",
@@ -3109,21 +3353,14 @@
       "location": "Zemst",
       "status": "Candidat ignore",
       "message": "code postal 2800 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2800/malines/rbw48582"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Zemst",
-      "status": "Candidat ignore",
-      "message": "code postal 2800 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2800/malines/rbw62867"
     },
     {
       "source": "Immovlan",
       "location": "Zemst",
       "status": "Candidat ignore",
-      "message": "code postal 2811 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2811/hombeek/rwc43041"
+      "message": "code postal 2800 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2800/malines/rbw48582"
     },
     {
       "source": "Immovlan",
@@ -3136,7 +3373,7 @@
       "source": "Immovlan",
       "location": "Halle",
       "status": "Recherche OK",
-      "message": "14 URL candidates",
+      "message": "19 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/halle?maxprice=350000"
     },
     {
@@ -3149,9 +3386,30 @@
     {
       "source": "Immovlan",
       "location": "Halle",
+      "status": "Fiche exploitable",
+      "message": "219000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw77511"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Halle",
+      "status": "Candidat ignore",
+      "message": "code postal 1502 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1502/lembeek/vbe61250"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Halle",
       "status": "Candidat ignore",
       "message": "code postal 1502 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1502/lembeek/rbw75183"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Halle",
+      "status": "Fiche exploitable",
+      "message": "299000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw75178"
     },
     {
       "source": "Immovlan",
@@ -3163,9 +3421,23 @@
     {
       "source": "Immovlan",
       "location": "Halle",
+      "status": "Fiche exploitable",
+      "message": "190000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw73393"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Halle",
       "status": "Candidat ignore",
       "message": "code postal 1501 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1501/buizingen/rbw71969"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Halle",
+      "status": "Fiche exploitable",
+      "message": "349000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw30998"
     },
     {
       "source": "Immovlan",
@@ -3190,59 +3462,17 @@
     },
     {
       "source": "Immovlan",
-      "location": "Halle",
-      "status": "Fiche exploitable",
-      "message": "330000 EUR",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw67668"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Halle",
-      "status": "Fiche exploitable",
-      "message": "350000 EUR",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw58803"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Halle",
-      "status": "Fiche exploitable",
-      "message": "275000 EUR",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw58426"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Halle",
-      "status": "Candidat ignore",
-      "message": "code postal 2980 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2980/zoersel/rbw55667"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Halle",
-      "status": "Fiche exploitable",
-      "message": "240000 EUR",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw45477"
-    },
-    {
-      "source": "Immovlan",
       "location": "Merchtem",
       "status": "Recherche OK",
-      "message": "12 URL candidates",
+      "message": "9 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/merchtem?maxprice=350000"
     },
     {
       "source": "Immovlan",
       "location": "Merchtem",
-      "status": "Candidat ignore",
-      "message": "vente notariale exclue",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1785/merchtem/rwc42335"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Merchtem",
       "status": "Fiche exploitable",
-      "message": "325000 EUR",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1785/merchtem/rwc42779"
+      "message": "299000 EUR",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1785/merchtem/rbv45455"
     },
     {
       "source": "Immovlan",
@@ -3277,13 +3507,6 @@
       "location": "Merchtem",
       "status": "Candidat ignore",
       "message": "code postal 1745 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1745/opwijk/rbw40812"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Merchtem",
-      "status": "Candidat ignore",
-      "message": "code postal 1745 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1745/opwijk/rbw35632"
     },
     {
@@ -3292,13 +3515,6 @@
       "status": "Candidat ignore",
       "message": "code postal 1745 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1745/opwijk/rwc42951"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Merchtem",
-      "status": "Candidat ignore",
-      "message": "code postal 1745 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1745/opwijk/rbv68839"
     },
     {
       "source": "Immovlan",
@@ -3318,7 +3534,7 @@
       "source": "Immovlan",
       "location": "Rixensart",
       "status": "Recherche OK",
-      "message": "5 URL candidates",
+      "message": "6 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/rixensart?maxprice=350000"
     },
     {
@@ -3353,6 +3569,13 @@
       "source": "Immovlan",
       "location": "Rixensart",
       "status": "Candidat ignore",
+      "message": "code postal 1390 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1390/grez-doiceau/vbe60619"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Rixensart",
+      "status": "Candidat ignore",
       "message": "code postal 1474 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1474/ways/vbe58838"
     },
@@ -3374,8 +3597,8 @@
       "source": "Immovlan",
       "location": "Huldenberg",
       "status": "Candidat ignore",
-      "message": "code postal 3140 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/3140/keerbergen/rbw75951"
+      "message": "code postal 3000 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/3000/louvain/rbw77388"
     },
     {
       "source": "Immovlan",
@@ -3388,43 +3611,8 @@
       "source": "Immovlan",
       "location": "Braine-l'Alleud",
       "status": "Recherche OK",
-      "message": "12 URL candidates",
+      "message": "3 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/braine-l-alleud?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Braine-l'Alleud",
-      "status": "Candidat ignore",
-      "message": "code postal 1421 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1421/ophain-bois-seigneur-isaac/vbe46980"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Braine-l'Alleud",
-      "status": "Fiche exploitable",
-      "message": "250000 EUR",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1420/braine-l-alleud/vbe50965"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Braine-l'Alleud",
-      "status": "Fiche exploitable",
-      "message": "250000 EUR",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1420/braine-l-alleud/vbe46886"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Braine-l'Alleud",
-      "status": "Fiche exploitable",
-      "message": "265000 EUR",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1420/braine-l-alleud/vbe23031"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Braine-l'Alleud",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1420/braine-l-alleud/vbd96167"
     },
     {
       "source": "Immovlan",
@@ -3437,43 +3625,15 @@
       "source": "Immovlan",
       "location": "Braine-l'Alleud",
       "status": "Candidat ignore",
-      "message": "code postal 1428 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1428/lillois-witterzee/vbd75563"
+      "message": "code postal 1480 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1480/clabecq/vbe58538"
     },
     {
       "source": "Immovlan",
       "location": "Braine-l'Alleud",
       "status": "Candidat ignore",
-      "message": "code postal 1428 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1428/lillois-witterzee/vbc28190"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Braine-l'Alleud",
-      "status": "Candidat ignore",
-      "message": "code postal 1410 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1410/waterloo/vbe56812"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Braine-l'Alleud",
-      "status": "Candidat ignore",
-      "message": "code postal 1410 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1410/waterloo/vbe42043"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Braine-l'Alleud",
-      "status": "Candidat ignore",
-      "message": "code postal 1410 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1410/waterloo/vbe09014"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Braine-l'Alleud",
-      "status": "Candidat ignore",
-      "message": "code postal 1640 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1640/rhode-saint-genese/rbw61488"
+      "message": "code postal 1480 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1480/clabecq/vbe57698"
     },
     {
       "source": "Immovlan",
@@ -3481,6 +3641,13 @@
       "status": "Recherche OK",
       "message": "5 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/bertem?maxprice=350000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Bertem",
+      "status": "Candidat ignore",
+      "message": "code postal 3078 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/3078/everberg/rbw48531"
     },
     {
       "source": "Immovlan",
@@ -3509,13 +3676,6 @@
       "status": "Candidat ignore",
       "message": "code postal 1390 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1390/nethen/vbb59131"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Bertem",
-      "status": "Candidat ignore",
-      "message": "code postal 2580 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2580/beerzel/rbw77432"
     },
     {
       "source": "Immovlan",
@@ -3598,7 +3758,7 @@
       "source": "Immovlan",
       "location": "Roosdaal",
       "status": "Recherche OK",
-      "message": "12 URL candidates",
+      "message": "9 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/roosdaal?maxprice=350000"
     },
     {
@@ -3626,20 +3786,6 @@
       "source": "Immovlan",
       "location": "Roosdaal",
       "status": "Candidat ignore",
-      "message": "code postal 9400 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/9400/ninove/rbw71527"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Roosdaal",
-      "status": "Candidat ignore",
-      "message": "code postal 9400 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/9400/ninove/rbw17020"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Roosdaal",
-      "status": "Candidat ignore",
       "message": "code postal 9472 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/9472/iddergem/rbw74647"
     },
@@ -3655,41 +3801,34 @@
       "location": "Roosdaal",
       "status": "Candidat ignore",
       "message": "code postal 1770 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1770/liedekerke/rbw45354"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Roosdaal",
-      "status": "Candidat ignore",
-      "message": "code postal 1770 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1770/liedekerke/rbw36306"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Roosdaal",
-      "status": "Candidat ignore",
-      "message": "code postal 1770 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1770/liedekerke/rbw27180"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Roosdaal",
-      "status": "Candidat ignore",
-      "message": "code postal 1770 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1770/liedekerke/rbv83968"
     },
     {
       "source": "Immovlan",
       "location": "Roosdaal",
       "status": "Candidat ignore",
-      "message": "code postal 1770 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1770/liedekerke/rbv65041"
+      "message": "code postal 9400 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/9400/ninove/rbw17020"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Roosdaal",
+      "status": "Candidat ignore",
+      "message": "code postal 9400 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/9400/ninove/rbw71527"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Roosdaal",
+      "status": "Candidat ignore",
+      "message": "code postal 9400 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/9400/ninove/rbw70949"
     },
     {
       "source": "Immovlan",
       "location": "Kampenhout",
       "status": "Recherche OK",
-      "message": "8 URL candidates",
+      "message": "10 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/kampenhout?maxprice=350000"
     },
     {
@@ -3725,6 +3864,13 @@
       "location": "Kampenhout",
       "status": "Candidat ignore",
       "message": "code postal 3140 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/3140/keerbergen/rbw75951"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Kampenhout",
+      "status": "Candidat ignore",
+      "message": "code postal 3140 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/3140/keerbergen/rbw75950"
     },
     {
@@ -3747,6 +3893,13 @@
       "status": "Candidat ignore",
       "message": "code postal 2812 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2812/muizen/rbw56843"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Kampenhout",
+      "status": "Candidat ignore",
+      "message": "code postal 2820 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2820/bonheiden/rbw47398"
     },
     {
       "source": "Immovlan",
@@ -3773,7 +3926,7 @@
       "source": "Immovlan",
       "location": "Pepingen",
       "status": "Recherche OK",
-      "message": "11 URL candidates",
+      "message": "9 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/pepingen?maxprice=350000"
     },
     {
@@ -3822,22 +3975,8 @@
       "source": "Immovlan",
       "location": "Pepingen",
       "status": "Candidat ignore",
-      "message": "code postal 1480 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1480/clabecq/vbe58538"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Pepingen",
-      "status": "Candidat ignore",
       "message": "code postal 1430 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1430/rebecq/vbe59454"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Pepingen",
-      "status": "Candidat ignore",
-      "message": "code postal 1480 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1480/clabecq/vbe57698"
     },
     {
       "source": "Immovlan",
@@ -3906,36 +4045,8 @@
       "source": "Immovlan",
       "location": "Braine-le-Chateau",
       "status": "Recherche OK",
-      "message": "10 URL candidates",
+      "message": "6 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/braine-le-chateau?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Braine-le-Chateau",
-      "status": "Fiche exploitable",
-      "message": "150000 EUR",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1440/braine-le-chateau/vbe43895"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Braine-le-Chateau",
-      "status": "Fiche exploitable",
-      "message": "285000 EUR",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1440/braine-le-chateau/vbe25820"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Braine-le-Chateau",
-      "status": "Candidat ignore",
-      "message": "type non maison probable",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1440/braine-le-chateau/vbe24901"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Braine-le-Chateau",
-      "status": "Fiche exploitable",
-      "message": "250000 EUR",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1440/braine-le-chateau/vbe23715"
     },
     {
       "source": "Immovlan",
@@ -3983,7 +4094,7 @@
       "source": "Immovlan",
       "location": "Liedekerke",
       "status": "Recherche OK",
-      "message": "5 URL candidates",
+      "message": "6 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/liedekerke?maxprice=350000"
     },
     {
@@ -4018,6 +4129,13 @@
       "source": "Immovlan",
       "location": "Liedekerke",
       "status": "Candidat ignore",
+      "message": "code postal 9470 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/9470/denderleeuw/vbb16471"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Liedekerke",
+      "status": "Candidat ignore",
       "message": "code postal 9320 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/9320/erembodegem/rbw76228"
     },
@@ -4025,7 +4143,7 @@
       "source": "Immovlan",
       "location": "Londerzeel",
       "status": "Recherche OK",
-      "message": "4 URL candidates",
+      "message": "3 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/londerzeel?maxprice=350000"
     },
     {
@@ -4051,24 +4169,10 @@
     },
     {
       "source": "Immovlan",
-      "location": "Londerzeel",
-      "status": "Candidat ignore",
-      "message": "code postal 2830 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2830/willebroek/rbw56611"
-    },
-    {
-      "source": "Immovlan",
       "location": "Affligem",
       "status": "Recherche OK",
-      "message": "9 URL candidates",
+      "message": "10 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/affligem?maxprice=350000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Affligem",
-      "status": "Fiche exploitable",
-      "message": "349000 EUR",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1790/affligem/rbw62429"
     },
     {
       "source": "Immovlan",
@@ -4094,20 +4198,6 @@
     {
       "source": "Immovlan",
       "location": "Affligem",
-      "status": "Fiche exploitable",
-      "message": "349000 EUR",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1790/affligem/rbv88722"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Affligem",
-      "status": "Fiche exploitable",
-      "message": "349000 EUR",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1790/affligem/rbv71164"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Affligem",
       "status": "Candidat ignore",
       "message": "code postal 9300 hors commune",
       "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/9300/alost/rbw75780"
@@ -4128,17 +4218,38 @@
     },
     {
       "source": "Immovlan",
-      "location": "Boortmeerbeek",
-      "status": "Recherche OK",
-      "message": "6 URL candidates",
-      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/boortmeerbeek?maxprice=350000"
+      "location": "Affligem",
+      "status": "Candidat ignore",
+      "message": "code postal 9300 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/9300/alost/rbw74616"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Affligem",
+      "status": "Candidat ignore",
+      "message": "code postal 9320 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/9320/erembodegem/rbw71041"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Affligem",
+      "status": "Candidat ignore",
+      "message": "code postal 9320 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/9320/erembodegem/rbw71040"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Affligem",
+      "status": "Candidat ignore",
+      "message": "code postal 9320 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/9320/erembodegem/rbw61447"
     },
     {
       "source": "Immovlan",
       "location": "Boortmeerbeek",
-      "status": "Candidat ignore",
-      "message": "code postal 2820 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/2820/bonheiden/rbw47398"
+      "status": "Recherche OK",
+      "message": "5 URL candidates",
+      "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/boortmeerbeek?maxprice=350000"
     },
     {
       "source": "Immovlan",
@@ -4270,15 +4381,85 @@
       "source": "Immovlan",
       "location": "Ottignies-Louvain-la-Neuve",
       "status": "Recherche OK",
-      "message": "1 URL candidates",
+      "message": "11 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/maison/a-vendre/ottignies-louvain-la-neuve?maxprice=350000"
     },
     {
       "source": "Immovlan",
       "location": "Ottignies-Louvain-la-Neuve",
       "status": "Candidat ignore",
-      "message": "code postal 1495 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1495/sart-dames-avelines/vbe59371"
+      "message": "type non maison probable",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1340/ottignies/vaz90817"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ottignies-Louvain-la-Neuve",
+      "status": "Candidat ignore",
+      "message": "code postal 1348 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1348/louvain-la-neuve/vay41232"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ottignies-Louvain-la-Neuve",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1340/ottignies/vaj70549"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ottignies-Louvain-la-Neuve",
+      "status": "Candidat ignore",
+      "message": "code postal 1490 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1490/court-saint-etienne/vbd61658"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ottignies-Louvain-la-Neuve",
+      "status": "Candidat ignore",
+      "message": "code postal 1490 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1490/court-saint-etienne/vbc48717"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ottignies-Louvain-la-Neuve",
+      "status": "Candidat ignore",
+      "message": "code postal 1490 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1490/court-saint-etienne/vbc54851"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ottignies-Louvain-la-Neuve",
+      "status": "Candidat ignore",
+      "message": "code postal 1490 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1490/court-saint-etienne/vbc16151"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ottignies-Louvain-la-Neuve",
+      "status": "Candidat ignore",
+      "message": "code postal 1490 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1490/court-saint-etienne/vbb91146"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ottignies-Louvain-la-Neuve",
+      "status": "Candidat ignore",
+      "message": "code postal 1490 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1490/court-saint-etienne/vbb09581"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ottignies-Louvain-la-Neuve",
+      "status": "Candidat ignore",
+      "message": "code postal 1490 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1490/court-saint-etienne/vay55907"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Ottignies-Louvain-la-Neuve",
+      "status": "Candidat ignore",
+      "message": "code postal 1490 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/maison/a-vendre/1490/court-saint-etienne/vay42070"
     },
     {
       "source": "Immovlan",
@@ -4949,7 +5130,7 @@
       "source": "2ememain",
       "location": "Vilvoorde",
       "status": "Recherche OK",
-      "message": "10 URL candidates",
+      "message": "11 URL candidates",
       "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/vilvoorde/?priceTo=350000"
     },
     {
@@ -4969,57 +5150,64 @@
     {
       "source": "2ememain",
       "location": "Vilvoorde",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 450000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2421691057-maison-3-facades-a-vendre-vilvorde"
     },
     {
       "source": "2ememain",
       "location": "Vilvoorde",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 429000 hors filtre",
+      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2436424135-karaktervolle-instapklare-rijwoning-3-slpk-epc-b"
+    },
+    {
+      "source": "2ememain",
+      "location": "Vilvoorde",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2407424077-maison-a-vendre"
     },
     {
       "source": "2ememain",
       "location": "Vilvoorde",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2427772426-maison-a-vendre"
     },
     {
       "source": "2ememain",
       "location": "Vilvoorde",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Vilvoorde",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2324893023-lot-2-maisons-a-vendre-a-doukala-sidi-benour"
     },
     {
       "source": "2ememain",
       "location": "Vilvoorde",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 530000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2406555876-maison-3-facades"
     },
     {
       "source": "2ememain",
       "location": "Vilvoorde",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2412109880-sous-option-duplex-130-m2-avec-terrasse-plein-sud-koningslo"
     },
     {
       "source": "2ememain",
       "location": "Vilvoorde",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 22000 sous seuil coherent",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2413556202-autostaanplaats"
     },
     {
       "source": "2ememain",
       "location": "Vilvoorde",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2427823539-duplex-avec-jardin"
     },
     {
@@ -5032,22 +5220,22 @@
     {
       "source": "2ememain",
       "location": "Zaventem",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "surface/chambres absentes - annonce particulier non exploitable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2432394440-maison-a-vendre-a-zaventem"
     },
     {
       "source": "2ememain",
       "location": "Zaventem",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2399027982-appartement-a-zaventem"
     },
     {
       "source": "2ememain",
       "location": "Zaventem",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 439000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2409148692-maison-bel-etage-a-vendre-a-zaventem"
     },
     {
@@ -5123,85 +5311,85 @@
     {
       "source": "2ememain",
       "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 590000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2432097863-maison-a-vendre"
     },
     {
       "source": "2ememain",
       "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2421616536-duplex-5-chambres-a-schaerbeek"
     },
     {
       "source": "2ememain",
       "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2421574457-appartement-3-chambres-a-schaerbeek"
     },
     {
       "source": "2ememain",
       "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2434546223-opbrengsteigendom-schaarbeek"
     },
     {
       "source": "2ememain",
       "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2434548756-immeuble-de-rapport-a-vendre-a-schaerbeek"
     },
     {
       "source": "2ememain",
       "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2435494941-appartement-1-chambre-schaerbeek-meiser"
     },
     {
       "source": "2ememain",
       "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2434836312-donnez-une-nouvelle-perspective-a-votre-propriete"
     },
     {
       "source": "2ememain",
       "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2426044528-opbrengsteigendom-schaarbeek"
     },
     {
       "source": "2ememain",
       "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Saint-Josse-Ten-Noode",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2432710113-a-vendre-depot-atelier-bureaux-sous-sol"
     },
     {
       "source": "2ememain",
       "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2426032893-immeuble-de-rapport-a-vendre-a-schaerbeek"
     },
     {
       "source": "2ememain",
       "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2398769321-immeuble-de-rapport-a-vendre-a-schaerbeek"
     },
     {
       "source": "2ememain",
       "location": "Schaerbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2415522322-immeuble-de-rapport-a-vendre-a-schaerbeek"
     },
     {
@@ -5214,106 +5402,113 @@
     {
       "source": "2ememain",
       "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "surface/chambres absentes - annonce particulier non exploitable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2406065687-vente-appart-dilbeek"
     },
     {
       "source": "2ememain",
       "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 510000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2418564910-spacieuse-maison-familiale-a-vendre-dilbeek"
     },
     {
       "source": "2ememain",
       "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 649000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2376730750-rez-commercial-habitation-jardin-au-centre-de-dilbeek"
     },
     {
       "source": "2ememain",
       "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 629000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2429112372-epc-une-maison-de-2010-a-vendre-1700-sint-martens-bodegem"
     },
     {
       "source": "2ememain",
       "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Dilbeek",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2238250296-maison-individuelle-avec-jardin-et-terrasse"
     },
     {
       "source": "2ememain",
       "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2428153331-maison-a-3-facades-a-vendre-avec-4-chambres-a-ternat"
     },
     {
       "source": "2ememain",
       "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Dilbeek",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2238250301-maison-individuelle-jardin-terrasse-nouv-cuisine-et-toiture"
     },
     {
       "source": "2ememain",
       "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 649000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2380748362-eengezinswoning-aanhorigheden-te-dilbeek"
     },
     {
       "source": "2ememain",
       "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Dilbeek",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2414858054-te-koop-assistentiewoning-te-asse"
     },
     {
       "source": "2ememain",
       "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Dilbeek",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2286776493-woning-geerfd-wij-kopen-snel-en-zonder-gedoe"
     },
     {
       "source": "2ememain",
       "location": "Dilbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m1671568660-te-gek-cd"
     },
     {
       "source": "2ememain",
       "location": "Sint-Pieters-Leeuw",
       "status": "Recherche OK",
-      "message": "3 URL candidates",
+      "message": "4 URL candidates",
       "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/sint-pieters-leeuw/?priceTo=350000"
     },
     {
       "source": "2ememain",
       "location": "Sint-Pieters-Leeuw",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 465000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2432313418-charmante-maison-3-ch-avec-jardin-et-garage"
     },
     {
       "source": "2ememain",
       "location": "Sint-Pieters-Leeuw",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
+      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2436541168-2-appartements-1-chambre-terrasse"
+    },
+    {
+      "source": "2ememain",
+      "location": "Sint-Pieters-Leeuw",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Sint-Pieters-Leeuw",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2417769376-accueil"
     },
     {
       "source": "2ememain",
       "location": "Sint-Pieters-Leeuw",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Sint-Pieters-Leeuw",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2416693413-charmante-villa-meublee-a-saidia-a-800m-de-la-plage-maroc"
     },
     {
@@ -5326,8 +5521,8 @@
     {
       "source": "2ememain",
       "location": "Tervuren",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 397000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2425701819-appartement"
     },
     {
@@ -5340,8 +5535,8 @@
     {
       "source": "2ememain",
       "location": "Saint-Gilles",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2420334928-immeuble-commercial-a-casablanca"
     },
     {
@@ -5361,8 +5556,8 @@
     {
       "source": "2ememain",
       "location": "Beersel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 525000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2412084830-grand-loft"
     },
     {
@@ -5375,22 +5570,22 @@
     {
       "source": "2ememain",
       "location": "Etterbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2434126913-appartement-1-chambre-avec-balcon-et-caves-a-etterbeek"
     },
     {
       "source": "2ememain",
       "location": "Etterbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2410618339-maison-en-pierres-du-pays-a-marchin"
     },
     {
       "source": "2ememain",
       "location": "Etterbeek",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "surface/chambres absentes - annonce particulier non exploitable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2403183773-rez-de-chaussee-75m2-jardin-155m2-etterbeek-315-000"
     },
     {
@@ -5410,22 +5605,22 @@
     {
       "source": "2ememain",
       "location": "Grimbergen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 550000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2419754648-maison-prete-a-emmenager-avec-jardin-et-situation-ideale"
     },
     {
       "source": "2ememain",
       "location": "Grimbergen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 518000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2435362512-open-bebouwing-te-koop-in-grimbergen"
     },
     {
       "source": "2ememain",
       "location": "Grimbergen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2431302823-bruxelles-opportunite-appartement-a-partir-de-149-000"
     },
     {
@@ -5438,8 +5633,8 @@
     {
       "source": "2ememain",
       "location": "Overijse",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 600000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2415581656-villa-sud-france-langudoc-roussillon"
     },
     {
@@ -5460,8 +5655,15 @@
       "source": "2ememain",
       "location": "Steenokkerzeel",
       "status": "Recherche OK",
-      "message": "0 URL candidates",
+      "message": "1 URL candidates",
       "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/steenokkerzeel/?priceTo=350000"
+    },
+    {
+      "source": "2ememain",
+      "location": "Steenokkerzeel",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
+      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2436346586-appartement-lumineux-de-2-chambres-a-malines"
     },
     {
       "source": "2ememain",
@@ -5473,9 +5675,9 @@
     {
       "source": "2ememain",
       "location": "Asse",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2428703888-te-koop-asse-huis-gerenoveerd-met-epc-label-b"
+      "status": "Candidat ignore",
+      "message": "prix 439500 hors filtre",
+      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2436428025-te-koop-volledig-gerenoveerde-woning-epc-b"
     },
     {
       "source": "2ememain",
@@ -5494,29 +5696,29 @@
     {
       "source": "2ememain",
       "location": "Waterloo",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 525000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2431851246-maison-de-caractere-255-m2-rue-saint-anne-a-waterloo"
     },
     {
       "source": "2ememain",
       "location": "Waterloo",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 1300 sous seuil coherent",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2431151443-villa-3-chambres-saint-vaast"
     },
     {
       "source": "2ememain",
       "location": "Waterloo",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2420792518-petit-appartement-1-chambre-renove-a-namur-salzinnes"
     },
     {
       "source": "2ememain",
       "location": "Waterloo",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2431319809-maison-2-ch-avec-jardin-a-les-bons-villers-clim-4-garages"
     },
     {
@@ -5529,8 +5731,8 @@
     {
       "source": "2ememain",
       "location": "Meise",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 375000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2412570200-maison-mitoyenne-a-deurne-pres-de-schoten"
     },
     {
@@ -5543,36 +5745,36 @@
     {
       "source": "2ememain",
       "location": "Zemst",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 649000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2404634892-villa-moderne-de-5-chambres-beaucoup-de-lumiere-et-epc-prat"
     },
     {
       "source": "2ememain",
       "location": "Zemst",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Kapelle-Op-Den-Bos En Deel Van Zemst",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2431021198-instapklare-woning-met-3-slp-in-rustige-buurt-te-koop-1880"
     },
     {
       "source": "2ememain",
       "location": "Zemst",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2420123446-studio-te-koop-in-antwerpen"
     },
     {
       "source": "2ememain",
       "location": "Zemst",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 580000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2422462985-mooie-half-open-bebouwing-in-rustige-doodlopende-straat"
     },
     {
       "source": "2ememain",
       "location": "Zemst",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Zemst",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2326604599-vakantie-woning-of-vastverblijfplaats-te-koop"
     },
     {
@@ -5585,85 +5787,78 @@
     {
       "source": "2ememain",
       "location": "Ternat",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2310202306-maison-casco-entrepot-atelier-atelier-beaucoup-de-potentiel"
     },
     {
       "source": "2ememain",
       "location": "Ternat",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 499000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2425077608-villa-de-4-chambres-sur-9-ares-en-bordure-de-zone-agricole"
     },
     {
       "source": "2ememain",
       "location": "Ternat",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 595000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2434355100-instapklare-open-bebouwing-met-tuin-in-wambeek"
     },
     {
       "source": "2ememain",
       "location": "Ternat",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2426651236-maison-a-vendre"
     },
     {
       "source": "2ememain",
       "location": "Halle",
       "status": "Recherche OK",
-      "message": "7 URL candidates",
+      "message": "6 URL candidates",
       "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/halle/?priceTo=350000"
     },
     {
       "source": "2ememain",
       "location": "Halle",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2431852104-magnifique-maison-4-facades-sur-terrain-de-4a-50ca"
-    },
-    {
-      "source": "2ememain",
-      "location": "Halle",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2421575577-appartement-avec-services-agrees-a-vendre-au-coeur-de-la-vill"
     },
     {
       "source": "2ememain",
       "location": "Halle",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2428359818-maison-a-vendre-immoweb-code-21621749"
-    },
-    {
-      "source": "2ememain",
-      "location": "Halle",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2354475540-maison-a-vendre-4-chambres"
     },
     {
       "source": "2ememain",
       "location": "Halle",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 595000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2403552997-huis-te-koop"
     },
     {
       "source": "2ememain",
       "location": "Halle",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
+      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2431852104-magnifique-maison-4-facades-sur-terrain-de-4a-50ca"
+    },
+    {
+      "source": "2ememain",
+      "location": "Halle",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Maurage",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2413423122-maison-d-habitation-avec-veranda-cour-et-jardin"
     },
     {
       "source": "2ememain",
       "location": "Halle",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 595000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2403544850-maison-bel-etage-3-ch"
     },
     {
@@ -5676,8 +5871,8 @@
     {
       "source": "2ememain",
       "location": "Merchtem",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "vendeur TRADER non particulier",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2366241561-merchtem-te-renoveren-woning-handelshuis-in-het-centrum"
     },
     {
@@ -5704,8 +5899,8 @@
     {
       "source": "2ememain",
       "location": "Kortenberg",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 395000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2433071320-maison-garage-jardin-3-atelier-te-koop-kortenberg"
     },
     {
@@ -5725,8 +5920,8 @@
     {
       "source": "2ememain",
       "location": "Bertem",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 570000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2423060504-maison-rurale-avec-vue-degagee-3-2-chambres"
     },
     {
@@ -5747,15 +5942,22 @@
       "source": "2ememain",
       "location": "Roosdaal",
       "status": "Recherche OK",
-      "message": "1 URL candidates",
+      "message": "2 URL candidates",
       "url": "https://www.2ememain.be/l/immo/maisons-a-vendre/q/roosdaal/?priceTo=350000"
     },
     {
       "source": "2ememain",
       "location": "Roosdaal",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 785000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2434534922-a-vendre-atelier-maison-okegem-ninove"
+    },
+    {
+      "source": "2ememain",
+      "location": "Roosdaal",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2436553998-maison-mitoyenne-a-vendre"
     },
     {
       "source": "2ememain",
@@ -5767,15 +5969,15 @@
     {
       "source": "2ememain",
       "location": "Kampenhout",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Kampenhout",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2435203974-huis-te-koop-te-oplinter"
     },
     {
       "source": "2ememain",
       "location": "Kampenhout",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m1731860922-appartement-rez-a-vendre-xl"
     },
     {
@@ -5788,36 +5990,36 @@
     {
       "source": "2ememain",
       "location": "Wavre",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Wavre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2416663522-boulangerie-prete-a-emmenager-un-flux-de-clients-constant"
     },
     {
       "source": "2ememain",
       "location": "Wavre",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2391986295-opportunite-rare-a-jodoigne"
     },
     {
       "source": "2ememain",
       "location": "Wavre",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Wavre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2404390079-batiment-a-vendre"
     },
     {
       "source": "2ememain",
       "location": "Wavre",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m1870475178-appartement-a-vendre-en-italie-pescara-mer-adriatic"
     },
     {
       "source": "2ememain",
       "location": "Wavre",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Wavre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2325405835-espace-mansarde-a-vendre"
     },
     {
@@ -5851,15 +6053,15 @@
     {
       "source": "2ememain",
       "location": "Liedekerke",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 380000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2419357765-maison-a-vendre"
     },
     {
       "source": "2ememain",
       "location": "Liedekerke",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 425000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2421529038-immobilier-d-investissement-3-app-liedekerke"
     },
     {
@@ -5872,64 +6074,64 @@
     {
       "source": "2ememain",
       "location": "Londerzeel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 479000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2415794049-maison-a-vendre-4-chambres-6a29-sud-prete-a-emmenager"
     },
     {
       "source": "2ememain",
       "location": "Londerzeel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 395000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2416201226-londerzeel-bel-etagewoning-met-3-slpks-tuin-en-terras"
     },
     {
       "source": "2ememain",
       "location": "Londerzeel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 519000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2432392508-prachtige-villa-in-londerzeel-te-koop"
     },
     {
       "source": "2ememain",
       "location": "Londerzeel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2331011513-puurs-kalfort-te-renoveren-woning-hob-op-grond-van-6a"
     },
     {
       "source": "2ememain",
       "location": "Londerzeel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2422832134-maison-a-vendre-a-steenhuffel"
     },
     {
       "source": "2ememain",
       "location": "Londerzeel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
-      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2427013323-maison-a-vendre-1840-steenhuffel-londerzeel"
-    },
-    {
-      "source": "2ememain",
-      "location": "Londerzeel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2313770543-appartement-a-louer-au-centre-ville-de-tanger-plage-250m"
     },
     {
       "source": "2ememain",
       "location": "Londerzeel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2427013323-maison-a-vendre-1840-steenhuffel-londerzeel"
+    },
+    {
+      "source": "2ememain",
+      "location": "Londerzeel",
+      "status": "Candidat ignore",
+      "message": "prix 495000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2408366938-ruime-duplex"
     },
     {
       "source": "2ememain",
       "location": "Londerzeel",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2416203611-puurs-ruisbroek-2-garages-nabij-centrum"
     },
     {
@@ -5956,15 +6158,15 @@
     {
       "source": "2ememain",
       "location": "Tubize",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2259149642-9-maisons-neuves-a-vendre"
     },
     {
       "source": "2ememain",
       "location": "Tubize",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2400733172-mobilhome-caravane"
     },
     {
@@ -5977,85 +6179,85 @@
     {
       "source": "2ememain",
       "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Malines",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2436283836-maison-du-centre-ville-de-malines"
     },
     {
       "source": "2ememain",
       "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 380000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2408780988-maison-a-vendre-avec-garage"
     },
     {
       "source": "2ememain",
       "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 1595 sous seuil coherent",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2433947387-maison-de-caractere-totalement-renovee-avec-jardin-epc-a"
     },
     {
       "source": "2ememain",
       "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2432263141-a-vendre-a-boom-2-opportunites-dans-une-maison-terrain"
     },
     {
       "source": "2ememain",
       "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 850 sous seuil coherent",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2410647746-exclusieve-werk-of-ontvangstruimte-nabij-centrum-mechelen"
     },
     {
       "source": "2ememain",
       "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2397669965-gezocht-woning-via-huurkoop-overeenkomst-mechelen-hombeek"
     },
     {
       "source": "2ememain",
       "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Malines",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2270414166-woning-verkopen-zonder-makelaar"
     },
     {
       "source": "2ememain",
       "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Duffel",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2296718236-charmante-rijwoning-hartje-duffel"
     },
     {
       "source": "2ememain",
       "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Duffel",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2260600263-charmante-rijwoning-centrum-duffel"
     },
     {
       "source": "2ememain",
       "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 500000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2286778922-opbrengsteigendom-gezocht"
     },
     {
       "source": "2ememain",
       "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Heist-Op-Den-Berg",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2363680598-huis-direct-verkopen-zonder-makelaar"
     },
     {
       "source": "2ememain",
       "location": "Mechelen",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Antwerpen",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2286777884-wij-kopen-uw-woning-zonder-makelaar"
     },
     {
@@ -6068,8 +6270,8 @@
     {
       "source": "2ememain",
       "location": "Ottignies-Louvain-la-Neuve",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix 369000 hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2426828545-appartement-a-vendre-proche-de-lln-2-chambres"
     },
     {
@@ -6089,15 +6291,15 @@
     {
       "source": "2ememain",
       "location": "Herent",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "type non maison probable",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2424684331-instapklare-flat-op-toplocatie-in-herent"
     },
     {
       "source": "2ememain",
       "location": "Herent",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2401593116-woonhuis-te-koop-via-biddit-te-aarschot"
     },
     {
@@ -6110,8 +6312,8 @@
     {
       "source": "2ememain",
       "location": "Denderleeuw",
-      "status": "Erreur detail",
-      "message": "HTTP 403",
+      "status": "Candidat ignore",
+      "message": "commune absente du titre/url; vendeur Denderleeuw",
       "url": "https://www.2ememain.be/v/immo/maisons-a-vendre/m2400511066-woning"
     },
     {
@@ -6124,29 +6326,36 @@
   ],
   "newListings": {
     "criterion": "absent-rapport-quotidien-precedent",
-    "baselineGeneratedAt": "2026-08-27T18:17:04.427Z",
-    "baselineCount": 597,
-    "count": 16,
+    "baselineGeneratedAt": "2026-08-28T19:20:01.501Z",
+    "baselineCount": 51,
+    "count": 23,
     "ids": [
-      "https://www.immovlan.be/fr/detail/maison/a-vendre/1440/braine-le-chateau/vbe43895",
-      "https://www.immovlan.be/fr/detail/maison/a-vendre/1420/braine-l-alleud/vbe50965",
-      "https://www.immovlan.be/fr/detail/maison/a-vendre/1420/braine-l-alleud/vbe46886",
-      "https://www.immovlan.be/fr/detail/maison/a-vendre/1200/woluwe-saint-lambert/vbd89822",
-      "https://www.immovlan.be/fr/detail/maison/a-vendre/1420/braine-l-alleud/vbe23031",
-      "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbw70822",
-      "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/vbe56741",
-      "https://www.immovlan.be/fr/detail/maison/a-vendre/3080/tervuren/rbw71595",
-      "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw70959",
-      "https://www.immovlan.be/fr/detail/maison/a-vendre/1090/jette/vbc83742",
-      "https://www.immovlan.be/fr/detail/maison/a-vendre/1930/nossegem/rbu28556",
-      "https://www.immovlan.be/fr/detail/maison/a-vendre/1790/affligem/rbw62429",
-      "https://www.immovlan.be/fr/detail/maison/a-vendre/1790/affligem/rbv88722",
-      "https://www.immovlan.be/fr/detail/maison/a-vendre/1790/affligem/rbv71164",
-      "https://www.immovlan.be/fr/detail/maison/a-vendre/1090/jette/vbe52701",
-      "https://www.immovlan.be/fr/detail/maison/a-vendre/1090/jette/rbv88568"
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1730/asse/rwc42931",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw73393",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbw41091",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbw61577",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1730/asse/rbw24631",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw77511",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe46624",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe50293",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe17644",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbv81083",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/rbw40784",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw75178",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1785/merchtem/rbv45455",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe48044",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe41147",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbw09055",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe47624",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe48701",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1600/sint-pieters-leeuw/rbw33957",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/rbw55117",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/vbe50218",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1070/anderlecht/rbw33372",
+      "https://www.immovlan.be/fr/detail/maison/a-vendre/1500/hal/rbw30998"
     ],
     "bySource": {
-      "Immovlan": 16
+      "Immovlan": 23
     }
   }
 }

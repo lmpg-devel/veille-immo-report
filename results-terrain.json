@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-29T13:29:42.424Z",
+  "generatedAt": "2026-08-30T12:39:00.623Z",
   "reportUrl": "https://lmpg-devel.github.io/veille-immo-report/",
   "propertyType": "terrain",
   "maxPrice": 100000,
@@ -81,8 +81,8 @@
       "source": "Immovlan",
       "location": "Linkebeek",
       "status": "Candidat ignore",
-      "message": "code postal 9470 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/9470/denderleeuw/rbw09107"
+      "message": "code postal 1600 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/1600/sint-pieters-leeuw/rbw25597"
     },
     {
       "source": "Immovlan",
@@ -102,22 +102,22 @@
       "source": "Immovlan",
       "location": "Ganshoren",
       "status": "Recherche OK",
-      "message": "1 URL candidates",
+      "message": "0 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/terrain/a-vendre/ganshoren?maxprice=100000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Ganshoren",
-      "status": "Candidat ignore",
-      "message": "code postal 1600 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/1600/sint-pieters-leeuw/rbw25597"
     },
     {
       "source": "Immovlan",
       "location": "Evere",
       "status": "Recherche OK",
-      "message": "0 URL candidates",
+      "message": "1 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/terrain/a-vendre/evere?maxprice=100000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Evere",
+      "status": "Candidat ignore",
+      "message": "code postal 9470 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/9470/denderleeuw/rbw09107"
     },
     {
       "source": "Immovlan",
@@ -242,15 +242,15 @@
       "source": "Immovlan",
       "location": "Hoeilaart",
       "status": "Candidat ignore",
-      "message": "code postal 1390 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/1390/grez-doiceau/vbe01298"
+      "message": "code postal 1980 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/1980/zemst/rbv40363"
     },
     {
       "source": "Immovlan",
       "location": "Hoeilaart",
       "status": "Candidat ignore",
-      "message": "code postal 1980 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/1980/zemst/rbv40363"
+      "message": "code postal 1480 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/1480/tubize/vbd67998"
     },
     {
       "source": "Immovlan",
@@ -270,15 +270,8 @@
       "source": "Immovlan",
       "location": "Sint-Pieters-Leeuw",
       "status": "Recherche OK",
-      "message": "1 URL candidates",
+      "message": "0 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/terrain/a-vendre/sint-pieters-leeuw?maxprice=100000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Sint-Pieters-Leeuw",
-      "status": "Candidat ignore",
-      "message": "code postal 1480 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/1480/tubize/vbd67998"
     },
     {
       "source": "Immovlan",
@@ -445,15 +438,29 @@
       "source": "Immovlan",
       "location": "Rixensart",
       "status": "Recherche OK",
-      "message": "0 URL candidates",
+      "message": "1 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/terrain/a-vendre/rixensart?maxprice=100000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Rixensart",
+      "status": "Candidat ignore",
+      "message": "code postal 1390 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/1390/grez-doiceau/vbe01298"
     },
     {
       "source": "Immovlan",
       "location": "Huldenberg",
       "status": "Recherche OK",
-      "message": "0 URL candidates",
+      "message": "1 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/terrain/a-vendre/huldenberg?maxprice=100000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Huldenberg",
+      "status": "Candidat ignore",
+      "message": "code postal 1370 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/1370/pietrain/vbe04076"
     },
     {
       "source": "Immovlan",
@@ -466,7 +473,7 @@
       "source": "Immovlan",
       "location": "Braine-l'Alleud",
       "status": "Recherche OK",
-      "message": "4 URL candidates",
+      "message": "6 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/terrain/a-vendre/braine-l-alleud?maxprice=100000"
     },
     {
@@ -496,6 +503,20 @@
       "status": "Candidat ignore",
       "message": "code postal 6181 hors commune",
       "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/6181/gouy-lez-pieton/vbe12064"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Braine-l'Alleud",
+      "status": "Candidat ignore",
+      "message": "code postal 7090 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/7090/braine-le-comte/vbe05224"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Braine-l'Alleud",
+      "status": "Candidat ignore",
+      "message": "code postal 7090 hors commune",
+      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/7090/braine-le-comte/vbe05223"
     },
     {
       "source": "Immovlan",
@@ -662,22 +683,8 @@
       "source": "Immovlan",
       "location": "Tubize",
       "status": "Recherche OK",
-      "message": "2 URL candidates",
+      "message": "0 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/terrain/a-vendre/tubize?maxprice=100000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Tubize",
-      "status": "Candidat ignore",
-      "message": "code postal 7090 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/7090/braine-le-comte/vbe05224"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Tubize",
-      "status": "Candidat ignore",
-      "message": "code postal 7090 hors commune",
-      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/7090/braine-le-comte/vbe05223"
     },
     {
       "source": "Immovlan",
@@ -1027,14 +1034,14 @@
       "location": "Zaventem",
       "status": "Candidat ignore",
       "message": "prix absent hors filtre",
-      "url": "https://www.2ememain.be/v/immo/terrains-terrains-a-batir/m2423875429-terrain-a-vendre-a-nossegem-zaventem"
+      "url": "https://www.2ememain.be/v/immo/terrains-terrains-a-batir/m2423875429-lottissement-maison-3-facades-a-vendre-a-nossegem-zaventem"
     },
     {
       "source": "2ememain",
       "location": "Zaventem",
       "status": "Candidat ignore",
       "message": "prix 599999 hors filtre",
-      "url": "https://www.2ememain.be/v/immo/terrains-terrains-a-batir/m2424172836-terrain-a-construire-de-16are35ca-a-nossegem"
+      "url": "https://www.2ememain.be/v/immo/terrains-terrains-a-batir/m2424172836-lottissement-de-16are35ca-a-nossegem"
     },
     {
       "source": "2ememain",
@@ -1621,7 +1628,7 @@
       "source": "2ememain",
       "location": "Denderleeuw",
       "status": "Recherche OK",
-      "message": "2 URL candidates",
+      "message": "3 URL candidates",
       "url": "https://www.2ememain.be/l/immo/terrains-terrains-a-batir/q/denderleeuw/?priceTo=100000"
     },
     {
@@ -1630,6 +1637,13 @@
       "status": "Candidat ignore",
       "message": "prix absent hors filtre",
       "url": "https://www.2ememain.be/v/immo/terrains-terrains-a-batir/m2332165967-3-hectares-de-foret-dont-un-etang-de-10-acres"
+    },
+    {
+      "source": "2ememain",
+      "location": "Denderleeuw",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.2ememain.be/v/immo/terrains-terrains-a-batir/m2436611822-weide-hooiland-iddergem"
     },
     {
       "source": "2ememain",
@@ -1648,7 +1662,7 @@
   ],
   "newListings": {
     "criterion": "absent-rapport-quotidien-precedent",
-    "baselineGeneratedAt": "2026-08-28T19:29:28.182Z",
+    "baselineGeneratedAt": "2026-08-29T13:29:42.424Z",
     "baselineCount": 0,
     "count": 0,
     "ids": [],

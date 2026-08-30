@@ -39,6 +39,45 @@ async function remoteResults(relativePath) {
   return Buffer.from(await response.arrayBuffer());
 }
 
+function resultsPayloadInfo(content) {
+  const payload = JSON.parse(Buffer.isBuffer(content) ? content.toString("utf8") : String(content || ""));
+  const listings = Array.isArray(payload && payload.listings) ? payload.listings : [];
+  const bySource = listings.reduce((acc, listing) => {
+    const source = String(listing && listing.source || "Source inconnue");
+    acc[source] = (acc[source] || 0) + 1;
+    return acc;
+  }, {});
+  return { count: listings.length, bySource };
+}
+
+function sourceCount(bySource, needle) {
+  return Object.keys(bySource || {}).reduce((total, source) => {
+    return source.toLowerCase().includes(needle) ? total + bySource[source] : total;
+  }, 0);
+}
+
+function remoteResultsLooksComplete(remoteContent, bundledContent, relativePath) {
+  const bundled = resultsPayloadInfo(bundledContent);
+  if (bundled.count === 0) {
+    return true;
+  }
+  const remote = resultsPayloadInfo(remoteContent);
+  if (remote.count === 0) {
+    return false;
+  }
+  if (remote.count < Math.max(1, Math.floor(bundled.count * 0.35))) {
+    return false;
+  }
+  if (relativePath === "results.json") {
+    const bundledImmoweb = sourceCount(bundled.bySource, "immoweb");
+    const remoteImmoweb = sourceCount(remote.bySource, "immoweb");
+    if (bundledImmoweb >= 25 && remoteImmoweb < Math.max(25, Math.floor(bundledImmoweb * 0.2))) {
+      return false;
+    }
+  }
+  return true;
+}
+
 function startLocalServer() {
   const webRoot = path.join(__dirname, "..", "web");
   diagnostic("webRoot=" + webRoot + " exists=" + fs.existsSync(webRoot));
@@ -53,10 +92,15 @@ function startLocalServer() {
       }
       let content;
       if (REMOTE_RESULTS_FILES.has(relativePath)) {
+        const bundledContent = fs.readFileSync(filePath);
         try {
-          content = await remoteResults(relativePath);
+          const remoteContent = await remoteResults(relativePath);
+          if (!remoteResultsLooksComplete(remoteContent, bundledContent, relativePath)) {
+            throw new Error("remote results look incomplete");
+          }
+          content = remoteContent;
         } catch {
-          content = fs.readFileSync(filePath);
+          content = bundledContent;
         }
       } else {
         content = fs.readFileSync(filePath);

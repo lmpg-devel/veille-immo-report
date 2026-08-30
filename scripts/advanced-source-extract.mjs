@@ -7,6 +7,7 @@ const DEFAULT_OUT = "reports-experimental/advanced-source-results.json";
 const USER_AGENT = "Mozilla/5.0 veille-immo-advanced/1.0";
 const APIFY_API_BASE = "https://api.apify.com/v2";
 const DEFAULT_ZIMMO_APIFY_ACTOR_ID = "dz_omar~zimmo-scraper";
+let fetchTimeoutMs = 12000;
 
 function parseArgs(argv) {
   const args = {
@@ -27,7 +28,8 @@ function parseArgs(argv) {
     apifyPollSecs: 20,
     apifyRunTimeoutMs: 600000,
     apifyDatasetLimit: 500,
-    apifyMaxResultsPerUrl: 10
+    apifyMaxResultsPerUrl: 10,
+    fetchTimeoutMs
   };
   for (let index = 2; index < argv.length; index += 1) {
     const item = argv[index];
@@ -49,6 +51,7 @@ function parseArgs(argv) {
   args.apifyRunTimeoutMs = Number(args.apifyRunTimeoutMs || 600000);
   args.apifyDatasetLimit = Number(args.apifyDatasetLimit || 500);
   args.apifyMaxResultsPerUrl = Number(args.apifyMaxResultsPerUrl || 10);
+  args.fetchTimeoutMs = Number(args.fetchTimeoutMs || fetchTimeoutMs);
   return args;
 }
 
@@ -87,18 +90,29 @@ function getFirstMatch(text, regex) {
 }
 
 async function fetchText(url, referer = "") {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), fetchTimeoutMs);
   const headers = {
     "User-Agent": USER_AGENT,
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "Accept-Language": "fr-BE,fr;q=0.9,nl;q=0.8"
   };
-  if (referer) headers.Referer = referer;
-  const response = await fetch(url, { headers, redirect: "follow" });
-  const text = await response.text();
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
+  try {
+    if (referer) headers.Referer = referer;
+    const response = await fetch(url, { headers, redirect: "follow", signal: controller.signal });
+    const text = await response.text();
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    return text;
+  } catch (error) {
+    if (error?.name === "AbortError") {
+      throw new Error(`Timeout ${fetchTimeoutMs}ms`);
+    }
+    throw error;
+  } finally {
+    clearTimeout(timer);
   }
-  return text;
 }
 
 function normalizeImageUrl(url) {
@@ -355,6 +369,11 @@ function findJsonLd(objects, type) {
   return objects.find((item) => String(item && item["@type"] || "").trim().toLowerCase() === type.toLowerCase()) || null;
 }
 
+function publicationDateInfo(value, source) {
+  const raw = cleanText(value);
+  return raw ? { publicationDate: raw, publicationDateSource: source } : { publicationDate: null, publicationDateSource: "" };
+}
+
 function immovlanSearchUrl(location, maxPrice, config) {
   const type = isLandSearch(config) ? "terrain" : "maison";
   return `https://www.immovlan.be/fr/immobilier/${type}/a-vendre/${location.immovlanSlug}?maxprice=${maxPrice}`;
@@ -382,6 +401,7 @@ async function parseImmovlanDetail(url, location, config) {
   const objects = parseJsonLdObjects(html);
   const house = findJsonLd(objects, "House");
   const land = findJsonLd(objects, "Land");
+  const realEstateListing = findJsonLd(objects, "RealEstateListing");
   const property = isLandSearch(config) ? (land || house || {}) : (house || {});
   const sell = findJsonLd(objects, "SellAction");
   const geo = findJsonLd(objects, "GeoCoordinates");
@@ -422,6 +442,7 @@ async function parseImmovlanDetail(url, location, config) {
     ...imageMatches
   ]).slice(0, 12);
   const phone = await getImmovlanPhone(vlanCode.toUpperCase(), url);
+  const publication = publicationDateInfo(firstField(realEstateListing || {}, ["datePosted", "datePublished", "dateCreated"]), "Immovlan JSON-LD RealEstateListing.datePosted");
 
   return {
     listing: {
@@ -446,6 +467,8 @@ async function parseImmovlanDetail(url, location, config) {
       isUnderOption,
       underOption: isUnderOption,
       saleStatus: isUnderOption ? "sous option" : "",
+      publicationDate: publication.publicationDate,
+      publicationDateSource: publication.publicationDateSource,
       photoCount: images.length,
       photoUrl: images[0] || null,
       photoUrls: images,
@@ -566,6 +589,15 @@ async function parseSecondHandDetail(url, location, config) {
   const sellerProfileUrl = seller.sellerProfileUrl ? new URL(seller.sellerProfileUrl, "https://www.2ememain.be").href : "";
   const sellerName = decodeHtml(seller.name || "");
   const hasSpecificSeller = sellerName && !/^particulier(?:\s+2ememain)?$/i.test(sellerName);
+  const publication = publicationDateInfo(firstField(listing, [
+    "datePosted",
+    "datePublished",
+    "publicationDate",
+    "publishedAt",
+    "createdAt",
+    "dateCreated",
+    "firstSeenAt"
+  ]), "2ememain window.__CONFIG__");
 
   if (!images.length) return { listing: null, message: "photos absentes - annonce particulier non exploitable" };
   if (!surfaceM2 && !bedrooms) return { listing: null, message: "surface/chambres absentes - annonce particulier non exploitable" };
@@ -591,6 +623,8 @@ async function parseSecondHandDetail(url, location, config) {
       agentPhone: "",
       agentEmail: "",
       agentWebsite: sellerProfileUrl,
+      publicationDate: publication.publicationDate,
+      publicationDateSource: publication.publicationDateSource,
       photoCount: images.length,
       photoUrl: images[0] || null,
       photoUrls: images,
@@ -925,6 +959,16 @@ function normalizeZimmoApifyItem(item, config) {
     ...collectImageUrls(firstField(item, ["photoUrls", "photos", "images", "imageUrls", "gallery", "media"])),
     ...collectImageUrls(firstField(item, ["image", "photo", "thumbnail"]))
   ].map(normalizeImageUrl).filter(Boolean))].slice(0, 12);
+  const publication = publicationDateInfo(firstField(item, [
+    "publicationDate",
+    "datePublished",
+    "datePosted",
+    "publishedAt",
+    "createdAt",
+    "dateCreated",
+    "onlineSince",
+    "firstSeenAt"
+  ]), "Zimmo Apify item publication field");
 
   return {
     listing: {
@@ -951,6 +995,8 @@ function normalizeZimmoApifyItem(item, config) {
       isUnderOption,
       underOption: isUnderOption,
       saleStatus: isUnderOption ? "sous option" : statusText,
+      publicationDate: publication.publicationDate,
+      publicationDateSource: publication.publicationDateSource,
       photoCount: images.length,
       photoUrl: images[0] || null,
       photoUrls: images,
@@ -967,8 +1013,8 @@ async function extractZimmoApify(config, args, diagnostics) {
     diagnostics.push({
       source: "Zimmo (Apify)",
       location: "Configuration",
-      status: "Connecteur pret",
-      message: `Acteur ${actorId || DEFAULT_ZIMMO_APIFY_ACTOR_ID} identifie. Definir APIFY_TOKEN pour activer l'import Zimmo via Apify.`,
+      status: "Extraction bloquee",
+      message: `APIFY_TOKEN absent. Acteur ${actorId || DEFAULT_ZIMMO_APIFY_ACTOR_ID} identifie mais import Zimmo non executable sans token.`,
       url: "https://apify.com/dz_omar/zimmo-scraper"
     });
     return [];
@@ -1032,6 +1078,14 @@ function replacementSourceMatches(listingSource, requestedSource) {
   return false;
 }
 
+function countBySource(listings) {
+  return (Array.isArray(listings) ? listings : []).reduce((acc, listing) => {
+    const source = String(listing?.source || "Source inconnue");
+    acc[source] = (acc[source] || 0) + 1;
+    return acc;
+  }, {});
+}
+
 function mergeResults(base, additions, replacementSources = []) {
   const activeReplacementSources = replacementSources.map((source) => String(source || "").toLowerCase()).filter(Boolean);
   const baseListings = (base.listings || []).filter((listing) => {
@@ -1050,12 +1104,14 @@ function mergeResults(base, additions, replacementSources = []) {
     ...base,
     generatedAt: new Date().toISOString(),
     count: merged.length,
+    sources: countBySource(merged),
     listings: merged
   };
 }
 
 async function run() {
   const args = parseArgs(process.argv);
+  fetchTimeoutMs = args.fetchTimeoutMs;
   const config = JSON.parse(fs.readFileSync(args.config, "utf8"));
   if (args.propertyType) config.propertyType = String(args.propertyType);
   if (args.maxPrice > 0) config.maxPrice = args.maxPrice;

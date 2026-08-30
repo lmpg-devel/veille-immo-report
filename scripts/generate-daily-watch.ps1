@@ -25,6 +25,24 @@ function Invoke-NativeCommand {
   }
 }
 
+function Test-ResultsQuality {
+  param(
+    [string]$CurrentPath,
+    [string]$PreviousPath,
+    [string]$Label,
+    [int]$MinTotal = 1
+  )
+
+  $arguments = @(
+    (Join-Path $root "scripts/validate-results-quality.mjs"),
+    "--current", $CurrentPath,
+    "--previous", $PreviousPath,
+    "--label", $Label,
+    "--minTotal", [string]$MinTotal
+  )
+  Invoke-NativeCommand "node" $arguments
+}
+
 $root = (Resolve-Path -LiteralPath $ProjectRoot).Path
 $config = if ([System.IO.Path]::IsPathRooted($ConfigPath)) {
   $ConfigPath
@@ -46,6 +64,7 @@ if (-not (Test-Path -LiteralPath $currentResults)) {
   throw "Current results baseline not found: $currentResults"
 }
 
+$previousResultsProvided = -not [string]::IsNullOrWhiteSpace($PreviousResultsPath)
 if ([string]::IsNullOrWhiteSpace($PreviousResultsPath)) {
   $tempRoot = if ($env:RUNNER_TEMP) {
     $env:RUNNER_TEMP
@@ -57,7 +76,14 @@ if ([string]::IsNullOrWhiteSpace($PreviousResultsPath)) {
 
 Push-Location -LiteralPath $root
 try {
-  Copy-Item -LiteralPath $currentResults -Destination $PreviousResultsPath -Force
+  if ($previousResultsProvided) {
+    if (-not (Test-Path -LiteralPath $PreviousResultsPath)) {
+      throw "Previous results file not found: $PreviousResultsPath"
+    }
+  }
+  else {
+    Copy-Item -LiteralPath $currentResults -Destination $PreviousResultsPath -Force
+  }
 
   & (Join-Path $root "scripts/run-veille-immo.ps1") `
     -ConfigPath $config `
@@ -93,6 +119,7 @@ try {
   if (-not $?) {
     throw "Base JSON generation failed"
   }
+  Test-ResultsQuality -CurrentPath $baseResults -PreviousPath $PreviousResultsPath -Label "maisons-base-immoweb" -MinTotal 25
 
   Invoke-NativeCommand "node" @(
     (Join-Path $root "scripts/advanced-source-extract.mjs"),
@@ -103,6 +130,7 @@ try {
     "--maxPerLocation", "12",
     "--delayMs", "350"
   )
+  Test-ResultsQuality -CurrentPath $currentResults -PreviousPath $PreviousResultsPath -Label "maisons-publie" -MinTotal 25
 
   Invoke-NativeCommand "node" @(
     (Join-Path $root "scripts/mark-new-listings.mjs"),
@@ -158,6 +186,7 @@ try {
   if (-not $?) {
     throw "Terrain JSON generation failed"
   }
+  Test-ResultsQuality -CurrentPath $terrainBaseResults -PreviousPath $terrainPreviousResults -Label "terrains-base-immoweb" -MinTotal 1
 
   Invoke-NativeCommand "node" @(
     (Join-Path $root "scripts/advanced-source-extract.mjs"),
@@ -170,6 +199,7 @@ try {
     "--maxPerLocation", "12",
     "--delayMs", "350"
   )
+  Test-ResultsQuality -CurrentPath $terrainResults -PreviousPath $terrainPreviousResults -Label "terrains-publie" -MinTotal 1
 
   Invoke-NativeCommand "node" @(
     (Join-Path $root "scripts/mark-new-listings.mjs"),

@@ -39,6 +39,57 @@ function sourceCounts(listings) {
   }, {});
 }
 
+function parseListingDateValue(value) {
+  if (value == null || value === "") return null;
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value < 100000000000 ? value * 1000 : value;
+  }
+  const raw = String(value).trim();
+  if (!raw) return null;
+  if (/^\d{10,13}$/.test(raw)) {
+    const numeric = Number(raw);
+    return numeric < 100000000000 ? numeric * 1000 : numeric;
+  }
+  const parsed = Date.parse(raw);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function listingPublicationInfo(listing) {
+  const fields = [
+    "publicationDate",
+    "publishedAt",
+    "publishedDate",
+    "datePublished",
+    "createdAt",
+    "creationDate",
+    "firstSeenAt",
+    "firstSeen",
+    "listedAt",
+    "listingDate",
+    "date"
+  ];
+  for (const field of fields) {
+    const parsed = parseListingDateValue(listing?.[field]);
+    if (parsed) {
+      return {
+        field,
+        rawValue: listing[field],
+        iso: new Date(parsed).toISOString(),
+        time: parsed
+      };
+    }
+  }
+  return null;
+}
+
+function recentPublicationMatch(listing, now) {
+  const publication = listingPublicationInfo(listing);
+  if (!publication || publication.time > now || now - publication.time > 72 * 60 * 60 * 1000) {
+    return null;
+  }
+  return publication;
+}
+
 function run() {
   const args = parseArgs(process.argv);
   if (!args.current || !args.previous) {
@@ -50,20 +101,38 @@ function run() {
   const currentListings = Array.isArray(current.listings) ? current.listings : [];
   const previousListings = Array.isArray(previous.listings) ? previous.listings : [];
   const previousKeys = new Set(previousListings.map(listingKey).filter(Boolean));
+  const now = Date.parse(current.generatedAt || "") || Date.now();
   const newListings = currentListings.filter((listing) => {
     const key = listingKey(listing);
-    return Boolean(key && !previousKeys.has(key));
+    return Boolean(key && (!previousKeys.has(key) || recentPublicationMatch(listing, now)));
   });
   const ids = newListings.map(listingKey);
+  const details = newListings.reduce((acc, listing) => {
+    const key = listingKey(listing);
+    const publication = recentPublicationMatch(listing, now);
+    acc[key] = {
+      reason: previousKeys.has(key) ? "publication-fiable-72h" : (publication ? "absent-rapport-quotidien-precedent-et-publication-fiable-72h" : "absent-rapport-quotidien-precedent"),
+      publication: publication ? {
+        field: publication.field,
+        rawValue: publication.rawValue,
+        iso: publication.iso,
+        ageHours: Math.round(((now - publication.time) / (60 * 60 * 1000)) * 10) / 10,
+        within72h: true
+      } : null
+    };
+    return acc;
+  }, {});
 
   current.newListings = {
-    criterion: "absent-rapport-quotidien-precedent",
+    criterion: "absent-rapport-quotidien-precedent-ou-publication-fiable-72h",
     baselineGeneratedAt: previous.generatedAt || null,
     baselineCount: previousListings.length,
     count: ids.length,
     ids,
+    details,
     bySource: sourceCounts(newListings)
   };
+  current.sources = sourceCounts(currentListings);
 
   const outputPath = args.out || args.current;
   fs.mkdirSync(path.dirname(path.resolve(outputPath)), { recursive: true });

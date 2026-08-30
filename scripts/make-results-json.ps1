@@ -39,6 +39,19 @@ function ConvertTo-NullableDouble {
   return $null
 }
 
+function Get-OptionalCsvValue {
+  param(
+    [object]$Row,
+    [string]$Name
+  )
+
+  if ($Row.PSObject.Properties.Name -contains $Name -and -not [string]::IsNullOrWhiteSpace([string]$Row.$Name)) {
+    return [string]$Row.$Name
+  }
+
+  return $null
+}
+
 $resolvedCsvPath = Resolve-WorkspacePath $CsvPath
 $resolvedOutputPath = Resolve-WorkspacePath $OutputPath
 
@@ -52,7 +65,9 @@ $listings = foreach ($row in $rows) {
   if (-not [string]::IsNullOrWhiteSpace($row.PhotoUrls)) {
     $photos = @($row.PhotoUrls -split "\s+\|\s+" | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
   }
-  $statusText = @($row.SaleStatus, $row.Status, $row.Availability, $row.Title) -join " "
+  $statusValues = @("SaleStatus", "Status", "Availability", "Title") |
+    ForEach-Object { Get-OptionalCsvValue -Row $row -Name $_ }
+  $statusText = $statusValues -join " "
   $isUnderOption = $false
   if ($row.PSObject.Properties.Name -contains "IsUnderOption" -and "$($row.IsUnderOption)" -match "^(?i:true|1|yes|oui)$") {
     $isUnderOption = $true
@@ -86,11 +101,26 @@ $listings = foreach ($row in $rows) {
     isUnderOption = $isUnderOption
     underOption = $isUnderOption
     saleStatus = if ($isUnderOption) { "sous option" } else { $row.SaleStatus }
+    publicationDate = Get-OptionalCsvValue -Row $row -Name "PublicationDate"
+    publicationDateSource = Get-OptionalCsvValue -Row $row -Name "PublicationDateSource"
     photoCount = ConvertTo-NullableInt $row.PhotoCount
     photoUrl = if ($photos.Count -gt 0) { $photos[0] } else { $null }
     photoUrls = @($photos)
     url = $row.Url
   }
+}
+
+$sourceCounts = [ordered]@{}
+foreach ($listing in @($listings)) {
+  $source = if ($listing.Contains("source") -and -not [string]::IsNullOrWhiteSpace([string]$listing["source"])) {
+    [string]$listing["source"]
+  } else {
+    "Source inconnue"
+  }
+  if (-not $sourceCounts.Contains($source)) {
+    $sourceCounts[$source] = 0
+  }
+  $sourceCounts[$source] += 1
 }
 
 $payload = [ordered]@{
@@ -100,6 +130,7 @@ $payload = [ordered]@{
   propertyType = $PropertyType
   maxPrice = $MaxPrice
   count = @($listings).Count
+  sources = $sourceCounts
   listings = @($listings)
 }
 

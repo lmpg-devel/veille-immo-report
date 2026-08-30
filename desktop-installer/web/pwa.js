@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-08-28-02";
+  const APP_VERSION = "pwa-2026-08-30-01";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
   const LOCATION_DISTANCES_URL = "data/location-distances.json";
@@ -652,43 +652,40 @@
     const nextNewDetails = {};
     const now = Date.now();
 
-    if (publishedIds) {
-      listings.forEach(function (listing) {
-        const id = listingNewId(listing);
-        if (id && publishedIds.has(id)) {
-          nextNewIds.add(id);
-          nextNewDetails[id] = {
-            reason: "absent-rapport-quotidien-precedent",
-            publication: null
-          };
-        }
-      });
-    } else if (previous.available) {
-      listings.forEach(function (listing) {
-        const id = listingNewId(listing);
-        const presentBefore = listingLaunchIds(listing).some(function (candidate) {
-          return previous.ids.has(candidate);
-        });
-        const match = listingNewRuleMatch(listing, presentBefore, now);
-        if (id && match) {
-          nextNewIds.add(id);
-          nextNewDetails[id] = match;
-        }
-      });
-    } else {
-      listings.forEach(function (listing) {
-        const id = listingNewId(listing);
-        const match = listingNewRuleMatch(listing, true, now);
-        if (id && match) {
-          nextNewIds.add(id);
-          nextNewDetails[id] = match;
-        }
-      });
-    }
+    listings.forEach(function (listing) {
+      const id = listingNewId(listing);
+      const launchIds = listingLaunchIds(listing);
+      if (!id || !launchIds.length) {
+        return;
+      }
+      const reasons = [];
+      let publication = null;
+      const inPublishedDailySnapshot = publishedIds
+        ? launchIds.some(function (candidate) { return publishedIds.has(candidate); })
+        : false;
+      if (inPublishedDailySnapshot) {
+        reasons.push("absent-rapport-quotidien-precedent");
+      }
+      const presentBefore = previous.available
+        ? launchIds.some(function (candidate) { return previous.ids.has(candidate); })
+        : true;
+      const match = listingNewRuleMatch(listing, presentBefore, now);
+      if (match) {
+        reasons.push(match.reason);
+        publication = match.publication;
+      }
+      if (reasons.length) {
+        nextNewIds.add(id);
+        nextNewDetails[id] = {
+          reason: Array.from(new Set(reasons)).join("+"),
+          publication: publication
+        };
+      }
+    });
 
     newListingIds = nextNewIds;
     newListingDetails = nextNewDetails;
-    newListingPreviousSource = publishedIds ? "previous-daily-report" : previous.source;
+    newListingPreviousSource = publishedIds && previous.available ? "previous-opening-and-daily-report" : (publishedIds ? "previous-daily-report" : previous.source);
     newListingPreviousCount = publishedIds
       ? Number(publishedSnapshot.baselineCount || Math.max(0, listings.length - nextNewIds.size))
       : previous.ids.size;
@@ -702,7 +699,7 @@
       count: newListingIds.size,
       only: showNewListingsOnly,
       ids: Array.from(newListingIds),
-      criterion: publishedIds ? "absent-rapport-quotidien-precedent" : "absent-ouverture-precedente-ou-publication-fiable-72h",
+      criterion: "absent-ouverture-precedente-ou-publication-fiable-72h" + (publishedIds ? "-ou-rapport-precedent" : ""),
       details: newListingDetails,
       previousSource: newListingPreviousSource,
       previousCount: newListingPreviousCount
@@ -736,7 +733,7 @@
       count: newListingIds.size,
       only: showNewListingsOnly,
       ids: Array.from(newListingIds),
-      criterion: newListingPreviousSource === "previous-daily-report" ? "absent-rapport-quotidien-precedent" : "absent-ouverture-precedente-ou-publication-fiable-72h",
+      criterion: "absent-ouverture-precedente-ou-publication-fiable-72h" + (newListingPreviousSource.indexOf("daily-report") !== -1 ? "-ou-rapport-precedent" : ""),
       details: newListingDetails,
       previousSource: newListingPreviousSource,
       previousCount: newListingPreviousCount
@@ -3644,14 +3641,17 @@
     const secondHandCount = counts["2ememain"] || 0;
     const zimmoMessage = zimmoCount > 0
       ? "Import Apify actif: " + zimmoCount + " annonce(s) integree(s)."
-      : "Connecteur Apify pret: acteur dz_omar/zimmo-scraper identifie. Definir APIFY_TOKEN cote pipeline pour integrer les annonces Zimmo.";
+      : "Extraction bloquee: Zimmo protege ses pages par challenge navigateur et l'import Apify exige APIFY_TOKEN cote pipeline.";
+    const agencyMessage = localAgencyCount > 0
+      ? localAgencyCount + " annonce(s) integree(s) depuis les sites directs."
+      : "0 annonce integree depuis sites directs; les agences OpenStreetMap restent disponibles comme contacts/cartographie.";
     const section = document.createElement("section");
     section.id = "otherSourcesSection";
     section.innerHTML = [
       "<h2>Autres sources</h2>",
       "<div class='other-source-note'>Sources publiees dans cette PWA: Immoweb " + (counts.Immoweb || 0) + ", Immovlan " + immovlanCount + ", Zimmo " + zimmoCount + ", agences locales " + localAgencyCount + ", 2ememain " + secondHandCount + ".</div>",
       "<div class='source-diagnostic-list'>",
-      "<div class='source-diagnostic-item'><strong>Agences locales</strong>" + localAgencyCount + " annonce(s) integree(s) depuis les sites directs.</div>",
+      "<div class='source-diagnostic-item'><strong>Agences locales</strong>" + agencyMessage + "</div>",
       "<div class='source-diagnostic-item'><strong>Zimmo</strong>" + zimmoMessage + "</div>",
       "<div class='source-diagnostic-item'><strong>Immovlan</strong>Extraction avancee active: HTML public, donnees structurees JSON-LD et endpoint telephone public. " + immovlanCount + " annonce(s) integree(s).</div>",
       "<div class='source-diagnostic-item'><strong>2ememain</strong>Extraction avancee active via pages publiques et window.__CONFIG__. " + usableSecondHandCount + " annonce(s) exploitable(s) en cartes sur " + secondHandCount + " candidate(s) publiee(s).</div>",

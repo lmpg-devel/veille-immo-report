@@ -10,6 +10,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+Set-StrictMode -Off
 
 function Resolve-FromWorkspace {
   param([string]$Path)
@@ -329,6 +330,9 @@ function Read-ImmowebListing {
     $statusFlag = $classified -and $classified.flags -and ($classified.flags.isUnderOption -or $classified.flags.isOption -or $classified.flags.isReserved)
     $statusPattern = '(?i)sous[-\s]?option|onder\s+optie|under\s+option|sale\s+agreed|r(?:e|é)serv(?:e|é|ee|ée)|compromis'
     $isUnderOption = [bool]($statusFlag -or $statusText -match $statusPattern)
+    $publication = if ($classified) { Get-ObjectPropertyValue -Object $classified -Name "publication" } else { $null }
+    $publicationDate = if ($publication) { Get-ObjectPropertyValue -Object $publication -Name "creationDate" } else { $null }
+    $publicationDateSource = if ($publicationDate) { "Immoweb classified.publication.creationDate" } else { $null }
 
     return [pscustomobject]@{
       Source = "Immoweb"
@@ -352,6 +356,8 @@ function Read-ImmowebListing {
       IsUnderOption = $isUnderOption
       UnderOption = $isUnderOption
       SaleStatus = if ($isUnderOption) { "sous option" } else { "" }
+      PublicationDate = $publicationDate
+      PublicationDateSource = $publicationDateSource
       PhotoCount = $pictures.Count
       PhotoUrls = ($pictures -join " | ")
       Title = $title

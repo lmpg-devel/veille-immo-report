@@ -287,7 +287,7 @@ async function main() {
 
     await waitFor(chrome.page, `(() => {
       try {
-        const seen = JSON.parse(localStorage.getItem('veille-immo-last-launch-ids') || '[]');
+        const seen = JSON.parse(localStorage.getItem('veille-immo-last-launch-ids-house') || '[]');
         const rendered = (window.veilleImmoRenderedMarkerListings || []).length;
         return { ok: Array.isArray(seen) && rendered > 0 && seen.length >= Math.max(100, Math.floor(rendered * 0.8)), seenCount: seen.length, rendered };
       } catch {
@@ -347,6 +347,11 @@ async function main() {
       const starsBeforeFilter = Array.from(document.querySelectorAll('.source-map-star')).length;
       const badgesBeforeFilter = Array.from(document.querySelectorAll('.new-badge')).length;
 
+      const optionToggle = document.querySelector('#optionFilterToggle');
+      if (optionToggle && !optionToggle.checked) {
+        optionToggle.checked = true;
+        optionToggle.dispatchEvent(new Event('change', { bubbles: true }));
+      }
       toggle.checked = true;
       toggle.dispatchEvent(new Event('change', { bubbles: true }));
       const filteredState = window.veilleImmoPriceFilterState || {};
@@ -360,7 +365,8 @@ async function main() {
 
       return {
         ok: initialState.count === expectedIds.size
-          && initialState.criterion === 'absent-rapport-quotidien-precedent'
+          && typeof initialState.criterion === 'string'
+          && initialState.criterion.indexOf('absent-ouverture-precedente-ou-publication-fiable-72h') === 0
           && initialState.previousSource === 'previous-daily-report'
           && Boolean(newPanel)
           && !toggle.disabled

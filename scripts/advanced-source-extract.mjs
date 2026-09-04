@@ -205,7 +205,7 @@ function hasBuildingLandSignal(text) {
 
 function badBuildingLandText(text) {
   const haystack = normalizedWords(text);
-  return /\b(terrain agricole|terre agricole|prairie|pature|champ|bois|foret|terrain forestier|terrain de loisirs|non batissable|non constructible|agricultural land|farmland|meadow|forest land|recreational land|landbouwgrond|weiland|bosgrond|recreatiegrond|niet bebouwbaar)\b/i.test(haystack);
+  return /\b(terrain agricole|terre agricole|prairie|pature|champ|bois|foret|terrain forestier|terrain de loisirs|non batissable|non constructible|agricultural land|farmland|meadow|forest land|recreational land|landbouwgrond|weiland|bosgrond|recreatiegrond|niet bebouwbaar|garage|garages|garagebox|parking|staanplaats|box|bureau|office|kantoor|commerce|commercial|handelspand|handelsruimte|maison|huis|woning|villa|appartement|apartment|flat|studio)\b/i.test(haystack);
 }
 
 function isNotarial(text) {
@@ -256,6 +256,12 @@ function sourceQualityRejectionReason(source, fields, location, config) {
     fields.category,
     fields.url
   ].filter(Boolean).join(" ");
+  const signalText = [
+    fields.title,
+    fields.description,
+    fields.category,
+    fields.url
+  ].filter(Boolean).join(" ");
 
   if (!price || price > maxPrice) return `prix ${price || "absent"} hors filtre`;
   if (!isLandSearch(config) && price < 50000) return `prix ${price} sous seuil coherent`;
@@ -264,10 +270,10 @@ function sourceQualityRejectionReason(source, fields, location, config) {
   if (hasMonthlySupplementText(haystack)) return "viager/rente/mensualite exclu";
   if (isLandSearch(config)) {
     if (badBuildingLandText(haystack)) return "terrain non constructible probable";
-    if (!hasBuildingLandSignal(haystack)) return "signal terrain a batir absent";
+    if (!hasBuildingLandSignal(signalText)) return "signal terrain a batir absent";
   } else {
     if (badHouseText(identityText)) return "type non maison probable";
-    if (!hasHouseSignal(identityText)) return "signal maison absent";
+    if (!hasHouseSignal(signalText)) return "signal maison absent";
   }
   if (location && source === "2ememain" && !locationMatches(location, [fields.url, fields.title])) {
     return `commune absente du titre/url; vendeur ${fields.locality || "sans localite"}`;
@@ -612,8 +618,8 @@ function findAgencyPropertySchema(objects) {
 
 function priceCandidatesFromText(text) {
   const candidates = [
-    ...[...String(text || "").matchAll(/(?:\bEUR\b|\u20ac)\s*(\d{2,3}(?:[\s.,\u00a0\u202f]\d{3})+|\d{5,6})/gi)].map((match) => match[1]),
-    ...[...String(text || "").matchAll(/(\d{2,3}(?:[\s.,\u00a0\u202f]\d{3})+|\d{5,6})\s*(?:\bEUR\b|\u20ac)/gi)].map((match) => match[1])
+    ...[...String(text || "").matchAll(/(?:\bEUR\b|\u20ac)\s*(\d{2,3}(?:[\s.,\u00a0\u202f]\d{3})+|\d{5,8})/gi)].map((match) => match[1]),
+    ...[...String(text || "").matchAll(/(\d{2,3}(?:[\s.,\u00a0\u202f]\d{3})+|\d{5,8})\s*(?:\bEUR\b|\u20ac)/gi)].map((match) => match[1])
   ]
     .map((value) => numberFromAny(value))
     .filter((price) => price && price >= 50000 && price <= 2000000);
@@ -645,13 +651,30 @@ function slugHasSegment(haystack, needle) {
   return new RegExp(`(?:^|-)${escapeRegExp(needle)}(?:-|$)`).test(haystack);
 }
 
+function fieldHasPostalCode(field, postal) {
+  const value = String(field || "");
+  if (!value || !postal) return false;
+  const normalized = value.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const matches = normalized.matchAll(new RegExp(`(^|[^0-9])${escapeRegExp(postal)}([^0-9]|$)`, "gi"));
+  for (const match of matches) {
+    const start = Math.max(0, match.index || 0);
+    const end = Math.min(normalized.length, start + match[0].length);
+    const context = normalized.slice(Math.max(0, start - 16), Math.min(normalized.length, end + 16));
+    if (new RegExp(`${escapeRegExp(postal)}\\s*[-_]?\\s*(?:m2|m²|m\\u00b2|sqm|vierkante)`, "i").test(context)) {
+      continue;
+    }
+    return true;
+  }
+  return false;
+}
+
 function detectLocation(config, fields) {
   const haystack = slug(fields.filter(Boolean).join(" "));
   let best = null;
   for (const location of config.locations || []) {
     let score = 0;
     const postal = slug(location.postalCode);
-    if (postal && slugHasSegment(haystack, postal)) score += 10;
+    if (postal && fields.some((field) => fieldHasPostalCode(field, postal))) score += 10;
     const primary = [location.name, location.immowebSlug, location.immovlanSlug, location.zimmoSlug]
       .map(slug)
       .filter(Boolean);
@@ -805,7 +828,7 @@ async function parseAgencyDetail(url, agency, config, dedupe) {
   const rejection = sourceQualityRejectionReason("Agence locale", {
     title,
     description,
-    category: isLandSearch(config) ? `${category} terrain a batir building land bouwgrond` : `${category} maison villa huis woning`,
+    category,
     locality: location.name,
     postalCode: location.postalCode,
     street: address,
@@ -1721,9 +1744,13 @@ async function run() {
     additions.push(...await extractAgencySites(config, args, base, diagnostics));
   }
   const merged = mergeResults(base, additions, sources);
+  const combinedDiagnostics = [
+    ...(Array.isArray(base.sourceDiagnostics) ? base.sourceDiagnostics : []),
+    ...diagnostics
+  ];
   merged.propertyType = isLandSearch(config) ? "terrain" : "maison";
   merged.maxPrice = Number(config.maxPrice || 0);
-  merged.sourceDiagnostics = diagnostics;
+  merged.sourceDiagnostics = combinedDiagnostics;
   const agencyCount = countBySource(merged.listings)["Agence locale (site direct)"] || 0;
   if (sources.some((source) => ["agency-sites", "agences", "agence-locale"].includes(source))) {
     merged.sourceAudit = {
@@ -1736,12 +1763,13 @@ async function run() {
   }
   fs.mkdirSync(path.dirname(args.outJson), { recursive: true });
   fs.writeFileSync(args.outJson, JSON.stringify(merged, null, 2), "utf8");
-  fs.writeFileSync(args.outJson.replace(/\.json$/, "-diagnostics.json"), JSON.stringify({ generatedAt: new Date().toISOString(), count: diagnostics.length, diagnostics }, null, 2), "utf8");
+  fs.writeFileSync(args.outJson.replace(/\.json$/, "-diagnostics.json"), JSON.stringify({ generatedAt: new Date().toISOString(), count: combinedDiagnostics.length, diagnostics: combinedDiagnostics }, null, 2), "utf8");
   console.log(JSON.stringify({
     baseCount: base.count,
     additions: additions.length,
     mergedCount: merged.count,
     diagnostics: diagnostics.length,
+    totalDiagnostics: combinedDiagnostics.length,
     bySource: additions.reduce((acc, item) => {
       acc[item.source] = (acc[item.source] || 0) + 1;
       return acc;

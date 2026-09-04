@@ -12,6 +12,8 @@ const ROOT = path.resolve(__dirname, "..");
 const RESULT_PATH = process.env.VEILLE_IMMO_QA_RESULTS_PATH
   ? path.resolve(process.env.VEILLE_IMMO_QA_RESULTS_PATH)
   : path.join(ROOT, "results.json");
+const SEARCH_MODE = process.env.VEILLE_IMMO_QA_SEARCH_MODE === "land" ? "land" : "house";
+const WINDOW_SIZE = process.env.VEILLE_IMMO_QA_WINDOW_SIZE || "1040,1280";
 
 function findChrome() {
   const candidates = [
@@ -84,7 +86,7 @@ function startServer(overrideResultsJson) {
         response.end("<!doctype html><title>qa blank</title>");
         return;
       }
-      if (url.pathname === "/results.json") {
+      if (url.pathname === "/results.json" || url.pathname === "/results-terrain.json") {
         response.writeHead(200, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
         response.end(overrideResultsJson);
         return;
@@ -213,7 +215,7 @@ async function startChrome(url) {
     "--no-first-run",
     "--no-default-browser-check",
     "--disable-dev-shm-usage",
-    "--window-size=1040,1280",
+    `--window-size=${WINDOW_SIZE}`,
     `--user-data-dir=${profileDir}`,
     "--remote-debugging-port=0",
     url
@@ -313,11 +315,12 @@ async function main() {
     await chrome.page.evaluate(`(() => {
       localStorage.clear();
       sessionStorage.clear();
-      localStorage.setItem('veille-immo-search-mode', 'house');
+      const searchMode = ${JSON.stringify(SEARCH_MODE)};
+      localStorage.setItem('veille-immo-search-mode', searchMode);
       localStorage.setItem('veille-immo-show-option', '1');
       localStorage.setItem('veille-immo-location-distance-km', '15');
-      localStorage.setItem('veille-immo-last-launch-ids-house', ${JSON.stringify(JSON.stringify(scenario.previousIds))});
-      localStorage.setItem('veille-immo-initialized-house', '1');
+      localStorage.setItem('veille-immo-last-launch-ids-' + searchMode, ${JSON.stringify(JSON.stringify(scenario.previousIds))});
+      localStorage.setItem('veille-immo-initialized-' + searchMode, '1');
       return { ok: true };
     })()`);
 
@@ -462,7 +465,7 @@ async function main() {
     const screenshot = await chrome.page.send("Page.captureScreenshot", { format: "png", captureBeyondViewport: false });
     const outDir = path.join(ROOT, "reports");
     await fsp.mkdir(outDir, { recursive: true });
-    const screenshotPath = path.join(outDir, "validation-newness-sources-pwa.png");
+    const screenshotPath = path.join(outDir, `validation-newness-sources-pwa-${SEARCH_MODE}.png`);
     await fsp.writeFile(screenshotPath, Buffer.from(screenshot.data, "base64"));
 
     console.log(JSON.stringify({

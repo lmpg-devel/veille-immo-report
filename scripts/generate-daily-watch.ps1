@@ -43,6 +43,49 @@ function Test-ResultsQuality {
   Invoke-NativeCommand "node" $arguments
 }
 
+function Invoke-AdvancedSourceStages {
+  param(
+    [string]$InputResults,
+    [string]$OutputResults,
+    [string]$PropertyType,
+    [int]$MaxPrice,
+    [string[]]$Sources,
+    [string]$TempPrefix
+  )
+
+  $stageInput = $InputResults
+  for ($stageIndex = 0; $stageIndex -lt $Sources.Count; $stageIndex += 1) {
+    $sourceName = $Sources[$stageIndex]
+    $safeSourceName = $sourceName -replace "[^A-Za-z0-9_-]", "-"
+    $isLastStage = $stageIndex -eq ($Sources.Count - 1)
+    $stageOutput = if ($isLastStage) {
+      $OutputResults
+    } else {
+      Join-Path $tempRoot "$TempPrefix-$($stageIndex + 1)-$safeSourceName.json"
+    }
+    $arguments = @(
+      (Join-Path $root "scripts/advanced-source-extract.mjs"),
+      "--config", $config,
+      "--baseResults", $stageInput,
+      "--outJson", $stageOutput,
+      "--propertyType", $PropertyType,
+      "--maxPrice", [string]$MaxPrice,
+      "--sources", $sourceName,
+      "--maxPerLocation", "12",
+      "--delayMs", "350"
+    )
+    if ($sourceName -eq "agency-sites") {
+      $arguments += @(
+        "--agencyMaxSites", "200",
+        "--agencyMaxCandidatesPerSite", "8",
+        "--agencyConcurrency", "2"
+      )
+    }
+    Invoke-NativeCommand "node" $arguments
+    $stageInput = $stageOutput
+  }
+}
+
 $root = (Resolve-Path -LiteralPath $ProjectRoot).Path
 $config = if ([System.IO.Path]::IsPathRooted($ConfigPath)) {
   $ConfigPath
@@ -121,18 +164,13 @@ try {
   }
   Test-ResultsQuality -CurrentPath $baseResults -PreviousPath $PreviousResultsPath -Label "maisons-base-immoweb" -MinTotal 25
 
-  Invoke-NativeCommand "node" @(
-    (Join-Path $root "scripts/advanced-source-extract.mjs"),
-    "--config", $config,
-    "--baseResults", $baseResults,
-    "--outJson", $currentResults,
-    "--sources", "immovlan,2ememain,zimmo-apify,agency-sites",
-    "--maxPerLocation", "12",
-    "--delayMs", "350",
-    "--agencyMaxSites", "200",
-    "--agencyMaxCandidatesPerSite", "8",
-    "--agencyConcurrency", "2"
-  )
+  Invoke-AdvancedSourceStages `
+    -InputResults $baseResults `
+    -OutputResults $currentResults `
+    -PropertyType "maison" `
+    -MaxPrice 350000 `
+    -Sources @("immovlan", "2ememain", "zimmo-apify", "agency-sites") `
+    -TempPrefix "veille-immo-house-enriched"
   Test-ResultsQuality -CurrentPath $currentResults -PreviousPath $PreviousResultsPath -Label "maisons-publie" -MinTotal 25
 
   Invoke-NativeCommand "node" @(
@@ -191,20 +229,13 @@ try {
   }
   Test-ResultsQuality -CurrentPath $terrainBaseResults -PreviousPath $terrainPreviousResults -Label "terrains-base-immoweb" -MinTotal 1
 
-  Invoke-NativeCommand "node" @(
-    (Join-Path $root "scripts/advanced-source-extract.mjs"),
-    "--config", $config,
-    "--baseResults", $terrainBaseResults,
-    "--outJson", $terrainResults,
-    "--propertyType", "terrain",
-    "--maxPrice", [string]$TerrainMaxPrice,
-    "--sources", "immovlan,2ememain,zimmo-apify,agency-sites",
-    "--maxPerLocation", "12",
-    "--delayMs", "350",
-    "--agencyMaxSites", "200",
-    "--agencyMaxCandidatesPerSite", "8",
-    "--agencyConcurrency", "2"
-  )
+  Invoke-AdvancedSourceStages `
+    -InputResults $terrainBaseResults `
+    -OutputResults $terrainResults `
+    -PropertyType "terrain" `
+    -MaxPrice $TerrainMaxPrice `
+    -Sources @("immovlan", "2ememain", "zimmo-apify", "agency-sites") `
+    -TempPrefix "veille-immo-terrain-enriched"
   Test-ResultsQuality -CurrentPath $terrainResults -PreviousPath $terrainPreviousResults -Label "terrains-publie" -MinTotal 1
 
   Invoke-NativeCommand "node" @(

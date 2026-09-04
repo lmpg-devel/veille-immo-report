@@ -47,7 +47,12 @@ function resultsPayloadInfo(content) {
     acc[source] = (acc[source] || 0) + 1;
     return acc;
   }, {});
-  return { count: listings.length, bySource };
+  const generatedAtMs = Date.parse(String(payload && payload.generatedAt || ""));
+  return {
+    count: listings.length,
+    bySource,
+    generatedAtMs: Number.isFinite(generatedAtMs) ? generatedAtMs : null
+  };
 }
 
 function sourceCount(bySource, needle) {
@@ -63,6 +68,9 @@ function remoteResultsLooksComplete(remoteContent, bundledContent, relativePath)
   }
   const remote = resultsPayloadInfo(remoteContent);
   if (remote.count === 0) {
+    return false;
+  }
+  if (bundled.generatedAtMs && (!remote.generatedAtMs || remote.generatedAtMs < bundled.generatedAtMs)) {
     return false;
   }
   if (remote.count < Math.max(1, Math.floor(bundled.count * 0.35))) {
@@ -157,8 +165,13 @@ function createWindow(url) {
           );
           await new Promise((resolve) => setTimeout(resolve, 5000));
         }
-        const screenshot = await window.webContents.capturePage();
-        fs.writeFileSync(process.env.VEILLE_IMMO_QA_SCREENSHOT, screenshot.toPNG());
+        let captureError = null;
+        try {
+          const screenshot = await window.webContents.capturePage();
+          fs.writeFileSync(process.env.VEILLE_IMMO_QA_SCREENSHOT, screenshot.toPNG());
+        } catch (error) {
+          captureError = error && error.message || String(error);
+        }
         const state = await window.webContents.executeJavaScript(`({
           title: document.title,
           bodyTextLength: (document.body && document.body.innerText || "").trim().length,
@@ -172,6 +185,7 @@ function createWindow(url) {
           activeSearch: Array.from(document.querySelectorAll('button[aria-pressed="true"]')).map((item) => item.textContent.trim()).find((text) => /Maisons|Terrains/.test(text)) || null
         })`);
         state.zoomFactor = window.webContents.getZoomFactor();
+        state.captureError = captureError;
         if (process.env.VEILLE_IMMO_QA_STATE) {
           fs.writeFileSync(process.env.VEILLE_IMMO_QA_STATE, JSON.stringify(state, null, 2));
         }

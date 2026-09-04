@@ -9,7 +9,9 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, "..");
-const RESULT_PATH = path.join(ROOT, "results.json");
+const RESULT_PATH = process.env.VEILLE_IMMO_QA_RESULTS_PATH
+  ? path.resolve(process.env.VEILLE_IMMO_QA_RESULTS_PATH)
+  : path.join(ROOT, "results.json");
 
 function findChrome() {
   const candidates = [
@@ -245,11 +247,19 @@ function buildScenario(payload) {
     const time = publicationTime(listing);
     return time && time <= now && time >= cutoff;
   });
+  const directAgencyListings = listings.filter((listing) => {
+    return String(listing?.source || "").toLowerCase().includes("agence locale");
+  });
   const recentPresent = recentListings.find((listing) => listingKey(listing) && Number.isFinite(Number(listing.latitude)) && Number.isFinite(Number(listing.longitude)));
   const absentOnly = listings.find((listing) => {
     const key = listingKey(listing);
     const time = publicationTime(listing);
-    return key && key !== listingKey(recentPresent) && !(time && time <= now && time >= cutoff) && Number.isFinite(Number(listing.latitude)) && Number.isFinite(Number(listing.longitude));
+    return key
+      && key !== listingKey(recentPresent)
+      && !String(listing?.source || "").toLowerCase().includes("agence locale")
+      && !(time && time <= now && time >= cutoff)
+      && Number.isFinite(Number(listing.latitude))
+      && Number.isFinite(Number(listing.longitude));
   });
   if (!recentPresent || !absentOnly) {
     throw new Error("Scenario QA impossible: annonce recente ou annonce absente non recente introuvable");
@@ -258,6 +268,7 @@ function buildScenario(payload) {
   const absentKey = listingKey(absentOnly);
   const expectedKeys = new Set(recentListings.map(listingKey).filter(Boolean));
   expectedKeys.add(absentKey);
+  directAgencyListings.map(listingKey).filter(Boolean).forEach((key) => expectedKeys.add(key));
   const expectedMarkerKeys = new Set(listings.filter((listing) => {
     const key = listingKey(listing);
     return expectedKeys.has(key) && Number.isFinite(Number(listing.latitude)) && Number.isFinite(Number(listing.longitude));
@@ -265,6 +276,7 @@ function buildScenario(payload) {
   const previousIds = [];
   for (const listing of listings) {
     if (listingKey(listing) === absentKey) continue;
+    if (String(listing?.source || "").toLowerCase().includes("agence locale")) continue;
     previousIds.push(...listingLaunchIds(listing));
   }
 
@@ -282,6 +294,17 @@ async function main() {
   const sourcePayload = JSON.parse(fs.readFileSync(RESULT_PATH, "utf8"));
   const testPayload = JSON.parse(JSON.stringify(sourcePayload));
   delete testPayload.newListings;
+  const recentCandidate = (Array.isArray(testPayload.listings) ? testPayload.listings : []).find((listing) => {
+    return listingKey(listing)
+      && !String(listing?.source || "").toLowerCase().includes("agence locale")
+      && Number.isFinite(Number(listing.latitude))
+      && Number.isFinite(Number(listing.longitude));
+  });
+  if (!recentCandidate) {
+    throw new Error("Scenario QA impossible: aucune annonce geolocalisee disponible pour simuler le critere 72 h");
+  }
+  recentCandidate.publicationDate = new Date(Date.now() - 36 * 60 * 60 * 1000).toISOString();
+  recentCandidate.publicationDateSource = "QA publication controlee";
   const scenario = buildScenario(testPayload);
   const { server, baseUrl } = await startServer(JSON.stringify(testPayload));
   const chrome = await startChrome(`${baseUrl}/__blank.html`);
@@ -348,7 +371,7 @@ async function main() {
         const source = String(listing && listing.source || '').toLowerCase();
         const expectedColor = source.includes('immoweb')
           ? 'rgb(11, 92, 134)'
-          : (source.includes('immovlan') ? 'rgb(225, 29, 72)' : '');
+          : (source.includes('immovlan') ? 'rgb(225, 29, 72)' : (source.includes('agence') ? 'rgb(47, 111, 62)' : ''));
         const icon = markerLayers[index] && markerLayers[index]._icon;
         const star = icon && icon.querySelector('.source-map-star');
         markerChecks.push({
@@ -373,6 +396,19 @@ async function main() {
         return marker && marker.style.display !== 'none';
       });
 
+      const expectedSources = ${JSON.stringify(scenario.sources)};
+      const sourceLabels = {
+        Immoweb: 'Immoweb',
+        Immovlan: 'Immovlan',
+        Zimmo: 'Zimmo',
+        'Agence locale (site direct)': 'agences locales',
+        '2ememain': '2ememain'
+      };
+      const sourceCountsOk = Object.entries(sourceLabels).every(([source, label]) => {
+        const count = Number(expectedSources[source] || 0);
+        return sourceNote.toLowerCase().includes((label + ' ' + count).toLowerCase());
+      });
+
       return {
         ok: state.count === expected.size
           && state.criterion === 'absent-ouverture-precedente-ou-publication-fiable-72h'
@@ -392,11 +428,7 @@ async function main() {
           && visibleCards.length === expected.size
           && visibleNewCards.length === expected.size
           && visibleStars.length === expectedMarkerKeys.size
-          && /Immoweb 544/.test(sourceNote)
-          && /Immovlan 56/.test(sourceNote)
-          && /Zimmo 0/.test(sourceNote)
-          && /agences locales 0/.test(sourceNote)
-          && /2ememain 0/.test(sourceNote)
+          && sourceCountsOk
           && /APIFY_TOKEN/.test(sourceDiagnosticsText)
           && /2ememain/.test(sourceDiagnosticsText),
         expectedCount: expected.size,
@@ -412,6 +444,8 @@ async function main() {
         visibleNewCards: visibleNewCards.length,
         visibleStars: visibleStars.length,
         sourceNote: sourceNote.trim(),
+        expectedSources,
+        sourceCountsOk,
         hasApifyDiagnostic: /APIFY_TOKEN/.test(sourceDiagnosticsText)
       };
     })()`);

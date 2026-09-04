@@ -320,7 +320,7 @@ async function main() {
         const source = String(listing && listing.source || '').toLowerCase();
         const expectedColor = source.includes('immoweb')
           ? 'rgb(11, 92, 134)'
-          : (source.includes('immovlan') ? 'rgb(225, 29, 72)' : '');
+          : (source.includes('immovlan') ? 'rgb(225, 29, 72)' : (source.includes('agence') ? 'rgb(47, 111, 62)' : ''));
         const icon = markerLayers[index] && markerLayers[index]._icon;
         const star = icon && icon.querySelector('.source-map-star');
         return {

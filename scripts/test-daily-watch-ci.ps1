@@ -16,7 +16,12 @@ function Invoke-Git {
   }
 }
 
-$testRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("veille-immo-ci-test-" + [guid]::NewGuid().ToString("N"))
+$testParent = if ($env:VEILLE_IMMO_TEST_TEMP_ROOT) {
+  $env:VEILLE_IMMO_TEST_TEMP_ROOT
+} else {
+  "C:\tmp\Codex"
+}
+$testRoot = Join-Path $testParent ("veille-immo-ci-test-" + [guid]::NewGuid().ToString("N"))
 $remote = Join-Path $testRoot "remote.git"
 $seed = Join-Path $testRoot "seed"
 $runner = Join-Path $testRoot "runner"
@@ -26,7 +31,7 @@ $originalRunnerTemp = $env:RUNNER_TEMP
 $originalConcurrentClone = $env:VEILLE_IMMO_TEST_CONCURRENT_CLONE
 
 try {
-  New-Item -ItemType Directory -Path $testRoot | Out-Null
+  New-Item -ItemType Directory -Force -Path $testRoot | Out-Null
   Invoke-Git $testRoot @("init", "--bare", $remote)
   Invoke-Git $testRoot @("init", "-b", "main", $seed)
 
@@ -45,6 +50,16 @@ param(
 $counterPath = Join-Path $ProjectRoot ".generation-attempt"
 $attempt = if (Test-Path -LiteralPath $counterPath) { 1 + [int](Get-Content -LiteralPath $counterPath -Raw) } else { 1 }
 Set-Content -LiteralPath $counterPath -Value $attempt
+if ([string]::IsNullOrWhiteSpace($PreviousResultsPath)) {
+  throw "PreviousResultsPath was not passed to the generator"
+}
+if (-not (Test-Path -LiteralPath $PreviousResultsPath)) {
+  throw "PreviousResultsPath was not prepared before generation: $PreviousResultsPath"
+}
+$previousPayload = Get-Content -LiteralPath $PreviousResultsPath -Raw
+if ($previousPayload -notmatch '"generatedAt"\s*:\s*"initial"') {
+  throw "PreviousResultsPath does not contain the reset baseline results"
+}
 $reports = Join-Path $ProjectRoot $OutputDir
 New-Item -ItemType Directory -Force -Path $reports | Out-Null
 $sourceState = Get-Content -LiteralPath (Join-Path $ProjectRoot "pwa.js") -Raw
@@ -55,6 +70,7 @@ Set-Content -LiteralPath (Join-Path $reports "veille-immo-test.csv") -Value "id,
 Set-Content -LiteralPath (Join-Path $reports "veille-immo-test.html") -Value "daily-attempt=$attempt"
 Set-Content -LiteralPath (Join-Path $reports "agences-locales-test.csv") -Value "name`nAgency"
 Set-Content -LiteralPath (Join-Path $ProjectRoot "results.json") -Value "{`"generatedAt`":`"test-$attempt`",`"listings`":[{`"id`":`"1`"}]}"
+Set-Content -LiteralPath (Join-Path $ProjectRoot "results-terrain.json") -Value "{`"generatedAt`":`"terrain-test-$attempt`",`"listings`":[{`"id`":`"terrain-1`"}]}"
 
 if ($attempt -eq 1) {
   $clone = $env:VEILLE_IMMO_TEST_CONCURRENT_CLONE
@@ -73,6 +89,7 @@ if ($attempt -eq 1) {
   Set-Content -LiteralPath (Join-Path $seed "mobile-index.html") -Value "initial"
   Set-Content -LiteralPath (Join-Path $seed "pwa.js") -Value "initial-source"
   Set-Content -LiteralPath (Join-Path $seed "results.json") -Value '{"generatedAt":"initial","listings":[]}'
+  Set-Content -LiteralPath (Join-Path $seed "results-terrain.json") -Value '{"generatedAt":"terrain-initial","listings":[]}'
   Set-Content -LiteralPath (Join-Path $seed "config/veille-immo.json") -Value "{}"
   Set-Content -LiteralPath (Join-Path $seed "reports/index.html") -Value "initial"
 
@@ -121,7 +138,7 @@ if ($attempt -eq 1) {
 
   if (Test-Path -LiteralPath $testRoot) {
     $resolvedTestRoot = (Resolve-Path -LiteralPath $testRoot).Path
-    $resolvedTempRoot = (Resolve-Path -LiteralPath ([System.IO.Path]::GetTempPath())).Path
+    $resolvedTempRoot = (Resolve-Path -LiteralPath $testParent).Path
     if (-not $resolvedTestRoot.StartsWith($resolvedTempRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
       throw "Refusing to remove test directory outside the system temp directory: $resolvedTestRoot"
     }

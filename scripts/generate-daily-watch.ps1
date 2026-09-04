@@ -126,9 +126,12 @@ try {
     "--config", $config,
     "--baseResults", $baseResults,
     "--outJson", $currentResults,
-    "--sources", "immovlan,2ememain,zimmo-apify",
+    "--sources", "immovlan,2ememain,zimmo-apify,agency-sites",
     "--maxPerLocation", "12",
-    "--delayMs", "350"
+    "--delayMs", "350",
+    "--agencyMaxSites", "200",
+    "--agencyMaxCandidatesPerSite", "8",
+    "--agencyConcurrency", "2"
   )
   Test-ResultsQuality -CurrentPath $currentResults -PreviousPath $PreviousResultsPath -Label "maisons-publie" -MinTotal 25
 
@@ -195,9 +198,12 @@ try {
     "--outJson", $terrainResults,
     "--propertyType", "terrain",
     "--maxPrice", [string]$TerrainMaxPrice,
-    "--sources", "immovlan,2ememain,zimmo-apify",
+    "--sources", "immovlan,2ememain,zimmo-apify,agency-sites",
     "--maxPerLocation", "12",
-    "--delayMs", "350"
+    "--delayMs", "350",
+    "--agencyMaxSites", "200",
+    "--agencyMaxCandidatesPerSite", "8",
+    "--agencyConcurrency", "2"
   )
   Test-ResultsQuality -CurrentPath $terrainResults -PreviousPath $terrainPreviousResults -Label "terrains-publie" -MinTotal 1
 

@@ -75,6 +75,7 @@ try {
     $startCommit = Get-GitValue @("rev-parse", "HEAD")
 
     $previousResults = Join-Path $tempRoot "veille-immo-previous-results-attempt-$attempt.json"
+    Copy-Item -LiteralPath (Join-Path $root "results.json") -Destination $previousResults -Force
     & $generator `
       -ProjectRoot $root `
       -ConfigPath "config/veille-immo.json" `

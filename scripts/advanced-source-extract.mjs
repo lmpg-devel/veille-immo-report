@@ -29,6 +29,11 @@ function parseArgs(argv) {
     apifyRunTimeoutMs: 600000,
     apifyDatasetLimit: 500,
     apifyMaxResultsPerUrl: 10,
+    agencyCsv: process.env.AGENCY_SITES_CSV || "",
+    agencyMaxSites: 30,
+    agencyMaxCandidatesPerSite: 8,
+    agencyConcurrency: 4,
+    agencyIndexPaths: process.env.AGENCY_INDEX_PATHS || "",
     fetchTimeoutMs
   };
   for (let index = 2; index < argv.length; index += 1) {
@@ -51,6 +56,9 @@ function parseArgs(argv) {
   args.apifyRunTimeoutMs = Number(args.apifyRunTimeoutMs || 600000);
   args.apifyDatasetLimit = Number(args.apifyDatasetLimit || 500);
   args.apifyMaxResultsPerUrl = Number(args.apifyMaxResultsPerUrl || 10);
+  args.agencyMaxSites = Number(args.agencyMaxSites || 30);
+  args.agencyMaxCandidatesPerSite = Number(args.agencyMaxCandidatesPerSite || 8);
+  args.agencyConcurrency = Math.max(1, Number(args.agencyConcurrency || 4));
   args.fetchTimeoutMs = Number(args.fetchTimeoutMs || fetchTimeoutMs);
   return args;
 }
@@ -89,13 +97,14 @@ function getFirstMatch(text, regex) {
   return match ? match[1] : "";
 }
 
-async function fetchText(url, referer = "") {
+async function fetchPage(url, referer = "") {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), fetchTimeoutMs);
   const headers = {
     "User-Agent": USER_AGENT,
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "Accept-Language": "fr-BE,fr;q=0.9,nl;q=0.8"
+    "Accept-Language": "fr-BE,fr;q=0.9,nl;q=0.8",
+    "Connection": "close"
   };
   try {
     if (referer) headers.Referer = referer;
@@ -104,7 +113,7 @@ async function fetchText(url, referer = "") {
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
-    return text;
+    return { text, finalUrl: response.url || url, status: response.status };
   } catch (error) {
     if (error?.name === "AbortError") {
       throw new Error(`Timeout ${fetchTimeoutMs}ms`);
@@ -113,6 +122,11 @@ async function fetchText(url, referer = "") {
   } finally {
     clearTimeout(timer);
   }
+}
+
+async function fetchText(url, referer = "") {
+  const page = await fetchPage(url, referer);
+  return page.text;
 }
 
 function normalizeImageUrl(url) {
@@ -177,7 +191,7 @@ function shortId(value) {
 
 function badHouseText(text) {
   const haystack = normalizedWords(text);
-  return /\b(appartement|apparemment|appartementen|apartment|flat|studio|studios|garage|garages|garagebox|parking|staanplaats|box|terrain|terrein|grond|bouwgrond|kot|kamer|chambre|room|commercial|commerce|handelsruimte|bureau|kantoor|entrepot|magazijn|hangar|loft|duplex|mur uniquement)\b/i.test(haystack);
+  return /\b(appartement|apparemment|appartementen|apartment|flat|studio|studios|garage|garages|garagebox|parking|staanplaats|box|terrain|terrein|grond|bouwgrond|kot|kamer|chambre|room|commercial|commerce|handelspand|handelsruimte|bureau|kantoor|entrepot|magazijn|hangar|loft|duplex|mur uniquement)\b/i.test(haystack);
 }
 
 function isLandSearch(config) {
@@ -374,6 +388,578 @@ function publicationDateInfo(value, source) {
   return raw ? { publicationDate: raw, publicationDateSource: source } : { publicationDate: null, publicationDateSource: "" };
 }
 
+function splitList(value) {
+  return String(value || "")
+    .split(/[,\n;]/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function parseCsvRows(text) {
+  const rows = [];
+  let row = [];
+  let field = "";
+  let quoted = false;
+  const input = String(text || "");
+  for (let index = 0; index < input.length; index += 1) {
+    const char = input[index];
+    const next = input[index + 1];
+    if (quoted) {
+      if (char === "\"" && next === "\"") {
+        field += "\"";
+        index += 1;
+      } else if (char === "\"") {
+        quoted = false;
+      } else {
+        field += char;
+      }
+      continue;
+    }
+    if (char === "\"") {
+      quoted = true;
+    } else if (char === ",") {
+      row.push(field);
+      field = "";
+    } else if (char === "\n") {
+      row.push(field);
+      if (row.some((item) => String(item || "").trim())) rows.push(row);
+      row = [];
+      field = "";
+    } else if (char !== "\r") {
+      field += char;
+    }
+  }
+  if (field || row.length) {
+    row.push(field);
+    if (row.some((item) => String(item || "").trim())) rows.push(row);
+  }
+  if (!rows.length) return [];
+  const headers = rows.shift().map((header) => String(header || "").trim());
+  return rows.map((values) => Object.fromEntries(headers.map((header, index) => [header, values[index] || ""])));
+}
+
+function latestAgencyCsvPath() {
+  const reportsDir = path.resolve("reports");
+  if (!fs.existsSync(reportsDir)) return "";
+  const files = fs.readdirSync(reportsDir)
+    .filter((name) => /^agences-locales-\d{4}-\d{2}-\d{2}\.csv$/i.test(name))
+    .map((name) => {
+      const filePath = path.join(reportsDir, name);
+      const stat = fs.statSync(filePath);
+      return { filePath, mtimeMs: stat.mtimeMs, size: stat.size };
+    })
+    .filter((item) => item.size > 500)
+    .sort((a, b) => b.mtimeMs - a.mtimeMs);
+  return files[0]?.filePath || "";
+}
+
+function normalizeWebsite(value) {
+  const raw = cleanText(value);
+  if (!raw) return "";
+  if (/^(mailto|tel|javascript):/i.test(raw)) return "";
+  try {
+    const url = new URL(/^https?:\/\//i.test(raw) ? raw : `https://${raw}`);
+    url.hash = "";
+    return url.href;
+  } catch {
+    return "";
+  }
+}
+
+function hostKey(url) {
+  try {
+    return new URL(url).hostname.toLowerCase().replace(/^www\./, "");
+  } catch {
+    return "";
+  }
+}
+
+function isPortalHost(url) {
+  const host = hostKey(url);
+  return /(^|\.)immoweb\.be$|(^|\.)immovlan\.be$|(^|\.)vlan\.be$|(^|\.)zimmo\.be$|(^|\.)2ememain\.be$/i.test(host);
+}
+
+function isSameAgencyHost(url, baseUrl) {
+  const host = hostKey(url);
+  const baseHost = hostKey(baseUrl);
+  return Boolean(host && baseHost && (host === baseHost || host.endsWith(`.${baseHost}`) || baseHost.endsWith(`.${host}`)));
+}
+
+function normalizeLinkUrl(url, baseUrl) {
+  try {
+    const parsed = new URL(decodeHtml(url), baseUrl);
+    if (!/^https?:$/i.test(parsed.protocol)) return "";
+    parsed.hash = "";
+    return parsed.href;
+  } catch {
+    return "";
+  }
+}
+
+function extractLinks(html, baseUrl) {
+  return [...String(html || "").matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>/gi)]
+    .map((match) => normalizeLinkUrl(match[1], baseUrl))
+    .filter(Boolean);
+}
+
+function urlDescriptor(url) {
+  try {
+    const parsed = new URL(url);
+    return normalizedWords(`${decodeURIComponent(parsed.pathname)} ${decodeURIComponent(parsed.search || "")}`);
+  } catch {
+    return normalizedWords(url);
+  }
+}
+
+function isBlockedAssetUrl(url) {
+  return /\.(?:css|js|mjs|map|png|jpe?g|gif|webp|svg|ico|pdf|zip|rar|mp4|webm|woff2?|ttf|eot)(?:[?#].*)?$/i.test(url);
+}
+
+function agencyCandidateScore(url) {
+  const descriptor = urlDescriptor(url);
+  if (!descriptor || isBlockedAssetUrl(url) || isPortalHost(url)) return 0;
+  if (/\b(contact|privacy|cookies?|mentions|conditions|login|admin|wp json|feed|tag|category|author|estimation|estimate|valuation|syndic|jobs?|carrieres?|vacatures?|about|over ons|team|kantoor|agence|agents?)\b/i.test(descriptor)) {
+    return 0;
+  }
+  if (/\b(a louer|te huur|location|huur|rent|vendu|sold|verkocht|loue|verhuurd)\b/i.test(descriptor)) {
+    return 0;
+  }
+  let score = 0;
+  if (/\b(a vendre|vente|acheter|te koop|koop|for sale|sale|buy)\b/i.test(descriptor)) score += 1;
+  if (/\b(maison|maisons|house|houses|huis|woning|woningen|villa|bungalow|bel etage|rijwoning|eengezinswoning|halfopen|habitation|pand|bien|property)\b/i.test(descriptor)) score += 1;
+  if (/\b(detail|annonce|property|bien|pand|ref|reference|listing|object)\b/i.test(descriptor)) score += 1;
+  if (/(?:^|[-/])\d{5,}(?:[-/]|$)/.test(url) || /[a-z0-9-]{20,}/i.test(descriptor)) score += 1;
+  return score;
+}
+
+function commonAgencyIndexUrls(baseUrl, configuredPaths) {
+  const paths = splitList(configuredPaths).length ? splitList(configuredPaths) : [
+    "/a-vendre",
+    "/fr/a-vendre",
+    "/fr/acheter",
+    "/fr/biens/a-vendre",
+    "/biens-a-vendre",
+    "/nos-biens/a-vendre",
+    "/vente",
+    "/te-koop",
+    "/nl/te-koop",
+    "/aanbod/te-koop",
+    "/panden/te-koop"
+  ];
+  return paths.map((item) => normalizeLinkUrl(item, baseUrl)).filter(Boolean);
+}
+
+function readAgencyRows(args) {
+  const agencyCsv = args.agencyCsv
+    ? path.resolve(args.agencyCsv)
+    : latestAgencyCsvPath();
+  if (!agencyCsv || !fs.existsSync(agencyCsv)) return { agencyCsv, rows: [] };
+  const seen = new Set();
+  const rows = parseCsvRows(fs.readFileSync(agencyCsv, "utf8"))
+    .map((row) => ({
+      name: cleanText(row.Name || row.name),
+      address: cleanText(row.Address || row.address),
+      latitude: floatFromAny(row.Latitude || row.latitude),
+      longitude: floatFromAny(row.Longitude || row.longitude),
+      phone: cleanText(row.Phone || row.phone),
+      email: cleanText(row.Email || row.email),
+      website: normalizeWebsite(row.Website || row.website),
+      osmUrl: cleanText(row.OsmUrl || row.osmUrl)
+    }))
+    .filter((row) => row.website && !isPortalHost(row.website))
+    .filter((row) => {
+      const key = hostKey(row.website);
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  return { agencyCsv, rows };
+}
+
+function flattenJsonLd(value, output = []) {
+  if (!value) return output;
+  if (Array.isArray(value)) {
+    value.forEach((item) => flattenJsonLd(item, output));
+    return output;
+  }
+  if (typeof value !== "object") return output;
+  output.push(value);
+  if (Array.isArray(value["@graph"])) flattenJsonLd(value["@graph"], output);
+  return output;
+}
+
+function parseAllJsonLdObjects(html) {
+  return parseJsonLdObjects(html).flatMap((item) => flattenJsonLd(item));
+}
+
+function jsonLdTypeIncludes(item, needles) {
+  const rawType = item && item["@type"];
+  const types = Array.isArray(rawType) ? rawType : [rawType];
+  return types.some((type) => needles.some((needle) => String(type || "").toLowerCase().includes(needle)));
+}
+
+function findAgencyPropertySchema(objects) {
+  return objects.find((item) => jsonLdTypeIncludes(item, [
+    "house",
+    "singlefamilyresidence",
+    "residence",
+    "land",
+    "apartment",
+    "realestatelisting",
+    "product"
+  ])) || null;
+}
+
+function priceCandidatesFromText(text) {
+  const candidates = [
+    ...[...String(text || "").matchAll(/(?:\bEUR\b|\u20ac)\s*(\d{2,3}(?:[\s.,\u00a0\u202f]\d{3})+|\d{5,6})/gi)].map((match) => match[1]),
+    ...[...String(text || "").matchAll(/(\d{2,3}(?:[\s.,\u00a0\u202f]\d{3})+|\d{5,6})\s*(?:\bEUR\b|\u20ac)/gi)].map((match) => match[1])
+  ]
+    .map((value) => numberFromAny(value))
+    .filter((price) => price && price >= 50000 && price <= 2000000);
+  return [...new Set(candidates)];
+}
+
+function priceFromJsonLd(object) {
+  return numberFromAny(firstField(object || {}, [
+    "price",
+    "offers.price",
+    "offers.0.price",
+    "offers.priceSpecification.price",
+    "offers.0.priceSpecification.price"
+  ]));
+}
+
+function extractMetaContent(html, name) {
+  const escaped = String(name || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const regex = new RegExp(`<meta\\s+(?:property|name)=["']${escaped}["']\\s+content=["']([^"']+)["']`, "i");
+  return cleanText(getFirstMatch(html, regex));
+}
+
+function escapeRegExp(value) {
+  return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function slugHasSegment(haystack, needle) {
+  if (!haystack || !needle) return false;
+  return new RegExp(`(?:^|-)${escapeRegExp(needle)}(?:-|$)`).test(haystack);
+}
+
+function detectLocation(config, fields) {
+  const haystack = slug(fields.filter(Boolean).join(" "));
+  let best = null;
+  for (const location of config.locations || []) {
+    let score = 0;
+    const postal = slug(location.postalCode);
+    if (postal && slugHasSegment(haystack, postal)) score += 10;
+    const primary = [location.name, location.immowebSlug, location.immovlanSlug, location.zimmoSlug]
+      .map(slug)
+      .filter(Boolean);
+    if (primary.some((needle) => slugHasSegment(haystack, needle))) score += 4;
+    const aliases = (location.aliases || []).map(slug).filter((needle) => needle.length >= 4);
+    if (aliases.some((needle) => slugHasSegment(haystack, needle))) score += 2;
+    if (score > 0 && (!best || score > best.score)) {
+      best = { score, location };
+    }
+  }
+  return best?.location || null;
+}
+
+function addressFromJsonLd(value) {
+  if (typeof value === "string") return cleanText(value);
+  const address = value && typeof value === "object" ? value : {};
+  return cleanText(firstField(address, [
+    (item) => [item.streetAddress, item.postalCode, item.addressLocality].filter(Boolean).join(" "),
+    "name",
+    "text"
+  ]));
+}
+
+function addressKey(listing) {
+  const address = slug(listing.address || "");
+  const postalLocality = slug([listing.postalCode, listing.locality].filter(Boolean).join(" "));
+  if (!address || address === postalLocality || !/\d/.test(address) || address.length < 8) return "";
+  return `${listing.price || ""}|${listing.postalCode || ""}|${slug(listing.locality || "")}|${address}`;
+}
+
+function typedListingKey(listing) {
+  const locality = slug(listing.locality || listing.requestedLocation);
+  const price = Number(listing.price || 0);
+  const surface = Number(listing.surfaceM2 || 0);
+  const bedrooms = Number(listing.bedrooms || 0);
+  if (!locality || !price || (!surface && !bedrooms)) return "";
+  return `${locality}|${price}|${surface || ""}|${bedrooms || ""}`;
+}
+
+function lightListingKey(listing) {
+  const locality = slug(listing.locality || listing.requestedLocation);
+  const price = Number(listing.price || 0);
+  return locality && price ? `${locality}|${price}` : "";
+}
+
+function titleTokens(value) {
+  const stop = new Set(["maison", "maisons", "house", "huis", "woning", "villa", "vendre", "vente", "koop", "te", "a", "de", "du", "des", "het", "een", "avec", "chambre", "chambres", "kamers", "immoweb", "immovlan", "zimmo"]);
+  return normalizedWords(value).split(/\s+/).filter((word) => word.length >= 4 && !stop.has(word) && !/^\d+$/.test(word));
+}
+
+function buildPortalDedupe(base) {
+  const sourceMatches = (source) => /immoweb|immovlan/i.test(String(source || ""));
+  const listings = (base.listings || []).filter((listing) => sourceMatches(listing.source));
+  const byLight = new Map();
+  const titleByLight = new Map();
+  const bedroomsByLight = new Map();
+  for (const listing of listings) {
+    const light = lightListingKey(listing);
+    if (light) {
+      byLight.set(light, (byLight.get(light) || 0) + 1);
+      const tokens = titleTokens(listing.title || "");
+      if (!titleByLight.has(light)) titleByLight.set(light, []);
+      titleByLight.get(light).push(new Set(tokens));
+      if (listing.bedrooms) {
+        if (!bedroomsByLight.has(light)) bedroomsByLight.set(light, new Set());
+        bedroomsByLight.get(light).add(Number(listing.bedrooms));
+      }
+    }
+  }
+  return {
+    urls: new Set(listings.map((listing) => canonicalUrl(listing.url)).filter(Boolean)),
+    addresses: new Set(listings.map(addressKey).filter(Boolean)),
+    addressTexts: listings
+      .map((listing) => ({ price: Number(listing.price || 0), value: slug(listing.address || "") }))
+      .filter((item) => item.price && item.value && /\d/.test(item.value) && item.value.length >= 12),
+    typed: new Set(listings.map(typedListingKey).filter(Boolean)),
+    imageKeys: new Set(listings.flatMap((listing) => (listing.photoUrls || []).map(imageIdentityKey)).filter(Boolean)),
+    byLight,
+    titleByLight,
+    bedroomsByLight
+  };
+}
+
+function portalDuplicateReason(listing, dedupe) {
+  if (!dedupe) return "";
+  if (isPortalHost(listing.url)) return "lien portail deja couvert";
+  const canonical = canonicalUrl(listing.url);
+  if (canonical && dedupe.urls.has(canonical)) return "url deja presente";
+  const address = addressKey(listing);
+  if (address && dedupe.addresses.has(address)) return "adresse/prix deja presents sur portail";
+  const candidateAddressText = slug([listing.title, listing.address].filter(Boolean).join(" "));
+  if (candidateAddressText && dedupe.addressTexts.some((item) => item.price === Number(listing.price || 0) && candidateAddressText.includes(item.value))) {
+    return "adresse detectee deja presente sur portail";
+  }
+  const typed = typedListingKey(listing);
+  if (typed && dedupe.typed.has(typed)) return "commune/prix/surface/chambres deja presents sur portail";
+  const imageKeys = (listing.photoUrls || []).map(imageIdentityKey).filter(Boolean);
+  if (imageKeys.some((key) => dedupe.imageKeys.has(key))) return "photo deja presente sur portail";
+  const light = lightListingKey(listing);
+  const matchingPortalCount = light ? (dedupe.byLight.get(light) || 0) : 0;
+  if (matchingPortalCount) {
+    const candidateTokens = new Set(titleTokens(listing.title || ""));
+    const similarTitle = (dedupe.titleByLight.get(light) || []).some((tokens) => {
+      let overlap = 0;
+      for (const token of candidateTokens) if (tokens.has(token)) overlap += 1;
+      return overlap >= 3;
+    });
+    if (similarTitle) return "titre/prix/commune deja presents sur portail";
+    if (listing.bedrooms && !address && !listing.surfaceM2 && dedupe.bedroomsByLight.get(light)?.has(Number(listing.bedrooms))) {
+      return "meme commune/prix/chambres deja presents sur portail, details insuffisants";
+    }
+    if (!address && !listing.surfaceM2 && !listing.bedrooms) {
+      return "meme commune/prix deja present sur portail, details insuffisants pour dedoublonner";
+    }
+  }
+  return "";
+}
+
+function hasDetailSchema(objects) {
+  return objects.some((item) => jsonLdTypeIncludes(item, ["house", "singlefamilyresidence", "land", "realestatelisting", "product"]) && priceFromJsonLd(item));
+}
+
+async function parseAgencyDetail(url, agency, config, dedupe) {
+  const page = await fetchPage(url, agency.website);
+  const html = page.text;
+  const text = textFromHtml(html);
+  const objects = parseAllJsonLdObjects(html);
+  const property = findAgencyPropertySchema(objects) || {};
+  const title = cleanText(
+    extractMetaContent(html, "og:title")
+    || getFirstMatch(html, /<h1\b[^>]*>([\s\S]*?)<\/h1>/i)
+    || getFirstMatch(html, /<title>([\s\S]*?)<\/title>/i)
+  );
+  const description = cleanText(extractMetaContent(html, "description") || extractMetaContent(html, "og:description") || firstField(property, ["description"]));
+  const addressValue = property.address || objects.find((item) => jsonLdTypeIncludes(item, ["postaladdress"])) || {};
+  const address = addressFromJsonLd(addressValue);
+  const location = detectLocation(config, [title, description, address, url]);
+  if (!location) return { listing: null, message: "commune cible absente" };
+
+  const jsonLdPrice = priceFromJsonLd(property);
+  const titlePrices = priceCandidatesFromText(title);
+  const descriptionPrices = priceCandidatesFromText(description);
+  const textPrices = priceCandidatesFromText(text);
+  const price = titlePrices[0] || descriptionPrices[0] || jsonLdPrice || textPrices[0] || null;
+  const detailSchema = hasDetailSchema(objects);
+  if (!detailSchema && textPrices.length > 4) {
+    return { listing: null, message: "page de liste probable, plusieurs prix detectes" };
+  }
+
+  const category = cleanText(firstField(property, ["category", "additionalType", "@type"]));
+  const rejection = sourceQualityRejectionReason("Agence locale", {
+    title,
+    description,
+    category: isLandSearch(config) ? `${category} terrain a batir building land bouwgrond` : `${category} maison villa huis woning`,
+    locality: location.name,
+    postalCode: location.postalCode,
+    street: address,
+    url,
+    price
+  }, location, config);
+  if (rejection) return { listing: null, message: rejection };
+
+  const detailText = [title, description, text].join(" ");
+  const bedrooms = numberFromAny(firstField(property, [
+    "numberOfRooms",
+    "numberOfBedrooms",
+    "bedrooms",
+    "accommodationFloorPlan.numberOfBedrooms"
+  ])) || extractBedroomsFromText(detailText);
+  const surfaceM2 = numberFromAny(firstField(property, [
+    "floorSize.value",
+    "floorSize",
+    "area.value",
+    "area",
+    "size"
+  ])) || extractSurfaceFromText(detailText);
+  const geo = objects.find((item) => jsonLdTypeIncludes(item, ["geocoordinates"])) || property.geo || {};
+  const images = dedupeImageUrls([
+    property.image,
+    extractMetaContent(html, "og:image"),
+    ...[...html.matchAll(/<img\b[^>]*(?:src|data-src|data-lazy-src)=["']([^"']+)["'][^>]*>/gi)].map((match) => normalizeLinkUrl(match[1], page.finalUrl))
+  ]).filter((image) => !/logo|favicon|avatar|placeholder|spinner/i.test(image)).slice(0, 12);
+  const publication = publicationDateInfo(firstField(property, [
+    "datePosted",
+    "datePublished",
+    "dateCreated",
+    "uploadDate"
+  ]) || extractMetaContent(html, "article:published_time"), "Agence locale JSON-LD/meta");
+  const isUnderOption = isUnderOptionText(detailText);
+  const listing = {
+    source: "Agence locale (site direct)",
+    id: `agency-${shortId(url)}`,
+    propertyType: isLandSearch(config) ? "terrain" : "maison",
+    title: title || `${isLandSearch(config) ? "Terrain" : "Maison"} a vendre - ${location.name} - ${agency.name || "Agence locale"}`,
+    price,
+    bedrooms: bedrooms || null,
+    surfaceM2: surfaceM2 || null,
+    locality: location.name,
+    requestedLocation: location.name,
+    postalCode: location.postalCode,
+    address,
+    latitude: floatFromAny(firstField(geo, ["latitude", "lat"])) || location.latitude || agency.latitude || null,
+    longitude: floatFromAny(firstField(geo, ["longitude", "lon", "lng"])) || location.longitude || agency.longitude || null,
+    geoPrecision: geo?.latitude && geo?.longitude ? "adresse publiee - agence locale" : "centre commune - agence locale",
+    agentName: agency.name || "Agence locale",
+    agentPhone: agency.phone || "",
+    agentEmail: agency.email || "",
+    agentWebsite: agency.website,
+    isUnderOption,
+    underOption: isUnderOption,
+    saleStatus: isUnderOption ? "sous option" : "",
+    publicationDate: publication.publicationDate,
+    publicationDateSource: publication.publicationDateSource,
+    photoCount: images.length,
+    photoUrl: images[0] || null,
+    photoUrls: images,
+    url: page.finalUrl || url
+  };
+  const duplicateReason = portalDuplicateReason(listing, dedupe);
+  if (duplicateReason) return { listing: null, message: `doublon portail: ${duplicateReason}` };
+  return { listing, message: `${price} EUR` };
+}
+
+async function extractAgencyForRow(agency, config, args, dedupe, diagnostics) {
+  const listings = [];
+  const seenPages = new Set();
+  const seenDetails = new Set();
+  try {
+    const home = await fetchPage(agency.website);
+    const baseUrl = home.finalUrl || agency.website;
+    const homeLinks = extractLinks(home.text, baseUrl)
+      .filter((url) => isSameAgencyHost(url, baseUrl) && !isPortalHost(url) && !isBlockedAssetUrl(url));
+    const indexUrls = [
+      baseUrl,
+      ...homeLinks.filter((url) => agencyCandidateScore(url) === 1),
+      ...commonAgencyIndexUrls(baseUrl, args.agencyIndexPaths)
+    ].filter((url) => url && isSameAgencyHost(url, baseUrl));
+    const detailCandidates = homeLinks.filter((url) => agencyCandidateScore(url) >= 2);
+
+    diagnostics.push({ source: "Agence locale", location: agency.name, status: "Site lu", message: `${homeLinks.length} lien(s) interne(s), ${detailCandidates.length} candidat(s) direct(s)`, url: baseUrl });
+
+    for (const pageUrl of indexUrls) {
+      const pageKey = canonicalUrl(pageUrl);
+      if (!pageKey || seenPages.has(pageKey)) continue;
+      seenPages.add(pageKey);
+      if (detailCandidates.length >= args.agencyMaxCandidatesPerSite) break;
+      try {
+        const page = pageUrl === baseUrl ? home : await fetchPage(pageUrl, baseUrl);
+        const links = extractLinks(page.text, page.finalUrl || pageUrl)
+          .filter((url) => isSameAgencyHost(url, baseUrl) && agencyCandidateScore(url) >= 2);
+        for (const link of links) {
+          const key = canonicalUrl(link);
+          if (key && !seenDetails.has(key)) {
+            seenDetails.add(key);
+            detailCandidates.push(link);
+          }
+          if (detailCandidates.length >= args.agencyMaxCandidatesPerSite) break;
+        }
+        diagnostics.push({ source: "Agence locale", location: agency.name, status: "Page candidats", message: `${links.length} lien(s) annonce potentiel(s)`, url: pageUrl });
+      } catch (error) {
+        diagnostics.push({ source: "Agence locale", location: agency.name, status: "Page ignoree", message: error.message, url: pageUrl });
+      }
+    }
+
+    for (const detailUrl of detailCandidates.slice(0, args.agencyMaxCandidatesPerSite)) {
+      await sleep(config.delayMs || 100);
+      try {
+        const { listing, message } = await parseAgencyDetail(detailUrl, agency, config, dedupe);
+        diagnostics.push({ source: "Agence locale", location: agency.name, status: listing ? "Fiche exploitable" : "Candidat ignore", message, url: detailUrl });
+        if (listing) listings.push(listing);
+      } catch (error) {
+        diagnostics.push({ source: "Agence locale", location: agency.name, status: "Erreur detail", message: error.message, url: detailUrl });
+      }
+    }
+  } catch (error) {
+    diagnostics.push({ source: "Agence locale", location: agency.name, status: "Site bloque ou illisible", message: error.message, url: agency.website });
+  }
+  return listings;
+}
+
+async function extractAgencySites(config, args, base, diagnostics) {
+  const { agencyCsv, rows } = readAgencyRows(args);
+  if (!rows.length) {
+    diagnostics.push({ source: "Agence locale", location: "CSV agences", status: "Absent", message: agencyCsv ? `Aucune agence exploitable dans ${agencyCsv}` : "CSV agences introuvable", url: "" });
+    return [];
+  }
+  const selected = rows.slice(0, args.agencyMaxSites);
+  const dedupe = buildPortalDedupe(base);
+  const listings = [];
+  let cursor = 0;
+  async function worker() {
+    while (cursor < selected.length) {
+      const index = cursor;
+      cursor += 1;
+      const agency = selected[index];
+      const agencyListings = await extractAgencyForRow(agency, config, args, dedupe, diagnostics);
+      for (const listing of agencyListings) {
+        const key = canonicalUrl(listing.url);
+        if (key && listings.some((item) => canonicalUrl(item.url) === key)) continue;
+        listings.push(listing);
+      }
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(args.agencyConcurrency, selected.length) }, () => worker()));
+  diagnostics.push({ source: "Agence locale", location: "Synthese", status: "Essai termine", message: `${listings.length} annonce(s) integree(s) depuis ${selected.length}/${rows.length} site(s) OSM avec dedoublonnage portail`, url: agencyCsv });
+  return listings;
+}
+
 function immovlanSearchUrl(location, maxPrice, config) {
   const type = isLandSearch(config) ? "terrain" : "maison";
   return `https://www.immovlan.be/fr/immobilier/${type}/a-vendre/${location.immovlanSlug}?maxprice=${maxPrice}`;
@@ -534,7 +1120,7 @@ function extractSurfaceFromText(text) {
 
 function extractBedroomsFromText(text) {
   const value = cleanText(text);
-  const match = value.match(/\b([1-9]\d?)\s*(?:ch(?:ambre|ambres)?|kamer|kamers|slaapkamer|slaapkamers)\b/i);
+  const match = value.match(/\b([1-9]\d?)\s*(?:ch(?:ambre|ambres)?|kamer|kamers|slaapkamer|slaapkamers|slpk|slpks)\b/i);
   return match ? Number(match[1]) : null;
 }
 
@@ -1075,6 +1661,7 @@ function replacementSourceMatches(listingSource, requestedSource) {
   if (requestedSource === "immovlan") return source.includes("immovlan");
   if (requestedSource === "2ememain") return source.includes("2ememain");
   if (["zimmo", "zimmo-apify", "apify-zimmo"].includes(requestedSource)) return source.includes("zimmo");
+  if (["agency-sites", "agences", "agence-locale"].includes(requestedSource)) return source.includes("agence locale");
   return false;
 }
 
@@ -1130,10 +1717,23 @@ async function run() {
   if (sources.some((source) => ["zimmo", "zimmo-apify", "apify-zimmo"].includes(source))) {
     additions.push(...await extractZimmoApify(config, args, diagnostics));
   }
+  if (sources.some((source) => ["agency-sites", "agences", "agence-locale"].includes(source))) {
+    additions.push(...await extractAgencySites(config, args, base, diagnostics));
+  }
   const merged = mergeResults(base, additions, sources);
   merged.propertyType = isLandSearch(config) ? "terrain" : "maison";
   merged.maxPrice = Number(config.maxPrice || 0);
   merged.sourceDiagnostics = diagnostics;
+  const agencyCount = countBySource(merged.listings)["Agence locale (site direct)"] || 0;
+  if (sources.some((source) => ["agency-sites", "agences", "agence-locale"].includes(source))) {
+    merged.sourceAudit = {
+      ...(merged.sourceAudit || {}),
+      agencesLocales: {
+        status: agencyCount > 0 ? "presente-et-rendue" : "presente-recherche-mais-filtre-ou-bloquee",
+        count: agencyCount
+      }
+    };
+  }
   fs.mkdirSync(path.dirname(args.outJson), { recursive: true });
   fs.writeFileSync(args.outJson, JSON.stringify(merged, null, 2), "utf8");
   fs.writeFileSync(args.outJson.replace(/\.json$/, "-diagnostics.json"), JSON.stringify({ generatedAt: new Date().toISOString(), count: diagnostics.length, diagnostics }, null, 2), "utf8");

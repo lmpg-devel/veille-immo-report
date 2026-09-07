@@ -22,13 +22,15 @@
 - Recherche textuelle dans les ressources applicatives : aucune popup Sources complementaires ni reference aux marches publics.
 - Fin de collecte REELLE : traitement GitHub 34168749608 termine avec succes en 50 min 47 s. Sans fermer les applications, Windows passe de 578 a 584 cartes et Android de 35 a 34 terrains ; les deux affichent l'etat current. Voir windows-live-refresh.json, android-live-refresh.json et les captures updated.
 - Donnees effectivement recues : maisons 2026-09-07T23:41:53.252Z, terrains 2026-09-07T23:54:25.704Z, soit le 8 septembre a 01:41 et 01:54 en Belgique. L'emulateur Android est configure en UTC et affiche l'heure locale UTC ; le controle de jour utilise Europe/Brussels.
+- Publication distante : version v2.1.3 publique sur GitHub Releases. EXE et APK telecharges integralement avec Node puis PowerShell, sans authentification ; SHA-256 identiques aux fichiers testes. Les liens GitHub Pages des deux binaires ont egalement ete telecharges et controles.
+- PWA publique ouverte dans un Chrome neuf apres deploiement : version pwa-2026-09-08-01, etat current, 584 cartes et marqueurs, communes cliquables, donnees du 8 septembre. Voir public-pwa-test.json et public-pwa.png.
 
 ## Reserves et controles restants
 
 - Le package stable de la serie 2.x est be.veilleimmo.mobile.v2, et non l'ancien identifiant be.veilleimmo.mobile. Il est conserve pour ne pas creer une autre application.
 - L'assistant d'installation NSIS n'a pas ete installe dans le profil utilisateur : son contenu a ete extrait et execute pour ne pas remplacer l'installation personnelle durant les tests.
 - Test Android sur emulateur, pas sur le telephone physique de l'utilisateur.
-- Le scenario navigateur de panne et de reprise est simule ; la fin de collecte a aussi ete verifiee reellement sur EXE et APK. Les liens publics de livraison doivent encore etre controles apres publication.
+- Le scenario navigateur de panne et de reprise est simule ; la fin de collecte et les liens publics ont aussi ete verifies reellement.
 - Les fichiers embarques de secours datent du 4 septembre. L'application doit recuperer les donnees distantes ; elle conserve et indique cette ancienne date si le reseau echoue.
 - Donnees presentes avant la nouvelle collecte : maisons Immoweb 539, Immovlan 35, agences 4 ; terrains Immoweb 35. Zimmo bloque et particuliers filtres : aucune annonce de ces sources n'a ete inventee.
 - Nouvelle collecte : maisons Immoweb 543, Immovlan 39, agences 2 ; terrains Immoweb 34. Ce correctif ne pretend pas debloquer Zimmo ou integrer de faux particuliers.
@@ -38,4 +40,5 @@
 
 - Creations : services/refresh, vendor/leaflet, scripts de test et transport, outputs/2.1.3 et rapport preflight.
 - Aucun deplacement de source existante. AGENTS.md utilisateur laisse intact.
-- Le repertoire temporaire d'essai doit etre supprime a la fin des verifications.
+- Les processus d'essai Windows et l'emulateur propre a cette tache ont ete arretes. Aucun autre emulateur n'a ete touche.
+- Nettoyage BLOQUE : l'environnement a refuse la suppression du repertoire temporaire C:\tmp\Codex\veille-immo-213, meme apres verification du chemin absolu. Il reste les copies telechargees, l'installateur extrait et les profils Chrome d'essai. Aucune suppression de fichier n'a ete effectuee durant cette phase finale ; les traces preliminaires non publiees sont conservees dans outputs/2.1.3.

@@ -20,15 +20,19 @@
 - Android : APK installe et lance sur emulateur Pixel 7 API 35, serial emulator-5570. Apres un echec reseau initial, le bouton Reessayer rejoint effectivement la collecte et affiche le bandeau actif. Voir android-refresh.png.
 - APK : package be.veilleimmo.mobile.v2, versionCode 213 (precedent 212), versionName 2.1.3, signatures v1 et v2 valides, resources.arsc stocke sans compression (1056 octets).
 - Recherche textuelle dans les ressources applicatives : aucune popup Sources complementaires ni reference aux marches publics.
+- Fin de collecte REELLE : traitement GitHub 34168749608 termine avec succes en 50 min 47 s. Sans fermer les applications, Windows passe de 578 a 584 cartes et Android de 35 a 34 terrains ; les deux affichent l'etat current. Voir windows-live-refresh.json, android-live-refresh.json et les captures updated.
+- Donnees effectivement recues : maisons 2026-09-07T23:41:53.252Z, terrains 2026-09-07T23:54:25.704Z, soit le 8 septembre a 01:41 et 01:54 en Belgique. L'emulateur Android est configure en UTC et affiche l'heure locale UTC ; le controle de jour utilise Europe/Brussels.
 
 ## Reserves et controles restants
 
 - Le package stable de la serie 2.x est be.veilleimmo.mobile.v2, et non l'ancien identifiant be.veilleimmo.mobile. Il est conserve pour ne pas creer une autre application.
 - L'assistant d'installation NSIS n'a pas ete installe dans le profil utilisateur : son contenu a ete extrait et execute pour ne pas remplacer l'installation personnelle durant les tests.
 - Test Android sur emulateur, pas sur le telephone physique de l'utilisateur.
-- Le scenario navigateur de fin de collecte est simule ; la verification de fin de collecte reelle et des liens publics de livraison reste a effectuer.
+- Le scenario navigateur de panne et de reprise est simule ; la fin de collecte a aussi ete verifiee reellement sur EXE et APK. Les liens publics de livraison doivent encore etre controles apres publication.
 - Les fichiers embarques de secours datent du 4 septembre. L'application doit recuperer les donnees distantes ; elle conserve et indique cette ancienne date si le reseau echoue.
 - Donnees presentes avant la nouvelle collecte : maisons Immoweb 539, Immovlan 35, agences 4 ; terrains Immoweb 35. Zimmo bloque et particuliers filtres : aucune annonce de ces sources n'a ete inventee.
+- Nouvelle collecte : maisons Immoweb 543, Immovlan 39, agences 2 ; terrains Immoweb 34. Ce correctif ne pretend pas debloquer Zimmo ou integrer de faux particuliers.
+- Limite connue : la collecte complete reste lente (50 min 47 s mesures). Le correctif permet son lancement et son suivi quotidien, il ne rend pas instantanee l'extraction des sites.
 
 ## Rangement
 

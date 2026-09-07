@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "fixture": true,
+  "initial": {
+    "busy": "true",
+    "text": "Recherche de nouvelles annonces en cours… L'application reste utilisable.Données affichées : 04/09/2026 15:47Réessayer",
+    "posts": 1,
+    "communeClickable": true,
+    "cards": 578
+  },
+  "mobile": {
+    "width": 366,
+    "left": 12,
+    "right": 378,
+    "viewport": 390
+  },
+  "checks": [
+    "running banner",
+    "commune click during refresh",
+    "failure retains cards",
+    "retry then current date",
+    "same-day visibility does not redispatch",
+    "mobile layout"
+  ]
+}

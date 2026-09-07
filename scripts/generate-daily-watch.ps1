@@ -108,12 +108,12 @@ if (-not (Test-Path -LiteralPath $currentResults)) {
 }
 
 $previousResultsProvided = -not [string]::IsNullOrWhiteSpace($PreviousResultsPath)
+$tempRoot = if ($env:RUNNER_TEMP) {
+  $env:RUNNER_TEMP
+} else {
+  [System.IO.Path]::GetTempPath()
+}
 if ([string]::IsNullOrWhiteSpace($PreviousResultsPath)) {
-  $tempRoot = if ($env:RUNNER_TEMP) {
-    $env:RUNNER_TEMP
-  } else {
-    [System.IO.Path]::GetTempPath()
-  }
   $PreviousResultsPath = Join-Path $tempRoot "veille-immo-previous-results.json"
 }
 

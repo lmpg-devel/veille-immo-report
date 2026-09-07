@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { fetchSourcePage } from "./fetch-source-page.mjs";
 
 const DEFAULT_CONFIG = "config/veille-immo.json";
 const DEFAULT_RESULTS = "publish/veille-immo-report/results.json";
@@ -98,30 +99,14 @@ function getFirstMatch(text, regex) {
 }
 
 async function fetchPage(url, referer = "") {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), fetchTimeoutMs);
   const headers = {
     "User-Agent": USER_AGENT,
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "Accept-Language": "fr-BE,fr;q=0.9,nl;q=0.8",
     "Connection": "close"
   };
-  try {
-    if (referer) headers.Referer = referer;
-    const response = await fetch(url, { headers, redirect: "follow", signal: controller.signal });
-    const text = await response.text();
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-    return { text, finalUrl: response.url || url, status: response.status };
-  } catch (error) {
-    if (error?.name === "AbortError") {
-      throw new Error(`Timeout ${fetchTimeoutMs}ms`);
-    }
-    throw error;
-  } finally {
-    clearTimeout(timer);
-  }
+  if (referer) headers.Referer = referer;
+  return fetchSourcePage(url, { headers, timeoutMs: fetchTimeoutMs });
 }
 
 async function fetchText(url, referer = "") {

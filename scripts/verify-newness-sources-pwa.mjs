@@ -207,7 +207,7 @@ async function waitFor(page, expression, timeoutMs = 30000) {
 }
 
 async function startChrome(url) {
-  const profileDir = fs.mkdtempSync(path.join(os.tmpdir(), "veille-immo-newness-qa-"));
+  const profileDir = fs.mkdtempSync(path.join(process.env.VEILLE_IMMO_QA_TEMP_ROOT || os.tmpdir(), "veille-immo-newness-qa-"));
   const devToolsFile = path.join(profileDir, "DevToolsActivePort");
   const chrome = spawn(findChrome(), [
     "--headless=new",
@@ -221,7 +221,20 @@ async function startChrome(url) {
     url
   ], { stdio: "ignore" });
   await waitForFile(devToolsFile, 15000);
-  const [port] = fs.readFileSync(devToolsFile, "utf8").trim().split(/\r?\n/);
+  let port;
+  for (let attempt = 0; attempt < 50 && !port; attempt += 1) {
+    try {
+      const [candidate] = fs.readFileSync(devToolsFile, "utf8").trim().split(/\r?\n/);
+      if (/^\d+$/.test(candidate)) port = candidate;
+    } catch (error) {
+      if (!["EBUSY", "ENOENT", "EACCES"].includes(error.code)) throw error;
+    }
+    if (!port) await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+  if (!port) {
+    chrome.kill();
+    throw new Error("Chrome DevTools port unavailable");
+  }
   const tabs = await fetchJson(`http://127.0.0.1:${port}/json`);
   const tab = tabs.find((item) => item.type === "page") || tabs[0];
   const page = new Cdp(tab.webSocketDebuggerUrl);
@@ -325,6 +338,9 @@ async function main() {
     })()`);
 
     await chrome.page.send("Page.navigate", { url: `${baseUrl}/index.html?qa=${Date.now()}` });
+    // A first service-worker installation reloads the page once.
+    await waitFor(chrome.page, "({ok: Boolean(navigator.serviceWorker.controller)})", 45000);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     await waitFor(chrome.page, `(() => ({
       ok: Boolean(window.veilleImmoNewListingState && window.veilleImmoPriceFilterState && document.querySelector('#newListingsOnlyToggle') && window.veilleImmoRenderedMarkerLayers),
       state: window.veilleImmoNewListingState || null,
@@ -481,7 +497,10 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+export { startServer, startChrome, waitFor };
+if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
+  main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}

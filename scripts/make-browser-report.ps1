@@ -9,6 +9,8 @@ $ErrorActionPreference = "Stop"
 $source = Resolve-Path -LiteralPath $SourceHtml
 $outputFullPath = [System.IO.Path]::GetFullPath($OutputHtml)
 $html = Get-Content -Raw -LiteralPath $source
+$html = $html.Replace('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', 'vendor/leaflet/leaflet.css')
+$html = $html.Replace('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', 'vendor/leaflet/leaflet.js')
 
 $new = @"
 function openExternalLinkPanel(button) {

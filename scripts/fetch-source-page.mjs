@@ -14,6 +14,7 @@ export async function fetchSourcePage(url, { headers = {}, timeoutMs = 12000, ma
         agent: false,
         headers: { ...headers, 'Accept-Encoding': 'identity' }
       }, response => {
+        response.on('error', reject);
         const status = response.statusCode;
         if ([301, 302, 303, 307, 308].includes(status) && response.headers.location) {
           response.resume();
@@ -36,7 +37,6 @@ export async function fetchSourcePage(url, { headers = {}, timeoutMs = 12000, ma
           }
           else chunks.push(chunk);
         });
-        response.on('error', reject);
         response.on('aborted', () => reject(new Error('Source response interrupted')));
         response.on('end', () => resolve({ text: Buffer.concat(chunks).toString('utf8'), finalUrl: target.href, status }));
       });

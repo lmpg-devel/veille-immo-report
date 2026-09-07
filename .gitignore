@@ -10,3 +10,4 @@ desktop-installer/qa/
 android-app/build/
 results-diagnostics.json
 results-terrain-diagnostics.json
+services/refresh/

@@ -1,6 +1,6 @@
 {
   "name": "veille-immo-desktop",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "private": true,
   "description": "Application Windows Veille Immo",
   "main": "electron/main.cjs",

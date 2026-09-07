@@ -1,7 +1,11 @@
 (function () {
   "use strict";
 
-  const APP_VERSION = "pwa-2026-09-04-01";
+  const APP_VERSION = "pwa-2026-09-08-01";
+  const DAILY_REFRESH_URL = "https://veille-immo-actualisation.lmpg110312.chatgpt.site";
+  let dailyRefreshPromise = null;
+  let dailyRefreshState = "checking";
+  let dailyCheckedDay = "";
   const CONFIG_URL = "config/veille-immo.json";
   const LOCATION_BOUNDARIES_URL = "data/location-boundaries.geojson";
   const LOCATION_DISTANCES_URL = "data/location-distances.json";
@@ -811,6 +815,19 @@
 
   async function fetchResults() {
     const resultsFile = configuredSearchMode(latestConfig).resultsFile || activeSearchProfile().resultsFile;
+    if (location.hostname === "appassets.androidplatform.net") {
+      try {
+        const remote = await fetch("https://lmpg-devel.github.io/veille-immo-report/" + resultsFile + "?t=" + Date.now(), {
+          cache: "no-store", signal: AbortSignal.timeout(12000)
+        });
+        if (!remote.ok) throw new Error("HTTP " + remote.status);
+        const payload = await remote.json();
+        if (!Array.isArray(payload.listings) || !payload.listings.length) throw new Error("Empty remote results");
+        return normalizeResultsPayload(payload);
+      } catch (error) {
+        // Bundled data remains available offline; the banner retains its real date.
+      }
+    }
     const response = await fetch(resultsFile + "?t=" + Date.now(), {
       cache: "no-store",
       headers: { "Accept": "application/json" }
@@ -3804,6 +3821,7 @@
       installRoutePreviewHandlers();
       scheduleMapEnhancements("refresh");
       applyPriceFilter();
+      renderDailyRefreshStatus();
       if (manual) {
         setRebuildFeedback("Recalcul termine: carte et liste mises a jour.", false);
       }
@@ -3941,7 +3959,97 @@
     });
   }
 
-  window.addEventListener("load", async function () {
+  function brusselsDay(value) {
+    return new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Brussels", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(value));
+  }
+
+  function renderDailyRefreshStatus() {
+    const banner = document.getElementById("dailyRefreshStatus");
+    if (!banner) return;
+    const busy = ["checking", "running", "pending", "publishing"].includes(dailyRefreshState);
+    const messages = {
+      checking: "Vérification des données du jour…",
+      running: "Recherche de nouvelles annonces en cours… L'application reste utilisable.",
+      pending: "Actualisation demandée. La recherche va démarrer…",
+      publishing: "Publication des nouvelles données en cours…",
+      current: "Données actualisées pour aujourd'hui.",
+      failed: "Actualisation impossible — dernières données conservées."
+    };
+    banner.dataset.state = dailyRefreshState;
+    banner.setAttribute("aria-busy", String(busy));
+    banner.querySelector(".daily-refresh-icon").hidden = !busy;
+    banner.querySelector(".daily-refresh-message").textContent = messages[dailyRefreshState] || messages.failed;
+    banner.querySelector(".daily-refresh-date").textContent = latestPayload && latestPayload.generatedAt
+      ? "Données affichées : " + formatDate(latestPayload.generatedAt) : "Chargement des dernières données disponibles.";
+    banner.querySelector("button").hidden = dailyRefreshState !== "failed";
+    window.veilleImmoDailyRefreshState = dailyRefreshState;
+  }
+
+  function installDailyRefreshBanner() {
+    if (document.getElementById("dailyRefreshStatus")) return;
+    const style = document.createElement("style");
+    style.textContent = ".daily-refresh{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px;margin:12px 0;border:1px solid #aac5ce;border-radius:6px;background:#eef7fa;color:#173c49;font-size:14px}.daily-refresh-copy{flex:1;min-width:180px}.daily-refresh-message{display:block;font-weight:700}.daily-refresh-date{display:block;margin-top:4px}.daily-refresh-icon{width:18px;height:18px;flex:0 0 18px;border:2px solid #b6cbd3;border-top-color:#0b5c86;border-radius:50%;animation:daily-spin 1s linear infinite}.daily-refresh [hidden]{display:none!important}.daily-refresh[data-state=failed]{border-color:#bd7770;background:#fff2f0}.daily-refresh button{padding:8px 12px;min-height:40px;cursor:pointer}@keyframes daily-spin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.daily-refresh-icon{animation:none}}";
+    document.head.appendChild(style);
+    const banner = document.createElement("div");
+    banner.id = "dailyRefreshStatus";
+    banner.className = "daily-refresh";
+    banner.setAttribute("role", "status");
+    banner.setAttribute("aria-live", "polite");
+    banner.innerHTML = '<span class="daily-refresh-icon" aria-hidden="true"></span><div class="daily-refresh-copy"><span class="daily-refresh-message"></span><span class="daily-refresh-date"></span></div><button type="button" hidden>Réessayer</button>';
+    const meta = document.querySelector(".meta");
+    if (meta) meta.insertAdjacentElement("afterend", banner);
+    else (document.querySelector("main") || document.body).prepend(banner);
+    banner.querySelector("button").addEventListener("click", runDailyRefresh);
+    renderDailyRefreshStatus();
+  }
+
+  function runDailyRefresh() {
+    if (dailyRefreshPromise) return dailyRefreshPromise;
+    dailyRefreshPromise = (async function () {
+      dailyRefreshState = "checking";
+      renderDailyRefreshStatus();
+      const started = Date.now();
+      let first = true;
+      try {
+        while (Date.now() - started < 130 * 60 * 1000) {
+          const response = await fetch(DAILY_REFRESH_URL + (first ? "/refresh" : "/status"), {
+            method: first ? "POST" : "GET", cache: "no-store", signal: AbortSignal.timeout(30000)
+          });
+          first = false;
+          if (!response.ok) throw new Error("Collection service unavailable");
+          const status = await response.json();
+          if (status.state === "failed") throw new Error("Collection failed");
+          if (status.state === "current") {
+            const payload = await refreshReportData(false);
+            if (brusselsDay(payload.generatedAt) !== brusselsDay(Date.now())) throw new Error("Published data not received");
+            dailyCheckedDay = brusselsDay(Date.now());
+            dailyRefreshState = "current";
+            renderDailyRefreshStatus();
+            return;
+          }
+          dailyRefreshState = ["running", "pending", "publishing"].includes(status.state) ? status.state : "running";
+          renderDailyRefreshStatus();
+          await new Promise(function (resolve) { setTimeout(resolve, 15000); });
+        }
+        throw new Error("Collection timeout");
+      } catch (error) {
+        dailyRefreshState = "failed";
+        renderDailyRefreshStatus();
+      }
+    })().finally(function () { dailyRefreshPromise = null; });
+    return dailyRefreshPromise;
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden && dailyCheckedDay !== brusselsDay(Date.now())) runDailyRefresh();
+  });
+  window.addEventListener("online", function () {
+    if (dailyRefreshState === "failed") runDailyRefresh();
+  });
+
+  document.addEventListener("DOMContentLoaded", async function () {
+    installDailyRefreshBanner();
+    runDailyRefresh();
     loadFavoriteListingIds();
     loadNewOnlyPreference();
     injectControls();
@@ -3952,10 +4060,7 @@
     if (pageButton) {
       pageButton.addEventListener("click", promptInstall);
     }
-    try {
-      await registerServiceWorker();
-    } catch (error) {
-    }
+    registerServiceWorker().catch(function () {});
     updateInstallButtons();
     refreshReportData(false).then(function () {
       return checkForNewListings(false);

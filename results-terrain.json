@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-11T15:25:01.565Z",
+  "generatedAt": "2026-11-12T15:51:59.596Z",
   "reportUrl": "https://lmpg-devel.github.io/veille-immo-report/",
   "propertyType": "terrain",
   "maxPrice": 100000,
@@ -730,9 +730,9 @@
       "publicationDate": "2/25/2026 1:09:24 PM",
       "publicationDateSource": "Immoweb classified.publication.creationDate",
       "photoCount": 1,
-      "photoUrl": "https://assets.immoweb.be/104515/images/artworks/placeholders/placeholder-card.svg",
+      "photoUrl": "https://assets.immoweb.be/104562/images/artworks/placeholders/placeholder-card.svg",
       "photoUrls": [
-        "https://assets.immoweb.be/104515/images/artworks/placeholders/placeholder-card.svg"
+        "https://assets.immoweb.be/104562/images/artworks/placeholders/placeholder-card.svg"
       ],
       "url": "https://www.immoweb.be/fr/annonce/terrain-a-batir/a-vendre/hal/1500/21381655"
     },
@@ -951,7 +951,7 @@
       "source": "Immovlan",
       "location": "Drogenbos",
       "status": "Recherche OK",
-      "message": "7 URL candidates",
+      "message": "6 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/terrain/a-vendre/drogenbos?maxprice=100000"
     },
     {
@@ -967,13 +967,6 @@
       "status": "Candidat ignore",
       "message": "commune cible absente",
       "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/9400/ninove/rbx30076#property"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Drogenbos",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/1853/strombeek-bever/vbe86208#property"
     },
     {
       "source": "Immovlan",
@@ -1021,7 +1014,7 @@
       "source": "Immovlan",
       "location": "Auderghem",
       "status": "Recherche OK",
-      "message": "3 URL candidates",
+      "message": "4 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/terrain/a-vendre/auderghem?maxprice=100000"
     },
     {
@@ -1044,6 +1037,13 @@
       "status": "Candidat ignore",
       "message": "commune cible absente",
       "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/1480/clabecq/vbe36285#property"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Auderghem",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/1390/grez-doiceau/vbe01298#property"
     },
     {
       "source": "Immovlan",
@@ -1196,15 +1196,8 @@
       "source": "Immovlan",
       "location": "Hoeilaart",
       "status": "Recherche OK",
-      "message": "1 URL candidates",
+      "message": "0 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/terrain/a-vendre/hoeilaart?maxprice=100000"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Hoeilaart",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/1390/grez-doiceau/vbe01298#property"
     },
     {
       "source": "Immovlan",
@@ -1483,7 +1476,7 @@
       "source": "Immovlan",
       "location": "Roosdaal",
       "status": "Recherche OK",
-      "message": "1 URL candidates",
+      "message": "2 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/terrain/a-vendre/roosdaal?maxprice=100000"
     },
     {
@@ -1492,6 +1485,13 @@
       "status": "Candidat ignore",
       "message": "commune cible absente",
       "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/7866/ollignies/vbe81538#property"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Roosdaal",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/9660/brakel/rbx16602#property"
     },
     {
       "source": "Immovlan",
@@ -1532,8 +1532,15 @@
       "source": "Immovlan",
       "location": "Pepingen",
       "status": "Recherche OK",
-      "message": "0 URL candidates",
+      "message": "1 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/terrain/a-vendre/pepingen?maxprice=100000"
+    },
+    {
+      "source": "Immovlan",
+      "location": "Pepingen",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/7866/ollignies/vbe77455#property"
     },
     {
       "source": "Immovlan",
@@ -1567,7 +1574,7 @@
       "source": "Immovlan",
       "location": "Liedekerke",
       "status": "Recherche OK",
-      "message": "2 URL candidates",
+      "message": "1 URL candidates",
       "url": "https://www.immovlan.be/fr/immobilier/terrain/a-vendre/liedekerke?maxprice=100000"
     },
     {
@@ -1576,13 +1583,6 @@
       "status": "Candidat ignore",
       "message": "commune cible absente",
       "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/9420/erpe-mere/rbw27641#property"
-    },
-    {
-      "source": "Immovlan",
-      "location": "Liedekerke",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.immovlan.be/fr/detail/terrain/a-vendre/9660/brakel/rbx16602#property"
     },
     {
       "source": "Immovlan",
@@ -1763,8 +1763,15 @@
       "source": "2ememain",
       "location": "Ganshoren",
       "status": "Recherche OK",
-      "message": "0 URL candidates",
+      "message": "1 URL candidates",
       "url": "https://www.2ememain.be/l/immo/terrains-terrains-a-batir/q/ganshoren/?priceTo=100000"
+    },
+    {
+      "source": "2ememain",
+      "location": "Ganshoren",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.2ememain.be/v/immo/terrains-terrains-a-batir/m2464660135-recherche-terrain"
     },
     {
       "source": "2ememain",
@@ -2504,37 +2511,72 @@
     {
       "source": "2ememain",
       "location": "Mechelen",
-      "status": "Recherche indisponible",
-      "message": "HTTP 403",
+      "status": "Recherche OK",
+      "message": "1 URL candidates",
       "url": "https://www.2ememain.be/l/immo/terrains-terrains-a-batir/q/mechelen/?priceTo=100000"
     },
     {
       "source": "2ememain",
+      "location": "Mechelen",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.2ememain.be/v/immo/terrains-terrains-a-batir/m2450881504-gevrgd-lapje-grond-te-koop-idbuurt-v-mechelen-bonheide-st"
+    },
+    {
+      "source": "2ememain",
       "location": "Ottignies-Louvain-la-Neuve",
-      "status": "Recherche indisponible",
-      "message": "HTTP 403",
+      "status": "Recherche OK",
+      "message": "1 URL candidates",
       "url": "https://www.2ememain.be/l/immo/terrains-terrains-a-batir/q/ottignies-louvain-la-neuve/?priceTo=100000"
     },
     {
       "source": "2ememain",
+      "location": "Ottignies-Louvain-la-Neuve",
+      "status": "Candidat ignore",
+      "message": "prix 150000 hors filtre",
+      "url": "https://www.2ememain.be/v/immo/terrains-terrains-a-batir/m2461698736-portugal-terrain-de-plus-d-1-hectare-a-bombarral"
+    },
+    {
+      "source": "2ememain",
       "location": "Oud-Heverlee",
-      "status": "Recherche indisponible",
-      "message": "HTTP 403",
+      "status": "Recherche OK",
+      "message": "1 URL candidates",
       "url": "https://www.2ememain.be/l/immo/terrains-terrains-a-batir/q/oud-heverlee/?priceTo=100000"
     },
     {
       "source": "2ememain",
+      "location": "Oud-Heverlee",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.2ememain.be/v/immo/terrains-terrains-a-batir/m2334909343-bouwgrond-voor-vrijstaande-woning-in-het-groen-nabij-leuven"
+    },
+    {
+      "source": "2ememain",
       "location": "Herent",
-      "status": "Recherche indisponible",
-      "message": "HTTP 403",
+      "status": "Recherche OK",
+      "message": "1 URL candidates",
       "url": "https://www.2ememain.be/l/immo/terrains-terrains-a-batir/q/herent/?priceTo=100000"
     },
     {
       "source": "2ememain",
+      "location": "Herent",
+      "status": "Candidat ignore",
+      "message": "prix 218000 hors filtre",
+      "url": "https://www.2ememain.be/v/immo/terrains-terrains-a-batir/m2452832107-bouwgrond-9-64-are"
+    },
+    {
+      "source": "2ememain",
       "location": "Denderleeuw",
-      "status": "Recherche indisponible",
-      "message": "HTTP 403",
+      "status": "Recherche OK",
+      "message": "1 URL candidates",
       "url": "https://www.2ememain.be/l/immo/terrains-terrains-a-batir/q/denderleeuw/?priceTo=100000"
+    },
+    {
+      "source": "2ememain",
+      "location": "Denderleeuw",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.2ememain.be/v/immo/terrains-terrains-a-batir/m2331853661-h-o-bouwgrond"
     },
     {
       "source": "Zimmo (Apify)",
@@ -2636,13 +2678,6 @@
     },
     {
       "source": "Agence locale",
-      "location": "Afimo",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://afimo.be/biens-a-vendre"
-    },
-    {
-      "source": "Agence locale",
       "location": "Agence Wellington",
       "status": "Candidat ignore",
       "message": "prix 399000 hors filtre",
@@ -2653,7 +2688,7 @@
       "location": "Afimo",
       "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://afimo.be/nos-biens/a-vendre"
+      "url": "https://afimo.be/biens-a-vendre"
     },
     {
       "source": "Agence locale",
@@ -2661,6 +2696,13 @@
       "status": "Candidat ignore",
       "message": "commune cible absente",
       "url": "https://www.agencewellington.be/fr/2/chercher-bien/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Afimo",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://afimo.be/nos-biens/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -2678,13 +2720,6 @@
     },
     {
       "source": "Agence locale",
-      "location": "Afimo",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://afimo.be/te-koop"
-    },
-    {
-      "source": "Agence locale",
       "location": "Agence Wellington",
       "status": "Candidat ignore",
       "message": "prix 249000 hors filtre",
@@ -2695,14 +2730,14 @@
       "location": "Afimo",
       "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://afimo.be/nl/te-koop"
+      "url": "https://afimo.be/te-koop"
     },
     {
       "source": "Agence locale",
       "location": "Afimo",
       "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://afimo.be/aanbod/te-koop"
+      "url": "https://afimo.be/nl/te-koop"
     },
     {
       "source": "Agence locale",
@@ -2723,7 +2758,7 @@
       "location": "Afimo",
       "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://afimo.be/panden/te-koop"
+      "url": "https://afimo.be/aanbod/te-koop"
     },
     {
       "source": "Agence locale",
@@ -2734,10 +2769,24 @@
     },
     {
       "source": "Agence locale",
+      "location": "Afimo",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://afimo.be/panden/te-koop"
+    },
+    {
+      "source": "Agence locale",
       "location": "Agencimmo",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://agencimmo.be/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Agencimmo",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://agencimmo.be/fr/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -2751,14 +2800,14 @@
       "location": "Agencimmo",
       "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://agencimmo.be/fr/a-vendre"
+      "url": "https://agencimmo.be/fr/acheter"
     },
     {
       "source": "Agence locale",
       "location": "Agencimmo",
       "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://agencimmo.be/fr/acheter"
+      "url": "https://agencimmo.be/fr/biens/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -2783,13 +2832,6 @@
     },
     {
       "source": "Agence locale",
-      "location": "Agencimmo",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://agencimmo.be/fr/biens/a-vendre"
-    },
-    {
-      "source": "Agence locale",
       "location": "Altro-Vastgoed",
       "status": "Page candidats",
       "message": "2 lien(s) annonce potentiel(s)",
@@ -2804,17 +2846,17 @@
     },
     {
       "source": "Agence locale",
-      "location": "Altro-Vastgoed",
-      "status": "Page candidats",
-      "message": "2 lien(s) annonce potentiel(s)",
-      "url": "https://altro.be/verkoop-van-een-patrimoniumvennootschap"
-    },
-    {
-      "source": "Agence locale",
       "location": "Agencimmo",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
       "url": "https://agencimmo.be/biens-a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Altro-Vastgoed",
+      "status": "Page candidats",
+      "message": "2 lien(s) annonce potentiel(s)",
+      "url": "https://altro.be/verkoop-van-een-patrimoniumvennootschap"
     },
     {
       "source": "Agence locale",
@@ -2867,17 +2909,17 @@
     },
     {
       "source": "Agence locale",
-      "location": "Altro-Vastgoed",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://altro.be/fr/a-vendre"
-    },
-    {
-      "source": "Agence locale",
       "location": "Agencimmo",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://agencimmo.be/panden/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Altro-Vastgoed",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://altro.be/fr/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -2888,10 +2930,24 @@
     },
     {
       "source": "Agence locale",
+      "location": "Arcadia",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.arcadiabelgium.be/properties/maison-de-rapport-3-lots-a-vendre-petite-copropriete-de-4-biens-dont-une-profession-liberale/"
+    },
+    {
+      "source": "Agence locale",
       "location": "Altro-Vastgoed",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://altro.be/fr/acheter"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Arcadia",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.arcadiabelgium.be/properties/maison-de-rapport-3-lots-a-vendre-petite-copropriete-de-4-biens-dont-une-profession-liberale/"
     },
     {
       "source": "Agence locale",
@@ -2916,17 +2972,17 @@
     },
     {
       "source": "Agence locale",
-      "location": "Altro-Vastgoed",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://altro.be/biens-a-vendre"
-    },
-    {
-      "source": "Agence locale",
       "location": "Arcadia",
       "status": "Candidat ignore",
       "message": "commune cible absente",
       "url": "https://www.arcadiabelgium.be/properties/maison-de-rapport-3-lots-a-vendre-petite-copropriete-de-4-biens-dont-une-profession-liberale/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Altro-Vastgoed",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://altro.be/biens-a-vendre"
     },
     {
       "source": "Agence locale",
@@ -2965,34 +3021,6 @@
     },
     {
       "source": "Agence locale",
-      "location": "Altro-Vastgoed",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://altro.be/nl/te-koop"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Arcadia",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.arcadiabelgium.be/properties/maison-de-rapport-3-lots-a-vendre-petite-copropriete-de-4-biens-dont-une-profession-liberale/"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Arcadia",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.arcadiabelgium.be/properties/maison-de-rapport-3-lots-a-vendre-petite-copropriete-de-4-biens-dont-une-profession-liberale/"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Altro-Vastgoed",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://altro.be/aanbod/te-koop"
-    },
-    {
-      "source": "Agence locale",
       "location": "Berth Immobiliën",
       "status": "Site lu",
       "message": "31 lien(s) interne(s), 5 candidat(s) direct(s)",
@@ -3024,7 +3052,7 @@
       "location": "Altro-Vastgoed",
       "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://altro.be/panden/te-koop"
+      "url": "https://altro.be/nl/te-koop"
     },
     {
       "source": "Agence locale",
@@ -3042,13 +3070,6 @@
     },
     {
       "source": "Agence locale",
-      "location": "Altro-Vastgoed",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://altro.be/zoek-pand"
-    },
-    {
-      "source": "Agence locale",
       "location": "Berth Immobiliën",
       "status": "Candidat ignore",
       "message": "prix absent hors filtre",
@@ -3060,13 +3081,6 @@
       "status": "Candidat ignore",
       "message": "prix 399000 hors filtre",
       "url": "https://www.berth.be/fr/l/a-vendre/maison/1601-sint-pieters-leeuw/lis_emjzpynt1j23x4c9tqr9p9cl/"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Altro-Vastgoed",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://altro.be/zoek-pand"
     },
     {
       "source": "Agence locale",
@@ -3085,9 +3099,9 @@
     {
       "source": "Agence locale",
       "location": "Altro-Vastgoed",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://altro.be/zoek-pand"
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://altro.be/aanbod/te-koop"
     },
     {
       "source": "Agence locale",
@@ -3102,6 +3116,13 @@
       "status": "Site bloque ou illisible",
       "message": "HTTP 404",
       "url": "https://boterbergh-pigeons-gcv.business.site/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Altro-Vastgoed",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://altro.be/panden/te-koop"
     },
     {
       "source": "Agence locale",
@@ -3126,9 +3147,37 @@
     },
     {
       "source": "Agence locale",
+      "location": "Altro-Vastgoed",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://altro.be/zoek-pand"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Altro-Vastgoed",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://altro.be/zoek-pand"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Altro-Vastgoed",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://altro.be/zoek-pand"
+    },
+    {
+      "source": "Agence locale",
+      "location": "By The Way",
+      "status": "Page candidats",
+      "message": "10 lien(s) annonce potentiel(s)",
+      "url": "https://bytheway.immo/biens-a-vendre/"
+    },
+    {
+      "source": "Agence locale",
       "location": "CBI Immo",
       "status": "Site lu",
-      "message": "427 lien(s) interne(s), 100 candidat(s) direct(s)",
+      "message": "427 lien(s) interne(s), 94 candidat(s) direct(s)",
       "url": "https://www.dewaele.com/nl/cbi-immo-is-nu-dewaele?utm_medium=301&utm_source=cbi-immo.be"
     },
     {
@@ -3141,9 +3190,9 @@
     {
       "source": "Agence locale",
       "location": "By The Way",
-      "status": "Page candidats",
-      "message": "10 lien(s) annonce potentiel(s)",
-      "url": "https://bytheway.immo/biens-a-vendre/"
+      "status": "Candidat ignore",
+      "message": "prix 295000 hors filtre",
+      "url": "https://bytheway.immo/bien/7228185-heros/"
     },
     {
       "source": "Agence locale",
@@ -3157,7 +3206,7 @@
       "location": "By The Way",
       "status": "Candidat ignore",
       "message": "commune cible absente",
-      "url": "https://bytheway.immo/bien/7934581-franklin-roosevelt-109/"
+      "url": "https://bytheway.immo/bien/7936531-charlemagne-45/"
     },
     {
       "source": "Agence locale",
@@ -3165,13 +3214,6 @@
       "status": "Candidat ignore",
       "message": "commune cible absente",
       "url": "https://www.dewaele.com/nl/te-koop/luxevastgoed/luxe-villa"
-    },
-    {
-      "source": "Agence locale",
-      "location": "By The Way",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://bytheway.immo/bien/7935093-franklin-roosevelt-109/"
     },
     {
       "source": "Agence locale",
@@ -3185,7 +3227,7 @@
       "location": "By The Way",
       "status": "Candidat ignore",
       "message": "commune cible absente",
-      "url": "https://bytheway.immo/bien/7903911-oxalis/"
+      "url": "https://bytheway.immo/bien/7934581-franklin-roosevelt-109/"
     },
     {
       "source": "Agence locale",
@@ -3198,8 +3240,8 @@
       "source": "Agence locale",
       "location": "By The Way",
       "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://bytheway.immo/bien/7934581-franklin-roosevelt-109/"
+      "message": "prix 295000 hors filtre",
+      "url": "https://bytheway.immo/bien/7228185-heros/"
     },
     {
       "source": "Agence locale",
@@ -3213,7 +3255,7 @@
       "location": "By The Way",
       "status": "Candidat ignore",
       "message": "commune cible absente",
-      "url": "https://bytheway.immo/bien/7935093-franklin-roosevelt-109/"
+      "url": "https://bytheway.immo/bien/7936531-charlemagne-45/"
     },
     {
       "source": "Agence locale",
@@ -3227,7 +3269,7 @@
       "location": "By The Way",
       "status": "Candidat ignore",
       "message": "commune cible absente",
-      "url": "https://bytheway.immo/bien/7903911-oxalis/"
+      "url": "https://bytheway.immo/bien/7934581-franklin-roosevelt-109/"
     },
     {
       "source": "Agence locale",
@@ -3266,17 +3308,17 @@
     },
     {
       "source": "Agence locale",
-      "location": "By The Way",
-      "status": "Candidat ignore",
-      "message": "prix 230000 hors filtre",
-      "url": "https://bytheway.immo/bien/7870505-theodore-50-av/"
-    },
-    {
-      "source": "Agence locale",
       "location": "CBRE",
       "status": "Candidat ignore",
       "message": "commune cible absente",
       "url": "https://www.cbre.be/services/property-types/residential"
+    },
+    {
+      "source": "Agence locale",
+      "location": "By The Way",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://bytheway.immo/bien/7935093-franklin-roosevelt-109/"
     },
     {
       "source": "Agence locale",
@@ -3308,10 +3350,24 @@
     },
     {
       "source": "Agence locale",
+      "location": "Century 21",
+      "status": "Site lu",
+      "message": "59 lien(s) interne(s), 1 candidat(s) direct(s)",
+      "url": "https://www.century21.be/fr/agence/century-21-best-house/XVqBaHQBXt-nJTnOkqVF"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Century 21",
+      "status": "Page candidats",
+      "message": "1 lien(s) annonce potentiel(s)",
+      "url": "https://www.century21.be/fr/agence/century-21-best-house/XVqBaHQBXt-nJTnOkqVF"
+    },
+    {
+      "source": "Agence locale",
       "location": "By The Way",
       "status": "Candidat ignore",
       "message": "commune cible absente",
-      "url": "https://bytheway.immo/bien/7932850-lou/"
+      "url": "https://bytheway.immo/bien/7903911-oxalis/"
     },
     {
       "source": "Agence locale",
@@ -3337,23 +3393,16 @@
     {
       "source": "Agence locale",
       "location": "Century 21",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://agence-immobiliere.brussels/vendre-ou-louer-mon-bien/"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Century 21",
-      "status": "Site lu",
-      "message": "59 lien(s) interne(s), 1 candidat(s) direct(s)",
-      "url": "https://www.century21.be/fr/agence/century-21-best-house/XVqBaHQBXt-nJTnOkqVF"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Century 21",
       "status": "Page candidats",
-      "message": "1 lien(s) annonce potentiel(s)",
-      "url": "https://www.century21.be/fr/agence/century-21-best-house/XVqBaHQBXt-nJTnOkqVF"
+      "message": "29 lien(s) annonce potentiel(s)",
+      "url": "https://www.century21.be/fr/recherche?agency=XVqBaHQBXt-nJTnOkqVF&listingType=FOR_SALE"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Century 21",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.century21.be/fr/estimer-votre-bien"
     },
     {
       "source": "Agence locale",
@@ -3361,6 +3410,34 @@
       "status": "Candidat ignore",
       "message": "prix absent hors filtre",
       "url": "https://agence-immobiliere.brussels/vendre-ou-louer-mon-bien/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Century 21",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.century21.be/fr/estimer-votre-bien"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Century 21",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://agence-immobiliere.brussels/vendre-ou-louer-mon-bien/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Century 21",
+      "status": "Candidat ignore",
+      "message": "prix 275000 hors filtre",
+      "url": "https://agence-immobiliere.brussels/bien/appartement-2-chambres-avec-belle-terrasse-a-vendre-17b04d96/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Century 21",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.century21.be/fr/a-vendre/maison"
     },
     {
       "source": "Agence locale",
@@ -3372,16 +3449,16 @@
     {
       "source": "Agence locale",
       "location": "Century 21",
-      "status": "Page candidats",
-      "message": "29 lien(s) annonce potentiel(s)",
-      "url": "https://www.century21.be/fr/recherche?agency=XVqBaHQBXt-nJTnOkqVF&listingType=FOR_SALE"
+      "status": "Candidat ignore",
+      "message": "prix 295000 hors filtre",
+      "url": "https://agence-immobiliere.brussels/bien/maison-mixte-commerce-logement-a-vendre-f1df7d2c/"
     },
     {
       "source": "Agence locale",
       "location": "Century 21",
       "status": "Candidat ignore",
-      "message": "prix 295000 hors filtre",
-      "url": "https://agence-immobiliere.brussels/bien/maison-mixte-commerce-logement-a-vendre-f1df7d2c/"
+      "message": "commune cible absente",
+      "url": "https://www.century21.be/fr/a-vendre/maison/villa"
     },
     {
       "source": "Agence locale",
@@ -3402,28 +3479,14 @@
       "location": "Century 21",
       "status": "Candidat ignore",
       "message": "commune cible absente",
-      "url": "https://www.century21.be/fr/estimer-votre-bien"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Century 21",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.century21.be/fr/estimer-votre-bien"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Century 21",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
       "url": "https://agence-immobiliere.brussels/bien/rez-de-chaussee-3-chambres-avec-jardin-et-garage-double-compris-aa926fa5/"
     },
     {
       "source": "Agence locale",
       "location": "Century 21",
       "status": "Candidat ignore",
-      "message": "prix 219000 hors filtre",
-      "url": "https://agence-immobiliere.brussels/bien/appartement-a-vendre-cd5a4c31/"
+      "message": "commune cible absente",
+      "url": "https://www.century21.be/fr/a-vendre/maison/maison-de-maitre"
     },
     {
       "source": "Agence locale",
@@ -3448,24 +3511,31 @@
     },
     {
       "source": "Agence locale",
-      "location": "Century 21",
+      "location": "Century 21 Astrid Anderlecht",
       "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.century21.be/fr/a-vendre/maison"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Century 21",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.century21.be/fr/a-vendre/maison/villa"
+      "message": "prix 245000 hors filtre",
+      "url": "https://www.immo-anderlecht.be/biens/appartement-a-vendre-anderlecht-1070-7937009"
     },
     {
       "source": "Agence locale",
       "location": "Century 21 Astrid Anderlecht",
       "status": "Candidat ignore",
-      "message": "prix 145000 hors filtre",
-      "url": "https://www.immo-anderlecht.be/biens/appartement-a-vendre-anderlecht-1070-7936217"
+      "message": "prix 245000 hors filtre",
+      "url": "https://www.immo-anderlecht.be/biens/appartement-a-vendre-anderlecht-1070-7937009"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Century 21",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.century21.be/fr/a-vendre/maison/bungalow"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Century 21 Astrid Anderlecht",
+      "status": "Candidat ignore",
+      "message": "prix 550000 hors filtre",
+      "url": "https://www.immo-anderlecht.be/biens/maison-a-vendre-anderlecht-1070-7936247"
     },
     {
       "source": "Agence locale",
@@ -3486,20 +3556,6 @@
       "location": "Century 21",
       "status": "Candidat ignore",
       "message": "commune cible absente",
-      "url": "https://www.century21.be/fr/a-vendre/maison/maison-de-maitre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Century 21",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.century21.be/fr/a-vendre/maison/bungalow"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Century 21",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
       "url": "https://www.century21.be/fr/a-vendre/maison/fermette"
     },
     {
@@ -3508,6 +3564,13 @@
       "status": "Candidat ignore",
       "message": "prix 290000 hors filtre",
       "url": "https://www.immo-anderlecht.be/biens/appartement-a-vendre-ixelles-1050-7935622"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Century 21 Astrid Anderlecht",
+      "status": "Candidat ignore",
+      "message": "prix 300000 hors filtre",
+      "url": "https://www.immo-anderlecht.be/biens/maison-a-vendre-anderlecht-1070-7935618"
     },
     {
       "source": "Agence locale",
@@ -3520,8 +3583,8 @@
       "source": "Agence locale",
       "location": "Century 21 Astrid Anderlecht",
       "status": "Candidat ignore",
-      "message": "prix 300000 hors filtre",
-      "url": "https://www.immo-anderlecht.be/biens/maison-a-vendre-anderlecht-1070-7935618"
+      "message": "prix 660000 hors filtre",
+      "url": "https://www.immo-anderlecht.be/biens/maison-a-vendre-sint-pieters-leeuw-1600-7935615"
     },
     {
       "source": "Agence locale",
@@ -3539,76 +3602,6 @@
     },
     {
       "source": "Agence locale",
-      "location": "Century 21 Astrid Anderlecht",
-      "status": "Candidat ignore",
-      "message": "prix 660000 hors filtre",
-      "url": "https://www.immo-anderlecht.be/biens/maison-a-vendre-sint-pieters-leeuw-1600-7935615"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Claes & Willems",
-      "status": "Candidat ignore",
-      "message": "prix 398000 hors filtre",
-      "url": "https://www.claeswillems.be/pand/ruime-bel-etagewoning-nabij-centrum-halle"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Claes & Willems",
-      "status": "Candidat ignore",
-      "message": "prix 335000 hors filtre",
-      "url": "https://www.claeswillems.be/pand/property-7883917"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Claes & Willems",
-      "status": "Candidat ignore",
-      "message": "prix 310000 hors filtre",
-      "url": "https://www.claeswillems.be/pand/gezinswoning-met-3-slaapkamers-en-zonnige-tuin-7877516"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Century 21 Astrid Anderlecht",
-      "status": "Candidat ignore",
-      "message": "prix 370000 hors filtre",
-      "url": "https://www.immo-anderlecht.be/biens/maison-a-vendre-anderlecht-1070-7935650"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Claes & Willems",
-      "status": "Candidat ignore",
-      "message": "location exclue",
-      "url": "https://www.claeswillems.be/pand/lenniksesteenweg-30-1671-pepingen"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Claes & Willems",
-      "status": "Candidat ignore",
-      "message": "prix 230000 hors filtre",
-      "url": "https://www.claeswillems.be/pand/marie-collaertstraat-114-1620-drogenbos"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Claes & Willems",
-      "status": "Candidat ignore",
-      "message": "prix 274000 hors filtre",
-      "url": "https://www.claeswillems.be/pand/melkerijstraat-29-halle-5082654"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Claes & Willems",
-      "status": "Candidat ignore",
-      "message": "prix 345000 hors filtre",
-      "url": "https://www.claeswillems.be/pand/tuinwijk-125"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Century 21 Astrid Anderlecht",
-      "status": "Candidat ignore",
-      "message": "prix 189000 hors filtre",
-      "url": "https://www.immo-anderlecht.be/biens/appartement-a-vendre-anderlecht-1070-7935647"
-    },
-    {
-      "source": "Agence locale",
       "location": "CODBEL",
       "status": "Site lu",
       "message": "82 lien(s) interne(s), 3 candidat(s) direct(s)",
@@ -3620,6 +3613,132 @@
       "status": "Page candidats",
       "message": "3 lien(s) annonce potentiel(s)",
       "url": "https://esset-pm.be/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Claes & Willems",
+      "status": "Candidat ignore",
+      "message": "prix 398000 hors filtre",
+      "url": "https://www.claeswillems.be/pand/ruime-bel-etagewoning-nabij-centrum-halle"
+    },
+    {
+      "source": "Agence locale",
+      "location": "CODBEL",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://esset-pm.be/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Claes & Willems",
+      "status": "Candidat ignore",
+      "message": "prix 335000 hors filtre",
+      "url": "https://www.claeswillems.be/pand/property-7883917"
+    },
+    {
+      "source": "Agence locale",
+      "location": "CODBEL",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://esset-pm.be/fr/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Claes & Willems",
+      "status": "Candidat ignore",
+      "message": "prix 310000 hors filtre",
+      "url": "https://www.claeswillems.be/pand/gezinswoning-met-3-slaapkamers-en-zonnige-tuin-7877516"
+    },
+    {
+      "source": "Agence locale",
+      "location": "CODBEL",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://esset-pm.be/fr/acheter"
+    },
+    {
+      "source": "Agence locale",
+      "location": "CODBEL",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://esset-pm.be/fr/biens/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "CODBEL",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://esset-pm.be/biens-a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Claes & Willems",
+      "status": "Candidat ignore",
+      "message": "location exclue",
+      "url": "https://www.claeswillems.be/pand/lenniksesteenweg-30-1671-pepingen"
+    },
+    {
+      "source": "Agence locale",
+      "location": "CODBEL",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://esset-pm.be/nos-biens/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Claes & Willems",
+      "status": "Candidat ignore",
+      "message": "prix 230000 hors filtre",
+      "url": "https://www.claeswillems.be/pand/marie-collaertstraat-114-1620-drogenbos"
+    },
+    {
+      "source": "Agence locale",
+      "location": "CODBEL",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://esset-pm.be/vente"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Claes & Willems",
+      "status": "Candidat ignore",
+      "message": "prix 274000 hors filtre",
+      "url": "https://www.claeswillems.be/pand/melkerijstraat-29-halle-5082654"
+    },
+    {
+      "source": "Agence locale",
+      "location": "CODBEL",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://esset-pm.be/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Claes & Willems",
+      "status": "Candidat ignore",
+      "message": "prix 345000 hors filtre",
+      "url": "https://www.claeswillems.be/pand/tuinwijk-125"
+    },
+    {
+      "source": "Agence locale",
+      "location": "CODBEL",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://esset-pm.be/nl/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "CODBEL",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://esset-pm.be/aanbod/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "CODBEL",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://esset-pm.be/panden/te-koop"
     },
     {
       "source": "Agence locale",
@@ -3638,9 +3757,9 @@
     {
       "source": "Agence locale",
       "location": "CODBEL",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://esset-pm.be/a-vendre"
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://esset-pm.be/services/property-management"
     },
     {
       "source": "Agence locale",
@@ -3652,23 +3771,9 @@
     {
       "source": "Agence locale",
       "location": "CODBEL",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://esset-pm.be/fr/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "CODBEL",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://esset-pm.be/fr/acheter"
-    },
-    {
-      "source": "Agence locale",
-      "location": "CODBEL",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://esset-pm.be/fr/biens/a-vendre"
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://esset-pm.be/services/property-management"
     },
     {
       "source": "Agence locale",
@@ -3680,16 +3785,9 @@
     {
       "source": "Agence locale",
       "location": "CODBEL",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://esset-pm.be/biens-a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "CODBEL",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://esset-pm.be/nos-biens/a-vendre"
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://esset-pm.be/actualites/esset-quares-ndeg2-en-property-management-en-belgique"
     },
     {
       "source": "Agence locale",
@@ -3701,16 +3799,9 @@
     {
       "source": "Agence locale",
       "location": "CODBEL",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://esset-pm.be/vente"
-    },
-    {
-      "source": "Agence locale",
-      "location": "CODBEL",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://esset-pm.be/te-koop"
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://esset-pm.be/services/property-management"
     },
     {
       "source": "Agence locale",
@@ -3722,16 +3813,9 @@
     {
       "source": "Agence locale",
       "location": "CODBEL",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://esset-pm.be/nl/te-koop"
-    },
-    {
-      "source": "Agence locale",
-      "location": "CODBEL",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://esset-pm.be/aanbod/te-koop"
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://esset-pm.be/actualites/esset-quares-ndeg2-en-property-management-en-belgique"
     },
     {
       "source": "Agence locale",
@@ -3739,90 +3823,6 @@
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
       "url": "https://www.cornerimmo.be/fr/details/id/7913161"
-    },
-    {
-      "source": "Agence locale",
-      "location": "CODBEL",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://esset-pm.be/panden/te-koop"
-    },
-    {
-      "source": "Agence locale",
-      "location": "CornerImmo",
-      "status": "Page candidats",
-      "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.cornerimmo.be/fr/details/id/7913424"
-    },
-    {
-      "source": "Agence locale",
-      "location": "CODBEL",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://esset-pm.be/services/property-management"
-    },
-    {
-      "source": "Agence locale",
-      "location": "CornerImmo",
-      "status": "Page candidats",
-      "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.cornerimmo.be/fr/details/id/7917261"
-    },
-    {
-      "source": "Agence locale",
-      "location": "CODBEL",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://esset-pm.be/services/property-management"
-    },
-    {
-      "source": "Agence locale",
-      "location": "CODBEL",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://esset-pm.be/actualites/esset-quares-ndeg2-en-property-management-en-belgique"
-    },
-    {
-      "source": "Agence locale",
-      "location": "CornerImmo",
-      "status": "Page candidats",
-      "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.cornerimmo.be/fr/details/id/7566666"
-    },
-    {
-      "source": "Agence locale",
-      "location": "CODBEL",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://esset-pm.be/services/property-management"
-    },
-    {
-      "source": "Agence locale",
-      "location": "CornerImmo",
-      "status": "Page candidats",
-      "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.cornerimmo.be/fr/details/id/7913654"
-    },
-    {
-      "source": "Agence locale",
-      "location": "CODBEL",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://esset-pm.be/actualites/esset-quares-ndeg2-en-property-management-en-belgique"
-    },
-    {
-      "source": "Agence locale",
-      "location": "CornerImmo",
-      "status": "Page candidats",
-      "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.cornerimmo.be/fr/details/id/7931685"
-    },
-    {
-      "source": "Agence locale",
-      "location": "CornerImmo",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.cornerimmo.be/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -3841,6 +3841,76 @@
     {
       "source": "Agence locale",
       "location": "CornerImmo",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://www.cornerimmo.be/fr/details/id/7913424"
+    },
+    {
+      "source": "Agence locale",
+      "location": "De Immobiliers",
+      "status": "Candidat ignore",
+      "message": "prix 340000 hors filtre",
+      "url": "https://www.deimmobiliers.be/detail/vente-appartement-halle/7704727"
+    },
+    {
+      "source": "Agence locale",
+      "location": "CornerImmo",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://www.cornerimmo.be/fr/details/id/7566666"
+    },
+    {
+      "source": "Agence locale",
+      "location": "De Immobiliers",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.deimmobiliers.be/detail/vente-maison-pajottegem/7704200"
+    },
+    {
+      "source": "Agence locale",
+      "location": "CornerImmo",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://www.cornerimmo.be/fr/details/id/7913654"
+    },
+    {
+      "source": "Agence locale",
+      "location": "De Immobiliers",
+      "status": "Candidat ignore",
+      "message": "prix 500000 hors filtre",
+      "url": "https://www.deimmobiliers.be/detail/vente-maison-halle/7703192"
+    },
+    {
+      "source": "Agence locale",
+      "location": "CornerImmo",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://www.cornerimmo.be/fr/details/id/7917261"
+    },
+    {
+      "source": "Agence locale",
+      "location": "CornerImmo",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://www.cornerimmo.be/fr/details/id/7931685"
+    },
+    {
+      "source": "Agence locale",
+      "location": "De Immobiliers",
+      "status": "Candidat ignore",
+      "message": "prix 720000 hors filtre",
+      "url": "https://www.deimmobiliers.be/detail/vente-maison-sint-pieters-leeuw/7700507"
+    },
+    {
+      "source": "Agence locale",
+      "location": "CornerImmo",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.cornerimmo.be/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "CornerImmo",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://www.cornerimmo.be/fr/acheter"
@@ -3851,6 +3921,13 @@
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://www.cornerimmo.be/fr/biens/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "De Immobiliers",
+      "status": "Candidat ignore",
+      "message": "prix 340000 hors filtre",
+      "url": "https://www.deimmobiliers.be/detail/vente-appartement-halle/7704727"
     },
     {
       "source": "Agence locale",
@@ -3868,13 +3945,6 @@
     },
     {
       "source": "Agence locale",
-      "location": "De Immobiliers",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.deimmobiliers.be/detail/vente-maison-pajottegem/7704200"
-    },
-    {
-      "source": "Agence locale",
       "location": "CornerImmo",
       "status": "Page ignoree",
       "message": "HTTP 404",
@@ -3889,17 +3959,17 @@
     },
     {
       "source": "Agence locale",
+      "location": "De Immobiliers",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.deimmobiliers.be/detail/vente-maison-pajottegem/7704200"
+    },
+    {
+      "source": "Agence locale",
       "location": "CornerImmo",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://www.cornerimmo.be/nl/te-koop"
-    },
-    {
-      "source": "Agence locale",
-      "location": "De Immobiliers",
-      "status": "Candidat ignore",
-      "message": "prix 500000 hors filtre",
-      "url": "https://www.deimmobiliers.be/detail/vente-maison-halle/7703192"
     },
     {
       "source": "Agence locale",
@@ -3919,8 +3989,8 @@
       "source": "Agence locale",
       "location": "De Immobiliers",
       "status": "Candidat ignore",
-      "message": "prix 720000 hors filtre",
-      "url": "https://www.deimmobiliers.be/detail/vente-maison-sint-pieters-leeuw/7700507"
+      "message": "prix 500000 hors filtre",
+      "url": "https://www.deimmobiliers.be/detail/vente-maison-halle/7703192"
     },
     {
       "source": "Agence locale",
@@ -3947,48 +4017,6 @@
       "source": "Agence locale",
       "location": "De Immobiliers",
       "status": "Candidat ignore",
-      "message": "prix 750000 hors filtre",
-      "url": "https://www.deimmobiliers.be/detail/vente-maison-beersel/7700459"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Destryker",
-      "status": "Candidat ignore",
-      "message": "prix 369000 hors filtre",
-      "url": "https://destryker.be/nl/aanbod/4502495/huis-te-koop-in-1650-beersel"
-    },
-    {
-      "source": "Agence locale",
-      "location": "De Immobiliers",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.deimmobiliers.be/detail/vente-maison-pajottegem/7704200"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Destryker",
-      "status": "Candidat ignore",
-      "message": "prix 369000 hors filtre",
-      "url": "https://destryker.be/nl/aanbod/4502495/huis-te-koop-in-1650-beersel"
-    },
-    {
-      "source": "Agence locale",
-      "location": "De Immobiliers",
-      "status": "Candidat ignore",
-      "message": "prix 500000 hors filtre",
-      "url": "https://www.deimmobiliers.be/detail/vente-maison-halle/7703192"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Destryker",
-      "status": "Candidat ignore",
-      "message": "prix 259000 hors filtre",
-      "url": "https://destryker.be/nl/aanbod/4473920/huis-te-koop-in-1500-halle"
-    },
-    {
-      "source": "Agence locale",
-      "location": "De Immobiliers",
-      "status": "Candidat ignore",
       "message": "prix 720000 hors filtre",
       "url": "https://www.deimmobiliers.be/detail/vente-maison-sint-pieters-leeuw/7700507"
     },
@@ -3996,29 +4024,8 @@
       "source": "Agence locale",
       "location": "Destryker",
       "status": "Candidat ignore",
-      "message": "prix 259000 hors filtre",
-      "url": "https://destryker.be/nl/aanbod/4473920/huis-te-koop-in-1500-halle"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Destryker",
-      "status": "Candidat ignore",
       "message": "prix 369000 hors filtre",
       "url": "https://destryker.be/nl/aanbod/4502495/huis-te-koop-in-1650-beersel"
-    },
-    {
-      "source": "Agence locale",
-      "location": "De Immobiliers",
-      "status": "Candidat ignore",
-      "message": "prix 750000 hors filtre",
-      "url": "https://www.deimmobiliers.be/detail/vente-maison-beersel/7700459"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Destryker",
-      "status": "Candidat ignore",
-      "message": "prix 259000 hors filtre",
-      "url": "https://destryker.be/nl/aanbod/4473920/huis-te-koop-in-1500-halle"
     },
     {
       "source": "Agence locale",
@@ -4031,8 +4038,71 @@
       "source": "Agence locale",
       "location": "Destryker",
       "status": "Candidat ignore",
+      "message": "prix 369000 hors filtre",
+      "url": "https://destryker.be/nl/aanbod/4502495/huis-te-koop-in-1650-beersel"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Destryker",
+      "status": "Candidat ignore",
+      "message": "prix 259000 hors filtre",
+      "url": "https://destryker.be/nl/aanbod/4473920/huis-te-koop-in-1500-halle"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Dewaele",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.dewaele.com/nl/te-koop/alle/huis"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Destryker",
+      "status": "Candidat ignore",
+      "message": "prix 259000 hors filtre",
+      "url": "https://destryker.be/nl/aanbod/4473920/huis-te-koop-in-1500-halle"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Dewaele",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.dewaele.com/nl/te-koop/investeringsvastgoed/woonvastgoed-investering"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Destryker",
+      "status": "Candidat ignore",
+      "message": "prix 369000 hors filtre",
+      "url": "https://destryker.be/nl/aanbod/4502495/huis-te-koop-in-1650-beersel"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Dewaele",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.dewaele.com/nl/te-koop/luxevastgoed/luxe-villa"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Destryker",
+      "status": "Candidat ignore",
+      "message": "prix 259000 hors filtre",
+      "url": "https://destryker.be/nl/aanbod/4473920/huis-te-koop-in-1500-halle"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Destryker",
+      "status": "Candidat ignore",
       "message": "prix 299000 hors filtre",
       "url": "https://destryker.be/nl/aanbod/4426745/huis-te-koop-in-1500-halle"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Dewaele",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.dewaele.com/nl/te-koop/investeringsvastgoed/bedrijfsvastgoed-investering"
     },
     {
       "source": "Agence locale",
@@ -4046,7 +4116,7 @@
       "location": "Dewaele",
       "status": "Candidat ignore",
       "message": "commune cible absente",
-      "url": "https://www.dewaele.com/nl/te-koop/alle/huis"
+      "url": "https://www.dewaele.com/nl/te-koop/nieuwbouw/woonvastgoed/huis"
     },
     {
       "source": "Agence locale",
@@ -4057,73 +4127,10 @@
     },
     {
       "source": "Agence locale",
-      "location": "Dewaele",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.dewaele.com/nl/te-koop/investeringsvastgoed/woonvastgoed-investering"
-    },
-    {
-      "source": "Agence locale",
       "location": "Dexin",
       "status": "Candidat ignore",
       "message": "prix absent hors filtre",
       "url": "https://www.dexin.be/news/114/34/Uccle-Centre/d,Property_details"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Dexin",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.dexin.be/news/171/34/Knokke-ZeedijkHet-Zoute/d,Property_details"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Dewaele",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.dewaele.com/nl/te-koop/luxevastgoed/luxe-villa"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Dexin",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.dexin.be/news/170/34/Anvers-Volksstraat/d,Property_details"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Dewaele",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.dewaele.com/nl/te-koop/investeringsvastgoed/bedrijfsvastgoed-investering"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Dexin",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.dexin.be/news/116/34/Hamoir/d,Property_details"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Dexin",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.dexin.be/news/169/34/Knokke-Albertlaan/d,Property_details"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Dewaele",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.dewaele.com/nl/te-koop/nieuwbouw/woonvastgoed/huis"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Dexin",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.dexin.be/news/168/34/Knokke-Boudewijnlaan/d,Property_details"
     },
     {
       "source": "Agence locale",
@@ -4137,14 +4144,7 @@
       "location": "Dexin",
       "status": "Candidat ignore",
       "message": "commune cible absente",
-      "url": "https://www.dexin.be/news/120/34/Marcels-Building/d,Property_details"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Dexin",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.dexin.be/news/126/34/Louise-380/d,Property_details"
+      "url": "https://www.dexin.be/news/171/34/Knokke-ZeedijkHet-Zoute/d,Property_details"
     },
     {
       "source": "Agence locale",
@@ -4152,6 +4152,27 @@
       "status": "Candidat ignore",
       "message": "commune cible absente",
       "url": "https://www.dewaele.com/nl/te-koop/investeringsvastgoed/woonvastgoed-investering"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Dexin",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.dexin.be/news/170/34/Anvers-Volksstraat/d,Property_details"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Dexin",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.dexin.be/news/116/34/Hamoir/d,Property_details"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Dewaele",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.dewaele.com/nl/te-koop/investeringsvastgoed/bedrijfsvastgoed-investering"
     },
     {
       "source": "Agence locale",
@@ -4169,10 +4190,10 @@
     },
     {
       "source": "Agence locale",
-      "location": "Engel & Völkers",
+      "location": "Dexin",
       "status": "Candidat ignore",
       "message": "commune cible absente",
-      "url": "https://www.engelvoelkers.com/be/fr/vente/vendre-bien-immobilier"
+      "url": "https://www.dexin.be/news/169/34/Knokke-Albertlaan/d,Property_details"
     },
     {
       "source": "Agence locale",
@@ -4183,10 +4204,17 @@
     },
     {
       "source": "Agence locale",
-      "location": "Dewaele",
+      "location": "Engel & Völkers",
       "status": "Candidat ignore",
       "message": "commune cible absente",
-      "url": "https://www.dewaele.com/nl/te-koop/investeringsvastgoed/bedrijfsvastgoed-investering"
+      "url": "https://www.engelvoelkers.com/be/fr/vente/vendre-bien-immobilier"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Dexin",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.dexin.be/news/168/34/Knokke-Boudewijnlaan/d,Property_details"
     },
     {
       "source": "Agence locale",
@@ -4197,6 +4225,13 @@
     },
     {
       "source": "Agence locale",
+      "location": "Dexin",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.dexin.be/news/120/34/Marcels-Building/d,Property_details"
+    },
+    {
+      "source": "Agence locale",
       "location": "Engel & Völkers",
       "status": "Candidat ignore",
       "message": "commune cible absente",
@@ -4208,12 +4243,33 @@
       "status": "Candidat ignore",
       "message": "commune cible absente",
       "url": "https://www.engelvoelkers.com/be/fr/vente/vendre-bien-immobilier"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Dexin",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.dexin.be/news/126/34/Louise-380/d,Property_details"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Engel & Völkers",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.engelvoelkers.com/be/fr/vente/vendre-bien-immobilier"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Engel & Völkers",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.engelvoelkers.com/be/fr/louer-votre-bien"
     },
     {
       "source": "Agence locale",
       "location": "ERA Innova",
       "status": "Site lu",
-      "message": "107 lien(s) interne(s), 4 candidat(s) direct(s)",
+      "message": "108 lien(s) interne(s), 4 candidat(s) direct(s)",
       "url": "https://www.era.be/nl/era-innova/halle"
     },
     {
@@ -4222,27 +4278,6 @@
       "status": "Page candidats",
       "message": "4 lien(s) annonce potentiel(s)",
       "url": "https://www.era.be/nl/era-innova/halle"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Engel & Völkers",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.engelvoelkers.com/be/fr/vente/vendre-bien-immobilier"
-    },
-    {
-      "source": "Agence locale",
-      "location": "ERA Innova",
-      "status": "Candidat ignore",
-      "message": "prix 495000 hors filtre",
-      "url": "https://www.era.be/nl/te-koop/merchtem/huis/woning-bouwland-55are-totaal"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Engel & Völkers",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.engelvoelkers.com/be/fr/louer-votre-bien"
     },
     {
       "source": "Agence locale",
@@ -4262,8 +4297,8 @@
       "source": "Agence locale",
       "location": "ERA Innova",
       "status": "Candidat ignore",
-      "message": "prix 565000 hors filtre",
-      "url": "https://www.era.be/nl/te-koop/lot/huis/charmante-4-gevelwoning-te-lot"
+      "message": "prix 495000 hors filtre",
+      "url": "https://www.era.be/nl/te-koop/merchtem/huis/woning-bouwland-55are-totaal"
     },
     {
       "source": "Agence locale",
@@ -4283,8 +4318,8 @@
       "source": "Agence locale",
       "location": "ERA Innova",
       "status": "Candidat ignore",
-      "message": "prix 315000 hors filtre",
-      "url": "https://www.era.be/nl/te-koop/buizingen/huis/karaktervolle-woning-met-3-slaapkamers-halle"
+      "message": "prix 565000 hors filtre",
+      "url": "https://www.era.be/nl/te-koop/lot/huis/charmante-4-gevelwoning-te-lot"
     },
     {
       "source": "Agence locale",
@@ -4297,15 +4332,8 @@
       "source": "Agence locale",
       "location": "ERA Innova",
       "status": "Candidat ignore",
-      "message": "prix 225000 hors filtre",
-      "url": "https://www.era.be/nl/te-koop/affligem/appartement/aangenaam-2-slaapkamerappartement"
-    },
-    {
-      "source": "Agence locale",
-      "location": "ERA Innova",
-      "status": "Candidat ignore",
-      "message": "prix 495000 hors filtre",
-      "url": "https://www.era.be/nl/te-koop/merchtem/huis/woning-bouwland-55are-totaal"
+      "message": "prix 315000 hors filtre",
+      "url": "https://www.era.be/nl/te-koop/buizingen/huis/karaktervolle-woning-met-3-slaapkamers-halle"
     },
     {
       "source": "Agence locale",
@@ -4313,6 +4341,27 @@
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
       "url": "https://www.eventimmo.be/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "ERA Innova",
+      "status": "Candidat ignore",
+      "message": "prix 225000 hors filtre",
+      "url": "https://www.era.be/nl/te-koop/affligem/appartement/aangenaam-2-slaapkamerappartement"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Eventimmo",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://www.eventimmo.be/fr/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "ERA Innova",
+      "status": "Candidat ignore",
+      "message": "prix 495000 hors filtre",
+      "url": "https://www.era.be/nl/te-koop/merchtem/huis/woning-bouwland-55are-totaal"
     },
     {
       "source": "Agence locale",
@@ -4326,7 +4375,7 @@
       "location": "Eventimmo",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.eventimmo.be/fr/a-vendre"
+      "url": "https://www.eventimmo.be/fr/biens/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -4337,24 +4386,17 @@
     },
     {
       "source": "Agence locale",
-      "location": "ERA Innova",
-      "status": "Candidat ignore",
-      "message": "prix 225000 hors filtre",
-      "url": "https://www.era.be/nl/te-koop/affligem/appartement/aangenaam-2-slaapkamerappartement"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Eventimmo",
-      "status": "Page candidats",
-      "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.eventimmo.be/fr/biens/a-vendre"
-    },
-    {
-      "source": "Agence locale",
       "location": "Eventimmo",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
       "url": "https://www.eventimmo.be/biens-a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "ERA Innova",
+      "status": "Candidat ignore",
+      "message": "prix 225000 hors filtre",
+      "url": "https://www.era.be/nl/te-koop/affligem/appartement/aangenaam-2-slaapkamerappartement"
     },
     {
       "source": "Agence locale",
@@ -4393,13 +4435,6 @@
     },
     {
       "source": "Agence locale",
-      "location": "evillas",
-      "status": "Site bloque ou illisible",
-      "message": "Timeout 12000ms",
-      "url": "http://www.e-villas.be/"
-    },
-    {
-      "source": "Agence locale",
       "location": "Eventimmo",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
@@ -4421,6 +4456,55 @@
     },
     {
       "source": "Agence locale",
+      "location": "Expertissimmo",
+      "status": "Page candidats",
+      "message": "19 lien(s) annonce potentiel(s)",
+      "url": "https://expertissimmo.eu/fr/biens-a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Expertissimmo",
+      "status": "Candidat ignore",
+      "message": "prix 270000 hors filtre",
+      "url": "https://expertissimmo.eu/fr/nos-biens/a-vendre/7902143/2-woluwe-saint-lambert"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Expertissimmo",
+      "status": "Candidat ignore",
+      "message": "prix 745000 hors filtre",
+      "url": "https://expertissimmo.eu/fr/nos-biens/a-vendre/7934112/1-woluwe-saint-lambert"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Expertissimmo",
+      "status": "Candidat ignore",
+      "message": "prix 535000 hors filtre",
+      "url": "https://expertissimmo.eu/fr/nos-biens/a-vendre/7936482/2-woluwe-saint-lambert"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Expertissimmo",
+      "status": "Candidat ignore",
+      "message": "prix 375000 hors filtre",
+      "url": "https://expertissimmo.eu/fr/nos-biens/a-vendre/7926997/2-woluwe-saint-lambert"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Expertissimmo",
+      "status": "Candidat ignore",
+      "message": "prix 365000 hors filtre",
+      "url": "https://expertissimmo.eu/fr/nos-biens/a-vendre/7928296/2-woluwe-saint-lambert"
+    },
+    {
+      "source": "Agence locale",
+      "location": "evillas",
+      "status": "Site bloque ou illisible",
+      "message": "Timeout 12000ms",
+      "url": "http://www.e-villas.be/"
+    },
+    {
+      "source": "Agence locale",
       "location": "Fastigon",
       "status": "Site lu",
       "message": "0 lien(s) interne(s), 0 candidat(s) direct(s)",
@@ -4436,9 +4520,9 @@
     {
       "source": "Agence locale",
       "location": "Expertissimmo",
-      "status": "Page candidats",
-      "message": "20 lien(s) annonce potentiel(s)",
-      "url": "https://expertissimmo.eu/fr/biens-a-vendre"
+      "status": "Candidat ignore",
+      "message": "prix 349000 hors filtre",
+      "url": "https://expertissimmo.eu/fr/nos-biens/a-vendre/7920673/2-evere"
     },
     {
       "source": "Agence locale",
@@ -4451,8 +4535,8 @@
       "source": "Agence locale",
       "location": "Expertissimmo",
       "status": "Candidat ignore",
-      "message": "prix 140000 hors filtre",
-      "url": "https://expertissimmo.eu/fr/nos-biens/a-vendre/7934870/2-schaerbeek"
+      "message": "prix 345000 hors filtre",
+      "url": "https://expertissimmo.eu/fr/nos-biens/a-vendre/7908750/2-schaerbeek"
     },
     {
       "source": "Agence locale",
@@ -4465,36 +4549,8 @@
       "source": "Agence locale",
       "location": "Expertissimmo",
       "status": "Candidat ignore",
-      "message": "prix 725000 hors filtre",
-      "url": "https://expertissimmo.eu/fr/nos-biens/a-vendre/7924246/1-woluwe-saint-lambert"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Expertissimmo",
-      "status": "Candidat ignore",
-      "message": "prix 420000 hors filtre",
-      "url": "https://expertissimmo.eu/fr/nos-biens/a-vendre/7935105/2-woluwe-saint-lambert"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Expertissimmo",
-      "status": "Candidat ignore",
-      "message": "prix 745000 hors filtre",
-      "url": "https://expertissimmo.eu/fr/nos-biens/a-vendre/7934112/1-woluwe-saint-lambert"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Expertissimmo",
-      "status": "Candidat ignore",
-      "message": "prix 282000 hors filtre",
-      "url": "https://expertissimmo.eu/fr/nos-biens/a-vendre/7927904/2-evere"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Expertissimmo",
-      "status": "Candidat ignore",
-      "message": "prix 390000 hors filtre",
-      "url": "https://expertissimmo.eu/fr/nos-biens/a-vendre/7905510/2-schaerbeek"
+      "message": "prix 495000 hors filtre",
+      "url": "https://expertissimmo.eu/fr/nos-biens/a-vendre/7935602/2-ixelles"
     },
     {
       "source": "Agence locale",
@@ -4505,13 +4561,6 @@
     },
     {
       "source": "Agence locale",
-      "location": "Expertissimmo",
-      "status": "Candidat ignore",
-      "message": "prix 400000 hors filtre",
-      "url": "https://expertissimmo.eu/fr/nos-biens/a-vendre/7921493/2-woluwe-saint-lambert"
-    },
-    {
-      "source": "Agence locale",
       "location": "Fastigon",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
@@ -4519,31 +4568,10 @@
     },
     {
       "source": "Agence locale",
-      "location": "Expertissimmo",
-      "status": "Candidat ignore",
-      "message": "prix 400000 hors filtre",
-      "url": "https://expertissimmo.eu/fr/nos-biens/a-vendre/7917759/1-schaerbeek"
-    },
-    {
-      "source": "Agence locale",
       "location": "Fastigon",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
       "url": "https://www.fastigon.com/biens-a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Fastigon",
-      "status": "Page candidats",
-      "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.fastigon.com/nos-biens/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Fastigon",
-      "status": "Page candidats",
-      "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.fastigon.com/vente"
     },
     {
       "source": "Agence locale",
@@ -4564,14 +4592,21 @@
       "location": "Fastigon",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.fastigon.com/te-koop"
+      "url": "https://www.fastigon.com/nos-biens/a-vendre"
     },
     {
       "source": "Agence locale",
       "location": "Fastigon",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.fastigon.com/nl/te-koop"
+      "url": "https://www.fastigon.com/vente"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Fastigon",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://www.fastigon.com/te-koop"
     },
     {
       "source": "Agence locale",
@@ -4585,7 +4620,21 @@
       "location": "Fastigon",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://www.fastigon.com/nl/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Fastigon",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
       "url": "https://www.fastigon.com/aanbod/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Foyer Anderlechtois - Anderlechtse Haard",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.foyer-anderlechtois.be/fr/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -4599,7 +4648,7 @@
       "location": "Foyer Anderlechtois - Anderlechtse Haard",
       "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://www.foyer-anderlechtois.be/fr/a-vendre"
+      "url": "https://www.foyer-anderlechtois.be/fr/acheter"
     },
     {
       "source": "Agence locale",
@@ -4614,13 +4663,6 @@
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
       "url": "https://www.generation-campus.be/fr/contact.php"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Foyer Anderlechtois - Anderlechtse Haard",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.foyer-anderlechtois.be/fr/acheter"
     },
     {
       "source": "Agence locale",
@@ -4715,13 +4757,6 @@
     },
     {
       "source": "Agence locale",
-      "location": "Foyer Anderlechtois - Anderlechtse Haard",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.foyer-anderlechtois.be/nos-biens/a-vendre"
-    },
-    {
-      "source": "Agence locale",
       "location": "Growing",
       "status": "Site lu",
       "message": "68 lien(s) interne(s), 0 candidat(s) direct(s)",
@@ -4739,7 +4774,7 @@
       "location": "Foyer Anderlechtois - Anderlechtse Haard",
       "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://www.foyer-anderlechtois.be/vente"
+      "url": "https://www.foyer-anderlechtois.be/nos-biens/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -4750,24 +4785,10 @@
     },
     {
       "source": "Agence locale",
-      "location": "Foyer Anderlechtois - Anderlechtse Haard",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.foyer-anderlechtois.be/te-koop"
-    },
-    {
-      "source": "Agence locale",
       "location": "Growing",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
       "url": "https://growing.be/fr/estate/details/7925237"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Foyer Anderlechtois - Anderlechtse Haard",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.foyer-anderlechtois.be/nl/te-koop"
     },
     {
       "source": "Agence locale",
@@ -4781,7 +4802,7 @@
       "location": "Foyer Anderlechtois - Anderlechtse Haard",
       "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://www.foyer-anderlechtois.be/aanbod/te-koop"
+      "url": "https://www.foyer-anderlechtois.be/vente"
     },
     {
       "source": "Agence locale",
@@ -4792,31 +4813,10 @@
     },
     {
       "source": "Agence locale",
-      "location": "Foyer Anderlechtois - Anderlechtse Haard",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.foyer-anderlechtois.be/panden/te-koop"
-    },
-    {
-      "source": "Agence locale",
       "location": "Growing",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://growing.be/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Home Consult",
-      "status": "Site lu",
-      "message": "63 lien(s) interne(s), 3 candidat(s) direct(s)",
-      "url": "https://www.home-consult.be/fr"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Home Consult",
-      "status": "Page candidats",
-      "message": "3 lien(s) annonce potentiel(s)",
-      "url": "https://www.home-consult.be/fr"
     },
     {
       "source": "Agence locale",
@@ -4834,24 +4834,10 @@
     },
     {
       "source": "Agence locale",
-      "location": "Home Consult",
-      "status": "Page candidats",
-      "message": "8 lien(s) annonce potentiel(s)",
-      "url": "https://www.home-consult.be/fr/a-vendre"
-    },
-    {
-      "source": "Agence locale",
       "location": "Growing",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://growing.be/fr/biens/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Home Consult",
-      "status": "Erreur detail",
-      "message": "HTTP 404",
-      "url": "https://www.home-consult.be/fr/a-vendre/maisons/a-1933-sterrebeek"
     },
     {
       "source": "Agence locale",
@@ -4862,10 +4848,10 @@
     },
     {
       "source": "Agence locale",
-      "location": "Home Consult",
-      "status": "Erreur detail",
+      "location": "Foyer Anderlechtois - Anderlechtse Haard",
+      "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://www.home-consult.be/fr/a-vendre/maisons/a-1930-zaventem"
+      "url": "https://www.foyer-anderlechtois.be/te-koop"
     },
     {
       "source": "Agence locale",
@@ -4883,24 +4869,10 @@
     },
     {
       "source": "Agence locale",
-      "location": "Home Consult",
-      "status": "Erreur detail",
-      "message": "HTTP 404",
-      "url": "https://www.home-consult.be/fr/a-vendre/maisons/a-3080-tervuren"
-    },
-    {
-      "source": "Agence locale",
       "location": "Growing",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://growing.be/te-koop"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Home Consult",
-      "status": "Erreur detail",
-      "message": "HTTP 404",
-      "url": "https://www.home-consult.be/fr/a-vendre/maisons/a-1933-sterrebeek"
     },
     {
       "source": "Agence locale",
@@ -4911,13 +4883,6 @@
     },
     {
       "source": "Agence locale",
-      "location": "Home Consult",
-      "status": "Erreur detail",
-      "message": "HTTP 404",
-      "url": "https://www.home-consult.be/fr/a-vendre/maisons/a-1930-zaventem"
-    },
-    {
-      "source": "Agence locale",
       "location": "Growing",
       "status": "Page ignoree",
       "message": "HTTP 404",
@@ -4925,17 +4890,66 @@
     },
     {
       "source": "Agence locale",
-      "location": "Home Consult",
-      "status": "Erreur detail",
-      "message": "HTTP 404",
-      "url": "https://www.home-consult.be/fr/a-vendre/maisons/a-3080-tervuren"
-    },
-    {
-      "source": "Agence locale",
       "location": "Growing",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://growing.be/panden/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Foyer Anderlechtois - Anderlechtse Haard",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.foyer-anderlechtois.be/nl/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Home Consult",
+      "status": "Site lu",
+      "message": "63 lien(s) interne(s), 3 candidat(s) direct(s)",
+      "url": "https://www.home-consult.be/fr"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Home Consult",
+      "status": "Page candidats",
+      "message": "3 lien(s) annonce potentiel(s)",
+      "url": "https://www.home-consult.be/fr"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Home Consult",
+      "status": "Page candidats",
+      "message": "9 lien(s) annonce potentiel(s)",
+      "url": "https://www.home-consult.be/fr/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Foyer Anderlechtois - Anderlechtse Haard",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.foyer-anderlechtois.be/aanbod/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Home Consult",
+      "status": "Erreur detail",
+      "message": "HTTP 404",
+      "url": "https://www.home-consult.be/fr/a-vendre/maisons/a-1933-sterrebeek"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Home Consult",
+      "status": "Erreur detail",
+      "message": "HTTP 404",
+      "url": "https://www.home-consult.be/fr/a-vendre/maisons/a-1930-zaventem"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Foyer Anderlechtois - Anderlechtse Haard",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.foyer-anderlechtois.be/panden/te-koop"
     },
     {
       "source": "Agence locale",
@@ -4961,9 +4975,9 @@
     {
       "source": "Agence locale",
       "location": "Home Consult",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.home-consult.be/fr/appartement-a-vendre-a-kortenberg/7915068"
+      "status": "Erreur detail",
+      "message": "HTTP 404",
+      "url": "https://www.home-consult.be/fr/a-vendre/maisons/a-3080-tervuren"
     },
     {
       "source": "Agence locale",
@@ -4982,9 +4996,9 @@
     {
       "source": "Agence locale",
       "location": "Home Consult",
-      "status": "Candidat ignore",
-      "message": "prix 339000 hors filtre",
-      "url": "https://www.home-consult.be/fr/appartement-a-vendre-a-tervuren/7847022"
+      "status": "Erreur detail",
+      "message": "HTTP 404",
+      "url": "https://www.home-consult.be/fr/a-vendre/maisons/a-1933-sterrebeek"
     },
     {
       "source": "Agence locale",
@@ -5009,17 +5023,17 @@
     },
     {
       "source": "Agence locale",
+      "location": "Home Consult",
+      "status": "Erreur detail",
+      "message": "HTTP 404",
+      "url": "https://www.home-consult.be/fr/a-vendre/maisons/a-1930-zaventem"
+    },
+    {
+      "source": "Agence locale",
       "location": "Home Horizon",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://www.homehorizon.be/vente"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Ifac Service",
-      "status": "Site lu",
-      "message": "109 lien(s) interne(s), 13 candidat(s) direct(s)",
-      "url": "http://ifac.be/nl/"
     },
     {
       "source": "Agence locale",
@@ -5030,17 +5044,17 @@
     },
     {
       "source": "Agence locale",
+      "location": "Home Consult",
+      "status": "Erreur detail",
+      "message": "HTTP 404",
+      "url": "https://www.home-consult.be/fr/a-vendre/maisons/a-3080-tervuren"
+    },
+    {
+      "source": "Agence locale",
       "location": "Home Horizon",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://www.homehorizon.be/nl/te-koop"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Ifac Service",
-      "status": "Candidat ignore",
-      "message": "page de liste probable, plusieurs prix detectes",
-      "url": "http://ifac.be/nl/te-koop/detail/12658/te-koop-huis-huis-met-3-slaapkamers-en-leuke-tuin-in-rustige-straat"
     },
     {
       "source": "Agence locale",
@@ -5058,10 +5072,31 @@
     },
     {
       "source": "Agence locale",
+      "location": "Home Consult",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.home-consult.be/fr/villa-a-vendre-a-wezembeek-oppem/7879959"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Ifac Service",
+      "status": "Site lu",
+      "message": "109 lien(s) interne(s), 14 candidat(s) direct(s)",
+      "url": "http://ifac.be/nl/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Home Consult",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.home-consult.be/fr/maison-a-vendre-a-tervuren/6282179"
+    },
+    {
+      "source": "Agence locale",
       "location": "Ifac Service",
       "status": "Candidat ignore",
       "message": "page de liste probable, plusieurs prix detectes",
-      "url": "http://ifac.be/nl/te-koop/detail/12506/te-koop-grond-bouwgrond-voor-woning-of-woning-handelsfunctie"
+      "url": "http://ifac.be/nl/te-koop/detail/12862/te-koop-huis-karaktervolle-te-renoveren-rijwoning-met-tuin-in-centrum"
     },
     {
       "source": "Agence locale",
@@ -5082,7 +5117,7 @@
       "location": "Ifac Service",
       "status": "Candidat ignore",
       "message": "page de liste probable, plusieurs prix detectes",
-      "url": "http://ifac.be/nl/te-koop/detail/12473/te-koop-huis-instapklare-halfopen-bebouwing"
+      "url": "http://ifac.be/nl/te-koop/detail/12658/te-koop-huis-huis-met-3-slaapkamers-en-leuke-tuin-in-rustige-straat"
     },
     {
       "source": "Agence locale",
@@ -5116,8 +5151,8 @@
       "source": "Agence locale",
       "location": "Ifac Service",
       "status": "Candidat ignore",
-      "message": "prix 875000 hors filtre",
-      "url": "http://ifac.be/nl/te-koop/detail/10115/te-koop-kantoren-kantoorruimte-atelier-met-duplexapp-in-centrum-tervuren"
+      "message": "page de liste probable, plusieurs prix detectes",
+      "url": "http://ifac.be/nl/te-koop/detail/12506/te-koop-grond-bouwgrond-voor-woning-of-woning-handelsfunctie"
     },
     {
       "source": "Agence locale",
@@ -5142,17 +5177,17 @@
     },
     {
       "source": "Agence locale",
+      "location": "Ifac Service",
+      "status": "Candidat ignore",
+      "message": "page de liste probable, plusieurs prix detectes",
+      "url": "http://ifac.be/nl/te-koop/detail/12473/te-koop-huis-instapklare-halfopen-bebouwing"
+    },
+    {
+      "source": "Agence locale",
       "location": "Immo CD",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://immocd.be/vente"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Ifac Service",
-      "status": "Candidat ignore",
-      "message": "prix 875000 hors filtre",
-      "url": "http://ifac.be/nl/te-koop/detail/11521/te-koop-kantoren-handelspand-als-investering"
     },
     {
       "source": "Agence locale",
@@ -5170,17 +5205,17 @@
     },
     {
       "source": "Agence locale",
+      "location": "Ifac Service",
+      "status": "Candidat ignore",
+      "message": "prix 875000 hors filtre",
+      "url": "http://ifac.be/nl/te-koop/detail/11521/te-koop-kantoren-handelspand-als-investering"
+    },
+    {
+      "source": "Agence locale",
       "location": "Immo CD",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://immocd.be/aanbod/te-koop"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Ifac Service",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "http://ifac.be/nl/te-koop/detail/12660/te-koop-appartement-aangenaam-en-goed-gelegen-duplex-appartement"
     },
     {
       "source": "Agence locale",
@@ -5193,8 +5228,8 @@
       "source": "Agence locale",
       "location": "Ifac Service",
       "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "http://ifac.be/nl/te-koop/detail/12661/te-koop-huis-energiezuinige-woning-met-3-slaapkamers"
+      "message": "prix 875000 hors filtre",
+      "url": "http://ifac.be/nl/te-koop/detail/10115/te-koop-kantoren-kantoorruimte-atelier-met-duplexapp-in-centrum-tervuren"
     },
     {
       "source": "Agence locale",
@@ -5205,10 +5240,24 @@
     },
     {
       "source": "Agence locale",
+      "location": "Ifac Service",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "http://ifac.be/nl/te-koop/detail/12660/te-koop-appartement-aangenaam-en-goed-gelegen-duplex-appartement"
+    },
+    {
+      "source": "Agence locale",
       "location": "Immo Fm",
       "status": "Candidat ignore",
       "message": "commune cible absente",
       "url": "https://www.immofm.eu/fr/2/chercher-bien/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Immo Fm",
+      "status": "Candidat ignore",
+      "message": "prix 890000 hors filtre",
+      "url": "https://www.immofm.eu/fr/bien/a-vendre/maison/1082-berchem-sainte-agathe/7931563"
     },
     {
       "source": "Agence locale",
@@ -5228,8 +5277,8 @@
       "source": "Agence locale",
       "location": "Immo Fm",
       "status": "Candidat ignore",
-      "message": "prix 890000 hors filtre",
-      "url": "https://www.immofm.eu/fr/bien/a-vendre/maison/1082-berchem-sainte-agathe/7931563"
+      "message": "prix 270000 hors filtre",
+      "url": "https://www.immofm.eu/fr/bien/a-vendre/appartement/1090-jette/7930232"
     },
     {
       "source": "Agence locale",
@@ -5242,13 +5291,6 @@
       "source": "Agence locale",
       "location": "Immo Fm",
       "status": "Candidat ignore",
-      "message": "prix 270000 hors filtre",
-      "url": "https://www.immofm.eu/fr/bien/a-vendre/appartement/1090-jette/7930232"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Immo Fm",
-      "status": "Candidat ignore",
       "message": "prix 185000 hors filtre",
       "url": "https://www.immofm.eu/fr/bien/a-vendre/appartement/1090-jette/7930146"
     },
@@ -5256,8 +5298,8 @@
       "source": "Agence locale",
       "location": "Immo I.D.",
       "status": "Candidat ignore",
-      "message": "page de liste probable, plusieurs prix detectes",
-      "url": "https://immoid.be/nl/te-koop/detail/1712765/3-slpk-app-met-groot-terras-mogelijk-dubbele-garage-60-000"
+      "message": "prix 985000 hors filtre",
+      "url": "https://immoid.be/nl/te-koop/detail/1712765/3-slpk-app-met-terras-mogelijk-dubbele-garage-60-000"
     },
     {
       "source": "Agence locale",
@@ -5265,13 +5307,6 @@
       "status": "Candidat ignore",
       "message": "prix 350000 hors filtre",
       "url": "https://www.immofm.eu/fr/bien/a-vendre/appartement/1140-evere/7926349"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Immo I.D.",
-      "status": "Candidat ignore",
-      "message": "prix 259900 hors filtre",
-      "url": "https://immoid.be/nl/te-koop/detail/1712760/commercieel-glv-121-m-met-terras-in-mechelen-nekkerspoel"
     },
     {
       "source": "Agence locale",
@@ -5284,8 +5319,8 @@
       "source": "Agence locale",
       "location": "Immo I.D.",
       "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://immoid.be/nl/te-koop/detail/1712756/te-renoveren-hoekhuis-met-4-5-slaapkamers-op-een-goede-locatie"
+      "message": "prix 259900 hors filtre",
+      "url": "https://immoid.be/nl/te-koop/detail/1712760/commercieel-glv-121-m-met-terras-in-mechelen-nekkerspoel"
     },
     {
       "source": "Agence locale",
@@ -5298,8 +5333,8 @@
       "source": "Agence locale",
       "location": "Immo I.D.",
       "status": "Candidat ignore",
-      "message": "prix 430000 hors filtre",
-      "url": "https://immoid.be/nl/te-koop/detail/1712754/te-renoveren-3-slaapkamer-op-de-5de-verdieping-met-zich-op-square-marie-louise"
+      "message": "commune cible absente",
+      "url": "https://immoid.be/nl/te-koop/detail/1712756/te-renoveren-hoekhuis-met-4-5-slaapkamers-op-een-goede-locatie"
     },
     {
       "source": "Agence locale",
@@ -5312,8 +5347,8 @@
       "source": "Agence locale",
       "location": "Immo I.D.",
       "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://immoid.be/nl/te-koop/detail/1712750/gelijkvloerse-loft-met-2-slpk-volledig-naar-eigen-smaak-met-mogelijk-6-btw"
+      "message": "prix 430000 hors filtre",
+      "url": "https://immoid.be/nl/te-koop/detail/1712754/te-renoveren-3-slaapkamer-op-de-5de-verdieping-met-zich-op-square-marie-louise"
     },
     {
       "source": "Agence locale",
@@ -5333,6 +5368,20 @@
       "source": "Agence locale",
       "location": "Immo I.D.",
       "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://immoid.be/nl/te-koop/detail/1712750/gelijkvloerse-loft-met-2-slpk-volledig-naar-eigen-smaak-met-mogelijk-6-btw"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Immo Quartier",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://www.immoquartier.be/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Immo I.D.",
+      "status": "Candidat ignore",
       "message": "prix 325000 hors filtre",
       "url": "https://immoid.be/nl/te-koop/detail/1712746/op-te-frissen-laagbouwwoning-met-1-slpk-garage-en-tuin"
     },
@@ -5341,7 +5390,7 @@
       "location": "Immo Quartier",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.immoquartier.be/a-vendre"
+      "url": "https://www.immoquartier.be/fr/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -5355,7 +5404,7 @@
       "location": "Immo Quartier",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.immoquartier.be/fr/a-vendre"
+      "url": "https://www.immoquartier.be/fr/acheter"
     },
     {
       "source": "Agence locale",
@@ -5390,7 +5439,7 @@
       "location": "Immo Quartier",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.immoquartier.be/fr/acheter"
+      "url": "https://www.immoquartier.be/fr/biens/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -5422,24 +5471,10 @@
     },
     {
       "source": "Agence locale",
-      "location": "Immo Quartier",
-      "status": "Page candidats",
-      "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.immoquartier.be/fr/biens/a-vendre"
-    },
-    {
-      "source": "Agence locale",
       "location": "Immo Roelands",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
       "url": "https://www.immoroelands.be/fr/a-vendre/lembeek/appartement/appartement/883/"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Immo Roelands",
-      "status": "Page candidats",
-      "message": "4 lien(s) annonce potentiel(s)",
-      "url": "https://www.immoroelands.be/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -5451,9 +5486,23 @@
     {
       "source": "Agence locale",
       "location": "Immo Roelands",
+      "status": "Page candidats",
+      "message": "4 lien(s) annonce potentiel(s)",
+      "url": "https://www.immoroelands.be/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Immo Roelands",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://www.immoroelands.be/fr/acheter"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Immo Quartier",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://www.immoquartier.be/nos-biens/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -5474,7 +5523,7 @@
       "location": "Immo Quartier",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.immoquartier.be/nos-biens/a-vendre"
+      "url": "https://www.immoquartier.be/vente"
     },
     {
       "source": "Agence locale",
@@ -5492,6 +5541,13 @@
     },
     {
       "source": "Agence locale",
+      "location": "Immo Quartier",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://www.immoquartier.be/te-koop"
+    },
+    {
+      "source": "Agence locale",
       "location": "Immo Roelands",
       "status": "Page ignoree",
       "message": "HTTP 404",
@@ -5506,17 +5562,17 @@
     },
     {
       "source": "Agence locale",
-      "location": "Immo Quartier",
-      "status": "Page candidats",
-      "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.immoquartier.be/vente"
-    },
-    {
-      "source": "Agence locale",
       "location": "Immo Roelands",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://www.immoroelands.be/aanbod/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Immo Quartier",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://www.immoquartier.be/nl/te-koop"
     },
     {
       "source": "Agence locale",
@@ -5527,17 +5583,17 @@
     },
     {
       "source": "Agence locale",
-      "location": "Immo Quartier",
-      "status": "Page candidats",
-      "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.immoquartier.be/te-koop"
-    },
-    {
-      "source": "Agence locale",
       "location": "Immo Roelands",
       "status": "Candidat ignore",
       "message": "prix 285000 hors filtre",
       "url": "https://www.immoroelands.be/fr/a-vendre/halle/villamaisonferme/maison-unifamiliale/875/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Immo Quartier",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://www.immoquartier.be/aanbod/te-koop"
     },
     {
       "source": "Agence locale",
@@ -5555,17 +5611,17 @@
     },
     {
       "source": "Agence locale",
-      "location": "Immo Quartier",
-      "status": "Page candidats",
-      "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.immoquartier.be/nl/te-koop"
-    },
-    {
-      "source": "Agence locale",
       "location": "Immo Roelands",
       "status": "Candidat ignore",
       "message": "prix 285000 hors filtre",
       "url": "https://www.immoroelands.be/nl/te-koop/halle/villawoninghoeve/eengezinswoning/875/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Immo Quartier",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://www.immoquartier.be/panden/te-koop"
     },
     {
       "source": "Agence locale",
@@ -5576,10 +5632,10 @@
     },
     {
       "source": "Agence locale",
-      "location": "Immo Quartier",
-      "status": "Page candidats",
-      "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.immoquartier.be/aanbod/te-koop"
+      "location": "Immobilière Le Col-Vert sprl",
+      "status": "Site bloque ou illisible",
+      "message": "HTTP 403",
+      "url": "https://www.col-vert.be/"
     },
     {
       "source": "Agence locale",
@@ -5594,27 +5650,6 @@
       "status": "Page candidats",
       "message": "7 lien(s) annonce potentiel(s)",
       "url": "https://immovermast.be/"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Immo Quartier",
-      "status": "Page candidats",
-      "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.immoquartier.be/panden/te-koop"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Immobilière Le Col-Vert sprl",
-      "status": "Site bloque ou illisible",
-      "message": "HTTP 403",
-      "url": "https://www.col-vert.be/"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Immo Vermast",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://immovermast.be/kopen/3953/te-koop-villa-woning-hoeve-prachtige-coup-de-coeur-woning-in-hoogvorst"
     },
     {
       "source": "Agence locale",
@@ -5635,7 +5670,7 @@
       "location": "Immo Vermast",
       "status": "Candidat ignore",
       "message": "commune cible absente",
-      "url": "https://immovermast.be/kopen/3935/te-koop-villa-woning-hoeve-prachtige-klassieke-villa-in-rustige-wijk"
+      "url": "https://immovermast.be/kopen/3953/te-koop-villa-woning-hoeve-prachtige-coup-de-coeur-woning-in-hoogvorst"
     },
     {
       "source": "Agence locale",
@@ -5660,13 +5695,6 @@
     },
     {
       "source": "Agence locale",
-      "location": "Immo Vermast",
-      "status": "Candidat ignore",
-      "message": "prix 845000 hors filtre",
-      "url": "https://immovermast.be/kopen/3948/te-koop-villa-woning-hoeve-architecturale-villa-klaas-goris-op-unieke-locatie"
-    },
-    {
-      "source": "Agence locale",
       "location": "ImmoBy",
       "status": "Page ignoree",
       "message": "HTTP 404",
@@ -5674,17 +5702,17 @@
     },
     {
       "source": "Agence locale",
+      "location": "Immo Vermast",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://immovermast.be/kopen/3935/te-koop-villa-woning-hoeve-prachtige-klassieke-villa-in-rustige-wijk"
+    },
+    {
+      "source": "Agence locale",
       "location": "ImmoBy",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://www.immoby.be/fr/biens/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Immo Vermast",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://immovermast.be/kopen/2392/te-koop-villa-woning-hoeve-ruime-villa-op-een-domein-van-1ha36a"
     },
     {
       "source": "Agence locale",
@@ -5711,8 +5739,8 @@
       "source": "Agence locale",
       "location": "Immo Vermast",
       "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://immovermast.be/kopen/3953/te-koop-villa-woning-hoeve-prachtige-coup-de-coeur-woning-in-hoogvorst"
+      "message": "prix 845000 hors filtre",
+      "url": "https://immovermast.be/kopen/3948/te-koop-villa-woning-hoeve-architecturale-villa-klaas-goris-op-unieke-locatie"
     },
     {
       "source": "Agence locale",
@@ -5747,7 +5775,7 @@
       "location": "Immo Vermast",
       "status": "Candidat ignore",
       "message": "commune cible absente",
-      "url": "https://immovermast.be/kopen/3935/te-koop-villa-woning-hoeve-prachtige-klassieke-villa-in-rustige-wijk"
+      "url": "https://immovermast.be/kopen/2392/te-koop-villa-woning-hoeve-ruime-villa-op-een-domein-van-1ha36a"
     },
     {
       "source": "Agence locale",
@@ -5767,8 +5795,50 @@
       "source": "Agence locale",
       "location": "Immo Vermast",
       "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://immovermast.be/kopen/3953/te-koop-villa-woning-hoeve-prachtige-coup-de-coeur-woning-in-hoogvorst"
+    },
+    {
+      "source": "Agence locale",
+      "location": "ImmoBy",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.immoby.be/en/resultats.php?ref=&s_country=BE&hometype=&province=&postcode=&price_min=&price_max=&bedrooms_min=&bedrooms_max=&adtype1=For+sale"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Immo Vermast",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://immovermast.be/kopen/3935/te-koop-villa-woning-hoeve-prachtige-klassieke-villa-in-rustige-wijk"
+    },
+    {
+      "source": "Agence locale",
+      "location": "ImmoBy",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.immoby.be/fr/resultats.php?ref=&s_country=BE&hometype=&province=&postcode=&price_min=&price_max=&bedrooms_min=&bedrooms_max=&adtype1=A+vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "ImmoBy",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.immoby.be/fr/resultats.php?ref=&s_country=BE&hometype=&province=&postcode=&price_min=&price_max=&bedrooms_min=&bedrooms_max=&adtype1=A+vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Immo Vermast",
+      "status": "Candidat ignore",
       "message": "prix 845000 hors filtre",
       "url": "https://immovermast.be/kopen/3948/te-koop-villa-woning-hoeve-architecturale-villa-klaas-goris-op-unieke-locatie"
+    },
+    {
+      "source": "Agence locale",
+      "location": "ImmoBy",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.immoby.be/nl/resultats.php?ref=&s_country=BE&hometype=&province=&postcode=&price_min=&price_max=&bedrooms_min=&bedrooms_max=&adtype1=Te+koop"
     },
     {
       "source": "Agence locale",
@@ -5786,24 +5856,10 @@
     },
     {
       "source": "Agence locale",
-      "location": "ImmoBy",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.immoby.be/fr/resultats.php?ref=&s_country=BE&hometype=&province=&postcode=&price_min=&price_max=&bedrooms_min=&bedrooms_max=&adtype1=A+vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "ImmoBy",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.immoby.be/fr/resultats.php?ref=&s_country=BE&hometype=&province=&postcode=&price_min=&price_max=&bedrooms_min=&bedrooms_max=&adtype1=A+vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "ImmoBy",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.immoby.be/nl/resultats.php?ref=&s_country=BE&hometype=&province=&postcode=&price_min=&price_max=&bedrooms_min=&bedrooms_max=&adtype1=Te+koop"
+      "location": "J&S Properties",
+      "status": "Site lu",
+      "message": "29 lien(s) interne(s), 8 candidat(s) direct(s)",
+      "url": "https://www.jsproperties.be/"
     },
     {
       "source": "Agence locale",
@@ -5821,6 +5877,13 @@
     },
     {
       "source": "Agence locale",
+      "location": "J&S Properties",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.jsproperties.be/fr/chercher-bien/a-vendre"
+    },
+    {
+      "source": "Agence locale",
       "location": "INESU IMMO",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
@@ -5828,17 +5891,10 @@
     },
     {
       "source": "Agence locale",
-      "location": "ImmoBy",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.immoby.be/en/resultats.php?ref=&s_country=BE&hometype=&province=&postcode=&price_min=&price_max=&bedrooms_min=&bedrooms_max=&adtype1=For+sale"
-    },
-    {
-      "source": "Agence locale",
       "location": "J&S Properties",
-      "status": "Site lu",
-      "message": "29 lien(s) interne(s), 8 candidat(s) direct(s)",
-      "url": "https://www.jsproperties.be/"
+      "status": "Candidat ignore",
+      "message": "prix 300000 hors filtre",
+      "url": "https://www.jsproperties.be/fr/bien/a-vendre/appartement/1030-schaerbeek/7924877"
     },
     {
       "source": "Agence locale",
@@ -5849,17 +5905,17 @@
     },
     {
       "source": "Agence locale",
+      "location": "J&S Properties",
+      "status": "Candidat ignore",
+      "message": "prix 185000 hors filtre",
+      "url": "https://www.jsproperties.be/fr/bien/a-vendre/appartement/1000-brussels/7923261"
+    },
+    {
+      "source": "Agence locale",
       "location": "INESU IMMO",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
       "url": "https://www.inesu.be/fr/acheter"
-    },
-    {
-      "source": "Agence locale",
-      "location": "J&S Properties",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.jsproperties.be/fr/chercher-bien/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -5872,8 +5928,8 @@
       "source": "Agence locale",
       "location": "J&S Properties",
       "status": "Candidat ignore",
-      "message": "prix 300000 hors filtre",
-      "url": "https://www.jsproperties.be/fr/bien/a-vendre/appartement/1030-schaerbeek/7924877"
+      "message": "prix 185000 hors filtre",
+      "url": "https://www.jsproperties.be/fr/bien/a-vendre/appartement/1030-schaerbeek/7923250"
     },
     {
       "source": "Agence locale",
@@ -5893,34 +5949,6 @@
       "source": "Agence locale",
       "location": "J&S Properties",
       "status": "Candidat ignore",
-      "message": "prix 185000 hors filtre",
-      "url": "https://www.jsproperties.be/fr/bien/a-vendre/appartement/1000-brussels/7923261"
-    },
-    {
-      "source": "Agence locale",
-      "location": "INESU IMMO",
-      "status": "Page candidats",
-      "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.inesu.be/vente"
-    },
-    {
-      "source": "Agence locale",
-      "location": "J&S Properties",
-      "status": "Candidat ignore",
-      "message": "prix 185000 hors filtre",
-      "url": "https://www.jsproperties.be/fr/bien/a-vendre/appartement/1030-schaerbeek/7923250"
-    },
-    {
-      "source": "Agence locale",
-      "location": "INESU IMMO",
-      "status": "Page candidats",
-      "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.inesu.be/te-koop"
-    },
-    {
-      "source": "Agence locale",
-      "location": "J&S Properties",
-      "status": "Candidat ignore",
       "message": "prix 310000 hors filtre",
       "url": "https://www.jsproperties.be/fr/bien/a-vendre/maison/1030-schaerbeek/7923228"
     },
@@ -5929,7 +5957,7 @@
       "location": "INESU IMMO",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.inesu.be/nl/te-koop"
+      "url": "https://www.inesu.be/vente"
     },
     {
       "source": "Agence locale",
@@ -5943,14 +5971,7 @@
       "location": "INESU IMMO",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.inesu.be/aanbod/te-koop"
-    },
-    {
-      "source": "Agence locale",
-      "location": "INESU IMMO",
-      "status": "Page candidats",
-      "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://www.inesu.be/panden/te-koop"
+      "url": "https://www.inesu.be/te-koop"
     },
     {
       "source": "Agence locale",
@@ -5961,10 +5982,17 @@
     },
     {
       "source": "Agence locale",
-      "location": "Jet'immo",
-      "status": "Site lu",
-      "message": "30 lien(s) interne(s), 9 candidat(s) direct(s)",
-      "url": "https://www.jetimmo.be/"
+      "location": "INESU IMMO",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://www.inesu.be/nl/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "INESU IMMO",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://www.inesu.be/aanbod/te-koop"
     },
     {
       "source": "Agence locale",
@@ -5972,6 +6000,27 @@
       "status": "Candidat ignore",
       "message": "prix absent hors filtre",
       "url": "https://www.jsproperties.be/fr/bien/option-v/maison/1120-bruxelles/7911199"
+    },
+    {
+      "source": "Agence locale",
+      "location": "INESU IMMO",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://www.inesu.be/panden/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Jet'immo",
+      "status": "Site lu",
+      "message": "30 lien(s) interne(s), 9 candidat(s) direct(s)",
+      "url": "https://www.jetimmo.be/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Just Immo",
+      "status": "Site lu",
+      "message": "204 lien(s) interne(s), 175 candidat(s) direct(s)",
+      "url": "http://www.justimmo.be/"
     },
     {
       "source": "Agence locale",
@@ -5983,9 +6032,9 @@
     {
       "source": "Agence locale",
       "location": "Just Immo",
-      "status": "Site lu",
-      "message": "204 lien(s) interne(s), 175 candidat(s) direct(s)",
-      "url": "http://www.justimmo.be/"
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "http://www.justimmo.be/fr/annonces-immobilieres/offre/neder-over-heembeek/bien/12356/superbe-appartement-3-chambres-140m--avec-terrasse.html"
     },
     {
       "source": "Agence locale",
@@ -6026,8 +6075,8 @@
       "source": "Agence locale",
       "location": "Just Immo",
       "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "http://www.justimmo.be/fr/annonces-immobilieres/offre/neder-over-heembeek/bien/12356/superbe-appartement-3-chambres-140m--avec-terrasse.html"
+      "message": "prix 199000 hors filtre",
+      "url": "http://www.justimmo.be/fr/annonces-immobilieres/offre/laeken/bien/12829/beau-rez-de-chaussee-1-chambre-avec-cour-et-faible.html"
     },
     {
       "source": "Agence locale",
@@ -6054,8 +6103,8 @@
       "source": "Agence locale",
       "location": "Just Immo",
       "status": "Candidat ignore",
-      "message": "prix 199000 hors filtre",
-      "url": "http://www.justimmo.be/fr/annonces-immobilieres/offre/laeken/bien/12829/beau-rez-de-chaussee-1-chambre-avec-cour-et-faible.html"
+      "message": "prix 369000 hors filtre",
+      "url": "http://www.justimmo.be/fr/annonces-immobilieres/offre/laeken/bien/12828/maison-3-chambres-avec-jardin-et-panneaux-photovol.html"
     },
     {
       "source": "Agence locale",
@@ -6082,8 +6131,8 @@
       "source": "Agence locale",
       "location": "Just Immo",
       "status": "Candidat ignore",
-      "message": "prix 369000 hors filtre",
-      "url": "http://www.justimmo.be/fr/annonces-immobilieres/offre/laeken/bien/12828/maison-3-chambres-avec-jardin-et-panneaux-photovol.html"
+      "message": "prix absent hors filtre",
+      "url": "http://www.justimmo.be/fr/annonces-immobilieres/offre/laeken/bien/12827/quartier-de-wand-appartement-une-chambre.html"
     },
     {
       "source": "Agence locale",
@@ -6098,20 +6147,6 @@
       "status": "Page candidats",
       "message": "7 lien(s) annonce potentiel(s)",
       "url": "https://www.lamaison.be/"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Just Immo",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "http://www.justimmo.be/fr/annonces-immobilieres/offre/laeken/bien/12827/quartier-de-wand-appartement-une-chambre.html"
-    },
-    {
-      "source": "Agence locale",
-      "location": "La Maison",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.lamaison.be/fr/2/chercher-bien/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -6138,8 +6173,36 @@
       "source": "Agence locale",
       "location": "La Maison",
       "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.lamaison.be/fr/2/chercher-bien/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Le Logis-Floréal",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.lelogisfloreal.be/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "La Maison",
+      "status": "Candidat ignore",
+      "message": "prix 475000 hors filtre",
+      "url": "https://www.lamaison.be/fr/bien/a-vendre/appartement/1933-zaventem/7936314"
+    },
+    {
+      "source": "Agence locale",
+      "location": "La Maison",
+      "status": "Candidat ignore",
       "message": "prix 823000 hors filtre",
       "url": "https://www.lamaison.be/fr/bien/a-vendre/maison/1150-woluwe-saint-pierre/7935518"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Le Logis-Floréal",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.lelogisfloreal.be/fr/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -6153,7 +6216,7 @@
       "location": "Le Logis-Floréal",
       "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://www.lelogisfloreal.be/a-vendre"
+      "url": "https://www.lelogisfloreal.be/fr/acheter"
     },
     {
       "source": "Agence locale",
@@ -6167,7 +6230,7 @@
       "location": "Le Logis-Floréal",
       "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://www.lelogisfloreal.be/fr/a-vendre"
+      "url": "https://www.lelogisfloreal.be/fr/biens/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -6175,20 +6238,6 @@
       "status": "Candidat ignore",
       "message": "prix 750000 hors filtre",
       "url": "https://www.lamaison.be/fr/bien/a-vendre/maison/1030-schaerbeek/7930366"
-    },
-    {
-      "source": "Agence locale",
-      "location": "La Maison",
-      "status": "Candidat ignore",
-      "message": "prix 315000 hors filtre",
-      "url": "https://www.lamaison.be/fr/bien/a-vendre/appartement/1150-woluwe-saint-pierre/7929301"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Le Logis-Floréal",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.lelogisfloreal.be/fr/acheter"
     },
     {
       "source": "Agence locale",
@@ -6202,7 +6251,14 @@
       "location": "Le Logis-Floréal",
       "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://www.lelogisfloreal.be/fr/biens/a-vendre"
+      "url": "https://www.lelogisfloreal.be/biens-a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Le Logis-Floréal",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.lelogisfloreal.be/nos-biens/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -6210,13 +6266,6 @@
       "status": "Site bloque ou illisible",
       "message": "HTTP 404",
       "url": "https://www.living-stone.be/nl/kantoor/living-stone-halle"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Le Logis-Floréal",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.lelogisfloreal.be/biens-a-vendre"
     },
     {
       "source": "Agence locale",
@@ -6234,6 +6283,13 @@
     },
     {
       "source": "Agence locale",
+      "location": "Le Logis-Floréal",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.lelogisfloreal.be/vente"
+    },
+    {
+      "source": "Agence locale",
       "location": "Lojega",
       "status": "Page ignoree",
       "message": "HTTP 404",
@@ -6241,17 +6297,17 @@
     },
     {
       "source": "Agence locale",
-      "location": "Le Logis-Floréal",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.lelogisfloreal.be/nos-biens/a-vendre"
-    },
-    {
-      "source": "Agence locale",
       "location": "Lojega",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://lojega.be/fr/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Le Logis-Floréal",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.lelogisfloreal.be/te-koop"
     },
     {
       "source": "Agence locale",
@@ -6269,17 +6325,17 @@
     },
     {
       "source": "Agence locale",
-      "location": "Le Logis-Floréal",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.lelogisfloreal.be/vente"
-    },
-    {
-      "source": "Agence locale",
       "location": "Lojega",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://lojega.be/biens-a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Le Logis-Floréal",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.lelogisfloreal.be/nl/te-koop"
     },
     {
       "source": "Agence locale",
@@ -6297,17 +6353,17 @@
     },
     {
       "source": "Agence locale",
-      "location": "Le Logis-Floréal",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.lelogisfloreal.be/te-koop"
-    },
-    {
-      "source": "Agence locale",
       "location": "Lojega",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://lojega.be/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Le Logis-Floréal",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.lelogisfloreal.be/aanbod/te-koop"
     },
     {
       "source": "Agence locale",
@@ -6318,13 +6374,6 @@
     },
     {
       "source": "Agence locale",
-      "location": "Le Logis-Floréal",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.lelogisfloreal.be/nl/te-koop"
-    },
-    {
-      "source": "Agence locale",
       "location": "Lojega",
       "status": "Page ignoree",
       "message": "HTTP 404",
@@ -6332,17 +6381,17 @@
     },
     {
       "source": "Agence locale",
+      "location": "Le Logis-Floréal",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.lelogisfloreal.be/panden/te-koop"
+    },
+    {
+      "source": "Agence locale",
       "location": "Lojega",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://lojega.be/panden/te-koop"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Le Logis-Floréal",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.lelogisfloreal.be/aanbod/te-koop"
     },
     {
       "source": "Agence locale",
@@ -6360,31 +6409,24 @@
     },
     {
       "source": "Agence locale",
+      "location": "Le Logis-Floréal",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.lelogisfloreal.be/videos-bien-entretenir-son-logement/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Maxime Real Estate",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.maxime-realestate.be/fr/appartement-a-vendre-a-sint-pieters-woluwe/7936399"
+    },
+    {
+      "source": "Agence locale",
       "location": "Maxime Real Estate",
       "status": "Candidat ignore",
       "message": "commune cible absente",
       "url": "https://www.maxime-realestate.be/fr/appartement-a-vendre-a-woluwe-saint-etienne/7919440"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Le Logis-Floréal",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.lelogisfloreal.be/panden/te-koop"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Maxime Real Estate",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.maxime-realestate.be/fr/immeuble-a-appartements-a-vendre-a-auderghem/7929958"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Maxime Real Estate",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.maxime-realestate.be/fr/maison-a-vendre-a-tervuren-vossem/7929524"
     },
     {
       "source": "Agence locale",
@@ -6398,35 +6440,7 @@
       "location": "Maxime Real Estate",
       "status": "Candidat ignore",
       "message": "prix absent hors filtre",
-      "url": "https://www.maxime-realestate.be/fr/news/vendre-votre-bien-immobilier-a-woluwe-et-dans-les-environs"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Maxime Real Estate",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.maxime-realestate.be/fr/appartement-a-vendre-a-woluwe-saint-etienne/7919440"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Maxime Real Estate",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
       "url": "https://www.maxime-realestate.be/fr/immeuble-a-appartements-a-vendre-a-auderghem/7929958"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Le Logis-Floréal",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.lelogisfloreal.be/videos-bien-entretenir-son-logement/"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Maxime Real Estate",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.maxime-realestate.be/fr/maison-a-vendre-a-tervuren-vossem/7929524"
     },
     {
       "source": "Agence locale",
@@ -6441,13 +6455,27 @@
       "status": "Candidat ignore",
       "message": "commune cible absente",
       "url": "https://www.lelogisfloreal.be/videos-bien-entretenir-son-logement/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Maxime Real Estate",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.maxime-realestate.be/fr/appartement-a-vendre-a-sint-pieters-woluwe/7936399"
     },
     {
       "source": "Agence locale",
       "location": "Modifa",
       "status": "Site lu",
-      "message": "38 lien(s) interne(s), 8 candidat(s) direct(s)",
+      "message": "38 lien(s) interne(s), 9 candidat(s) direct(s)",
       "url": "https://www.modifa.be/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Maxime Real Estate",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.maxime-realestate.be/fr/appartement-a-vendre-a-woluwe-saint-etienne/7919440"
     },
     {
       "source": "Agence locale",
@@ -6455,6 +6483,41 @@
       "status": "Candidat ignore",
       "message": "page de liste probable, plusieurs prix detectes",
       "url": "https://www.modifa.be/fr/2/chercher-bien/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Maxime Real Estate",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.maxime-realestate.be/fr/immeuble-a-appartements-a-vendre-a-auderghem/7929958"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Modifa",
+      "status": "Candidat ignore",
+      "message": "prix 945000 hors filtre",
+      "url": "https://www.modifa.be/fr/bien/a-vendre/maison/1640-rhode-saint-genese/7937275"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Maxime Real Estate",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.maxime-realestate.be/fr/news/vendre-votre-bien-immobilier-a-woluwe-et-dans-les-environs"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Modifa",
+      "status": "Candidat ignore",
+      "message": "prix 750000 hors filtre",
+      "url": "https://www.modifa.be/fr/bien/a-vendre/maison/1640-rhode-saint-genese/7935376"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Modifa",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.modifa.be/fr/bien/a-vendre/maison/5530-yvoir/7932999"
     },
     {
       "source": "Agence locale",
@@ -6469,20 +6532,6 @@
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
       "url": "https://www.multimmo.be/nl/"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Modifa",
-      "status": "Candidat ignore",
-      "message": "prix 365000 hors filtre",
-      "url": "https://www.modifa.be/fr/bien/a-vendre/appartement/1180-uccle/7933129"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Modifa",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.modifa.be/fr/bien/a-vendre/maison/5530-yvoir/7932999"
     },
     {
       "source": "Agence locale",
@@ -6503,7 +6552,14 @@
       "location": "Multimmo",
       "status": "Candidat ignore",
       "message": "prix absent hors filtre",
-      "url": "https://www.multimmo.be/nl/te-koop/15394/woning/sintmartenslennik/schapenstraat238"
+      "url": "https://www.multimmo.be/nl/te-koop/15403/bedrijfsgebouw/itterbeek/kerkstraat35"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Multimmo",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.multimmo.be/nl/te-koop/15401/woning/itterbeek/kerkstraat35"
     },
     {
       "source": "Agence locale",
@@ -6514,13 +6570,6 @@
     },
     {
       "source": "Agence locale",
-      "location": "Multimmo",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.multimmo.be/nl/te-koop/15391/woning/gooik/hoevestraat1"
-    },
-    {
-      "source": "Agence locale",
       "location": "Modifa",
       "status": "Candidat ignore",
       "message": "prix 499000 hors filtre",
@@ -6528,38 +6577,24 @@
     },
     {
       "source": "Agence locale",
-      "location": "Modifa",
+      "location": "Multimmo",
       "status": "Candidat ignore",
-      "message": "prix 195000 hors filtre",
+      "message": "prix absent hors filtre",
+      "url": "https://www.multimmo.be/nl/te-koop/15355/appartement/halle/eizingenstraat5"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Modifa",
+      "status": "Erreur detail",
+      "message": "HTTP 404",
       "url": "https://www.modifa.be/fr/bien/a-vendre/appartement/1020-bruxelles/7924457"
     },
     {
       "source": "Agence locale",
       "location": "Multimmo",
       "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.multimmo.be/nl/te-koop/15358/woning/herne/geraardsbergsesteenweg50"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Modifa",
-      "status": "Candidat ignore",
-      "message": "page de liste probable, plusieurs prix detectes",
-      "url": "https://www.modifa.be/fr/2/chercher-bien/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Multimmo",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.multimmo.be/nl/te-koop/15304/bedrijfsgebouw/gooik/hoevestraat1"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Multimmo",
-      "status": "Candidat ignore",
       "message": "prix absent hors filtre",
-      "url": "https://www.multimmo.be/nl/te-koop/15387/woning/sintpietersleeuw/kleinebrugstraat97"
+      "url": "https://www.multimmo.be/nl/te-koop/15394/woning/sintmartenslennik/schapenstraat238"
     },
     {
       "source": "Agence locale",
@@ -6579,8 +6614,8 @@
       "source": "Agence locale",
       "location": "Multimmo",
       "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.multimmo.be/nl/te-koop/15384/woning/sintpietersleeuw/fabriekstraat178"
+      "message": "commune cible absente",
+      "url": "https://www.multimmo.be/nl/te-koop/15391/woning/gooik/hoevestraat1"
     },
     {
       "source": "Agence locale",
@@ -6594,7 +6629,7 @@
       "location": "Multimmo",
       "status": "Candidat ignore",
       "message": "commune cible absente",
-      "url": "https://www.multimmo.be/nl/te-koop/15247/bouwgrond/meerbeke/prindaal"
+      "url": "https://www.multimmo.be/nl/te-koop/15358/woning/herne/geraardsbergsesteenweg50"
     },
     {
       "source": "Agence locale",
@@ -6602,6 +6637,13 @@
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://www.nexthomes.be/fr/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Multimmo",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.multimmo.be/nl/te-koop/15304/bedrijfsgebouw/gooik/hoevestraat1"
     },
     {
       "source": "Agence locale",
@@ -6615,7 +6657,7 @@
       "location": "Multimmo",
       "status": "Candidat ignore",
       "message": "prix absent hors filtre",
-      "url": "https://www.multimmo.be/nl/te-koop/15026/woning/ruisbroek/fabriekstraat178"
+      "url": "https://www.multimmo.be/nl/te-koop/15387/woning/sintpietersleeuw/kleinebrugstraat97"
     },
     {
       "source": "Agence locale",
@@ -6643,7 +6685,14 @@
       "location": "Property One",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://propertyone.be/fr/properties/parc-brugmann-magnifique-rez-de-chaussee-avec-2ch-immeuble-de-standing-15912/"
+      "url": "https://propertyone.be/fr/properties/parc-brugmann-magnifique-espace-bureau-en-rez-de-chaussee-15923/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Next Homes",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.nexthomes.be/fr/biens/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -6668,13 +6717,6 @@
     },
     {
       "source": "Agence locale",
-      "location": "Next Homes",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.nexthomes.be/fr/biens/a-vendre"
-    },
-    {
-      "source": "Agence locale",
       "location": "Property One",
       "status": "Page candidats",
       "message": "3 lien(s) annonce potentiel(s)",
@@ -6686,6 +6728,13 @@
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://propertyone.be/fr/biens/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Next Homes",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.nexthomes.be/biens-a-vendre"
     },
     {
       "source": "Agence locale",
@@ -6703,13 +6752,6 @@
     },
     {
       "source": "Agence locale",
-      "location": "Next Homes",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.nexthomes.be/biens-a-vendre"
-    },
-    {
-      "source": "Agence locale",
       "location": "Property One",
       "status": "Page ignoree",
       "message": "HTTP 404",
@@ -6724,17 +6766,17 @@
     },
     {
       "source": "Agence locale",
-      "location": "Property One",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://propertyone.be/nl/te-koop"
-    },
-    {
-      "source": "Agence locale",
       "location": "Next Homes",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://www.nexthomes.be/nos-biens/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Property One",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://propertyone.be/nl/te-koop"
     },
     {
       "source": "Agence locale",
@@ -6752,20 +6794,6 @@
     },
     {
       "source": "Agence locale",
-      "location": "Property One",
-      "status": "Candidat ignore",
-      "message": "page de liste probable, plusieurs prix detectes",
-      "url": "https://propertyone.be/fr/properties/grande-maison-renovee-ideale-pour-famille-ou-coliving-15877/"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Property One",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://propertyone.be/fr/10-ans-property-one/"
-    },
-    {
-      "source": "Agence locale",
       "location": "Next Homes",
       "status": "Page ignoree",
       "message": "HTTP 404",
@@ -6775,13 +6803,6 @@
       "source": "Agence locale",
       "location": "Property One",
       "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://propertyone.be/fr/5-bonnes-raisons-de-faire-appel-a-property-one-pour-votre-projet-immobilier/"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Property One",
-      "status": "Candidat ignore",
       "message": "page de liste probable, plusieurs prix detectes",
       "url": "https://propertyone.be/fr/properties/grande-maison-renovee-ideale-pour-famille-ou-coliving-15877/"
     },
@@ -6801,10 +6822,52 @@
     },
     {
       "source": "Agence locale",
+      "location": "Property One",
+      "status": "Candidat ignore",
+      "message": "page de liste probable, plusieurs prix detectes",
+      "url": "https://propertyone.be/fr/properties/grande-maison-renovee-ideale-pour-famille-ou-coliving-15877/"
+    },
+    {
+      "source": "Agence locale",
       "location": "Next Homes",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://www.nexthomes.be/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Property One",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://propertyone.be/fr/10-ans-property-one/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Property One",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://propertyone.be/fr/5-bonnes-raisons-de-faire-appel-a-property-one-pour-votre-projet-immobilier/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "RE/MAX Premium",
+      "status": "Site lu",
+      "message": "0 lien(s) interne(s), 0 candidat(s) direct(s)",
+      "url": "https://remax.eu/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "RE/MAX Premium",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://remax.eu/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "RE/MAX Premium",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://remax.eu/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -6816,16 +6879,30 @@
     {
       "source": "Agence locale",
       "location": "RE/MAX Premium",
-      "status": "Site lu",
-      "message": "92 lien(s) interne(s), 0 candidat(s) direct(s)",
-      "url": "https://remax.eu/"
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://remax.eu/fr/a-vendre"
     },
     {
       "source": "Agence locale",
       "location": "RE/MAX Premium",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://remax.eu/"
+      "url": "https://remax.eu/fr/acheter"
+    },
+    {
+      "source": "Agence locale",
+      "location": "RE/MAX Premium",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://remax.eu/fr/biens/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "RE/MAX Premium",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://remax.eu/biens-a-vendre"
     },
     {
       "source": "Agence locale",
@@ -6836,17 +6913,52 @@
     },
     {
       "source": "Agence locale",
-      "location": "Next Homes",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.nexthomes.be/panden/te-koop"
+      "location": "RE/MAX Premium",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://remax.eu/nos-biens/a-vendre"
     },
     {
       "source": "Agence locale",
       "location": "RE/MAX Premium",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
-      "url": "https://remax.eu/buy/"
+      "url": "https://remax.eu/vente"
+    },
+    {
+      "source": "Agence locale",
+      "location": "RE/MAX Premium",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://remax.eu/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "RE/MAX Premium",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://remax.eu/nl/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "RE/MAX Premium",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://remax.eu/aanbod/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "RE/MAX Premium",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "https://remax.eu/panden/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Next Homes",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.nexthomes.be/panden/te-koop"
     },
     {
       "source": "Agence locale",
@@ -6857,136 +6969,10 @@
     },
     {
       "source": "Agence locale",
-      "location": "RE/MAX Premium",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://remax.eu/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Residency",
-      "status": "Candidat ignore",
-      "message": "prix 650000 hors filtre",
-      "url": "https://www.residency.be/en/property/for-sale/house/1120-neder-over-heembeek/7925219"
-    },
-    {
-      "source": "Agence locale",
-      "location": "RE/MAX Premium",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://remax.eu/fr/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Residency",
-      "status": "Candidat ignore",
-      "message": "prix 475000 hors filtre",
-      "url": "https://www.residency.be/en/property/for-sale/house/1120-neder-over-heembeek/7925213"
-    },
-    {
-      "source": "Agence locale",
-      "location": "RE/MAX Premium",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://remax.eu/fr/acheter"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Residency",
-      "status": "Candidat ignore",
-      "message": "prix 279000 hors filtre",
-      "url": "https://www.residency.be/en/property/for-sale/flat/1020-laeken/7913536"
-    },
-    {
-      "source": "Agence locale",
-      "location": "RE/MAX Premium",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://remax.eu/fr/biens/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Residency",
-      "status": "Candidat ignore",
-      "message": "prix 579000 hors filtre",
-      "url": "https://www.residency.be/en/property/for-sale/house/1020-bruxelles/7909432"
-    },
-    {
-      "source": "Agence locale",
-      "location": "RE/MAX Premium",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://remax.eu/biens-a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Residency",
-      "status": "Candidat ignore",
-      "message": "prix 295000 hors filtre",
-      "url": "https://www.residency.be/en/property/for-sale/flat/1140-evere/7901230"
-    },
-    {
-      "source": "Agence locale",
-      "location": "RE/MAX Premium",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://remax.eu/nos-biens/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "RE/MAX Premium",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://remax.eu/vente"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Residency",
-      "status": "Candidat ignore",
-      "message": "prix 324000 hors filtre",
-      "url": "https://www.residency.be/en/property/for-sale/flat/1000-bruxelles/7896420"
-    },
-    {
-      "source": "Agence locale",
-      "location": "RE/MAX Premium",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://remax.eu/te-koop"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Residency",
-      "status": "Candidat ignore",
-      "message": "prix 295000 hors filtre",
-      "url": "https://www.residency.be/en/property/for-sale/flat/1090-jette/7884784"
-    },
-    {
-      "source": "Agence locale",
-      "location": "RE/MAX Premium",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://remax.eu/nl/te-koop"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Residency",
-      "status": "Candidat ignore",
-      "message": "prix 395000 hors filtre",
-      "url": "https://www.residency.be/en/property/for-sale/flat/1020-bruxelles/7883329"
-    },
-    {
-      "source": "Agence locale",
       "location": "Rosace",
       "status": "Site bloque ou illisible",
       "message": "HTTP 404",
       "url": "https://www.rosace.be/"
-    },
-    {
-      "source": "Agence locale",
-      "location": "RE/MAX Premium",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://remax.eu/aanbod/te-koop"
     },
     {
       "source": "Agence locale",
@@ -7011,10 +6997,10 @@
     },
     {
       "source": "Agence locale",
-      "location": "RE/MAX Premium",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://remax.eu/panden/te-koop"
+      "location": "Residency",
+      "status": "Candidat ignore",
+      "message": "prix 650000 hors filtre",
+      "url": "https://www.residency.be/en/property/for-sale/house/1120-neder-over-heembeek/7925219"
     },
     {
       "source": "Agence locale",
@@ -7025,38 +7011,10 @@
     },
     {
       "source": "Agence locale",
-      "location": "Success-Immo Invest",
-      "status": "Site lu",
-      "message": "0 lien(s) interne(s), 0 candidat(s) direct(s)",
-      "url": "http://www.access-immo.be/"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Success-Immo Invest",
-      "status": "Page candidats",
-      "message": "0 lien(s) annonce potentiel(s)",
-      "url": "http://www.access-immo.be/"
-    },
-    {
-      "source": "Agence locale",
       "location": "Square Properties",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://www.square-properties.be/fr/acheter"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Success-Immo Invest",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "http://www.access-immo.be/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Success-Immo Invest",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "http://www.access-immo.be/fr/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -7067,20 +7025,6 @@
     },
     {
       "source": "Agence locale",
-      "location": "Success-Immo Invest",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "http://www.access-immo.be/fr/acheter"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Success-Immo Invest",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "http://www.access-immo.be/fr/biens/a-vendre"
-    },
-    {
-      "source": "Agence locale",
       "location": "Square Properties",
       "status": "Page ignoree",
       "message": "HTTP 404",
@@ -7088,10 +7032,10 @@
     },
     {
       "source": "Agence locale",
-      "location": "Success-Immo Invest",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "http://www.access-immo.be/biens-a-vendre"
+      "location": "Residency",
+      "status": "Candidat ignore",
+      "message": "prix 475000 hors filtre",
+      "url": "https://www.residency.be/en/property/for-sale/house/1120-neder-over-heembeek/7925213"
     },
     {
       "source": "Agence locale",
@@ -7102,38 +7046,10 @@
     },
     {
       "source": "Agence locale",
-      "location": "Success-Immo Invest",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "http://www.access-immo.be/nos-biens/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Success-Immo Invest",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "http://www.access-immo.be/vente"
-    },
-    {
-      "source": "Agence locale",
       "location": "Square Properties",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://www.square-properties.be/vente"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Success-Immo Invest",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "http://www.access-immo.be/te-koop"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Success-Immo Invest",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "http://www.access-immo.be/nl/te-koop"
     },
     {
       "source": "Agence locale",
@@ -7144,13 +7060,6 @@
     },
     {
       "source": "Agence locale",
-      "location": "Success-Immo Invest",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "http://www.access-immo.be/aanbod/te-koop"
-    },
-    {
-      "source": "Agence locale",
       "location": "Square Properties",
       "status": "Page ignoree",
       "message": "HTTP 404",
@@ -7158,10 +7067,10 @@
     },
     {
       "source": "Agence locale",
-      "location": "Success-Immo Invest",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "http://www.access-immo.be/panden/te-koop"
+      "location": "Residency",
+      "status": "Candidat ignore",
+      "message": "prix 279000 hors filtre",
+      "url": "https://www.residency.be/en/property/for-sale/flat/1020-laeken/7913536"
     },
     {
       "source": "Agence locale",
@@ -7186,6 +7095,174 @@
     },
     {
       "source": "Agence locale",
+      "location": "Residency",
+      "status": "Candidat ignore",
+      "message": "prix 579000 hors filtre",
+      "url": "https://www.residency.be/en/property/for-sale/house/1020-bruxelles/7909432"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Square Properties",
+      "status": "Candidat ignore",
+      "message": "prix 825000 hors filtre",
+      "url": "https://www.square-properties.be/fr/bien/a-vendre/maison/1070-anderlecht/7841461"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Residency",
+      "status": "Candidat ignore",
+      "message": "prix 295000 hors filtre",
+      "url": "https://www.residency.be/en/property/for-sale/flat/1140-evere/7901230"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Residency",
+      "status": "Candidat ignore",
+      "message": "prix 324000 hors filtre",
+      "url": "https://www.residency.be/en/property/for-sale/flat/1000-bruxelles/7896420"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Square Properties",
+      "status": "Candidat ignore",
+      "message": "prix 585000 hors filtre",
+      "url": "https://www.square-properties.be/fr/bien/a-vendre/appartement/1000-bruxelles/7346430"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Square Properties",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.square-properties.be/fr/2/chercher-bien/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Square Properties",
+      "status": "Candidat ignore",
+      "message": "prix 825000 hors filtre",
+      "url": "https://www.square-properties.be/fr/bien/a-vendre/maison/1070-anderlecht/7841461"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Residency",
+      "status": "Candidat ignore",
+      "message": "prix 295000 hors filtre",
+      "url": "https://www.residency.be/en/property/for-sale/flat/1090-jette/7884784"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Square Properties",
+      "status": "Candidat ignore",
+      "message": "prix 585000 hors filtre",
+      "url": "https://www.square-properties.be/fr/bien/a-vendre/appartement/1000-bruxelles/7346430"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Success-Immo Invest",
+      "status": "Site lu",
+      "message": "0 lien(s) interne(s), 0 candidat(s) direct(s)",
+      "url": "http://www.access-immo.be/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Success-Immo Invest",
+      "status": "Page candidats",
+      "message": "0 lien(s) annonce potentiel(s)",
+      "url": "http://www.access-immo.be/"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Residency",
+      "status": "Candidat ignore",
+      "message": "prix 395000 hors filtre",
+      "url": "https://www.residency.be/en/property/for-sale/flat/1020-bruxelles/7883329"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Success-Immo Invest",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "http://www.access-immo.be/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Success-Immo Invest",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "http://www.access-immo.be/fr/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Success-Immo Invest",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "http://www.access-immo.be/fr/acheter"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Success-Immo Invest",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "http://www.access-immo.be/fr/biens/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Success-Immo Invest",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "http://www.access-immo.be/biens-a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Success-Immo Invest",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "http://www.access-immo.be/nos-biens/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Success-Immo Invest",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "http://www.access-immo.be/vente"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Success-Immo Invest",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "http://www.access-immo.be/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Success-Immo Invest",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "http://www.access-immo.be/nl/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Success-Immo Invest",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "http://www.access-immo.be/aanbod/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Success-Immo Invest",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "http://www.access-immo.be/panden/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "The Bridge",
+      "status": "Site bloque ou illisible",
+      "message": "HTTP 403",
+      "url": "https://www.thebridge.be/"
+    },
+    {
+      "source": "Agence locale",
       "location": "Sweet Inn",
       "status": "Site lu",
       "message": "50 lien(s) interne(s), 0 candidat(s) direct(s)",
@@ -7200,94 +7277,10 @@
     },
     {
       "source": "Agence locale",
-      "location": "Square Properties",
-      "status": "Candidat ignore",
-      "message": "prix 825000 hors filtre",
-      "url": "https://www.square-properties.be/fr/bien/a-vendre/maison/1070-anderlecht/7841461"
-    },
-    {
-      "source": "Agence locale",
       "location": "Sweet Inn",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://www.sweett.com/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Square Properties",
-      "status": "Candidat ignore",
-      "message": "prix 585000 hors filtre",
-      "url": "https://www.square-properties.be/fr/bien/a-vendre/appartement/1000-bruxelles/7346430"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Sweet Inn",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.sweett.com/fr/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Sweet Inn",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.sweett.com/fr/acheter"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Square Properties",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.square-properties.be/fr/2/chercher-bien/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Sweet Inn",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.sweett.com/fr/biens/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Square Properties",
-      "status": "Candidat ignore",
-      "message": "prix 825000 hors filtre",
-      "url": "https://www.square-properties.be/fr/bien/a-vendre/maison/1070-anderlecht/7841461"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Sweet Inn",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.sweett.com/biens-a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Square Properties",
-      "status": "Candidat ignore",
-      "message": "prix 585000 hors filtre",
-      "url": "https://www.square-properties.be/fr/bien/a-vendre/appartement/1000-bruxelles/7346430"
-    },
-    {
-      "source": "Agence locale",
-      "location": "The Bridge",
-      "status": "Site bloque ou illisible",
-      "message": "HTTP 403",
-      "url": "https://www.thebridge.be/"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Sweet Inn",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.sweett.com/nos-biens/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Sweet Inn",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.sweett.com/vente"
     },
     {
       "source": "Agence locale",
@@ -7308,14 +7301,7 @@
       "location": "Sweet Inn",
       "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://www.sweett.com/te-koop"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Sweet Inn",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://www.sweett.com/nl/te-koop"
+      "url": "https://www.sweett.com/fr/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -7329,14 +7315,14 @@
       "location": "Sweet Inn",
       "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://www.sweett.com/aanbod/te-koop"
+      "url": "https://www.sweett.com/fr/acheter"
     },
     {
       "source": "Agence locale",
       "location": "Sweet Inn",
       "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://www.sweett.com/panden/te-koop"
+      "url": "https://www.sweett.com/fr/biens/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -7347,24 +7333,94 @@
     },
     {
       "source": "Agence locale",
+      "location": "Sweet Inn",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.sweett.com/biens-a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Trevi Nord",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.trevi.be/fr/acheter-bien-immobilier/projets-immobiliers-neufs"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Trevi Nord",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.trevi.be/fr/acheter-bien-immobilier"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Sweet Inn",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.sweett.com/nos-biens/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Sweet Inn",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.sweett.com/vente"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Trevi Nord",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.trevi.be/fr/louer-bien-immobilier"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Sweet Inn",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.sweett.com/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Trevi Nord",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.trevi.be/fr/acheter-bien-immobilier"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Sweet Inn",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.sweett.com/nl/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Sweet Inn",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.sweett.com/aanbod/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Trevi Nord",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.trevi.be/fr/louer-bien-immobilier"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Sweet Inn",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://www.sweett.com/panden/te-koop"
+    },
+    {
+      "source": "Agence locale",
       "location": "Trior",
       "status": "Site lu",
       "message": "96 lien(s) interne(s), 9 candidat(s) direct(s)",
       "url": "https://www.trior.be/agence-immobiliere-jette"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Trior",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.trior.be/estimer-bien-immobilier"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Trior",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.trior.be/vendre-bien-immobilier"
     },
     {
       "source": "Agence locale",
@@ -7378,49 +7434,7 @@
       "location": "Trior",
       "status": "Candidat ignore",
       "message": "commune cible absente",
-      "url": "https://immo.trior.be/fr/2/chercher-bien/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Trior",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
       "url": "https://www.trior.be/estimer-bien-immobilier"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Trior",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.trior.be/vendre-bien-immobilier"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Trior",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://immo.trior.be/fr/2/chercher-bien/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Trevi Nord",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.trevi.be/fr/acheter-bien-immobilier"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Trior",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.trior.be/vendre-bien-immobilier?hsLang=fr-be"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Trior",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.trior.be/estimer-bien-immobilier?hsLang=fr-be"
     },
     {
       "source": "Agence locale",
@@ -7445,17 +7459,17 @@
     },
     {
       "source": "Agence locale",
+      "location": "Trior",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.trior.be/vendre-bien-immobilier"
+    },
+    {
+      "source": "Agence locale",
       "location": "Urban Concept",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
       "url": "https://www.urban-concept.be/fr/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Trevi Nord",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.trevi.be/fr/louer-bien-immobilier"
     },
     {
       "source": "Agence locale",
@@ -7473,10 +7487,24 @@
     },
     {
       "source": "Agence locale",
+      "location": "Trior",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://immo.trior.be/fr/2/chercher-bien/a-vendre"
+    },
+    {
+      "source": "Agence locale",
       "location": "Urban Concept",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
       "url": "https://www.urban-concept.be/biens-a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Trior",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.trior.be/estimer-bien-immobilier"
     },
     {
       "source": "Agence locale",
@@ -7487,17 +7515,17 @@
     },
     {
       "source": "Agence locale",
+      "location": "Trior",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.trior.be/vendre-bien-immobilier"
+    },
+    {
+      "source": "Agence locale",
       "location": "Urban Concept",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
       "url": "https://www.urban-concept.be/vente"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Trevi Nord",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.trevi.be/fr/acheter-bien-immobilier"
     },
     {
       "source": "Agence locale",
@@ -7515,6 +7543,13 @@
     },
     {
       "source": "Agence locale",
+      "location": "Trior",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://immo.trior.be/fr/2/chercher-bien/a-vendre"
+    },
+    {
+      "source": "Agence locale",
       "location": "Urban Concept",
       "status": "Page candidats",
       "message": "0 lien(s) annonce potentiel(s)",
@@ -7529,38 +7564,17 @@
     },
     {
       "source": "Agence locale",
-      "location": "Trevi Nord",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.trevi.be/fr/louer-bien-immobilier"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Valimmas & Co BV",
-      "status": "Site lu",
-      "message": "43 lien(s) interne(s), 6 candidat(s) direct(s)",
-      "url": "https://www.valimmas.be/fr"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Valimmas & Co BV",
-      "status": "Page candidats",
-      "message": "6 lien(s) annonce potentiel(s)",
-      "url": "https://www.valimmas.be/fr"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Trevi Nord",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.trevi.be/fr/acheter-bien-immobilier/projets-immobiliers-neufs"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Valimmas & Co BV",
+      "location": "Trior",
       "status": "Candidat ignore",
       "message": "prix absent hors filtre",
-      "url": "https://www.valimmas.be/fr/villa-a-vendre-a-asse/7933317"
+      "url": "https://www.trior.be/vendre-bien-immobilier?hsLang=fr-be"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Trior",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.trior.be/estimer-bien-immobilier?hsLang=fr-be"
     },
     {
       "source": "Agence locale",
@@ -7579,9 +7593,16 @@
     {
       "source": "Agence locale",
       "location": "Valimmas & Co BV",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.valimmas.be/fr/maison-a-vendre-a-asse/7923844"
+      "status": "Site lu",
+      "message": "43 lien(s) interne(s), 6 candidat(s) direct(s)",
+      "url": "https://www.valimmas.be/fr"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Valimmas & Co BV",
+      "status": "Page candidats",
+      "message": "6 lien(s) annonce potentiel(s)",
+      "url": "https://www.valimmas.be/fr"
     },
     {
       "source": "Agence locale",
@@ -7595,14 +7616,42 @@
       "location": "Valimmas & Co BV",
       "status": "Candidat ignore",
       "message": "prix absent hors filtre",
-      "url": "https://www.valimmas.be/fr/villa-a-vendre-a-asse/7916651"
+      "url": "https://www.valimmas.be/fr/villa-a-vendre-a-asse/7933317"
     },
     {
       "source": "Agence locale",
       "location": "Vaneau Lecobel",
       "status": "Page candidats",
-      "message": "18 lien(s) annonce potentiel(s)",
+      "message": "19 lien(s) annonce potentiel(s)",
       "url": "https://www.lecobel-vaneau.be/en/our-properties-brussels-south-buy"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Valimmas & Co BV",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.valimmas.be/fr/maison-a-vendre-a-asse/7923844"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Vaneau Lecobel",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.lecobel-vaneau.be/en/sell-property"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Valimmas & Co BV",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.valimmas.be/fr/villa-a-vendre-a-asse/7916651"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Vaneau Lecobel",
+      "status": "Candidat ignore",
+      "message": "prix absent hors filtre",
+      "url": "https://www.lecobel-vaneau.be/en/sell-property"
     },
     {
       "source": "Agence locale",
@@ -7643,8 +7692,8 @@
       "source": "Agence locale",
       "location": "Vaneau Lecobel",
       "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.lecobel-vaneau.be/en/sell-property"
+      "message": "prix 691000 hors filtre",
+      "url": "https://www.lecobel-vaneau.be/fr/bien-immobilier-ixelles-chatelain-penthouse-3-ch-de-200-m2-avec-terrasse-de-50-m2-31474"
     },
     {
       "source": "Agence locale",
@@ -7652,13 +7701,6 @@
       "status": "Candidat ignore",
       "message": "prix absent hors filtre",
       "url": "https://www.valimmas.be/fr/villa-a-vendre-a-asse/7933317"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Vaneau Lecobel",
-      "status": "Candidat ignore",
-      "message": "prix absent hors filtre",
-      "url": "https://www.lecobel-vaneau.be/en/sell-property"
     },
     {
       "source": "Agence locale",
@@ -7671,13 +7713,6 @@
       "source": "Agence locale",
       "location": "Vaneau Lecobel",
       "status": "Candidat ignore",
-      "message": "prix 691000 hors filtre",
-      "url": "https://www.lecobel-vaneau.be/fr/bien-immobilier-ixelles-chatelain-penthouse-3-ch-de-200-m2-avec-terrasse-de-50-m2-31474"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Vaneau Lecobel",
-      "status": "Candidat ignore",
       "message": "prix 950000 hors filtre",
       "url": "https://www.lecobel-vaneau.be/en/real-estate-uccle-uccle-observatory-district-magnificent-contemporary-property-indoor-swimming-pool"
     },
@@ -7685,15 +7720,15 @@
       "source": "Agence locale",
       "location": "Viabilis Immo",
       "status": "Site lu",
-      "message": "107 lien(s) interne(s), 11 candidat(s) direct(s)",
+      "message": "107 lien(s) interne(s), 13 candidat(s) direct(s)",
       "url": "https://www.viabilis.be/fr/accueil"
     },
     {
       "source": "Agence locale",
       "location": "Viabilis Immo",
       "status": "Candidat ignore",
-      "message": "prix 195000 hors filtre",
-      "url": "https://www.viabilis.be/fr/detail/7648181/vente/appartement/forest"
+      "message": "prix 287000 hors filtre",
+      "url": "https://www.viabilis.be/fr/detail/7880365/vente/appartement/anderlecht"
     },
     {
       "source": "Agence locale",
@@ -7701,6 +7736,13 @@
       "status": "Candidat ignore",
       "message": "prix 950000 hors filtre",
       "url": "https://www.lecobel-vaneau.be/en/real-estate-uccle-exceptional-modernist-property-uccle-14063"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Viabilis Immo",
+      "status": "Candidat ignore",
+      "message": "prix 375000 hors filtre",
+      "url": "https://www.viabilis.be/fr/detail/7743459/vente/appartement/saint-gilles"
     },
     {
       "source": "Agence locale",
@@ -7720,8 +7762,8 @@
       "source": "Agence locale",
       "location": "Viabilis Immo",
       "status": "Candidat ignore",
-      "message": "prix 265000 hors filtre",
-      "url": "https://www.viabilis.be/fr/detail/7648185/vente/appartement/forest"
+      "message": "prix 235000 hors filtre",
+      "url": "https://www.viabilis.be/fr/detail/7793929/vente/appartement/bruxelles"
     },
     {
       "source": "Agence locale",
@@ -7741,8 +7783,8 @@
       "source": "Agence locale",
       "location": "Viabilis Immo",
       "status": "Candidat ignore",
-      "message": "prix 260000 hors filtre",
-      "url": "https://www.viabilis.be/fr/detail/7895996/vente/appartement/uccle"
+      "message": "prix 445000 hors filtre",
+      "url": "https://www.viabilis.be/fr/detail/6069756/vente/maison/saint-gilles"
     },
     {
       "source": "Agence locale",
@@ -7750,20 +7792,6 @@
       "status": "Page candidats",
       "message": "29 lien(s) annonce potentiel(s)",
       "url": "https://www.victoire.be/fr/a-vendre"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Viabilis Immo",
-      "status": "Candidat ignore",
-      "message": "prix 395000 hors filtre",
-      "url": "https://www.viabilis.be/fr/detail/7935377/vente/bureau/bruxelles"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Victoire",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.victoire.be/fr/blog/detail/marcheimmobilierpremiumBruxelles2025"
     },
     {
       "source": "Agence locale",
@@ -7783,8 +7811,22 @@
       "source": "Agence locale",
       "location": "Viabilis Immo",
       "status": "Candidat ignore",
-      "message": "prix 190000 hors filtre",
-      "url": "https://www.viabilis.be/fr/detail/7183790/vente/appartement/saint-gilles"
+      "message": "prix 395000 hors filtre",
+      "url": "https://www.viabilis.be/fr/detail/7904420/vente/appartement/bruxelles"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Victoire",
+      "status": "Candidat ignore",
+      "message": "commune cible absente",
+      "url": "https://www.victoire.be/fr/blog/detail/marcheimmobilierpremiumBruxelles2025"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Viabilis Immo",
+      "status": "Candidat ignore",
+      "message": "prix 245000 hors filtre",
+      "url": "https://www.viabilis.be/fr/detail/7648203/vente/appartement/forest"
     },
     {
       "source": "Agence locale",
@@ -7792,13 +7834,6 @@
       "status": "Candidat ignore",
       "message": "commune cible absente",
       "url": "https://www.victoire.be/fr/blog/detail/LouerunbienBruxellesproprietairesdoiventsavoir"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Viabilis Immo",
-      "status": "Candidat ignore",
-      "message": "prix 575000 hors filtre",
-      "url": "https://www.viabilis.be/fr/detail/7544360/vente/appartement/anderlecht"
     },
     {
       "source": "Agence locale",
@@ -7813,13 +7848,6 @@
       "status": "Candidat ignore",
       "message": "commune cible absente",
       "url": "https://www.victoire.be/fr/blog/detail/marcheimmobilierpremiumBruxelles2025"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Victoire",
-      "status": "Candidat ignore",
-      "message": "commune cible absente",
-      "url": "https://www.victoire.be/fr/blog/detail/LouerunbienBruxellesproprietairesdoiventsavoir"
     },
     {
       "source": "Agence locale",
@@ -7839,8 +7867,8 @@
       "source": "Agence locale",
       "location": "Victoire",
       "status": "Candidat ignore",
-      "message": "prix 595000 hors filtre",
-      "url": "https://www.victoire.be/fr/a-vendre/detail/87574242/vente-maison-charmant-huis-grote-tuin-en-garage"
+      "message": "commune cible absente",
+      "url": "https://www.victoire.be/fr/blog/detail/LouerunbienBruxellesproprietairesdoiventsavoir"
     },
     {
       "source": "Agence locale",
@@ -7853,8 +7881,8 @@
       "source": "Agence locale",
       "location": "Victoire",
       "status": "Candidat ignore",
-      "message": "prix 750000 hors filtre",
-      "url": "https://www.victoire.be/fr/a-vendre/detail/87531291/vente-maison-ukkel-fort-jaco-mooie-villa-met-tuin"
+      "message": "prix 790000 hors filtre",
+      "url": "https://www.victoire.be/fr/a-vendre/detail/87578370/vente-appartement-bos-van-la-cambre-elegante-appartement-uitzonderlijk-uitzicht"
     },
     {
       "source": "Agence locale",
@@ -7862,6 +7890,20 @@
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://wilink.be/fr/a-vendre"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Victoire",
+      "status": "Candidat ignore",
+      "message": "prix 595000 hors filtre",
+      "url": "https://www.victoire.be/fr/a-vendre/detail/87574242/vente-maison-charmant-huis-grote-tuin-en-garage"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Wilink",
+      "status": "Page ignoree",
+      "message": "HTTP 404",
+      "url": "https://wilink.be/fr/acheter"
     },
     {
       "source": "Agence locale",
@@ -7882,7 +7924,7 @@
       "location": "Wilink",
       "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://wilink.be/fr/acheter"
+      "url": "https://wilink.be/fr/biens/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -7896,7 +7938,7 @@
       "location": "Wilink",
       "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://wilink.be/fr/biens/a-vendre"
+      "url": "https://wilink.be/biens-a-vendre"
     },
     {
       "source": "Agence locale",
@@ -7910,7 +7952,7 @@
       "location": "Wilink",
       "status": "Page ignoree",
       "message": "HTTP 404",
-      "url": "https://wilink.be/biens-a-vendre"
+      "url": "https://wilink.be/nos-biens/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -7918,13 +7960,6 @@
       "status": "Candidat ignore",
       "message": "commune cible absente",
       "url": "https://www.woonkantoor.be/fr-be/detail/vente-fermette-maison-geraardsbergen/7683295"
-    },
-    {
-      "source": "Agence locale",
-      "location": "Wilink",
-      "status": "Page ignoree",
-      "message": "HTTP 404",
-      "url": "https://wilink.be/nos-biens/a-vendre"
     },
     {
       "source": "Agence locale",
@@ -7977,17 +8012,17 @@
     },
     {
       "source": "Agence locale",
-      "location": "Woonkantoor",
-      "status": "Candidat ignore",
-      "message": "prix 435000 hors filtre",
-      "url": "https://www.woonkantoor.be/fr-be/detail/vente-loft-appartement-anderlecht/7570121"
-    },
-    {
-      "source": "Agence locale",
       "location": "Wilink",
       "status": "Page ignoree",
       "message": "HTTP 404",
       "url": "https://wilink.be/aanbod/te-koop"
+    },
+    {
+      "source": "Agence locale",
+      "location": "Woonkantoor",
+      "status": "Candidat ignore",
+      "message": "prix 435000 hors filtre",
+      "url": "https://www.woonkantoor.be/fr-be/detail/vente-loft-appartement-anderlecht/7570121"
     },
     {
       "source": "Agence locale",
@@ -8008,7 +8043,7 @@
       "location": "Synthese",
       "status": "Essai termine",
       "message": "0 annonce(s) integree(s) depuis 73/73 site(s) OSM avec dedoublonnage portail",
-      "url": "D:\\a\\veille-immo-report\\veille-immo-report\\reports\\agences-locales-2026-11-11.csv"
+      "url": "D:\\a\\veille-immo-report\\veille-immo-report\\reports\\agences-locales-2026-11-12.csv"
     }
   ],
   "sourceAudit": {
@@ -8019,7 +8054,7 @@
   },
   "newListings": {
     "criterion": "absent-rapport-quotidien-precedent-ou-publication-fiable-72h",
-    "baselineGeneratedAt": "2026-11-07T14:00:42.839Z",
+    "baselineGeneratedAt": "2026-11-11T15:25:01.565Z",
     "baselineCount": 26,
     "count": 0,
     "ids": [],
